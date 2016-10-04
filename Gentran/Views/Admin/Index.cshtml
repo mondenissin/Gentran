@@ -1,8 +1,9 @@
 ﻿@{
-    ViewBag.Title = "Administrator";    
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Administrator";
 }
-<h2>@ViewData["Title"].</h2>
-<h3>@ViewData["Message"]</h3>
+@*<h2>@ViewData["Title"].</h2>
+<h3>@ViewData["Message"]</h3>*@
 
 @section scripts{
     <script src="~/App/Admin/App.js"></script>
@@ -11,8 +12,21 @@
     <script src="~/App/Admin/ViewModels/Prod/ProdListModel.js"></script>
 }
 
-<div data-ng-app="admin" data-ng-controller="rootViewModel">
+@*<div data-ng-app="admin" data-ng-controller="rootViewModel">
     <button ng-click="userList()">User List</button>
     <button ng-click="prodList()">Product List</button>
     <div ng-view></div>
+</div>*@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Dashboard
+            <small>Control panel</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </section>
 </div>
