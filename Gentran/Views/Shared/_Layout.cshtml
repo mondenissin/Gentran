@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title - Gentran</title>
+
+    <link rel="shortcut icon" href="~/Images/VINCE.jpg"/> 
+    <link rel="stylesheet" href="~/Content/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    @RenderSection("styles", required: false)
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Sign In", "Login", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Developer", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Administrator", "Index", "Admin")</li>
+                    <li>@Html.ActionLink("Purchase", "Index", "Order")</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; 2016 - Gentran</p>
+        </footer>
+    </div>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
+    <script src="~/Scripts/bootstrap-js/bootstrap.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/master/master_ajax.js"></script>
+    <script type="text/javascript" src="~/Scripts/angular/angular.js"></script>
+    <script type="text/javascript" src="~/Scripts/angular/angular-route.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/master/master_main.js"></script>
+
+    <script type="text/javascript">
+        window.MyApp = {};
+    </script>
+    <script src="~/App/App.js"></script>
+    <script type="text/javascript">
+        MyApp.rootPath = '@Url.Content("~")';
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
