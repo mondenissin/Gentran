@@ -19,7 +19,7 @@ namespace Gentran.Controllers.mvc
                 HttpContext.Response.Redirect(basePath);
             }
 
-            ViewData["Message"] = "Sub modules";
+            ViewData["Message"] = "Choose retrieving process";
 
             return View();
         }

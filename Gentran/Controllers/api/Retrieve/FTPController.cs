@@ -14,8 +14,9 @@ namespace Gentran.Controllers.api
     {
         string m_ftpSite, m_strUsername, m_strPassword = "";
         // GET api/ftp
-        public Object Get()
+        public Object Get(string id)
         {
+            string acct = id;
             bool success = true;
             List<string> fileList = new List<string>();
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
@@ -23,9 +24,16 @@ namespace Gentran.Controllers.api
 
             try
             {
-                m_ftpSite = System.Configuration.ConfigurationManager.AppSettings["ftpsite"];
-                m_strUsername = System.Configuration.ConfigurationManager.AppSettings["username"];
-                m_strPassword = System.Configuration.ConfigurationManager.AppSettings["password"];
+                if (acct == "sm") {
+                    m_ftpSite = System.Configuration.ConfigurationManager.AppSettings["smftpsite"];
+                    m_strUsername = System.Configuration.ConfigurationManager.AppSettings["smusername"];
+                    m_strPassword = System.Configuration.ConfigurationManager.AppSettings["smpassword"];
+                } else if (acct == "s8") {
+                    m_ftpSite = System.Configuration.ConfigurationManager.AppSettings["s8ftpsite"];
+                    m_strUsername = System.Configuration.ConfigurationManager.AppSettings["s8username"];
+                    m_strPassword = System.Configuration.ConfigurationManager.AppSettings["s8password"];
+
+                }
 
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(m_ftpSite);
                 request.Method = WebRequestMethods.Ftp.ListDirectory;
@@ -45,7 +53,7 @@ namespace Gentran.Controllers.api
                     {
                         string inputfilepath = @"C:\inetpub\wwwroot\files\ftp\" + line;
                         string ftpfullpath = m_ftpSite +"/"+ line;
-
+                        
                         using (WebClient webreq = new WebClient())
                         {
                             webreq.Credentials = new NetworkCredential(m_strUsername, m_strPassword);
@@ -56,6 +64,12 @@ namespace Gentran.Controllers.api
                                 file.Write(fileData, 0, fileData.Length);
                                 file.Close();
                             }
+
+                            FtpWebRequest request2 = (FtpWebRequest)WebRequest.Create(ftpfullpath);
+                            request2.Method = WebRequestMethods.Ftp.DeleteFile;
+                            FtpWebResponse response2 = (FtpWebResponse)request2.GetResponse();
+                            string asd = response2.StatusDescription;
+                            response2.Close();
                         }
                     }
                     line = reader.ReadLine().ToString();
@@ -94,7 +108,7 @@ namespace Gentran.Controllers.api
         }
 
         // GET api/ftp/5
-        public string Get(int id)
+        public string Get()
         {
             return "value";
         }

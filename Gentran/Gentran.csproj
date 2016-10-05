@@ -127,12 +127,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\api\Order\FTPController.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Controllers\api\Login\LoginController.cs" />
     <Compile Include="Controllers\api\Admin\ProdController.cs" />
     <Compile Include="Controllers\api\Admin\UserListController.cs" />
+    <Compile Include="Controllers\api\Retrieve\FTPController.cs" />
     <Compile Include="Controllers\mvc\AdminController.cs" />
     <Compile Include="Controllers\mvc\HomeController.cs" />
     <Compile Include="Controllers\mvc\MonitoringController.cs" />
@@ -155,8 +153,10 @@
     <Content Include="App\App.js" />
     <Content Include="App\Retrieve\App.js" />
     <Content Include="App\Retrieve\RootViewModel.js" />
-    <Content Include="App\Retrieve\ViewModels\FTP\ftpModel.js" />
-    <Content Include="App\Retrieve\Views\FTP\FTP.html" />
+    <Content Include="App\Retrieve\ViewModels\SM\smModel.js" />
+    <Content Include="App\Retrieve\ViewModels\Super8\superModel.js" />
+    <Content Include="App\Retrieve\Views\SM\sm.html" />
+    <Content Include="App\Retrieve\Views\Super8\super.html" />
     <Content Include="Content\bootstrap\bootstrap-select.css" />
     <Content Include="Content\bootstrap\bootstrap-select.min.css" />
     <Content Include="Content\bootstrap\bootstrap-select.min_.css" />
@@ -228,8 +228,10 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Images\API.png" />
     <Content Include="Images\banner.PNG" />
     <Content Include="Images\download.png" />
+    <Content Include="Images\ECOM.png" />
     <Content Include="Images\files\csv.png" />
     <Content Include="Images\files\excel.png" />
     <Content Include="Images\files\htm.png" />
@@ -238,6 +240,7 @@
     <Content Include="Images\files\xls.png" />
     <Content Include="Images\files\xlsm.png" />
     <Content Include="Images\files\xlsx.png" />
+    <Content Include="Images\FTP.png" />
     <Content Include="Images\print.png" />
     <Content Include="Images\view.png" />
     <Content Include="Images\VINCE.jpg" />
@@ -602,7 +605,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App\Home\" />
@@ -610,6 +612,9 @@
     <Folder Include="App\Order\" />
     <Folder Include="App_Data\" />
     <Folder Include="Content\css\order\" />
+    <Folder Include="Controllers\api\Monitoring\" />
+    <Folder Include="Controllers\api\Order\" />
+    <Folder Include="Images\outlets\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -644,6 +649,9 @@
     <Content Include="Views\Order\Index.cshtml" />
     <Content Include="Views\Monitoring\Index.cshtml" />
     <Content Include="Views\Retrieve\Index.cshtml" />
+    <Content Include="Views\Shared\_AdminLayout.cshtml" />
+    <Content Include="Views\Shared\_MainLayout.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
