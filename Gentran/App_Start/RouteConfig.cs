@@ -24,9 +24,20 @@ namespace Gentran
                 defaults: new { controller = "Admin", action = "Index" });
 
             routes.MapRoute(
+                name: "Retrieve",
+                url: "Retrieve/{*catchall}",
+                defaults: new { controller = "Retrieve", action = "Index" });
+
+            routes.MapRoute(
                 name: "Order",
                 url: "Order/{*catchall}",
                 defaults: new { controller = "Order", action = "Index" });
+
+            routes.MapRoute(
+                name: "Monitoring",
+                url: "Monitoring/{*catchall}",
+                defaults: new { controller = "Monitoring", action = "Index" });
+
 
             routes.MapRoute(
                 name: "Default",

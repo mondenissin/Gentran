@@ -1,15 +1,15 @@
-﻿var orderModule = angular.module('order', ['common'])
+﻿var retrieveModule = angular.module('retrieve', ['common'])
     .config(function ($routeProvider, $locationProvider) {
         var _root = getRoot();
-        $routeProvider.when(_root + 'Order/FTP', { templateUrl: _root + 'App/Order/Views/FTP/FTP.html', controller: 'ftpViewModel' });
-        $routeProvider.otherwise({ redirectTo: _root + 'Order' });
+        $routeProvider.when(_root + 'Retrieve/FTP', { templateUrl: _root + 'App/Retrieve/Views/FTP/FTP.html', controller: 'ftpViewModel' });
+        $routeProvider.otherwise({ redirectTo: _root + 'Retrieve' });
         $locationProvider.html5Mode(true);
     });
 
-orderModule.factory('orderService', function ($rootScope, $http, $q, $location, viewModelHelper) { return MyApp.orderService($rootScope, $http, $q, $location, viewModelHelper); });
+retrieveModule.factory('retrieveService', function ($rootScope, $http, $q, $location, viewModelHelper) { return MyApp.retrieveService($rootScope, $http, $q, $location, viewModelHelper); });
 
 (function (myApp) {
-    var orderService = function ($rootScope, $http, $q, $location, viewModelHelper) {
+    var retrieveService = function ($rootScope, $http, $q, $location, viewModelHelper) {
 
         var self = this;
 
@@ -17,7 +17,7 @@ orderModule.factory('orderService', function ($rootScope, $http, $q, $location, 
          
         return this;
     };
-    myApp.orderService = orderService;
+    myApp.retrieveService = retrieveService;
 }(window.MyApp));
 
 /*

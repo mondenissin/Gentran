@@ -1,7 +1,7 @@
-﻿orderModule.controller("ftpViewModel", function ($scope, orderService, $http, $q, $routeParams, $window, $location, viewModelHelper, $timeout) {
+﻿retrieveModule.controller("ftpViewModel", function ($scope, retrieveService, $http, $q, $routeParams, $window, $location, viewModelHelper, $timeout) {
 
     $scope.viewModelHelper = viewModelHelper;
-    $scope.orderService = orderService;
+    $scope.retrieveService = retrieveService;
 
     var initialize = function () {
         $scope.refreshFTP();
@@ -108,22 +108,33 @@
 
 
     $scope.selectFile = function ($event) {
-        if (this.check == "A") {
+        console.log(this);
+        if (this.check == true) {
             $($($event.target)[0].nextElementSibling).css('border', '2px solid green');
             $($($event.target)[0].nextElementSibling).css('background', 'hsla(120,100%,50%,0.3)');
         }
-        else {
+        else if(this.check == false){
             $($($event.target)[0].nextElementSibling).css('border', '2px solid #e1e1e1');
             $($($event.target)[0].nextElementSibling).css('background', 'transparent');
         }
-        console.log($event);
+    }
+
+    $scope.selectFileAll = function () {
+        
+        if (this.all == true) {
+            $('.po-files').css('border', '2px solid green');
+            $('.po-files').css('background', 'hsla(120,100%,50%,0.3)');
+        } else if (this.all == false) {
+            $('.po-files').css('border', '2px solid #e1e1e1');
+            $('.po-files').css('background', 'transparent');
+        }
     }
 
     initialize();
 });
 
 
-orderModule.directive('tooltip', function () {
+retrieveModule.directive('tooltip', function () {
     return {
         restrict: 'A',
         link: function (scope, element, attrs) {

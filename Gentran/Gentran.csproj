@@ -16,6 +16,11 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -130,7 +135,9 @@
     <Compile Include="Controllers\api\Admin\UserListController.cs" />
     <Compile Include="Controllers\mvc\AdminController.cs" />
     <Compile Include="Controllers\mvc\HomeController.cs" />
+    <Compile Include="Controllers\mvc\MonitoringController.cs" />
     <Compile Include="Controllers\mvc\OrderController.cs" />
+    <Compile Include="Controllers\mvc\RetrieveController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -146,10 +153,10 @@
     <Content Include="App\Admin\Views\Prod\ProdList.html" />
     <Content Include="App\Admin\Views\Users\UserList.html" />
     <Content Include="App\App.js" />
-    <Content Include="App\Order\App.js" />
-    <Content Include="App\Order\RootViewModel.js" />
-    <Content Include="App\Order\ViewModels\FTP\ftpModel.js" />
-    <Content Include="App\Order\Views\FTP\FTP.html" />
+    <Content Include="App\Retrieve\App.js" />
+    <Content Include="App\Retrieve\RootViewModel.js" />
+    <Content Include="App\Retrieve\ViewModels\FTP\ftpModel.js" />
+    <Content Include="App\Retrieve\Views\FTP\FTP.html" />
     <Content Include="Content\bootstrap\bootstrap-select.css" />
     <Content Include="Content\bootstrap\bootstrap-select.min.css" />
     <Content Include="Content\bootstrap\bootstrap-select.min_.css" />
@@ -160,7 +167,7 @@
     <Content Include="Content\bootstrap\build.css" />
     <Content Include="Content\bootstrap\dataTables.bootstrap.min.css" />
     <Content Include="Content\bootstrap\flat-ui.css" />
-    <Content Include="Content\css\order\order.css" />
+    <Content Include="Content\css\retrieve\retrieve.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -599,7 +606,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App\Home\" />
+    <Folder Include="App\Monitoring\" />
+    <Folder Include="App\Order\" />
     <Folder Include="App_Data\" />
+    <Folder Include="Content\css\order\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -632,6 +642,8 @@
     <None Include="Scripts\angular\jquery-1.9.0.min.map" />
     <None Include="Scripts\angular\version.json" />
     <Content Include="Views\Order\Index.cshtml" />
+    <Content Include="Views\Monitoring\Index.cshtml" />
+    <Content Include="Views\Retrieve\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
