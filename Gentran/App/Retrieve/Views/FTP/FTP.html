@@ -1,0 +1,19 @@
+﻿
+<hr />
+<h3>FTP FILES LOADED</h3>
+
+<input class="po-cbx" type="checkbox" ng-model="all" ng-change="selectFileAll()"/>
+<div class="container">
+    <div class = "po-files-h" ng-repeat="f in files" ng-init="$last ? loadHover() : angular.noop()">
+        <input id = "{{f.files}}" class = "po-cbx" ng-click="$event = $event" ng-change="selectFile($event)" type="checkbox" ng-model="check" ng-checked="all"/>
+        <div class="po-files">  
+            {{f}}<!--<img ng-src = "{{f.directory}}" Content-type="image/jpeg"/>-->
+            <div class="po-files-hover">
+                <img ng-src = "{{f.extension}}" class="po-files-ico pull-left" />
+                <span class = "lbl-po-files">{{f.files}}</span>
+                <img data-toggle="tooltip" data-container = "body" data-placement="bottom" title="View" ng-click="showFile(f)" src="../images/print.png" class="po-files-ico-foot" style="left:10px" tooltip>
+                <img data-toggle="tooltip" data-container = "body" data-placement="bottom" title="Download" ng-click="downloadFile(f)" src="../images/download.png" class="po-files-ico-foot" style="left:55px" tooltip>
+            </div>
+        </div>
+    </div>
+</div>
