@@ -122,3 +122,167 @@ textarea {
     display: block;
     margin-top: 10px;
 }
+
+button.btn.btn-link {
+    color: #8aa4af;
+    padding: 5px 5px 5px 15px;
+    display: block;
+    font-size: 14px;
+    width:100%;
+    text-align:left;
+    text-decoration:none;
+}
+button.btn.btn-link:hover {
+    color:#fff;
+    background-color: #FABD44;
+}
+button.btn.btn-link:active {
+    background-color: #F88F00;
+
+}
+button.btn.btn-link:focus {
+    outline:0;
+    background-color: #F88F00;
+    color: white;
+}
+
+button.btn.btn-link i, button.btn.btn-link span {
+    margin-right: 5px;
+}
+
+
+/* ------------------------------------- PAGE TABLE --------------------------------------*/
+
+.table
+{
+    margin-bottom: 0px;
+    border-collapse: collapse !important;
+}
+ .table>thead>tr>th,.table>tbody>tr>td
+ {
+     padding:4px;
+     border-collapse:collapse !important;
+ }
+ .table>tbody>tr>td
+ {
+     border-collapse:collapse !important;
+ }
+
+ .page-table{
+     /*border: 2px solid #ccc;*/
+ }
+
+ .page-table table{
+    margin: 0 !important;
+    /*border-collapse:collapse !important;*/
+ }
+ table th
+ {
+     margin: 0 !important;
+    height: 15px !important;
+    line-height: 15px !important;
+    border-left: 0.5px solid #e0e0e0!important;
+    border-bottom:1px solid #e0e0e0 !important;
+    border-top:1px solid #e0e0e0 !important;
+    white-space: nowrap!important;
+    /*border:1px solid #e0e0e0 !important;*/
+}
+
+#UserTable td{
+    border:none !important;
+    height: 15px;
+    line-height: 15px;
+}
+#UserTable td img{
+    line-height: 15px;
+}
+
+#cbxMain {
+    margin: 0px;
+}
+.page-table table td
+{
+    text-align:left;
+    color:#777;
+    white-space:nowrap;
+}
+
+.page-table table td label
+{
+    float:left;
+    margin: auto;
+}
+.checkbox label
+{
+    min-height:0 !important;
+    padding-left:0 !important;
+}
+.page-table table td a
+{
+    display:block;
+    float:left;
+}
+.page-table table td input
+{
+    margin-top: 50%;
+}
+ .page-table table td img
+{
+    float:left;
+    padding: 2px;
+    width:18px;
+    height:18px;
+    margin:0px 3px 0 0;
+    border:1px solid #d0d0d0;
+    background-color:#f0f0f0;
+    cursor: pointer;
+    margin-top: 6.5px;
+}
+.page-table td img:hover
+{
+    background-color:#e5eeff;
+    border:1px solid #33a3ff;
+}
+
+.table-data-id {
+    align-content: center;
+    text-align: right!important;
+    width: 5%!important;
+}
+.table-data-pcode { 
+    text-align:left!important;
+    width: 15%!important;
+}
+.table-data-pdesc { 
+    text-align:left!important;
+    width: 40%!important;
+}
+.table-data-pbcode {
+    text-align:right!important;
+    width: 15%!important;
+}
+.table-data-pstatus {
+    text-align:right!important;
+    width: 10%!important;
+}
+.table-data-poptions {
+    text-align:left!important; 
+    width: 10%!important;
+}
+/* ======================================== END OF PAGE TABLE ========================================== */
+.paginate_button {
+    padding: 2px!important;
+}
+.paginate_button:hover {
+    border-width:1px!important;
+}
+.pagination {
+    margin: 5px 0px;
+}
+.pagination > li > a {
+  background: #fafafa;
+  color: #666;
+}
+.pagination.pagination-flat > li > a {
+  border-radius: 0 !important;
+}

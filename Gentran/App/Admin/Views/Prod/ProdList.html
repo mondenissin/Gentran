@@ -1,29 +1,48 @@
-﻿<hr />
-<input type="text" ng-model="search[searchBy]" />Search By:
+﻿<!--<input type="text" ng-model="search[searchBy]" />Search By:
 <select ng-model="searchBy">
     <option value="PMCode" selected>Product Code</option>
     <option value="PMDescription">Product Detail</option>
+    <option value="PMDescription">Product Barcode</option>
 </select>
-<hr />
-<table id="UserTable">
-    <thead>
-        <tr>
-            <th></th>
-            <th>Product Code</th>
-            <th>Product Description</th>
-        </tr>
-    </thead>
-    <tbody ng-repeat="p in product | filter:search">
-        <tr>
-            <td ng-cloak>
-                <a href="#" ng-click="showProduct(p)">Select</a>
-            </td>
-            <td ng-cloak>
-                {{p.PMCode}}
-            </td>
-            <td ng-cloak>
-                {{p.PMDescription}}
-            </td>
-        </tr>
-    </tbody>
-</table>
+<hr />     -->
+<div class="page-table">
+    <table id="UserTable" datatable="" class="table table-striped row-border hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Product Code</th>
+                <th>Product Description</th>
+                <th>Product Barcode</th>
+                <th>Product Status</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="p in product | filter:search">
+                <td class="table-data-id" ng-cloak>
+                    {{p.PMId}}
+                </td>
+                <td class="table-data-pcode" ng-cloak>
+                    {{p.PMCode}}
+                </td>
+                <td class="table-data-pdesc" ng-cloak>
+                    {{p.PMDescription}}
+                </td>
+                <td class="table-data-pbcode" ng-cloak>
+                    {{p.PMBarcode}}
+                </td>
+                <td class="table-data-pstatus" ng-cloak>
+                    {{p.PSDescription}}
+                </td>
+                <td class="table-data-poptions" ng-cloak></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        setTimeout(function () {
+            $('#UserTable').dataTable({ destroy: true, fixedHeader: true, "searching": false, "order": [[0, "asc"]], "pageLength": 15, columnDefs: [{ targets: 'no-sort', orderable: false }] });
+        }, 1000);
+     });
+</script>
