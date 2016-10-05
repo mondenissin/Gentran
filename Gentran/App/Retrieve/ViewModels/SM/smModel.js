@@ -1,4 +1,4 @@
-﻿retrieveModule.controller("ftpViewModel", function ($scope, retrieveService, $http, $q, $routeParams, $window, $location, viewModelHelper, $timeout) {
+﻿retrieveModule.controller("smViewModel", function ($scope, retrieveService, $http, $q, $routeParams, $window, $location, viewModelHelper, $timeout) {
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.retrieveService = retrieveService;
@@ -9,19 +9,7 @@
 
     $scope.refreshFTP = function () {
 
-        /*
-        var asd = [];
-        var dsa = {};
-        dsa.files = "261088.pdf";
-        dsa.directory = "C:\\inetpub\\wwwroot\\files\\ftp\\261088.pdf";
-        dsa.extension = "../Images/files/pdf.png";
-        asd[0] = dsa;
-        asd[1] = "";
-        $scope.files = asd;
-
-        console.log($scope.files);
-        */
-        viewModelHelper.apiGet('api/ftp', null, function (result) {
+        viewModelHelper.apiGet('api/ftp/sm', null, function (result) {
             
             if (result.data.success) {
                 $scope.files = result.data.detail.map(function (obj) {

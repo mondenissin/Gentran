@@ -1,8 +1,7 @@
 ﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewBag.Title = "Administrator";
 }
-@*<h2>@ViewData["Title"].</h2>
-<h3>@ViewData["Message"]</h3>*@
 
 @section styles{
 <link href="~/Content/AdminLTE.min.css" rel="stylesheet" />
@@ -19,11 +18,11 @@
 @section header_menu {
     <header class="main-header">
     <!-- Logo -->
-    <a href="#" class="logo">
+    <a href="@Url.Content("~/Home/Index")" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>A</b>dm</span>
+        <span class="logo-mini"><i class="fa fa-arrow-left"></i></span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>A</b>dministrator</span>
+        <span class="logo-lg"><i class="fa fa-arrow-left">&nbsp;&nbsp;</i> <b>Return Home</b></span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">

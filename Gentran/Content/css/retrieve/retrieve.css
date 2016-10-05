@@ -84,3 +84,13 @@
     width:25px;
     height:25px;
 }
+
+
+.tab-label {
+    position:absolute !important;
+    left:10%;
+    bottom:5%;
+    font-family:cursive;
+    color:#e5c638;
+    font-size:15px;
+}

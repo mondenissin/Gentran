@@ -1,7 +1,8 @@
 ﻿var retrieveModule = angular.module('retrieve', ['common'])
     .config(function ($routeProvider, $locationProvider) {
         var _root = getRoot();
-        $routeProvider.when(_root + 'Retrieve/FTP', { templateUrl: _root + 'App/Retrieve/Views/FTP/FTP.html', controller: 'ftpViewModel' });
+        $routeProvider.when(_root + 'Retrieve/SM', { templateUrl: _root + 'App/Retrieve/Views/SM/sm.html', controller: 'smViewModel' });
+        $routeProvider.when(_root + 'Retrieve/Super8', { templateUrl: _root + 'App/Retrieve/Views/Super8/super.html', controller: 'superViewModel' });
         $routeProvider.otherwise({ redirectTo: _root + 'Retrieve' });
         $locationProvider.html5Mode(true);
     });
