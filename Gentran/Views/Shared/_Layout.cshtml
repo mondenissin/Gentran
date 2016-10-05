@@ -8,11 +8,13 @@
     <link rel="shortcut icon" href="~/Images/VINCE.jpg"/> 
     <link rel="stylesheet" href="~/Content/bootstrap/bootstrap.css" />
     <link rel="stylesheet" href="~/Content/Site.css" />
+    <link href="~/Content/font-awesome/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/ionicons/ionicons.min.css" rel="stylesheet" />
     @RenderSection("styles", required: false)
     @Scripts.Render("~/bundles/modernizr")
 </head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+<body class="hold-transition skin-blue sidebar-mini">
+    @*<div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -32,16 +34,19 @@
                 </ul>
             </div>
         </div>
+    </div>*@
+    @RenderSection("header_menu", required: false)
+    <div class="content-wrapper">
+        <section class="content">
+            @RenderBody()
+            @RenderSection("footer", required: false)
+        </section>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2016 - Gentran</p>
-        </footer>
-    </div>
-    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
+    @*<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>*@
+    <script src="~/Scripts/jquery/jquery-2.2.3.min.js"></script>
+    <script src="~/Scripts/plugins/raphael-min.js"></script>
     <script src="~/Scripts/bootstrap-js/bootstrap.js"></script>
+    <script src="~/Scripts/js/app.min.js"></script>
     <script type="text/javascript" src="~/Scripts/js/master/master_ajax.js"></script>
     <script type="text/javascript" src="~/Scripts/angular/angular.js"></script>
     <script type="text/javascript" src="~/Scripts/angular/angular-route.js"></script>
