@@ -1,0 +1,64 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title - Gentran</title>
+
+    <link rel="shortcut icon" href="~/Images/VINCE.jpg" />
+    <link rel="stylesheet" href="~/Content/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    <link href="~/Content/font-awesome/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/ionicons/ionicons.min.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4 col-md-offset-4">
+                        <h1 class="text-center login-title">Sign in to Gentran</h1>
+                        <div class="account-wall">
+                            <img class="profile-img" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120"
+                                 alt="">
+                            <form class="form-signin" onsubmit="return submitLogin();">
+                                <input id="username" type="text" class="form-control" placeholder="Username" required autofocus>
+                                <input id="password" type="password" class="form-control" placeholder="Password" required>
+                                <button id="submitButt" class="btn btn-lg btn-primary btn-block" type="submit">
+                                    Sign in
+                                </button>
+                                <label id="lblErrorMsg" class="lblErrorMsg" style="display:none;"></label>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <footer>
+                <p>&copy; 2016 - Gentran</p>
+            </footer>
+        </section>
+    </div>
+    <script src="~/Scripts/jquery/jquery-2.2.3.min.js"></script>
+    <script src="~/Scripts/plugins/raphael-min.js"></script>
+    <script src="~/Scripts/bootstrap-js/bootstrap.js"></script>
+    <script src="~/Scripts/js/app.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/master/master_ajax.js"></script>
+    <script type="text/javascript" src="~/Scripts/angular/angular.js"></script>
+    <script type="text/javascript" src="~/Scripts/angular/angular-route.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/master/master_main.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/login/login.js"></script>
+
+    <script type="text/javascript">
+        window.MyApp = {};
+    </script>
+    <script src="~/App/App.js"></script>
+    <script type="text/javascript">
+        MyApp.rootPath = '@Url.Content("~")';
+    </script>
+</body>
+</html>
