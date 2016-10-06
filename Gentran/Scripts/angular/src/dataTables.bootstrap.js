@@ -45,7 +45,8 @@ var DataTable = $.fn.dataTable;
 
 /* Set the defaults for DataTables initialisation */
 $.extend( true, DataTable.defaults, {
-	dom:
+    dom:
+		"<'container-fluid'<'row'<'col-sm-6 no-padding'l><'col-sm-6 no-padding'f>>>" +
 		"<'container-fluid'<'row'<'col-sm-12 no-padding'tr>>>" +
 		"<'container-fluid'<'row'<'col-sm-12'p>>>",
 	renderer: 'bootstrap'

@@ -1,4 +1,4 @@
-﻿var adminModule = angular.module('admin', ['common'])
+﻿var adminModule = angular.module('admin', ['common', 'datatables'])
     .config(function ($routeProvider, $locationProvider) {
         var _root = getRoot();
         $routeProvider.when(_root+'Admin/Userlist', { templateUrl: _root+'App/Admin/Views/Users/UserList.html', controller: 'userViewModel' });

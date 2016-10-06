@@ -251,11 +251,11 @@ button.btn.btn-link i, button.btn.btn-link span {
 }
 .table-data-pcode { 
     text-align:left!important;
-    width: 15%!important;
+    width: 10%!important;
 }
 .table-data-pdesc { 
     text-align:left!important;
-    width: 40%!important;
+    width: auto!important;
 }
 .table-data-pbcode {
     text-align:right!important;
@@ -263,7 +263,7 @@ button.btn.btn-link i, button.btn.btn-link span {
 }
 .table-data-pstatus {
     text-align:right!important;
-    width: 10%!important;
+    width: 5%!important;
 }
 .table-data-poptions {
     text-align:left!important; 

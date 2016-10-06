@@ -1,4 +1,4 @@
-﻿adminModule.controller("prodViewModel", function ($scope, adminService, $http, $q, $routeParams, $window, $location, viewModelHelper) {
+﻿adminModule.controller("prodViewModel", function ($scope, adminService, $http, $q, $routeParams, $window, $location, viewModelHelper, DTOptionsBuilder) {
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.adminService = adminService;
@@ -19,5 +19,8 @@
         alert('You selected ' + product.PMCode + ' ' + product.PMDescription);
     }
 
+    $scope.dataTableOpt = {
+        "aLengthMenu": [[10, 50, 100, -1], [10, 50, 100, 'All']],
+    };
     initialize();
 });

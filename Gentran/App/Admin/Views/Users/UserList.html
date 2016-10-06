@@ -17,13 +17,10 @@
     <tbody ng-repeat="p in people | filter:search">
         <tr>
             <td ng-cloak>
-                <a href="#" ng-click="showPerson(p)">Select</a>
+                {{p.UMId}}
             </td>
             <td ng-cloak>
-                {{p.UMFirstName}}
-            </td>
-            <td ng-cloak>
-                {{p.UMLastName}}
+                {{p.UMFirstName}} {{p.UMLastName}}
             </td>
         </tr>
     </tbody>
