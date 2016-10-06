@@ -274,7 +274,8 @@ button.btn.btn-link i, button.btn.btn-link span {
     padding: 2px!important;
 }
 .paginate_button:hover {
-    border-width:1px!important;
+    background: none!important;
+        border: 1px solid transparent !important;
 }
 .pagination {
     margin: 5px 0px;
