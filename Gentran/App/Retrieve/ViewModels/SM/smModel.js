@@ -4,10 +4,10 @@
     $scope.retrieveService = retrieveService;
     $scope.trustAsHtml = $sce.trustAsHtml;
     var initialize = function () {
-        $scope.refreshFTP();
+        $scope.refreshSM();
     }
 
-    $scope.refreshFTP = function () {
+    $scope.refreshSM = function () {
         
         viewModelHelper.apiGet('api/ftp/sm', null, function (result) {
             
@@ -96,14 +96,14 @@
 
 
     $scope.selectFile = function ($event) {
-        if (this.check == true) {
+        /*if (this.check == true) {
             $($($event.target)[0].nextElementSibling).css('border', '2px solid green');
             $($($event.target)[0].nextElementSibling).css('background', 'hsla(120,100%,50%,0.3)');
         }
         else if(this.check == false){
             $($($event.target)[0].nextElementSibling).css('border', '2px solid #e1e1e1');
             $($($event.target)[0].nextElementSibling).css('background', 'transparent');
-        }
+        }*/
     }
 
     $scope.selectFileAll = function () {

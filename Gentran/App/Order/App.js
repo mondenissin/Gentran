@@ -1,19 +1,18 @@
-﻿var retrieveModule = angular.module('retrieve', ['common'])
+﻿var orderModule = angular.module('order', ['common'])
     .config(function ($routeProvider, $locationProvider) {
         var _root = getRoot();
-        $routeProvider.when(_root + 'Retrieve/SM', { templateUrl: _root + 'App/Retrieve/Views/SM/sm.html', controller: 'smViewModel' });
-        $routeProvider.when(_root + 'Retrieve/Super8', { templateUrl: _root + 'App/Retrieve/Views/Super8/super.html', controller: 'superViewModel' });
-        $routeProvider.otherwise({ redirectTo: _root + 'Retrieve' });
+        $routeProvider.when(_root + 'Order/OrderList', { templateUrl: _root + 'App/Order/Views/Orders/order.html', controller: 'orderViewModel' });
+        $routeProvider.otherwise({ redirectTo: _root + 'Order' });
         $locationProvider.html5Mode({
             enabled: true,
             requireBase: false
         });
     });
 
-retrieveModule.factory('retrieveService', function ($rootScope, $http, $q, $location, viewModelHelper) { return MyApp.retrieveService($rootScope, $http, $q, $location, viewModelHelper); });
+orderModule.factory('orderService', function ($rootScope, $http, $q, $location, viewModelHelper) { return MyApp.orderService($rootScope, $http, $q, $location, viewModelHelper); });
 
 (function (myApp) {
-    var retrieveService = function ($rootScope, $http, $q, $location, viewModelHelper) {
+    var orderService = function ($rootScope, $http, $q, $location, viewModelHelper) {
 
         var self = this;
 
@@ -21,7 +20,7 @@ retrieveModule.factory('retrieveService', function ($rootScope, $http, $q, $loca
          
         return this;
     };
-    myApp.retrieveService = retrieveService;
+    myApp.orderService = orderService;
 }(window.MyApp));
 
 /*
