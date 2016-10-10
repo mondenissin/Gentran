@@ -123,6 +123,16 @@ textarea {
     margin-top: 10px;
 }
 
+ul.data-management li.active{
+     background-color: #f7790e;  
+     border-top-left-radius: 10px;
+     border-bottom-left-radius: 10px;
+}
+
+ul.data-management li.active .btn {
+     color:#fff;
+}
+
 button.btn.btn-link {
     color: #8aa4af;
     padding: 5px 5px 5px 15px;
@@ -132,17 +142,23 @@ button.btn.btn-link {
     text-align:left;
     text-decoration:none;
 }
-button.btn.btn-link:hover {
+ul.data-management li:not(.active):hover {
     color:#fff;
-    background-color: #FABD44;
+    background-color: #FABD44;  
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
-button.btn.btn-link:active {
-    background-color: #F88F00;
+ul.data-management li:hover .btn {
+     color:#fff;
+}
+
+ul.data-management li:active {
+    background-color: transparent;
 
 }
 button.btn.btn-link:focus {
     outline:0;
-    background-color: #F88F00;
+    background-color: transparent;
     color: white;
 }
 
@@ -204,7 +220,7 @@ button.btn.btn-link i, button.btn.btn-link span {
 {
     text-align:left;
     color:#777;
-    white-space:nowrap;
+    padding: 4px 10px!important;
 }
 
 .page-table table td label
@@ -226,7 +242,7 @@ button.btn.btn-link i, button.btn.btn-link span {
 {
     margin-top: 50%;
 }
- .page-table table td img
+.page-table table td img
 {
     float:left;
     padding: 2px;
@@ -236,7 +252,7 @@ button.btn.btn-link i, button.btn.btn-link span {
     border:1px solid #d0d0d0;
     background-color:#f0f0f0;
     cursor: pointer;
-    margin-top: 6.5px;
+    margin-top: 4.5px;
 }
 .page-table td img:hover
 {
@@ -251,11 +267,11 @@ button.btn.btn-link i, button.btn.btn-link span {
 }
 .table-data-pcode { 
     text-align:left!important;
-    width: 15%!important;
+    width: 10%!important;
 }
 .table-data-pdesc { 
     text-align:left!important;
-    width: 40%!important;
+    width: auto!important;
 }
 .table-data-pbcode {
     text-align:right!important;
@@ -263,7 +279,7 @@ button.btn.btn-link i, button.btn.btn-link span {
 }
 .table-data-pstatus {
     text-align:right!important;
-    width: 10%!important;
+    width: 5%!important;
 }
 .table-data-poptions {
     text-align:left!important; 

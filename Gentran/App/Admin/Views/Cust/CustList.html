@@ -1,0 +1,52 @@
+﻿<div class="page-table">
+    <table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-bordered bordered table-striped table-condensed datatable">
+            <thead>
+                <tr>
+                    <th>Customer Code</th>
+                    <th>Customer Name</th>
+                    <th>Status</th>
+                    <th>Assignment</th>
+                    <th class="no-sort">Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="c in customers | filter:search">
+                    <td ng-cloak>
+                        {{c.CMCode}}
+                    </td>
+                    <td ng-cloak>
+                        {{c.CMDescription}}
+                    </td>
+                    <td ng-cloak>
+                        {{c.CMStatus == '1' ? 'Active' : 'Inactive'}}
+                    </td>
+                    <td ng-cloak>
+                        <img title="User assignment to Customer" ng-click="CustomerToUser(c.CMId,c.CMCode)" src="../Images/master/information.png">
+                        <span ng-if="c.UCount > 1 ">
+                            {{c.UCount}} users assigned
+                        </span>
+                        <span ng-if="c.UCount <= 1">
+                            {{c.UCount == 1 ? c.UCount : 'No'}} user assigned
+                        </span>
+                    </td>
+                    <td class="table-data-poptions" ng-cloak>
+                        <img title="Edit Customer Details" ng-click="getDetails(c.CMCode)" src="../Images/master/edit.png">
+                        <img title="Edit Customer Mapping" ng-click="getMapping(c.CMCode)" src="../Images/master/assign.png">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</div>
+
+<script>
+    $(function () {
+        var parent = $('.data-management');
+        parent.addClass('menu-open').css({ 'display': 'block' });
+        var elem = $('.btncust');
+        parent.find('li').each(function () {
+            $(this).removeClass('active');
+        });
+        elem.closest('li').addClass('active');
+    });
+
+</script>
