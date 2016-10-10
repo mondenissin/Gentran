@@ -1,14 +1,14 @@
-﻿retrieveModule.controller("smViewModel", function ($scope, retrieveService, $http, $q, $routeParams, $window, $location, viewModelHelper, $timeout) {
+﻿retrieveModule.controller("smViewModel", function ($sce,$scope, retrieveService, $http, $q, $routeParams, $window, $location, viewModelHelper, $timeout) {
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.retrieveService = retrieveService;
-
+    $scope.trustAsHtml = $sce.trustAsHtml;
     var initialize = function () {
         $scope.refreshFTP();
     }
 
     $scope.refreshFTP = function () {
-
+        
         viewModelHelper.apiGet('api/ftp/sm', null, function (result) {
             
             if (result.data.success) {
@@ -96,7 +96,6 @@
 
 
     $scope.selectFile = function ($event) {
-        console.log(this);
         if (this.check == true) {
             $($($event.target)[0].nextElementSibling).css('border', '2px solid green');
             $($($event.target)[0].nextElementSibling).css('background', 'hsla(120,100%,50%,0.3)');
@@ -118,9 +117,100 @@
         }
     }
 
+    function convertHTML(tag) {
+    
+        return $sce.trustAsHtml(tag);
+        
+    }
+
+    $scope.getSelected = function () {
+        var chk = false;
+        var ctr = 0;
+        var listFile = [];
+        var listElem = [];
+        
+        $('.po-cbx').each(function () {
+
+            if (this.checked == true) {
+
+                chk = true;
+                var tr;
+
+                //$(this.parentElement).remove();
+                this.checked = false;
+
+                listFile[ctr] = {};
+
+                listElem[ctr] = {};
+                listElem[ctr].element = $(this.parentElement);
+                
+                listFile[ctr].outlet = "SM";
+                listFile[ctr].fileName = this.nextElementSibling.children[0].children[2].textContent;
+                listFile[ctr].fileLogo = this.nextElementSibling.children[0].children[0].outerHTML;
+                listFile[ctr].name = this.nextElementSibling.children[0].children[1].textContent;
+                listFile[ctr].fileID = this.nextElementSibling.children[0].children[1].textContent.replace('.', '');
+
+                ctr++; 
+            }
+        }).promise().done(function () {
+            $scope.uploadedFile = listFile;
+            
+            if (chk) {
+                $('#mapModal').modal('show');
+                var i = 0, count = listFile.length;
+                var execTime;
+                function LaodFile() {
+                    var fileName = [];
+                    var elemName = [];
+                    var items = {};
+
+                    elemName[0] = listElem[i];
+                    fileName[0] = listFile[i];
+                    items.payload = fileName;
+
+                    viewModelHelper.apiPost('api/masteruploader', JSON.stringify(items), function (result) {
+                        if (result.data.success) {
+                            var mapData = result.data.filecontent;
+                            execTime = result.data.execution;
+                            //console.log(mapData);
+                            console.log(execTime);
+                            $('#' + fileName[0].fileID).text("Reading");
+                            $('#' + fileName[0].fileID).animate({ width: '100%' }, execTime);
+
+                            setTimeout(function () {
+                                $('#' + fileName[0].fileID).text("Successful");
+
+                                //IF PO IS SUCCESSFUL
+                                $(elemName[0].element).remove();
+                            }, execTime);
+                        }
+                    });
+
+                    i++;
+                    if (i < count) {
+                        setTimeout(LaodFile, 1000);
+                    }
+                }
+                setTimeout(function () {
+                    LaodFile();
+                }, execTime);
+            } else {
+                alert("Select File");
+            }
+        });
+    }
+
+    $scope.clearSuccess = function () {
+        //$('#mapModal .modal-body table tbody').remove();
+    }
+    
+    $scope.closeModal = function () {
+        $('#mapModal').modal('hide');
+        //$('#mapModal .modal-body table tbody').remove();
+    }
+
     initialize();
 });
-
 
 retrieveModule.directive('tooltip', function () {
     return {

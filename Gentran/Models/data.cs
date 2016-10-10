@@ -113,6 +113,7 @@ public class Value
     
     public bool isMultiple { get; set; }
 
+    
     //------ERROR LOG------//
     
     public string errorResult { get; set; }
@@ -168,12 +169,19 @@ public class Value
     
     public string name { get; set; }
 
-    
+    public string element { get; set; }
+
     public string filename { get; set; }
+
+    public string fileID { get; set; }
+
+    public string fileLogo { get; set; }
+
+    public string outlet { get; set; }
 
     //-------type---------//
 
-    
+
     public string sugacc { get; set; }
     
     public string sugacc2 { get; set; }
@@ -241,9 +249,11 @@ public class Response
 {
     public Boolean success { get; set; }
     public object detail { get; set; }
+    public object unmapdetail { get; set; }
     public object errortype { get; set; }
     public string[] filecontent { get; set; }
     public string payloadvalue { get; set; }
+    public long execution { get; set; }
 }
 public class Transaction
 {

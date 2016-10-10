@@ -90,6 +90,7 @@ namespace Gentran.Controllers.api
                     fileList.Clear();
                     fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp", "*.pdf"));
                     fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp", "*.txt"));
+                    fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp", "*.csv"));
 
                     int intCount = 0;
                     intCount = fileList.Count;
