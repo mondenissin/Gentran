@@ -15,7 +15,7 @@ namespace Gentran.Controllers.api
         {
             bool success = true;
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
-            String sQuery = "select * from tblusermaster";
+            String sQuery = "SELECT  UMId, UMUsername, UMEmail, UMStatus, (select USDescription from tbluserstatus where USId = UMStatus) as USStatus, UMFirstname, UMLastname,UMType FROM tblusermaster where UMType != 'DEV'";
             SqlCommand cmd = new SqlCommand(sQuery, connection);
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;

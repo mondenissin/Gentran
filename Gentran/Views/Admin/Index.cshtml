@@ -5,7 +5,8 @@
 
 @section styles{
 <link href="~/Content/AdminLTE.min.css" rel="stylesheet" />
-<link href="~/Content/skins/_all-skins.min.css" rel="stylesheet" />    
+<link href="~/Content/skins/_all-skins.min.css" rel="stylesheet" />  
+<link href="~/Content/ngDialog.css" rel="stylesheet" />  
 }
 
 @section scripts{
@@ -13,6 +14,8 @@
     <script src="~/App/Admin/RootViewModel.js"></script>
     <script src="~/App/Admin/ViewModels/Users/UserListModel.js"></script>
     <script src="~/App/Admin/ViewModels/Prod/ProdListModel.js"></script>
+    <script src="~/App/Admin/ViewModels/Cust/CustListModel.js"></script>
+    <script src="~/App/Admin/ViewModels/TransLog/TransLogListModel.js"></script>
 }
 
 @section header_menu {
@@ -57,12 +60,12 @@
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
                     </a>
-                    <ul class="treeview-menu">
-                        <li><button class="btn btn-link" ng-click="userList()"><i class="fa fa-user"></i> User</button></li>
-                        <li><button class="btn btn-link" ng-click="prodList()"><i class="fa fa-shopping-cart"></i> Product</button></li>
-                        <li><button class="btn btn-link" ng-click="custList()"><i class="fa fa-users"></i> Customer</button></li>
-                        <li><button class="btn btn-link" ng-click="prodList()"><i class="fa fa-database"></i> Logs</button></li>
-                        <li><button class="btn btn-link" ng-click="prodList()"><span class="glyphicon glyphicon-sort"></span> Connections</button></li>
+                    <ul class="treeview-menu data-management">
+                        <li><button class="btn btn-link btnuser" ng-click="userList()"><i class="fa fa-user"></i> User</button></li>
+                        <li><button class="btn btn-link btnprod" ng-click="prodList()"><i class="fa fa-shopping-cart"></i> Product</button></li>
+                        <li><button class="btn btn-link btncust" ng-click="custList()"><i class="fa fa-users"></i> Customer</button></li>
+                        <li><button class="btn btn-link btnlogs" ng-click="logList()"><i class="fa fa-database"></i> Logs</button></li>
+                        <li><button class="btn btn-link btbconn" ng-click="connections()"><span class="glyphicon glyphicon-sort"></span> Connections</button></li>
                     </ul>
                 </li>
                 <li>
@@ -77,7 +80,8 @@
 }
 <!-- Body -->
 <section class="content-body">
-    <div>
-        <div data-ng-view></div>
+    <div class="page-table">
+        <div data-ng-view>
+        </div>
     </div>
 </section>

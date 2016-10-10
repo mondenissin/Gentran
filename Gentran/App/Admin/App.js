@@ -1,11 +1,26 @@
 ﻿var adminModule = angular.module('admin', ['common', 'datatables'])
-    .config(function ($routeProvider, $locationProvider) {
-        var _root = getRoot();
-        $routeProvider.when(_root+'Admin/Userlist', { templateUrl: _root+'App/Admin/Views/Users/UserList.html', controller: 'userViewModel' });
-        $routeProvider.when(_root + 'Admin/Prodlist', { templateUrl: _root + 'App/Admin/Views/Prod/ProdList.html', controller: 'prodViewModel' });
-        $routeProvider.otherwise({ redirectTo: _root + 'Admin' });
-        $locationProvider.html5Mode(true);
-    });
+.config(function ($routeProvider, $locationProvider) {
+    var _root = getRoot();
+    $routeProvider.when(_root+'Admin/Users', { templateUrl: _root+'App/Admin/Views/Users/UserList.html', controller: 'userViewModel' });
+    $routeProvider.when(_root + 'Admin/Products', { templateUrl: _root + 'App/Admin/Views/Prod/ProdList.html', controller: 'prodViewModel' });
+    $routeProvider.when(_root + 'Admin/Customers', { templateUrl: _root + 'App/Admin/Views/Cust/CustList.html', controller: 'custViewModel' });
+    $routeProvider.when(_root + 'Admin/TransactionLogs', { templateUrl: _root + 'App/Admin/Views/TransLog/TransLogList.html', controller: 'translogViewModel' });
+    $routeProvider.when(_root + 'Admin/Connections', { templateUrl: _root + 'App/Admin/Views/Connections/ConnectionList.html', controller: 'connectionViewModel' });
+    $routeProvider.otherwise({ redirectTo: _root + 'Admin' });
+    $locationProvider.html5Mode({
+        enabled: true,
+        requireBase: false
+    });    
+});
+
+adminModule.run(function (DTDefaultOptions) {
+    // Display 50 items per page by default
+    DTDefaultOptions.setDisplayLength(50);
+    var cDom = "<'row dt-info'<'col-sm-5 'i><'col-sm-7'p>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-5'><'col-sm-7'p>>";
+    DTDefaultOptions.setOption('dom', cDom);
+});
 
 adminModule.factory('adminService', function ($rootScope, $http, $q, $location, viewModelHelper) { return MyApp.adminService($rootScope, $http, $q, $location, viewModelHelper); });
 

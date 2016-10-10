@@ -1,4 +1,4 @@
-﻿adminModule.controller("prodViewModel", function ($scope, adminService, $http, $q, $routeParams, $window, $location, viewModelHelper, DTOptionsBuilder) {
+﻿adminModule.controller("prodViewModel", function ($scope, adminService, $http, $q, $routeParams, $window, $location, viewModelHelper, DTOptionsBuilder, DTColumnDefBuilder) {
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.adminService = adminService;
@@ -14,9 +14,25 @@
         viewModelHelper.apiGet('api/prod', null, function (result) {
             $scope.product = result.data.detail;
         });
+
+        $scope.dtOptions = DTOptionsBuilder.newOptions();
+        $scope.dtColumnDefs = [
+           DTColumnDefBuilder.newColumnDef('no-sort').notSortable()
+        ];
     }
     $scope.showProduct = function (product) {
         alert('You selected ' + product.PMCode + ' ' + product.PMDescription);
+    }
+
+    $scope.getDetails = function (p) {
+        $('#txt_prodID').val(p.PMId);
+        $('#txt_prodCode').val(p.PMCode);
+        $('#txt_prodDescription').val(p.PMDescription);
+        $('#txt_prodBarcode').val(p.PMBarcode);
+        $('#txt_prodType').val(p.PMCategory);
+        $('#txt_prodStatus').val(p.PMStatus);
+
+        $('#ProductDetailsModal').modal('show');
     }
 
     $scope.dataTableOpt = {

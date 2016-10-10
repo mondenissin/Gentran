@@ -1,27 +1,67 @@
 ﻿
-<hr />
-<input type="text" ng-model="search[searchBy]" />Search By: 
-<select ng-model="searchBy">
-    <option value="UMFirstName" selected>First Name</option>
-    <option value="UMLastName">Last Name</option>
-</select>
-<hr />
-<table id="UserTable">
+<table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-bordered bordered table-striped table-condensed datatable">
     <thead>
         <tr>
-            <th></th>
-            <th>First Name</th>
-            <th>Last Name</th>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th class="no-sort">Options</th>
         </tr>
     </thead>
-    <tbody ng-repeat="p in people | filter:search">
-        <tr>
-            <td ng-cloak>
-                {{p.UMId}}
-            </td>
-            <td ng-cloak>
-                {{p.UMFirstName}} {{p.UMLastName}}
+    <tbody>
+        <tr ng-repeat="p in people | filter:search">
+            <td ng-cloak> {{p.UMId}} </td>
+            <td ng-cloak> {{p.UMUsername}} </td>
+            <td ng-cloak> {{p.UMFirstname}} {{p.UMLastname}} </td>
+            <td ng-cloak> {{p.UMEmail}} </td>
+            <td ng-cloak> {{p.UMType}} </td>
+            <td ng-cloak> {{p.USStatus}} </td>
+            <td ng-cloak ng-switch="p.UMStatus">
+                <div class="case" ng-switch-when="ACT">
+                    <img title="Edit User Details" ng-click="userDetails(p.UMId)" src="../Images/master/edit.png">
+                    <img title="Reset" ng-click="resetUser(p.UMId)" src="../Images/master/reset.png">
+                    <img title="Deactivate" ng-click="removeUser(p.UMId)" src="../Images/master/remove.png">
+                </div>
+                <div class="case" ng-switch-when="INA">
+                    <img title="Edit User Details" ng-click="userDetails(p.UMId)" src="../Images/master/edit.png">
+                    <img title="Deactivate" ng-click="removeUser(p.UMId)" src="../Images/master/remove.png">
+                </div>
+                <div class="case" ng-switch-when="DEA">
+                    <img title="Reset" ng-click="resetUser(p.UMId)" src="../Images/master/reset.png">
+                </div>
+                 <div class="case" ng-switch-default>
+
+                 </div>
+                
             </td>
         </tr>
     </tbody>
 </table>
+
+<script>
+    $(function () {
+        var parent = $('.data-management');
+        parent.addClass('menu-open').css({ 'display': 'block' });
+        var elem = $('.btnuser');
+        parent.find('li').each(function () {
+            $(this).removeClass('active');
+        });
+        elem.closest('li').addClass(' active');
+    });
+</script>
+
+<script type="text/ng-template" id="UserModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">I'm a modal!</h3>
+    </div>
+    <div class="modal-body" id="modal-body">
+       
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="userViewModel.ok()">OK</button>
+        <button class="btn btn-warning" type="button" ng-click="userViewModel.cancel()">Cancel</button>
+    </div>
+</script>

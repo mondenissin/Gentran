@@ -218,7 +218,8 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
       var $input = this.$element.find('input')
       if ($input.prop('type') == 'radio') {
         if ($input.prop('checked') && this.$element.hasClass('active')) changed = false
-        else $parent.find('.active').removeClass('active')
+        else $parent.find('.active').
+
       }
       if (changed) $input.prop('checked', !this.$element.hasClass('active')).trigger('change')
     }

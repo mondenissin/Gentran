@@ -1,41 +1,88 @@
-﻿<!--<input type="text" ng-model="search[searchBy]" />Search By:
-<select ng-model="searchBy">
-    <option value="PMCode" selected>Product Code</option>
-    <option value="PMDescription">Product Detail</option>
-    <option value="PMDescription">Product Barcode</option>
-</select>
-<hr />     -->
-<div class="page-table">
-    <table id="UserTable" datatable="ng"  class="table table-bordered bordered table-striped table-condensed datatable" ui-jq="dataTable" ui-options="dataTableOpt">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Product Code</th>
-                    <th>Product Description</th>
-                    <th>Product Barcode</th>
-                    <th>Status</th>
-                    <th>Options</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="p in product | filter:search">
-                    <td class="table-data-id" ng-cloak>
-                        {{p.PMId}}
-                    </td>
-                    <td class="table-data-pcode" ng-cloak>
-                        {{p.PMCode}}
-                    </td>
-                    <td class="table-data-pdesc" ng-cloak>
-                        {{p.PMDescription}}
-                    </td>
-                    <td class="table-data-pbcode" ng-cloak>
-                        {{p.PMBarcode}}
-                    </td>
-                    <td class="table-data-pstatus" ng-cloak>
-                        {{p.PSDescription}}
-                    </td>
-                    <td class="table-data-poptions" ng-cloak></td>
-                </tr>
-            </tbody>
-        </table>
+﻿<table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-responsive table-bordered bordered table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Product Code</th>
+            <th>Product Description</th>
+            <th>Product Barcode</th>
+            <th>Status</th>
+            <th class="no-sort">Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="p in product | filter:search">
+            <td class="table-data-id" ng-cloak>
+                {{p.PMId}}
+            </td>
+            <td class="table-data-pcode" ng-cloak>
+                {{p.PMCode}}
+            </td>
+            <td class="table-data-pdesc" ng-cloak>
+                {{p.PMDescription}}
+            </td>
+            <td class="table-data-pbcode" ng-cloak>
+                {{p.PMBarcode}}
+            </td>
+            <td class="table-data-pstatus" ng-cloak>
+                {{p.PSDescription}}
+            </td>
+            <td class="table-data-poptions" ng-cloak>
+                <img title="Edit Product Details" ng-click="getDetails(p)" src="../Images/master/edit.png">
+                <img title="Edit Product Mapping" ng-click="getMapping(p)" src="../Images/master/assign.png">
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<!------- PRODUCT DETAILS MODAL ------->
+<div id="ProductDetailsModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Product Details</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label>Product ID:</label>
+                                <input id="txt_prodID" class="form-control input-sm" type="text" disabled />
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label>Product Code:</label>
+                                <input id="txt_prodCode" class="form-control  input-sm" type="text" disabled />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label>Product Description:</label>
+                                <input id="txt_prodDescription" class="form-control  input-sm" type="text" disabled />
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label>Product Barcode:</label>
+                                <input id="txt_prodBarcode" class="form-control  input-sm" type="text" disabled />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label>Product Type:</label>
+                                <input id="txt_prodType" class="form-control input-sm" type="text" disabled />
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label>Product Status:</label>
+                                <input id="txt_prodStatus" class="form-control  input-sm" type="text" disabled />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
 </div>
+<!------- END OF PRODUCT DETAILS MODAL ------->

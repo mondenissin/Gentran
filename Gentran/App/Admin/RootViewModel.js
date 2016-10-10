@@ -13,11 +13,23 @@
     }
 
     $scope.userList = function () {
-        viewModelHelper.navigateTo('Admin/Userlist');
+        viewModelHelper.navigateTo('Admin/Users');
     }
 
     $scope.prodList = function () {
-        viewModelHelper.navigateTo('Admin/Prodlist');
+        viewModelHelper.navigateTo('Admin/Products');
+    }
+
+    $scope.custList = function () {
+        viewModelHelper.navigateTo('Admin/Customers');
+    }
+
+    $scope.logList = function () {
+        viewModelHelper.navigateTo('Admin/TransactionLogs');
+    }
+    
+    $scope.connections = function () {
+        viewModelHelper.navigateTo('Admin/Connections');
     }
 
     initialize();
