@@ -23,16 +23,16 @@
             <td ng-cloak> {{p.USStatus}} </td>
             <td ng-cloak ng-switch="p.UMStatus">
                 <div class="case" ng-switch-when="ACT">
-                    <button class="btn btn-default btn-xs option-icon-size" ng-click="userDetails(p.UMId)" title="Edit User Details"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                    <button class="btn btn-default btn-xs option-icon-size" ng-click="resetUser(p.UMId)" title="Reset"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-                    <button class="btn btn-default btn-xs option-icon-size" ng-click="removeUser(p.UMId)" title="Deactivate"><i class="fa fa-power-off" aria-hidden="true"></i></button>
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="userDetails(p)" title="Edit User Details"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="resetUser(p)" title="Reset"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="removeUser(p)" title="Deactivate"><i class="fa fa-power-off" aria-hidden="true"></i></button>
                 </div>
                 <div class="case" ng-switch-when="INA">
-                    <button class="btn btn-default btn-xs option-icon-size" ng-click="userDetails(p.UMId)" title="Edit User Details"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                    <button class="btn btn-default btn-xs option-icon-size" ng-click="removeUser(p.UMId)" title="Deactivate"><i class="fa fa-power-off" aria-hidden="true"></i></button>
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="userDetails(p)" title="Edit User Details"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="removeUser(p)" title="Deactivate"><i class="fa fa-power-off" aria-hidden="true"></i></button>
                 </div>
                 <div class="case" ng-switch-when="DEA">
-                    <button class="btn btn-default btn-xs option-icon-size" ng-click="resetUser(p.UMId)" title="Reset"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="resetUser(p)" title="Reset"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                 </div>
                  <div class="case" ng-switch-default>
 

@@ -43,7 +43,7 @@
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><i class="fa fa-home"></i></span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><i class="fa fa-arrow-left">&nbsp;&nbsp;</i> <b>Return Home</b></span>
+            <span class="logo-lg"><i class="fa fa-home">&nbsp;&nbsp;</i> <b>Home</b></span>
             </a>
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top">
@@ -260,8 +260,14 @@
     <script src="~/Scripts/angular/src/angular-datatables.renderer.js"></script>
     <script src="~/Scripts/angular/src/angular-datatables.util.js"></script>
     <script src="~/Scripts/angular/src/angular-datatables.instances.js"></script>
-    <script src="~/Scripts/sly.js"></script>
     @*//--->*@
+
+    <script type="text/javascript">
+        function ShowHideDiv(chk_changepass) {
+        	var changepass = document.getElementById("div-changepass");
+        	changepass.style.display = chk_changepass.checked ? "block" : "none";
+        }
+    </script>
 
     <script type="text/javascript">
         window.MyApp = {};
