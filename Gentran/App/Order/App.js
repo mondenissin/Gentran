@@ -2,7 +2,7 @@
     .config(function ($routeProvider, $locationProvider) {
         var _root = getRoot();
         $routeProvider.when(_root + 'Order/OrderList', { templateUrl: _root + 'App/Order/Views/Orders/order.html', controller: 'orderViewModel' });
-        $routeProvider.otherwise({ redirectTo: _root + 'Order' });
+        $routeProvider.otherwise({ redirectTo: _root + 'Order/OrderList' });
         $locationProvider.html5Mode({
             enabled: true,
             requireBase: false

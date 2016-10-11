@@ -13,5 +13,15 @@
         viewModelHelper.navigateTo('Order/OrderList');
     }
 
+    $scope.showOrder = function () {
+
+        if (orderService.orderId == undefined) {
+            alert("Enter PO Number");
+        } else {
+            console.log(orderService.orderId);
+            console.log($scope.order);
+        }
+    }
+
     initialize();
 });

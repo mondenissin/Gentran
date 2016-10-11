@@ -134,7 +134,6 @@
             if (this.checked == true) {
 
                 chk = true;
-                var tr;
 
                 //$(this.parentElement).remove();
                 this.checked = false;

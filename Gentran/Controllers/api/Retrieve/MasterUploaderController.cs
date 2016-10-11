@@ -193,7 +193,6 @@ namespace Gentran.Controllers.api.Retrieve
             for (int x=0;x<data.Count;x++) {
                 try
                 {
-                    //"CustNo","PONum","oDate","dDate","ProdCode","qty","uUser","uAcct"
                     uQty = data[x]["qty"].ToString();
                     uPrice = "0";
 
