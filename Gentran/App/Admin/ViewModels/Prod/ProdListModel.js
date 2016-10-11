@@ -21,7 +21,7 @@
         ];
     }
     $scope.showProduct = function (product) {
-        alert('You selected ' + product.PMCode + ' ' + product.PMDescription);
+        alert('You selected ' + product.PMCode + ' ' + product.PMDescription); 
     }
 
     $scope.getDetails = function (p) {
@@ -33,6 +33,10 @@
         $('#txt_prodStatus').val(p.PMStatus);
 
         $('#ProductDetailsModal').modal('show');
+    }
+
+    $scope.addProduct = function () {
+        $('#AddProductModal').modal('show');
     }
 
     $scope.dataTableOpt = {

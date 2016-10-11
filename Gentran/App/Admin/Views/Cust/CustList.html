@@ -1,4 +1,8 @@
-﻿<div class="page-table">
+﻿<div class="breadcrumb">
+    <button class="btn btn-default btn-xs icon-size" title="Add Customer" ng-click="addCustomer()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+    <button class="btn btn-default btn-xs icon-size" title="Batch Add Customer"><i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
+</div>
+<div class="page-table">
     <table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-bordered bordered table-striped table-condensed datatable">
             <thead>
                 <tr>
@@ -10,7 +14,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="c in customers | filter:search">
+                <tr ng-repeat="c in customers track by c.CMCode ">
                     <td ng-cloak>
                         {{c.CMCode}}
                     </td>
@@ -21,7 +25,7 @@
                         {{c.CMStatus == '1' ? 'Active' : 'Inactive'}}
                     </td>
                     <td ng-cloak>
-                        <img title="User assignment to Customer" ng-click="CustomerToUser(c.CMId,c.CMCode)" src="../Images/master/information.png">
+                        <button class="btn btn-default btn-xs option-icon-size" ng-click="CustomerToUser(c)" title="User assignment to Customer"><i class="fa fa-info" aria-hidden="true"></i></button>  
                         <span ng-if="c.UCount > 1 ">
                             {{c.UCount}} users assigned
                         </span>
@@ -30,16 +34,65 @@
                         </span>
                     </td>
                     <td class="table-data-poptions" ng-cloak>
-                        <img title="Edit Customer Details" ng-click="getDetails(c.CMCode)" src="../Images/master/edit.png">
-                        <img title="Edit Customer Mapping" ng-click="getMapping(c.CMCode)" src="../Images/master/assign.png">
+                        <button class="btn btn-default btn-xs option-icon-size" ng-click="getDetails(c.CMCode)" title="View Customer Details"><i class="fa fa-search" aria-hidden="true"></i></button>
+                        <button class="btn btn-default btn-xs option-icon-size" ng-click="getMapping(c.CMCode)" title="Edit Customer Mapping"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                     </td>
                 </tr>
             </tbody>
         </table>
 </div>
 
+
+<!------- ADD CUSTOMER MODAL ------->
+<div id="AddCustomerModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-user"></i> Add Customer</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label>Customer ID:</label>
+                        <input id="txt_custid" class="form-control input-sm" type="text" disabled/>
+                    </div>
+                    <div class="form-group">
+                        <label>Customer Area:</label> 
+                        <select id="ddl_custarea" class="form-control input-sm">
+                            <option selected disabled>-- Please Select Area --</option>
+                            <option value="1">Luzon</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Customer Code:</label> 
+                        <input id="txt_custcode" class="form-control  input-sm" type="text" />
+                    </div>
+                    <div class="form-group">
+                        <label>Customer Name:</label> 
+                        <input id="txt_custname" class="form-control  input-sm" type="text" />
+                    </div>
+                    <div class="form-group">
+                        <label>Customer Status:</label> 
+                        <select id="ddl_custstatus" class="form-control input-sm">
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-sm">Add Customer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!------- END OF ADD CUSTOMER MODAL ------->
+
 <script>
-    $(function () {
+    $(function () { 
         var parent = $('.data-management');
         parent.addClass('menu-open').css({ 'display': 'block' });
         var elem = $('.btncust');

@@ -72,8 +72,7 @@ public class AppSettings
         return new string(chars);
     }
 
-    public string toDate(string date) {
-
+    public string toDate(string date) {      
         char[] dSplit = date.ToCharArray();
 
         if (date.Length == 6)
@@ -90,4 +89,3 @@ public class AppSettings
         return date;
     }
 }
-

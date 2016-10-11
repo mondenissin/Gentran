@@ -13,12 +13,16 @@
 
         viewModelHelper.apiGet('api/cust', null, function (result) {
             $scope.customers = result.data.detail;
-        });
+        }); 
 
         $scope.dtOptions = DTOptionsBuilder.newOptions();
         $scope.dtColumnDefs = [
            DTColumnDefBuilder.newColumnDef('no-sort').notSortable()
         ];
+    }
+
+    $scope.addCustomer = function () {
+        $('#AddCustomerModal').modal('show');
     }
     
     initialize();

@@ -43,7 +43,7 @@
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><i class="fa fa-home"></i></span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><i class="fa fa-arrow-left">&nbsp;&nbsp;</i> <b>Return Home</b></span>
+            <span class="logo-lg"><i class="fa fa-home">&nbsp;&nbsp;</i> <b>Home</b></span>
             </a>
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top">
@@ -56,8 +56,8 @@
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="user user-menu">
                             <a href="#">
-                                <img src="~/Images/user3-128x128.jpg" class="user-image" alt="User Image">
-                                <span class="hidden-xs">Alexander Pierce</span>
+                                <img src="~/Images/shermaine.jpg" class="user-image" alt="User Image">
+                                <span class="hidden-xs">Shermaine Gae Tan</span>
                             </a>
 
                         </li>
@@ -67,9 +67,9 @@
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header">
-                                    <img src="~/Images/user3-128x128.jpg" class="img-circle" alt="User Image">
+                                    <img src="~/Images/shermaine.jpg" class="img-circle" alt="User Image">
                                     <p>
-                                        Alexander Pierce - Web Developer
+                                        Shermaine Gae Tan - Web Developer
                                         <small>Member since Nov. 2012</small>
                                     </p>
                                 </li>
@@ -91,6 +91,9 @@
         <div data-ng-app="admin" data-ng-controller="rootViewModel">
             @RenderSection("header_menu", required: false)
             <div class="content-wrapper">
+                <div class="action_bar">
+                    @RenderSection("action_menu", required: false)
+                </div> 
                 <section class="content">
                     @RenderBody()
                     <hr />
@@ -99,6 +102,142 @@
                     </footer>
                 </section>
             </div>
+            <!-- =================================== MODALS ==================================== -->
+            <!------- EDIT USER MODAL ------->
+            <div id="editUserModal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" id="btnEditModalClose" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title"><span class="glyphicon glyphicon-pencil"></span> User Profile</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <form class="form-horizontal" role="form">
+                                    <div class="col-xs-6 col-md-3">
+                                        <div style="height:120px; width:100%; background: black; border-radius:50%;" class="link-user-imgprof" title="Click to change."></div><br />
+                                        <input type="file" id="fuProfPic" style="width:100%;" onchange="previewFile()" />
+                                        <input type="hidden" id="imageBase64" />
+                                    </div>
+                                    <div class="col-md-9 col-xs-12">
+
+                                        <div class="form-group">
+                                            <div class="col-md-4 col-xs-12">
+                                                <label class="control-label">User ID:</label>
+                                            </div>
+                                            <div class="col-md-8 col-xs-12">
+                                                <input id="txt_edituserid" class="form-control input-sm" type="text" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label class="control-label">User Name: <span class="required">*</span></label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input id="txt_edituname" class="form-control input-sm" type="text">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label class="control-label">Nickname:</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input id="txt_editnname" class="form-control input-sm" type="text">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label class="control-label">First Name: <span class="required">*</span></label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input id="txt_editfname" class="form-control input-sm" type="text">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label class="control-label">Middle Name:</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input id="txt_editmname" class="form-control input-sm" type="text">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label class="control-label">Last Name: <span class="required">*</span></label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input id="txt_editlname" class="form-control input-sm" type="text">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <label class="control-label">Email:</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input id="txt_editemail" class="form-control input-sm" type="email">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-4"></div>
+                                            <div class="col-md-8">
+                                                <input type="checkbox" id="chk_changepass" onchange="ShowHideDiv(chk_changepass)" />
+                                                <label class="control-label">Change Password</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="div-changepass" style="display:none;">
+                                        <div class="divider"></div>
+                                        <div class="col-md-3 col-xs-12"></div>
+                                        <div class="col-md-9 col-xs-12">
+                                            <div class="form-group">
+                                                <div class="col-md-4 col-xs-12">
+                                                    <label class="control-label">Old Password: <span class="required">*</span></label>
+                                                </div>
+                                                <div class="col-md-8 col-xs-12">
+                                                    <input id="txt_oldpass" class="form-control input-sm" type="password" placeholder="Old password">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-md-4">
+                                                    <label class="control-label">New Password: <span class="required">*</span></label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input id="txt_newpass" class="form-control input-sm" type="password" placeholder="New password">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-md-4">
+                                                    <label class="control-label">Confirm Password: <span class="required">*</span></label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input id="txt_confirmpass" class="form-control input-sm" type="password" placeholder="Confirm new password">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default btn-sm" data-dismiss="modal" id="btnEditModalCancel" value="Cancel" />
+                            <input type="button" class="btn btn-primary btn-sm" id="btnSaveProfChange" ng-click="saveUserDetails()" value="Save" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!------- END OF EDIT USER MODAL ------->
+            <!-- =================================== END OF MODALS ==================================== -->
+
         </div>
     </div>
     @*<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>*@
@@ -122,6 +261,13 @@
     <script src="~/Scripts/angular/src/angular-datatables.util.js"></script>
     <script src="~/Scripts/angular/src/angular-datatables.instances.js"></script>
     @*//--->*@
+
+    <script type="text/javascript">
+        function ShowHideDiv(chk_changepass) {
+        	var changepass = document.getElementById("div-changepass");
+        	changepass.style.display = chk_changepass.checked ? "block" : "none";
+        }
+    </script>
 
     <script type="text/javascript">
         window.MyApp = {};

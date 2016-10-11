@@ -1,5 +1,7 @@
-﻿
-<table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-bordered bordered table-striped table-condensed datatable">
+﻿<div class="breadcrumb">
+    <button class="btn btn-default btn-xs icon-size" title="Add User" ng-click="addUser()"><i class="fa fa-plus" aria-hidden="true" ></i></button>
+</div> 
+<table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-responsive table-bordered bordered table-striped table-condensed datatable">
     <thead>
         <tr>
             <th>ID</th>
@@ -12,7 +14,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="p in people | filter:search">
+        <tr ng-repeat="p in people track by p.UMId">
             <td ng-cloak> {{p.UMId}} </td>
             <td ng-cloak> {{p.UMUsername}} </td>
             <td ng-cloak> {{p.UMFirstname}} {{p.UMLastname}} </td>
@@ -21,16 +23,16 @@
             <td ng-cloak> {{p.USStatus}} </td>
             <td ng-cloak ng-switch="p.UMStatus">
                 <div class="case" ng-switch-when="ACT">
-                    <img title="Edit User Details" ng-click="userDetails(p.UMId)" src="../Images/master/edit.png">
-                    <img title="Reset" ng-click="resetUser(p.UMId)" src="../Images/master/reset.png">
-                    <img title="Deactivate" ng-click="removeUser(p.UMId)" src="../Images/master/remove.png">
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="userDetails(p)" title="Edit User Details"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="resetUser(p)" title="Reset"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="removeUser(p)" title="Deactivate"><i class="fa fa-power-off" aria-hidden="true"></i></button>
                 </div>
                 <div class="case" ng-switch-when="INA">
-                    <img title="Edit User Details" ng-click="userDetails(p.UMId)" src="../Images/master/edit.png">
-                    <img title="Deactivate" ng-click="removeUser(p.UMId)" src="../Images/master/remove.png">
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="userDetails(p)" title="Edit User Details"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="removeUser(p)" title="Deactivate"><i class="fa fa-power-off" aria-hidden="true"></i></button>
                 </div>
                 <div class="case" ng-switch-when="DEA">
-                    <img title="Reset" ng-click="resetUser(p.UMId)" src="../Images/master/reset.png">
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="resetUser(p)" title="Reset"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                 </div>
                  <div class="case" ng-switch-default>
 
@@ -40,6 +42,69 @@
         </tr>
     </tbody>
 </table>
+
+
+<!-- ================================== MODALS ================================= -->
+
+<!------- ADD USER MODAL ------->
+<div id="AddUserModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-user"></i> Add User</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                        <div class="form-group">
+                                <label>User Type:</label> <span class="required">*</span>
+                                <select id="ddl_utype" class="form-control input-sm">
+                                    <option selected disabled>-- Please Select User Type --</option>
+                                    <option value="ADM">Administrator</option>
+                                </select>
+                        </div>
+                        <div class="form-group">
+                            
+                                <label>Nickname:</label>
+                                <input id="txt_nname" class="form-control  input-sm" type="text" />
+                            
+                        </div>
+                        <div class="form-group">
+                           
+                                <label>First Name:</label> <span class="required">*</span>
+                                <input id="txt_fname" class="form-control  input-sm" type="text" />
+                           
+                        </div>
+                        <div class="form-group">
+                           
+                                <label>Middle Name:</label> <span class="required">*</span>
+                                <input id="txt_mname" class="form-control  input-sm" type="text" />
+                            
+                        </div>
+                        <div class="form-group">
+                            
+                                <label>Last Name:</label> <span class="required">*</span>
+                                <input id="txt_lname" class="form-control  input-sm" type="text" />
+                           
+                        </div>
+                        <div class="form-group">
+                                <label>Email:</label> 
+                                <input id="txt_email" class="form-control  input-sm" type="email" />
+                           
+                        </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-sm">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!------- END OF ADD USER MODAL ------->
+
+
 
 <script>
     $(function () {

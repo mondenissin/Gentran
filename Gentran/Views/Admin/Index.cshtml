@@ -26,10 +26,10 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="~/Images/user3-128x128.jpg" class="img-circle" alt="User Image">
+                <img src="~/Images/shermaine.jpg" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-                <p>Alexander Pierce</p>
+                <p>Shermaine Gae Tan</p>
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
@@ -65,7 +65,7 @@
                         <li><button class="btn btn-link btnprod" ng-click="prodList()"><i class="fa fa-shopping-cart"></i> Product</button></li>
                         <li><button class="btn btn-link btncust" ng-click="custList()"><i class="fa fa-users"></i> Customer</button></li>
                         <li><button class="btn btn-link btnlogs" ng-click="logList()"><i class="fa fa-database"></i> Logs</button></li>
-                        <li><button class="btn btn-link btbconn" ng-click="connections()"><span class="glyphicon glyphicon-sort"></span> Connections</button></li>
+                        @*<li><button class="btn btn-link btbconn" ng-click="connections()"><span class="glyphicon glyphicon-sort"></span> Connections</button></li>*@
                     </ul>
                 </li>
                 <li>
@@ -78,9 +78,10 @@
     <!-- /.sidebar -->
 </aside>
 }
+
 <!-- Body -->
 <section class="content-body">
-    <div class="page-table">
+    <div class="page-table" style="overflow-x: scroll;">
         <div data-ng-view>
         </div>
     </div>
