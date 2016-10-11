@@ -3,3 +3,24 @@
 }
 <h2>@ViewData["Title"].</h2>
 <h3>@ViewData["Message"]</h3>
+
+
+@section scripts {
+    <script src="~/App/Order/App.js"></script>
+    <script src="~/App/Order/RootViewModel.js"></script>
+    <script src="~/App/Order/ViewModels/Orders/orderModel.js"></script>
+}
+
+<div data-ng-app="order" data-ng-controller="rootViewModel">
+    <div class="row">
+        <div class="col-md-4">
+            <button class="btn btn-primary" ng-click="orderList()">Order List</button>
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-primary" ng-click="showOrder()">Order</button>&nbsp;
+            <input type="text" ng-model="orderService.orderId" />
+        </div>
+    </div>
+    <hr />
+    <div ng-view></div>
+</div>

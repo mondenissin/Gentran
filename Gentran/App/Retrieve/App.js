@@ -4,7 +4,10 @@
         $routeProvider.when(_root + 'Retrieve/SM', { templateUrl: _root + 'App/Retrieve/Views/SM/sm.html', controller: 'smViewModel' });
         $routeProvider.when(_root + 'Retrieve/Super8', { templateUrl: _root + 'App/Retrieve/Views/Super8/super.html', controller: 'superViewModel' });
         $routeProvider.otherwise({ redirectTo: _root + 'Retrieve' });
-        $locationProvider.html5Mode(true);
+        $locationProvider.html5Mode({
+            enabled: true,
+            requireBase: false
+        });
     });
 
 retrieveModule.factory('retrieveService', function ($rootScope, $http, $q, $location, viewModelHelper) { return MyApp.retrieveService($rootScope, $http, $q, $location, viewModelHelper); });

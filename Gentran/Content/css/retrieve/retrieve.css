@@ -85,6 +85,14 @@
     height:25px;
 }
 
+.po-cbx-all
+{
+    cursor:pointer;
+    display:block;
+    margin:5px !important;
+    width:25px;
+    height:25px;
+}
 
 .tab-label {
     position:absolute !important;

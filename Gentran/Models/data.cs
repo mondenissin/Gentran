@@ -113,7 +113,11 @@ public class Value
 
     public bool isMultiple { get; set; }
 
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> e8fb1dd4fd8e69fd7781845d5a145261fd3db33c
     //------ERROR LOG------//
 
     public string errorResult { get; set; }

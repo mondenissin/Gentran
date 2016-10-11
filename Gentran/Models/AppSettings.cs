@@ -72,8 +72,12 @@ public class AppSettings
         return new string(chars);
     }
 
+<<<<<<< HEAD
     public string toDate(string date)
     {
+=======
+    public string toDate(string date) {
+>>>>>>> e8fb1dd4fd8e69fd7781845d5a145261fd3db33c
 
         char[] dSplit = date.ToCharArray();
 
@@ -81,6 +85,7 @@ public class AppSettings
         {
             date = date.Insert(2, "/").Insert(5, "/");
         }
+<<<<<<< HEAD
         else if (date.Length == 5 && ((date.StartsWith("1") && (dSplit[1] == '1' || dSplit[1] == '2' || dSplit[1] == '0'))))
         {
             date = date.Insert(2, "/").Insert(4, "/");
@@ -89,6 +94,18 @@ public class AppSettings
         {
             date = date.Insert(1, "/").Insert(4, "/");
         }
+=======
+        else if (date.Length == 5 && ((date.StartsWith("1") && (dSplit[1] == '1' || dSplit[1] == '2' || dSplit[1] == '0')))) {
+            date = date.Insert(2, "/").Insert(4, "/");
+        }
+        else {
+            date = date.Insert(1, "/").Insert(4, "/");
+        }
+
+        return date;
+    }
+}
+>>>>>>> e8fb1dd4fd8e69fd7781845d5a145261fd3db33c
 
         return date;
     }

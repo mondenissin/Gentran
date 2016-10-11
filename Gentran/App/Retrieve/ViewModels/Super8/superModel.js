@@ -4,10 +4,10 @@
     $scope.retrieveService = retrieveService;
 
     var initialize = function () {
-        $scope.refreshFTP();
+        $scope.refreshS8();
     }
 
-    $scope.refreshFTP = function () {
+    $scope.refreshS8 = function () {
 
         viewModelHelper.apiGet('api/ftp/s8', null, function (result) {
             

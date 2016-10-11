@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
     setInterval(function () {
         connect();
-    },5000);
+    }, 5000);
 });
 
 function connect() {
@@ -35,9 +35,9 @@ function submitLogin() {
         if (data.toLowerCase().includes("success")) {
             $('#lblErrorMsg').text('Login Success');
             $('#lblErrorMsg').fadeIn();
-          //  setTimeout(function () {
-                window.location.href = MyApp.rootPath + "Home/Index";
-           // },3000);
+            setTimeout(function () {
+                window.location.href = MyApp.rootPath + "Retrieve/Index";
+            },3000);
         } else {
             console.log("Login Failed");
             $('#lblErrorMsg').text(data);

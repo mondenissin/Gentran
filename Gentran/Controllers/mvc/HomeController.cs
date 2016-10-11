@@ -37,7 +37,7 @@ namespace Gentran.Controllers
         {
             if(Session.Count >0)
                 return true;
-
+            
             return false;
         }
     }
