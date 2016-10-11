@@ -26,7 +26,7 @@
 
     $scope.addUser = function () {
         $('#AddUserModal').modal('show');
-    }
+    } 
 
     initialize();
 });

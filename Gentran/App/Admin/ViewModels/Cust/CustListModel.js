@@ -13,7 +13,7 @@
 
         viewModelHelper.apiGet('api/cust', null, function (result) {
             $scope.customers = result.data.detail;
-        });
+        }); 
 
         $scope.dtOptions = DTOptionsBuilder.newOptions();
         $scope.dtColumnDefs = [

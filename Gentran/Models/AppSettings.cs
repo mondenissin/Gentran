@@ -72,5 +72,24 @@ public class AppSettings
         return new string(chars);
     }
 
-}
+    public string toDate(string date)
+    {
 
+        char[] dSplit = date.ToCharArray();
+
+        if (date.Length == 6)
+        {
+            date = date.Insert(2, "/").Insert(5, "/");
+        }
+        else if (date.Length == 5 && ((date.StartsWith("1") && (dSplit[1] == '1' || dSplit[1] == '2' || dSplit[1] == '0'))))
+        {
+            date = date.Insert(2, "/").Insert(4, "/");
+        }
+        else
+        {
+            date = date.Insert(1, "/").Insert(4, "/");
+        }
+
+        return date;
+    }
+}

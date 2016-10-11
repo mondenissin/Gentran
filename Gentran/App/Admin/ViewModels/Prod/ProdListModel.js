@@ -21,7 +21,7 @@
         ];
     }
     $scope.showProduct = function (product) {
-        alert('You selected ' + product.PMCode + ' ' + product.PMDescription);
+        alert('You selected ' + product.PMCode + ' ' + product.PMDescription); 
     }
 
     $scope.getDetails = function (p) {
