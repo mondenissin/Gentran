@@ -1,8 +1,6 @@
 ﻿@{
     ViewBag.Title = "PO Retrieve";
 }
-<h2>@ViewData["Title"].</h2>
-<h3>@ViewData["Message"]</h3>
 
 @section styles{
     <link rel="stylesheet" href="~/Content/css/retrieve/retrieve.css" />
@@ -14,30 +12,85 @@
     <script src="~/App/Retrieve/ViewModels/SM/smModel.js"></script>
     <script src="~/App/Retrieve/ViewModels/Super8/superModel.js"></script>
 }
-
-<div data-ng-app="retrieve" data-ng-controller="rootViewModel">
-
-    <ul class="nav nav-tabs skin-blue">
-        <li><a data-toggle="tab" href="/#FTP"><img src="~/Images/FTP.png" style="width:150px;height:125px;" /><label class="tab-label">FTP</label></a></li>
-        <li><a data-toggle="tab" href="/#E-Comm"><img src="~/Images/ECOM.png" style="width:150px;height:125px" /><label class="tab-label">E-Comm</label></a></li>
-        <li><a data-toggle="tab" href="/#API"><img src="~/Images/API.png" style="width:150px;height:125px" /><label class="tab-label">Web Service</label></a></li>
-    </ul>
-
-    <div class="tab-content">
-        <div id="FTP" class="tab-pane fade ">
-            <h3>Outlets</h3>
-            <button ng-click="smFile()"><img src="~/Images/outlets/sm.png" style="width:100px;height:75px;" /></button>
-            <button ng-click="superFile()"><img src="~/Images/outlets/super8.jpg" style="width:100px;height:75px" /></button>
+@section sidebar {
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div style="color: #fff;">
+                <center><h3><b><i class="fa fa-file-code-o"></i> <span>PO Retrieve</span></b></h3></center>
+            </div>
         </div>
-        <div id="E-Comm" class="tab-pane fade">
-            <h3>Outlets</h3>
-            <button ng-click="smFile()"><img src="~/Images/outlets/sm.png" style="width:100px;height:75px;" /></button>
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu">
+            <li class="header">MAIN NAVIGATION</li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-server"></i> <span>FTP Server</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu data-management">
+                    <li><button class="btn btn-link" ng-click=""><i class="fa fa-user"></i> SM</button></li>
+                    <li><button class="btn btn-link" ng-click=""><i class="fa fa-user"></i> Super 8</button></li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-desktop"></i> <span>E-Comm</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu data-management">
+                    <li><button class="btn btn-link" ng-click=""><i class="fa fa-user"></i> SM</button></li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-cloud"></i> <span>Web Service</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu data-management">
+                    <li><button class="btn btn-link" ng-click=""><i class="fa fa-user"></i> SM</button></li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>
+}
+<div class="col-md-offset-2">
+    <h2>@ViewData["Title"].</h2>
+    <h3>@ViewData["Message"]</h3>
+    <div data-ng-app="retrieve" data-ng-controller="rootViewModel">
+
+        <ul class="nav nav-tabs skin-blue">
+            <li><a data-toggle="tab" href="/#FTP"><img src="~/Images/FTP.png" style="width:150px;height:125px;" /><label class="tab-label">FTP</label></a></li>
+            <li><a data-toggle="tab" href="/#E-Comm"><img src="~/Images/ECOM.png" style="width:150px;height:125px" /><label class="tab-label">E-Comm</label></a></li>
+            <li><a data-toggle="tab" href="/#API"><img src="~/Images/API.png" style="width:150px;height:125px" /><label class="tab-label">Web Service</label></a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="FTP" class="tab-pane fade ">
+                <h3>Outlets</h3>
+                <button ng-click="smFile()"><img src="~/Images/outlets/sm.png" style="width:100px;height:75px;" /></button>
+                <button ng-click="superFile()"><img src="~/Images/outlets/super8.jpg" style="width:100px;height:75px" /></button>
+            </div>
+            <div id="E-Comm" class="tab-pane fade">
+                <h3>Outlets</h3>
+                <button ng-click="smFile()"><img src="~/Images/outlets/sm.png" style="width:100px;height:75px;" /></button>
+            </div>
+            <div id="API" class="tab-pane fade">
+                <h3>Outlets</h3>
+                <button ng-click="smFile()"><img src="~/Images/outlets/sm.png" style="width:100px;height:75px;" /></button>
+            </div>
         </div>
-        <div id="API" class="tab-pane fade">
-            <h3>Outlets</h3>
-            <button ng-click="smFile()"><img src="~/Images/outlets/sm.png" style="width:100px;height:75px;" /></button>
-        </div>
+
+        <div ng-view></div>
     </div>
-
-    <div ng-view></div>
-</div>
+ </div>

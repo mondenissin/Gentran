@@ -20,6 +20,10 @@
            DTColumnDefBuilder.newColumnDef('no-sort').notSortable()
         ];
     }
+
+    $scope.addCustomer = function () {
+        $('#AddCustomerModal').modal('show');
+    }
     
     initialize();
 });

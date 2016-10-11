@@ -21,7 +21,7 @@
     <div class="wrapper">
         <header class="main-header">
             <nav class="navbar navbar-static-top">
-                <div class="container">
+                <div class="container-fluid">
                     <div class="navbar-header">
                         <a href="#" class="navbar-brand"><b>Admin</b>LTE</a>
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
@@ -94,7 +94,8 @@
             </nav>
         </header> 
         <div class="content-wrapper">
-            <div class="container">
+            <div class="container-fluid">
+                @RenderSection("sidebar", required: false)
                 <section class="content">
                     @RenderBody()
                     <hr />

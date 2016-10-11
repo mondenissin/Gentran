@@ -24,5 +24,9 @@
         console.log('You selected ' + person.UMFirstName + ' ' + person.UMLastName);
     }
 
+    $scope.addUser = function () {
+        $('#AddUserModal').modal('show');
+    }
+
     initialize();
 });

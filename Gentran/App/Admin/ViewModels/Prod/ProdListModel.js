@@ -35,6 +35,10 @@
         $('#ProductDetailsModal').modal('show');
     }
 
+    $scope.addProduct = function () {
+        $('#AddProductModal').modal('show');
+    }
+
     $scope.dataTableOpt = {
         "aLengthMenu": [[10, 50, 100, -1], [10, 50, 100, 'All']],
     };

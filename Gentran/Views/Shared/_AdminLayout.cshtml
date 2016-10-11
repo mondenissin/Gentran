@@ -56,8 +56,8 @@
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="user user-menu">
                             <a href="#">
-                                <img src="~/Images/user3-128x128.jpg" class="user-image" alt="User Image">
-                                <span class="hidden-xs">Alexander Pierce</span>
+                                <img src="~/Images/shermaine.jpg" class="user-image" alt="User Image">
+                                <span class="hidden-xs">Shermaine Gae Tan</span>
                             </a>
 
                         </li>
@@ -67,9 +67,9 @@
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header">
-                                    <img src="~/Images/user3-128x128.jpg" class="img-circle" alt="User Image">
+                                    <img src="~/Images/shermaine.jpg" class="img-circle" alt="User Image">
                                     <p>
-                                        Alexander Pierce - Web Developer
+                                        Shermaine Gae Tan - Web Developer
                                         <small>Member since Nov. 2012</small>
                                     </p>
                                 </li>
@@ -91,6 +91,9 @@
         <div data-ng-app="admin" data-ng-controller="rootViewModel">
             @RenderSection("header_menu", required: false)
             <div class="content-wrapper">
+                <div class="action_bar">
+                    @RenderSection("action_menu", required: false)
+                </div>
                 <section class="content">
                     @RenderBody()
                     <hr />
@@ -121,6 +124,7 @@
     <script src="~/Scripts/angular/src/angular-datatables.renderer.js"></script>
     <script src="~/Scripts/angular/src/angular-datatables.util.js"></script>
     <script src="~/Scripts/angular/src/angular-datatables.instances.js"></script>
+    <script src="~/Scripts/sly.js"></script>
     @*//--->*@
 
     <script type="text/javascript">
