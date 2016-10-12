@@ -12,7 +12,7 @@
     <script src="~/App/Retrieve/ViewModels/SM/smModel.js"></script>
     <script src="~/App/Retrieve/ViewModels/Super8/superModel.js"></script>
 }
-@section sidebar {
+@*@section sidebar {
 <aside class="main-sidebar"> 
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
@@ -61,9 +61,45 @@
     </section>
     <!-- /.sidebar -->
 </aside>
-}
-<div class="col-md-offset-2">
-    <h2>@ViewData["Title"].</h2>
-    <h3>@ViewData["Message"]</h3>
-    
+}*@
+<div class="">
+    <div style="font-size: 30px; color:#24546f;" class="breadcrumb"><b>@ViewData["Title"]</b></div>
+    <div data-ng-app="retrieve" data-ng-controller="rootViewModel">
+
+        <ul class="nav nav-tabs skin-blue">
+            <li><a data-toggle="tab" href="/#FTP"><b>FTP Server</b></a></li>
+            <li><a data-toggle="tab" href="/#E-Comm"><b>E-Commerce</b></a></li>
+            <li><a data-toggle="tab" href="/#API"><b>Web Service</b></a></li>
+        </ul>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="tab-content">
+                    <div id="FTP" class="tab-pane fade ">
+                        <ul class="sidebar-menu">
+                            <li><h3 class="breadcrumb"><b>O</b>utlets</h3></li>
+                            <li class="treeview"><button class="btn btn-link-ret" ng-click="smFile()"><i class="fa fa-user"></i> SM</button></li>
+                            <li class="treeview"><button class="btn btn-link-ret" ng-click="superFile()"><i class="fa fa-user"></i> Super 8</button></li>
+                        </ul>
+                    </div>
+                    <div id="E-Comm" class="tab-pane fade">
+                        <ul class="sidebar-menu">
+                            <li><h3 class="breadcrumb"><b>O</b>utlets</h3></li>
+                            <li class="treeview"><button class="btn btn-link-ret" ng-click="smFile()"><i class="fa fa-user"></i> SM</button></li>
+                        </ul>
+                    </div>
+                    <div id="API" class="tab-pane fade">
+                        <ul class="sidebar-menu">
+                            <li><h3 class="breadcrumb"><b>O</b>utlets</h3></li>
+                            <li class="treeview"><button class="btn btn-link-ret" ng-click="smFile()"><i class="fa fa-user"></i> SM</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div ng-view>
+
+                </div>
+            </div>
+            </div>
+        </div>
  </div>

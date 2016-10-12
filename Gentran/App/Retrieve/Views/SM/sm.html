@@ -1,11 +1,8 @@
 ﻿
-<hr />
-<h3>SM FILES LOADED</h3>
+<h3 class="breadcrumb"><b>S</b>M FILES LOADED</h3>
 
 
 
-<div class="container">
-    <div class="container">
         <div class="navbar" id="navbar">
             <ul class="nav navbar-nav">
                 <li><input class="po-cbx-all" type="checkbox" ng-model="all" ng-change="selectFileAll()" ng-show="files" /></li>
@@ -17,7 +14,6 @@
                 </button>  
             </div>
         </div>
-    </div>
     <div class="po-files-h" ng-repeat="f in files" ng-init="$last ? loadHover() : angular.noop()">
         <input class="po-cbx" ng-click="$event = $event" ng-change="selectFile($event)" type="checkbox" ng-model="check" ng-checked="all" />
         <div class="po-files">
@@ -33,7 +29,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <div id="mapModal" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">

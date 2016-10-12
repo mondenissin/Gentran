@@ -43,11 +43,6 @@
                                 </ul>
                             </li>
                         </ul>
-                        <form class="navbar-form navbar-left" role="search">
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="navbar-search-input" placeholder="Search">
-                            </div>
-                        </form>
                     </div>
                     <!-- /.navbar-collapse -->
                     <!-- Navbar Right Menu -->
@@ -94,8 +89,6 @@
             </nav>
         </header> 
         <div class="content-wrapper">
-            <div class="container-fluid">
-                @RenderSection("sidebar", required: false)
                 <section class="content">
                     @RenderBody()
                     <hr />
@@ -103,7 +96,6 @@
                         <p>&copy; 2016 - Gentran</p>
                     </footer> 
                 </section>
-            </div>
         </div>
     </div>
         @*<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>*@
