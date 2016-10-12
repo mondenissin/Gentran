@@ -192,7 +192,6 @@ namespace Gentran.Controllers.api
                     }
 
                     else if( values.operation == "add_user" ){
-
                         int userCount = 0;
                         string prefix = DateTime.Now.ToString("yy");
 
