@@ -14,6 +14,8 @@
     <link href="~/Content/AdminLTE.min.css" rel="stylesheet" />
     <link href="~/Content/skins/_all-skins.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/Content/Site.css" /> 
+    <link href="~/Content/notification/notification.css" rel="stylesheet" />
+    <link href="~/Content/notification/waves-effect.css" rel="stylesheet" />
     @RenderSection("styles", required: false)
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -107,6 +109,12 @@
         <script type="text/javascript" src="~/Scripts/angular/angular.js"></script>
         <script type="text/javascript" src="~/Scripts/angular/angular-route.js"></script>
         <script type="text/javascript" src="~/Scripts/js/master/master_main.js"></script>
+
+        <script src="~/Scripts/notification/notifications.js"></script>
+        <script src="~/Scripts/notification/waves.js"></script>
+        <script src="~/Scripts/notification/notify.min.js"></script>
+        <script src="~/Scripts/notification/notify-metro.js"></script>
+        <script src="~/Scripts/js/master/master_balloon.js"></script>
 
         <script type="text/javascript">
             window.MyApp = {};
