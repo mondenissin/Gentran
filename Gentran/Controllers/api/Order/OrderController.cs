@@ -76,14 +76,24 @@ namespace Gentran.Controllers.api.Order
                 Dictionary<object, object> row;
                 foreach (DataRow dr in dt.Rows)
                 {
+                    string icon = "";
                     row = new Dictionary<object, object>();
                     foreach (DataColumn col in dt.Columns)
                     {
-                        row.Add(col.ColumnName, dr[col]);
+                        if (col.ColumnName == "ulstatus" && dr[col].ToString() == "11") {
+                            icon = "fa-exclamation-circle";
+                        } else if (col.ColumnName == "ulstatus" && dr[col].ToString() == "20") {
+                            icon = "fa-check";
+                        }
+                        else if(col.ColumnName == "ulstatus"){
+                            icon = "fa-check";
+                        }
+                        row.Add(col.ColumnName, dr[col].ToString());
                     }
+                    row.Add("uicons", icon);
                     rows.Add(row);
                 }
-
+                
                 connection.Close();
 
                 success = true;
@@ -102,9 +112,72 @@ namespace Gentran.Controllers.api.Order
         }
 
         // GET api/order/5
-        public string Get(int id)
+        public object Get(string id)
         {
-            return "value";
+            bool success = true;
+            SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
+            String sQuery = @"select
+                                ULAccount,
+                                ULFilename,
+                                UIStatus,
+                                ULRemarks,
+                                ULStatus,
+                                ULPONumber,
+                                ULUser, 
+                                left(ulorderdate,12) as ULOrderDate,
+                                left(uldeliverydate,12) as ULDeliveryDate,
+                                uiquantity as UIQuantity,
+                                cmcode as ULCustomer,
+                                pmcode as UIProduct,
+                                pmdescription as PMDescription,
+                                ppprice  as UIPrice,
+                                (ppprice * uiquantity) as UITPrice
+                                from
+                                tbluploadlog
+                                left join tbluploaditems
+                                on tbluploadlog.ULId = tbluploaditems.uiid
+                                left join tblcustomermaster
+                                on cmid = ulcustomer
+                                left join tblproductmaster
+                                on pmid = uiproduct
+                                left join tblproductpricing
+                                on ppproduct = uiproduct and pparea = cmarea
+                                where
+                                ULId ='" + id + @"'
+                                and uiquantity != 0";
+            SqlCommand cmd = new SqlCommand(sQuery, connection);
+            List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+            Dictionary<string, object> row;
+
+            try
+            {
+                connection.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows)
+                {
+                    while (dr.Read())
+                    {
+                        row = new Dictionary<string, object>();
+                        for (int i = 0; i < dr.FieldCount; i++)
+                        {
+                            var cName = dr.GetName(i);
+                            row.Add(cName, dr[cName]);
+                        }
+                        rows.Add(row);
+                    }
+                }
+                else
+                    success = false;
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                row = new Dictionary<string, object>();
+                row.Add("Error", ex.Message);
+                rows.Add(row);
+            }
+
+            return new Response { success = success, detail = rows };
         }
 
         // POST api/order

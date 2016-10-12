@@ -8,8 +8,8 @@
             requireBase: false
         });
     });
-
 orderModule.factory('orderService', function ($rootScope, $http, $q, $location, viewModelHelper) { return MyApp.orderService($rootScope, $http, $q, $location, viewModelHelper); });
+
 
 (function (myApp) {
     var orderService = function ($rootScope, $http, $q, $location, viewModelHelper) {

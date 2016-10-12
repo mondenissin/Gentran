@@ -38,15 +38,16 @@
                 <td class="table-data-uudate">{{ o.uluploaddate }}</td>
                 <td class="table-data-cqty">{{ o.countulquantity }}</td>
                 <td class="table-data-sqty">{{ o.sumulquantity }}</td>
-                <td class="table-data-uprice">{{ o.uiprice }}</td>
-                <td class="table-data-ustat">{{ o.ulstatus }}</td>
-                <td><a href="#" ng-click="showDetails(o)">show</a></td>
+                <td class="table-data-uprice">₱{{o.uiprice }}</td>
+                <td class="table-data-ustat"><button class="btn btn-default btn-sm " ng-click="getStatus(o)" title="View Details"><i class="fa {{o.uicons}}" aria-hidden="true"></i></button></td>
+                <!--<img onclick="errorDetails(\'' + data.detail[i].ulid + '\',\'' + data.detail[i].ulstatus + '\')" title="View Error Details" src="img/master/error.png">-->
+                <td><a href="#" ng-click="showDetails(o)">Details</a></td>
             </tr>
         </tbody>
     </table>
 </div>
 
-
+<!-- START MODAL FOR ORDERS TO BE SUBMITTED-->
 <div id="submitModal" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -85,3 +86,85 @@
         </div>
     </div>
 </div>
+<!-- END MODAL FOR ORDERS TO BE SUBMITTED-->
+
+
+<!-- START MODAL FOR ORDERS DETAIL-->
+<div id="orderDetailsModal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Order Details</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>PO Number:</label>
+                                <input id="txt_ponum" class="form-control input-sm" type="text" disabled ng-model="ordersInfo.txt_ponum">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Customer Number:</label>
+                                <input id="txt_custnum" class="form-control input-sm" type="text" disabled ng-model="ordersInfo.txt_custnum">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Order Date:</label>
+                                <input id="txt_orderdate" class="form-control input-sm" type="text" disabled ng-model="ordersInfo.txt_orderdate">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Delivery Date:</label>
+                                <input id="txt_deliverydate" class="form-control input-sm" type="text" disabled ng-model="ordersInfo.txt_deliverydate">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Remarks / Ship to: </label>
+                                <input id="txt_remarks" class="form-control input-sm" type="text" disabled ng-model="ordersInfo.txt_remarks">
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="table-responsive" id="order_table">
+                                <table id="tbl_orders" class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>SKU</th>
+                                            <th>Description</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                            <th>Total Price</th>
+                                            <th class="no-sort">Options</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="oi in orderItems">
+                                            <td>{{oi.UIProduct}}</td>
+                                            <td>{{oi.PMDescription}}</td>
+                                            <td>{{oi.UIQuantity}}</td>
+                                            <td>{{oi.UIPrice}}</td>
+                                            <td>{{oi.UITPrice}}</td>
+                                            <td><button class="btn btn-default btn-sm " ng-click="getStatus(o)" title="Delete Item" ng-hide="ifEdit"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" id="modal-footer-orderDetails">
+                <input type="hidden" id="txt_account" />
+                <input type="hidden" id="txt_id" />
+                <input type="hidden" id="txt_status" />
+                <!--<input type="submit" class="btn btn-danger btn-sm pull-left" id="btn_editorder_delete" value="Delete"/>-->
+                <button class="btn btn-primary btn-sm " ng-click="editDetails($event)" title="Edit Items">Edit</button>
+                <input type="submit" class="btn btn-default btn-sm" id="btn_editorder_save_cancel" style="display:none;" data-dismiss="modal" value="Cancel" onclick="HideSaveBtn_order()" />
+                <input type="submit" class="btn btn-primary btn-sm" id="btn_editorder_save" value="Save" style="display:none;" onclick="kas_saveOrders()" />
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END MODAL FOR ORDERS DETAIL-->
