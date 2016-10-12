@@ -67,17 +67,16 @@ namespace Gentran.Controllers.api
 
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
 
-            String sQuery;
+            String sQuery = "";
             SqlCommand cmd;//= new SqlCommand(sQuery, connection);
             SqlDataReader dr;
-
 
             try {
 
                 for (int i = 0; i < values.payload.Count; i++) {
-                    connection.Open();
 
                     string uid = values.payload[i].umid;
+                    string utype = values.payload[i].type;
                     string uname = values.payload[i].username;
                     string nname = values.payload[i].nickname;
                     string fname = values.payload[i].firstname;
@@ -88,18 +87,77 @@ namespace Gentran.Controllers.api
                     string opass = values.payload[i].oldpassword;
                     string npass = values.payload[i].newpassword;
 
-                    if (values.payload[i].oldpassword != "unchanged")
+                    //string uid = values.payload[i].umid != null ? values.payload[i].umid : "";
+                    //string utype = values.payload[i].type != null ? values.payload[i].type : "";
+                    //string uname = values.payload[i].username != null ? values.payload[i].username : "";
+                    //string nname = values.payload[i].nickname != null ? values.payload[i].nickname : "";
+                    //string fname = values.payload[i].firstname != null ? values.payload[i].firstname : "";
+                    //string mname = values.payload[i].middlename != null ? values.payload[i].middlename : "";
+                    //string lname = values.payload[i].lastname != null ? values.payload[i].lastname : "";
+                    //string email = values.payload[i].email != null ? values.payload[i].email : "";
+                    //string image = values.payload[i].image != null ? values.payload[i].image : "";
+                    //string opass = values.payload[i].oldpassword != null ? values.payload[i].oldpassword : "";
+                    //string npass = values.payload[i].newpassword != null ? values.payload[i].newpassword : "";
+
+                    if (values.operation == "save_user")
                     {
-                        sQuery = "SELECT * FROM tblUserMaster where umid = '" + uid + "' and umpassword = '" + AppSettings.Encrypt(opass) + "'";
-                        cmd = new SqlCommand(sQuery, connection);
-                       // cmd.Parameters.Add("@UMPassword", AppSettings.Encrypt(opass));
-                        dr = cmd.ExecuteReader();
-                        if (dr.HasRows)
+                        connection.Open();
+
+                        if (values.payload[i].oldpassword != "unchanged")
                         {
+                            sQuery = "SELECT * FROM tblUserMaster where umid = '" + uid + "' and umpassword = '" + AppSettings.Encrypt(opass) + "'";
+                            cmd = new SqlCommand(sQuery, connection);
+                            // cmd.Parameters.Add("@UMPassword", AppSettings.Encrypt(opass));
+                            dr = cmd.ExecuteReader();
+                            if (dr.HasRows)
+                            {
+                                connection.Close();
+
+                                if (image == "unchanged")
+                                {
+                                    sQuery = "Update tblusermaster set umusername = '" + uname
+                                            + "', umnickname = '" + nname
+                                            + "', umfirstname = '" + fname
+                                            + "', ummiddlename = '" + mname
+                                            + "', umlastname = '" + lname
+                                            + "', umemail = '" + email
+                                            + "', umstatus = 'ACT"
+                                            + "', umpassword = @UMPassword where umid = '" + uid + "'";
+                                }
+                                else
+                                {
+                                    sQuery = "Update tblusermaster set umusername = '" + uname
+                                            + "', umnickname = '" + nname
+                                            + "', umfirstname = '" + fname
+                                            + "', ummiddlename = '" + mname
+                                            + "', umlastname = '" + lname
+                                            + "', umimage = '" + image
+                                            + "', umemail = '" + email
+                                            + "', umstatus = 'ACT"
+                                            + "', umpassword = @UMPassword where umid = '" + uid + "'";
+                                }
+                                connection.Open();
+                                cmd = new SqlCommand(sQuery, connection);
+                                cmd.Parameters.Add("@UMPassword", AppSettings.Encrypt(npass));
+                                cmd.ExecuteNonQuery();
+                                connection.Close();
+
+                                success = true;
+                                response = "USER UPDATED!";
+                            }
+                            else
+                            {
+                                success = false;
+                                response = "Invalid user credentials!";
+                            }
+                        }
+                        else
+                        {
+
                             connection.Close();
 
                             if (image == "unchanged")
-                            {  
+                            {
                                 sQuery = "Update tblusermaster set umusername = '" + uname
                                         + "', umnickname = '" + nname
                                         + "', umfirstname = '" + fname
@@ -107,9 +165,10 @@ namespace Gentran.Controllers.api
                                         + "', umlastname = '" + lname
                                         + "', umemail = '" + email
                                         + "', umstatus = 'ACT"
-                                        + "', umpassword = @UMPassword where umid = '" + uid + "'";
+                                        + "' where umid = '" + uid + "'";
                             }
-                            else {  
+                            else
+                            {
                                 sQuery = "Update tblusermaster set umusername = '" + uname
                                         + "', umnickname = '" + nname
                                         + "', umfirstname = '" + fname
@@ -118,61 +177,75 @@ namespace Gentran.Controllers.api
                                         + "', umimage = '" + image
                                         + "', umemail = '" + email
                                         + "', umstatus = 'ACT"
-                                        + "', umpassword = @UMPassword where umid = '" + uid + "'";
-                            }  
+                                        + "' where umid = '" + uid + "'";
+                            }
+
                             connection.Open();
                             cmd = new SqlCommand(sQuery, connection);
-                            cmd.Parameters.Add("@UMPassword", AppSettings.Encrypt(npass));
                             cmd.ExecuteNonQuery();
                             connection.Close();
 
                             success = true;
                             response = "USER UPDATED!";
                         }
-                        else
-                        {
-                            success = false;
-                            response = "Invalid user credentials!";
-                        }
+
                     }
-                    else {
 
-                        connection.Close();   
+                    else if( values.operation == "add_user" ){
+                        int userCount = 0;
+                        string prefix = DateTime.Now.ToString("yy");
 
-                        if (image == "unchanged")
+                        sQuery = "SELECT MAX(UMId) as userCount from tblUserMaster where UMId like '" + prefix + "%'";
+                        connection.Open();
+                        cmd = new SqlCommand(sQuery, connection);
+                        dr = cmd.ExecuteReader();
+
+                        if (dr.HasRows)
                         {
-                            sQuery = "Update tblusermaster set umusername = '" + uname
-                                    + "', umnickname = '" + nname
-                                    + "', umfirstname = '" + fname
-                                    + "', ummiddlename = '" + mname
-                                    + "', umlastname = '" + lname
-                                    + "', umemail = '" + email
-                                    + "', umstatus = 'ACT"
-                                    + "' where umid = '" + uid + "'";
+                            dr.Read();
+                            userCount = dr["userCount"] == DBNull.Value ? 0 : Convert.ToInt32(dr["userCount"]);
+                            dr.Close();
+                        }
+                        connection.Close();
+
+                        if (userCount < 9999)
+                        {
+                            uid = prefix + userCount.ToString("D4");
                         }
                         else
                         {
-                            sQuery = "Update tblusermaster set umusername = '" + uname
-                                    + "', umnickname = '" + nname
-                                    + "', umfirstname = '" + fname
-                                    + "', ummiddlename = '" + mname
-                                    + "', umlastname = '" + lname
-                                    + "', umimage = '" + image
-                                    + "', umemail = '" + email
-                                    + "', umstatus = 'ACT"
-                                    + "' where umid = '" + uid + "'";
+                            uid = (userCount + 1).ToString();
                         }
-                            
+
+                        if (nname == "")
+                        {
+                            nname = fname;
+                        }
+
+                        var encPass = AppSettings.Encrypt("def-password");
+                          
+                        sQuery = "INSERT INTO tblUserMaster select '" + uid + "','" + fname + " " + lname +
+                                    "','" + fname + "','" + nname + "','" + mname +
+                                    "','" + lname + "','" + email + "','','" + utype +
+                                    "','INA','"+ encPass + "','" + utype + "'";
+
                         connection.Open();
                         cmd = new SqlCommand(sQuery, connection);
                         cmd.ExecuteNonQuery();
-                        connection.Close(); 
+                        connection.Close();
+
+                        sQuery = "INSERT INTO tblUserAccess select '" + uid + "','" + utype + "'";
+
+                        connection.Open();
+                        cmd = new SqlCommand(sQuery, connection);
+                        cmd.ExecuteNonQuery();
+                        connection.Close();
 
                         success = true;
-                        response = "USER UPDATED!";
-
+                        response = "User successfully added!";
                     }
-                    error = sQuery;
+
+                    error = success == false ? sQuery : "";
                 } 
             }
             catch (Exception ex) {
@@ -180,7 +253,7 @@ namespace Gentran.Controllers.api
                 connection.Close();
 
                 success = false;
-                response = ex.Message;
+                response = ex.ToString();
             } 
             return new Response { success = success, detail = response , errortype = error };
         }
