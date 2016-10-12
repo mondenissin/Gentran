@@ -59,7 +59,7 @@
                 <form role="form">
                         <div class="form-group">
                                 <label>User Type:</label> <span class="required">*</span>
-                                <select id="ddl_utype" class="form-control input-sm">
+                                <select id="ddl_addusertype" class="form-control input-sm">
                                     <option selected disabled>-- Please Select User Type --</option>
                                     <option value="ADM">Administrator</option>
                                 </select>
@@ -67,44 +67,42 @@
                         <div class="form-group">
                             
                                 <label>Nickname:</label>
-                                <input id="txt_nname" class="form-control  input-sm" type="text" />
+                                <input id="txt_addnname" class="form-control  input-sm" type="text" />
                             
                         </div>
                         <div class="form-group">
                            
                                 <label>First Name:</label> <span class="required">*</span>
-                                <input id="txt_fname" class="form-control  input-sm" type="text" />
+                                <input id="txt_addfname" class="form-control  input-sm" type="text" />
                            
                         </div>
                         <div class="form-group">
                            
                                 <label>Middle Name:</label> <span class="required">*</span>
-                                <input id="txt_mname" class="form-control  input-sm" type="text" />
+                                <input id="txt_addmname" class="form-control  input-sm" type="text" />
                             
                         </div>
                         <div class="form-group">
                             
                                 <label>Last Name:</label> <span class="required">*</span>
-                                <input id="txt_lname" class="form-control  input-sm" type="text" />
+                                <input id="txt_addlname" class="form-control  input-sm" type="text" />
                            
                         </div>
                         <div class="form-group">
                                 <label>Email:</label> 
-                                <input id="txt_email" class="form-control  input-sm" type="email" />
+                                <input id="txt_addemail" class="form-control  input-sm" type="email" />
                            
                         </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary btn-sm">Save changes</button>
+                <button type="button" class="btn btn-primary btn-sm" ng-click="saveAddUser()">Save changes</button>
             </div>
         </div>
     </div>
 </div>
 <!------- END OF ADD USER MODAL ------->
-
-
 
 <script>
     $(function () {
@@ -116,17 +114,4 @@
         });
         elem.closest('li').addClass(' active');
     });
-</script>
-
-<script type="text/ng-template" id="UserModal.html">
-    <div class="modal-header">
-        <h3 class="modal-title" id="modal-title">I'm a modal!</h3>
-    </div>
-    <div class="modal-body" id="modal-body">
-       
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary" type="button" ng-click="userViewModel.ok()">OK</button>
-        <button class="btn btn-warning" type="button" ng-click="userViewModel.cancel()">Cancel</button>
-    </div>
 </script>

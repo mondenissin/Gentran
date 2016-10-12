@@ -60,18 +60,18 @@ function UserProfileValidate() {
     }
     else {
         var Items = {}
-        Items.umid = $('#txt_edituserid').val();
-        Items.username = $('#txt_edituname').val();
-        Items.nickname = $('#txt_editnname').val();
-        Items.firstname = $('#txt_editfname').val();
-        Items.middlename = $('#txt_editmname').val();
-        Items.lastname = $('#txt_editlname').val();
-        Items.email = $('#txt_editemail').val();
+        Items.umid = $('#txt_edituserid').val().replace(/\'/gi, '\'\'');
+        Items.username = $('#txt_edituname').val().replace(/\'/gi, '\'\'');
+        Items.nickname = $('#txt_editnname').val().replace(/\'/gi, '\'\'');
+        Items.firstname = $('#txt_editfname').val().replace(/\'/gi, '\'\'');
+        Items.middlename = $('#txt_editmname').val().replace(/\'/gi, '\'\'');
+        Items.lastname = $('#txt_editlname').val().replace(/\'/gi, '\'\'');
+        Items.email = $('#txt_editemail').val().replace(/\'/gi, '\'\'');
         Items.image = "unchanged";
         Items.oldpassword = "unchanged";
 
         if ($('#imageBase64').val().length > 0) {
-            Items.image = $('#imageBase64').val();
+            Items.image = $('#imageBase64').val().replace(/\'/gi, '\'\'');
         }
 
         if (document.getElementById('chk_changepass').checked) {
@@ -80,9 +80,9 @@ function UserProfileValidate() {
                 alert('Please fill up all fields!');
             }
             else {
-                Items.oldpassword = $('#txt_oldpass').val();
+                Items.oldpassword = $('#txt_oldpass').val().replace(/\'/gi, '\'\'');
                 if ($('#txt_newpass').val() == $('#txt_confirmpass').val()) {
-                    Items.newpassword = $('#txt_confirmpass').val();
+                    Items.newpassword = $('#txt_confirmpass').val().replace(/\'/gi, '\'\'');
 
                     Values.valid = true;
                     Values.items = Items;
@@ -110,4 +110,10 @@ function resetFields() {
     $('#txt_oldpass').val('');
     $('#txt_newpass').val('');
     $('#txt_confirmpass').val('');
+
+    $('#txt_addnname').val('');
+    $('#txt_addfname').val('');
+    $('#txt_addmname').val('');
+    $('#txt_addlname').val('');
+    $('#txt_addemail').val('');
 }

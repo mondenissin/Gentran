@@ -1,4 +1,4 @@
-﻿adminModule.controller("userViewModel", function ($scope, adminService, $http, $q, $routeParams, $window, $location, viewModelHelper, DTOptionsBuilder, DTColumnDefBuilder) {
+﻿adminModule.controller("userViewModel", function ($scope, adminService, $http, $q, $routeParams, $window, $location, viewModelHelper, DTOptionsBuilder, DTColumnDefBuilder,$route) {
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.adminService = adminService;
@@ -27,6 +27,29 @@
     $scope.addUser = function () {
         $('#AddUserModal').modal('show');
     } 
+
+    $scope.saveAddUser = function () {
+        var ret = ValidateAddUser();
+        
+        if (ret.valid == true) {
+            $scope.data = {};
+            $scope.data.operation = 'add_user';
+            $scope.data.payload = _payloadParser(ret.items);
+
+            viewModelHelper.apiPost('api/userlist', $scope.data, function (result) {
+                var data = result.data;
+                if (data.success === true) {
+                    $('#AddUserModal').modal('hide');
+                    resetFields();
+                    alert(data.detail);
+                    $route.reload();
+                } else {
+                    alert(data.detail)
+                }
+            });
+        }
+
+    }
 
 	$scope.userDetails = function (person) {
         $('#txt_edituserid').val(person.UMId);
