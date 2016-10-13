@@ -200,6 +200,11 @@ button.btn.btn-link i, button.btn.btn-link span {
     text-decoration:none;
 }
 
+.page-top-header {
+    font-size: 30px; 
+    color:#24546f;
+}
+
 /* ======================================== EDIT USER MODAL ========================================== */
 
 .link-user-imgprof
