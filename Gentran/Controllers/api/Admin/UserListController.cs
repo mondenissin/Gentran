@@ -63,7 +63,7 @@ namespace Gentran.Controllers.api
         {
             Boolean success = false;
             string response = "";
-            string error = "";
+            string error = "post";
 
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
 
@@ -71,9 +71,11 @@ namespace Gentran.Controllers.api
             SqlCommand cmd;//= new SqlCommand(sQuery, connection);
             SqlDataReader dr;
 
-            try {
+            try
+            {
 
-                for (int i = 0; i < values.payload.Count; i++) {
+                for (int i = 0; i < values.payload.Count; i++)
+                {
 
                     string uid = values.payload[i].umid;
                     string utype = values.payload[i].type;
@@ -87,17 +89,105 @@ namespace Gentran.Controllers.api
                     string opass = values.payload[i].oldpassword;
                     string npass = values.payload[i].newpassword;
 
-                    //string uid = values.payload[i].umid != null ? values.payload[i].umid : "";
-                    //string utype = values.payload[i].type != null ? values.payload[i].type : "";
-                    //string uname = values.payload[i].username != null ? values.payload[i].username : "";
-                    //string nname = values.payload[i].nickname != null ? values.payload[i].nickname : "";
-                    //string fname = values.payload[i].firstname != null ? values.payload[i].firstname : "";
-                    //string mname = values.payload[i].middlename != null ? values.payload[i].middlename : "";
-                    //string lname = values.payload[i].lastname != null ? values.payload[i].lastname : "";
-                    //string email = values.payload[i].email != null ? values.payload[i].email : "";
-                    //string image = values.payload[i].image != null ? values.payload[i].image : "";
-                    //string opass = values.payload[i].oldpassword != null ? values.payload[i].oldpassword : "";
-                    //string npass = values.payload[i].newpassword != null ? values.payload[i].newpassword : "";
+                    if (values.operation == "add_user")
+                    {
+                        int userCount = 0;
+                        string prefix = DateTime.Now.ToString("yy");
+
+                        sQuery = "SELECT MAX(UMId) as userCount from tblUserMaster where UMId like '" + prefix + "%'";
+                        connection.Open();
+                        cmd = new SqlCommand(sQuery, connection);
+                        dr = cmd.ExecuteReader();
+
+                        if (dr.HasRows)
+                        {
+                            dr.Read();
+                            userCount = dr["userCount"] == DBNull.Value ? 0 : Convert.ToInt32(dr["userCount"]);
+                            dr.Close();
+                        }
+                        connection.Close();
+
+                        if (userCount < 9999)
+                        {
+                            uid = prefix + userCount.ToString("D4");
+                        }
+                        else
+                        {
+                            uid = (userCount + 1).ToString();
+                        }
+
+                        if (nname == "")
+                        {
+                            nname = fname;
+                        }
+
+                        var encPass = AppSettings.Encrypt("def-password");
+
+                        sQuery = "INSERT INTO tblUserMaster select '" + uid + "','" + fname + " " + lname +
+                                    "','" + fname + "','" + nname + "','" + mname +
+                                    "','" + lname + "','" + email + "','','" + utype +
+                                    "','INA','" + encPass + "','" + utype + "'";
+
+                        connection.Open();
+                        cmd = new SqlCommand(sQuery, connection);
+                        cmd.ExecuteNonQuery();
+                        connection.Close();
+
+                        sQuery = "INSERT INTO tblUserAccess select '" + uid + "','" + utype + "'";
+
+                        connection.Open();
+                        cmd = new SqlCommand(sQuery, connection);
+                        cmd.ExecuteNonQuery();
+                        connection.Close();
+
+                        success = true;
+                        response = "User successfully added!";
+                    } 
+
+                    error = success == false ? sQuery : "";
+                }
+            }
+            catch (Exception ex)
+            {
+
+                connection.Close();
+
+                success = false;
+                response = ex.Message;
+            }
+            return new Response { success = success, detail = response, errortype = error };
+        }
+
+        // PUT api/userlis/5
+        public object Put(string id,[FromBody]Data values)
+        {
+            Boolean success = false;
+            string response = "";
+            string error = "put";
+
+            SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
+
+            String sQuery = "";
+            SqlCommand cmd;//= new SqlCommand(sQuery, connection);
+            SqlDataReader dr;
+
+            try
+            {
+
+                for (int i = 0; i < values.payload.Count; i++)
+                {
+
+                    string uid = values.payload[i].umid;
+                    string utype = values.payload[i].type;
+                    string uname = values.payload[i].username;
+                    string nname = values.payload[i].nickname;
+                    string fname = values.payload[i].firstname;
+                    string mname = values.payload[i].middlename;
+                    string lname = values.payload[i].lastname;
+                    string email = values.payload[i].email;
+                    string image = values.payload[i].image;
+                    string opass = values.payload[i].oldpassword;
+                    string npass = values.payload[i].newpassword;
 
                     if (values.operation == "save_user")
                     {
@@ -105,9 +195,9 @@ namespace Gentran.Controllers.api
 
                         if (values.payload[i].oldpassword != "unchanged")
                         {
-                            sQuery = "SELECT * FROM tblUserMaster where umid = '" + uid + "' and umpassword = '" + AppSettings.Encrypt(opass) + "'";
+                            sQuery = "SELECT * FROM tblUserMaster where umid = '" + uid + "' and umpassword = @UMPassword";
                             cmd = new SqlCommand(sQuery, connection);
-                            // cmd.Parameters.Add("@UMPassword", AppSettings.Encrypt(opass));
+                            cmd.Parameters.Add("@UMPassword", AppSettings.Encrypt(opass));
                             dr = cmd.ExecuteReader();
                             if (dr.HasRows)
                             {
@@ -191,76 +281,75 @@ namespace Gentran.Controllers.api
 
                     }
 
-                    else if( values.operation == "add_user" ){
-                        int userCount = 0;
-                        string prefix = DateTime.Now.ToString("yy");
+                    else if (values.operation == "reset_user")
+                    {
 
-                        sQuery = "SELECT MAX(UMId) as userCount from tblUserMaster where UMId like '" + prefix + "%'";
+                        sQuery = "select UMId,UMType,UMFirstName,UMLastName from tblusermaster where UMId = '" + uid + "'";
+
                         connection.Open();
+
                         cmd = new SqlCommand(sQuery, connection);
+
                         dr = cmd.ExecuteReader();
 
                         if (dr.HasRows)
                         {
                             dr.Read();
-                            userCount = dr["userCount"] == DBNull.Value ? 0 : Convert.ToInt32(dr["userCount"]);
+                            String userId = dr["UMId"].ToString();
+                            String access = dr["UMType"].ToString();
+                            String UMFirstName = dr["UMFirstName"].ToString();
+                            String UMLastName = dr["UMLastName"].ToString();
                             dr.Close();
-                        }
-                        connection.Close();
 
-                        if (userCount < 9999)
-                        {
-                            uid = prefix + userCount.ToString("D4");
+                            connection.Close();
+
+                            sQuery = "update tblusermaster set umstatus = 'INA',umpassword = PWDENCRYPT('def-password'),umimage = '',UMUserName = '" + UMFirstName + ' ' + UMLastName + "' where umid = '" + uid + "'";
+
+                            connection.Open();
+                            cmd = new SqlCommand(sQuery, connection);
+                            cmd.ExecuteNonQuery();
+                            connection.Close();
+
+                            String deleteStr = "delete from tblUserAccess where uauser = '" + userId + "' and uaaccess not in ('" + access + "')";
+                            connection.Open();
+                            SqlCommand deletecmd = new SqlCommand(deleteStr, connection);
+                            deletecmd.ExecuteNonQuery();
+                            connection.Close();
+
+                            success = true;
+                            response = "User has been reset!";
                         }
                         else
                         {
-                            uid = (userCount + 1).ToString();
+                            response = "Cant find ID #: " + uid;
+                            success = false;
                         }
 
-                        if (nname == "")
-                        {
-                            nname = fname;
-                        }
-
-                        var encPass = AppSettings.Encrypt("def-password");
-                          
-                        sQuery = "INSERT INTO tblUserMaster select '" + uid + "','" + fname + " " + lname +
-                                    "','" + fname + "','" + nname + "','" + mname +
-                                    "','" + lname + "','" + email + "','','" + utype +
-                                    "','INA','"+ encPass + "','" + utype + "'";
-
-                        connection.Open();
-                        cmd = new SqlCommand(sQuery, connection);
-                        cmd.ExecuteNonQuery();
-                        connection.Close();
-
-                        sQuery = "INSERT INTO tblUserAccess select '" + uid + "','" + utype + "'";
-
+                    }
+                    else if (values.operation == "deactivate_user")
+                    {
+                        sQuery = "update tblusermaster set umstatus = 'DEA' where umid = '" + uid + "'";
                         connection.Open();
                         cmd = new SqlCommand(sQuery, connection);
                         cmd.ExecuteNonQuery();
                         connection.Close();
 
                         success = true;
-                        response = "User successfully added!";
+                        response = "User has been deactivated!";
                     }
 
                     error = success == false ? sQuery : "";
-                } 
+                }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
 
                 connection.Close();
 
                 success = false;
-                response = ex.ToString();
-            } 
-            return new Response { success = success, detail = response , errortype = error };
-        }
-
-        // PUT api/userlis/5
-        public void Put(int id, [FromBody]string value)
-        {
+                response = ex.Message;
+            }
+            return new Response { success = success, detail = response, errortype = error };
         }
 
         // DELETE api/userlis/5

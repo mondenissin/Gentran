@@ -24,15 +24,15 @@
             <td ng-cloak ng-switch="p.UMStatus">
                 <div class="case" ng-switch-when="ACT">
                     <button class="btn btn-default btn-xs option-icon-size" ng-click="userDetails(p)" title="Edit User Details"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                    <button class="btn btn-default btn-xs option-icon-size" ng-click="resetUser(p)" title="Reset"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-                    <button class="btn btn-default btn-xs option-icon-size" ng-click="removeUser(p)" title="Deactivate"><i class="fa fa-power-off" aria-hidden="true"></i></button>
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="ShowConfirmModal('reset',p)" title="Reset"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="ShowConfirmModal('deact',p)" title="Deactivate"><i class="fa fa-power-off" aria-hidden="true"></i></button>
                 </div>
                 <div class="case" ng-switch-when="INA">
                     <button class="btn btn-default btn-xs option-icon-size" ng-click="userDetails(p)" title="Edit User Details"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                    <button class="btn btn-default btn-xs option-icon-size" ng-click="removeUser(p)" title="Deactivate"><i class="fa fa-power-off" aria-hidden="true"></i></button>
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="ShowConfirmModal('deact',p)" title="Deactivate"><i class="fa fa-power-off" aria-hidden="true"></i></button>
                 </div>
                 <div class="case" ng-switch-when="DEA">
-                    <button class="btn btn-default btn-xs option-icon-size" ng-click="resetUser(p)" title="Reset"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="ShowConfirmModal('reset',p)" title="Reset"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                 </div>
                  <div class="case" ng-switch-default>
 
@@ -97,13 +97,36 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary btn-sm" ng-click="saveAddUser()">Save changes</button>
+                <button type="button" class="btn btn-primary btn-sm" ng-click="saveAddUser()">Save User</button>
             </div>
         </div>
     </div>
 </div>
 <!------- END OF ADD USER MODAL ------->
 
+<!------- DEACTIVATE/RESET MODAL ------->
+<div id="userOptionsModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title confirm-header-message">Action Type</h4>
+                <input type="hidden" class="txt_hidden_umid" />
+                <input type="hidden" class="txt_hidden_operation" />
+            </div>
+            <div class="modal-body">
+                <p class="confirmMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary btn-md" ng-click="ActionSelected()">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!------- END OF DEACTIVATE/RESET MODAL ------->
+
+<!-- ================================== END OF MODALS ================================= -->
 <script>
     $(function () {
         var parent = $('.data-management');

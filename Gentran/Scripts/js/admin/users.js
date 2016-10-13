@@ -11,10 +11,10 @@
     var eMail = $('#txt_addemail').val().replace(/\'/gi, '\'\'');
 
     if (userType == "" || userType == null || fName == "" || lName == "") {
-        alert('Please fill all the required fields!');
+        warning('Warning!','Please fill all the required fields!');
     }
     else if (eMail != "" && validateEmail(eMail) == false) {
-        alert('Invalid email!');
+        warning('Warning!','Invalid email!');
     }
     else {
         var Item = {};

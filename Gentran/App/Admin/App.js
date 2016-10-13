@@ -6,7 +6,7 @@
     $routeProvider.when(_root + 'Admin/Customers', { templateUrl: _root + 'App/Admin/Views/Cust/CustList.html', controller: 'custViewModel' });
     $routeProvider.when(_root + 'Admin/TransactionLogs', { templateUrl: _root + 'App/Admin/Views/TransLog/TransLogList.html', controller: 'translogViewModel' });
     $routeProvider.when(_root + 'Admin/Connections', { templateUrl: _root + 'App/Admin/Views/Connections/ConnectionList.html', controller: 'connectionViewModel' });
-   // $routeProvider.otherwise({ redirectTo: _root + 'Admin' });
+    $routeProvider.otherwise({ redirectTo: _root + 'Admin' });
     $locationProvider.html5Mode({
         enabled: true,
         requireBase: false

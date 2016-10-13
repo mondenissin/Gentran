@@ -24,13 +24,68 @@
         console.log('You selected ' + person.UMFirstName + ' ' + person.UMLastName);
     }
 
+    $scope.UserUpdate = function (operation,umid) {
+
+        var Item = {};
+        Item.umid = umid;
+
+        $scope.data = {};
+        $scope.data.operation = operation;
+        $scope.data.payload = _payloadParser(Item);
+
+        viewModelHelper.apiPut('api/userlist', $.param({
+                    values: JSON.stringify($scope.data)
+                }) , function (result) {
+            var data = result.data;
+            if (data.success === true) {
+                success('User Update', data.detail);
+
+                $('#userOptionsModal').modal('hide');
+                setTimeout(function () {
+                    $route.reload();
+                }, 300);
+            } else {
+                error('Error!',data.detail)
+            }
+        });
+    }
+
+    $scope.ShowConfirmModal = function (operation, person) {
+
+        if (operation == "reset") {
+            $('.confirm-header-message').text('Reset User Credentials');
+            $('.confirmMessage').text('Do you wish to reset ' + person.UMFirstname + ' ' + person.UMLastname + '?');
+        }
+        else {
+            $('.confirm-header-message').text('Deactivate User');
+            $('.confirmMessage').text('Do you wish to deactivate ' + person.UMFirstname + ' ' + person.UMLastname + '?');
+        }
+
+        $('.txt_hidden_umid').val(person.UMId);
+        $('.txt_hidden_operation').val(operation);
+
+        $('#userOptionsModal').modal('show');
+    }
+
+    $scope.ActionSelected = function () {
+        var umid = $('.txt_hidden_umid').val();
+        var operation = $('.txt_hidden_operation').val();
+
+        if (operation == "reset") {
+            $scope.UserUpdate('reset_user', umid);
+        }
+        else {
+            $scope.UserUpdate('deactivate_user', umid);
+        }
+    }
+
     $scope.addUser = function () {
         $('#AddUserModal').modal('show');
     } 
 
     $scope.saveAddUser = function () {
         var ret = ValidateAddUser();
-        
+
         if (ret.valid == true) {
             $scope.data = {};
             $scope.data.operation = 'add_user';
@@ -39,16 +94,19 @@
             viewModelHelper.apiPost('api/userlist', $scope.data, function (result) {
                 var data = result.data;
                 if (data.success === true) {
-                    $('#AddUserModal').modal('hide');
                     resetFields();
-                    alert(data.detail);
-                    $route.reload();
+                    $('#AddUserModal').modal('hide');
+
+                    setTimeout(function () {
+                        $route.reload();
+                    }, 300);
+
+                    success('Add User', data.detail);
                 } else {
-                    alert(data.detail)
+                    error('Add User', data.detail)
                 }
             });
         }
-
     }
 
 	$scope.userDetails = function (person) {
