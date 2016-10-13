@@ -1,4 +1,14 @@
-﻿<div class="breadcrumb">
+﻿<hr />
+<input type="text" ng-model="search[searchBy]" />Search By:
+<select ng-model="searchBy">
+    <option value="PMCode" selected>Product Code</option>
+    <option value="PMDescription">Product Name</option>
+    <option value="PMBarcode">Product Barcode</option>
+    <option value="PSDescription">Product Status</option>
+</select>
+<hr />
+
+<div class="breadcrumb">
     <button class="btn btn-default btn-xs icon-size" title="Add Product" ng-click="addProduct()"><i class="fa fa-plus" aria-hidden="true"></i></button>
     <button class="btn btn-default btn-xs icon-size" title="Batch Add Product"><i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
 </div>
@@ -14,7 +24,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="p in product track by p.PMId">
+        <tr ng-repeat="p in product | filter:search">
             <td class="table-data-id" ng-cloak>
                 {{p.PMId}}
             </td>

@@ -1,4 +1,12 @@
-﻿<div class="breadcrumb">
+﻿<hr />
+<input type="text" ng-model="search[searchBy]" />Search By:
+<select ng-model="searchBy">
+    <option value="CMCode" selected>Customer Code</option>
+    <option value="CMDescription">Customer Name</option>
+</select>
+<hr />
+
+<div class="breadcrumb">
     <button class="btn btn-default btn-xs icon-size" title="Add Customer" ng-click="addCustomer()"><i class="fa fa-plus" aria-hidden="true"></i></button>
     <button class="btn btn-default btn-xs icon-size" title="Batch Add Customer"><i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
 </div>
@@ -14,7 +22,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="c in customers track by c.CMCode ">
+                <tr ng-repeat="c in customers | filter:search">
                     <td ng-cloak>
                         {{c.CMCode}}
                     </td>

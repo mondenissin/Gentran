@@ -1,4 +1,16 @@
-﻿<div class="breadcrumb">
+﻿<hr />
+<input type="text" ng-model="search[searchBy]" />Search By:
+<select ng-model="searchBy">
+    <option value="TLId" selected>Transaction ID</option>
+    <option value="UMUsername">User Name</option>
+    <option value="TLDate">Date</option>
+    <option value="TADescription">Description</option>
+    <option value="TLValue">Product Value</option>
+    <option value="TLRemarks">Remarks</option>
+</select>
+<hr />
+
+<div class="breadcrumb">
     <button class="btn btn-default btn-xs icon-size" title="Pending Button"><i class="fa" aria-hidden="true"></i></button>
 </div> 
 <table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-bordered bordered table-striped table-condensed datatable">
