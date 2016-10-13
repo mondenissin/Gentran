@@ -33,20 +33,19 @@
         $scope.data.operation = operation;
         $scope.data.payload = _payloadParser(Item);
 
-        viewModelHelper.apiPut('api/userlist', $.param({
-                    values: JSON.stringify($scope.data)
-                }), function (result) {
+        viewModelHelper.apiPut('api/userlist', $scope.data, function (result) {
             var data = result.data;
             if (data.success === true) {
-                success('User Update', data.detail);
+                notif_success('User Update', data.detail);
 
                 $('#userOptionsModal').modal('hide');
                 setTimeout(function () {
                     $route.reload();
                 }, 300);
             } else {
-                error('Error!',data.detail)
+                notif_error('Error!',data.detail)
             }
+
         });
     }
 
@@ -101,9 +100,9 @@
                         $route.reload();
                     }, 300);
 
-                    success('Add User', data.detail);
+                    notif_success('Add User', data.detail);
                 } else {
-                    error('Add User', data.detail)
+                    notif_error('Add User', data.detail)
                 }
             });
         }
