@@ -9,7 +9,7 @@
 
     $scope.refreshUser = function () {
         $scope.search = {};
-        $scope.searchBy = "UMFirstName";
+        $scope.searchBy = "UMId";
 
         viewModelHelper.apiGet('api/userlist', null, function (result) {
             $scope.people = result.data.detail;

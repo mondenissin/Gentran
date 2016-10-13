@@ -1,4 +1,15 @@
-﻿<div class="breadcrumb">
+﻿<hr />
+<input type="text" ng-model="search[searchBy]" />Search By:
+<select ng-model="searchBy">
+    <option value="UMId" selected>User ID</option>
+    <option value="UMUsername">Username</option>
+    <option value="UMFirstname">First Name</option>
+    <option value="UMLastname">Last Name</option>
+    <option value="UMEmail">Email</option>
+</select>
+<hr />
+
+<div class="breadcrumb">
     <button class="btn btn-default btn-xs icon-size" title="Add User" ng-click="addUser()"><i class="fa fa-plus" aria-hidden="true" ></i></button>
 </div> 
 <table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-responsive table-bordered bordered table-striped table-condensed datatable">
@@ -14,7 +25,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="p in people track by p.UMId">
+        <tr ng-repeat="p in people | filter:search ">
             <td ng-cloak> {{p.UMId}} </td>
             <td ng-cloak> {{p.UMUsername}} </td>
             <td ng-cloak> {{p.UMFirstname}} {{p.UMLastname}} </td>
