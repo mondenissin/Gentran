@@ -1,4 +1,4 @@
-﻿function success(title,message) {
+﻿function success(title, message) {
     $.Notification.autoHideNotify('success', 'bottom left', title, message);
 }
 function error(title, message) {

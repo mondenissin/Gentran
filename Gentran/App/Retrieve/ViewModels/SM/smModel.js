@@ -136,7 +136,7 @@
                 chk = true;
 
                 //$(this.parentElement).remove();
-                this.checked = false;
+                //this.checked = false;
 
                 listFile[ctr] = {};
 
@@ -156,7 +156,7 @@
             
             if (chk) {
                 $('#mapModal').modal('show');
-                var i = 0, count = listFile.length;
+                /*var i = 0, count = listFile.length;
                 var execTime;
                 function LaodFile() {
                     var fileName = [];
@@ -189,22 +189,16 @@
                 }
                 setTimeout(function () {
                     LaodFile();
-                }, execTime);
+                }, execTime);*/
             } else {
                 alert("Select File");
             }
         });
     }
 
-    $scope.clearSuccess = function () {
+    /*$scope.clearSuccess = function () {
         //$('#mapModal .modal-body table tbody').remove();
-    }
-    
-    $scope.closeModal = function () {
-        $('#mapModal').modal('hide');
-        //$('#mapModal .modal-body table tbody').remove();
-    }
-
+    }*/
     initialize();
 });
 

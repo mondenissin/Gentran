@@ -1,19 +1,11 @@
 ﻿
 <h3 class="breadcrumb"><b>S</b>M FILES LOADED</h3>
-
-
-
-        <div class="navbar" id="navbar">
-            <ul class="nav navbar-nav">
-                <li><input class="po-cbx-all" type="checkbox" ng-model="all" ng-change="selectFileAll()" ng-show="files" /></li>
-                <li><button class = "tn btn-default btn-sm" ng-click="getSelected()" ng-show="files">Map files</button></li>
-            </ul>
-            <div class="desti-folder pull-right">
-                <button class="btn btn-default btn-sm pull-right icon-margin" data-toggle="modal" data-target="#mapModal">
-                    Queued files
-                </button>  
-            </div>
-        </div>
+    <div class="navbar" id="navbar">
+        <ul class="nav navbar-nav">
+            <li><input class="po-cbx-all" type="checkbox" ng-model="all" ng-change="selectFileAll()" ng-show="files" /></li>
+            <li><button class = "tn btn-default btn-sm" ng-click="getSelected()" ng-show="files">Read files</button></li>
+        </ul>
+    </div>
     <div class="po-files-h" ng-repeat="f in files" ng-init="$last ? loadHover() : angular.noop()">
         <input class="po-cbx" ng-click="$event = $event" ng-change="selectFile($event)" type="checkbox" ng-model="check" ng-checked="all" />
         <div class="po-files">
@@ -34,7 +26,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Raading Files</h4>
             </div>
             <div class="modal-body">
@@ -58,7 +50,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" ng-click="clearSuccess()">Clear Successful</button>
+                <!--<button type="button" class="btn btn-default btn-sm" ng-click="clearSuccess()">Clear Successful</button>-->
                 <!--<input type="submit" class="btn btn-primary btn-sm" id="submitOrder" value="Yes" data-dismiss="modal" />-->
             </div>
         </div>
