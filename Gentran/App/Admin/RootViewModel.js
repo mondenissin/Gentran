@@ -47,15 +47,15 @@
         $scope.data.operation = 'save_user';
         $scope.data.payload = _payloadParser(values);
 
-        viewModelHelper.apiPut('api/userlist', $.param({ values:JSON.stringify($scope.data)}) , function (result) {
+        viewModelHelper.apiPut('api/userlist', $scope.data, function (result) {
             var data = result.data;
             if (data.success === true) {
                 $('#editUserModal').modal('hide');
                 resetFields();
                 $route.reload();
-                success('User Profile Update', data.detail);
+                notif_success('User Profile Update', data.detail);
             } else {
-                warning('User Profile Update', data.detail)
+                notif_warning('User Profile Update', data.detail)
             }
         });
     }

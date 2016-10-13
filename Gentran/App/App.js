@@ -63,7 +63,7 @@ commonModule.factory('viewModelHelper', function ($http, $q, $window, $location)
 
             $http.put(MyApp.rootPath + uri, data, {
                   headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                      'Content-Type': 'application/json'
                   },
                 })
                 .then(function (result) {

@@ -54,10 +54,10 @@ function UserProfileValidate() {
 
     if ($('#txt_edituname').val() == "" || $('#txt_editfname').val() == "" || $('#txt_editlname').val() == "") {
 
-        warning('Warning!', 'Please fill up all fields!');
+        notif_warning('Warning!', 'Please fill up all fields!');
     }
     else if ($('#txt_editemail').val() !== "" && validateEmail($('#txt_editemail').val()) == false) {
-        warning('Warning!', 'Invalid email!');
+        notif_warning('Warning!', 'Invalid email!');
     }
     else {
         var Items = {}
@@ -78,7 +78,7 @@ function UserProfileValidate() {
         if (document.getElementById('chk_changepass').checked) {
 
             if ($('#txt_oldpass').val() == '' || $('#txt_newpass').val() == '' || $('#txt_confirmpass').val() == '') {
-                awarning('Warning!', 'Please fill up all fields!');
+                notif_warning('Warning!', 'Please fill up all fields!');
             }
             else {
                 Items.oldpassword = $('#txt_oldpass').val().replace(/\'/gi, '\'\'');
@@ -90,7 +90,7 @@ function UserProfileValidate() {
                     return Values;
                 }
                 else {
-                    warning('Warning!', 'Your passwords does not match!');
+                    notif_warning('Warning!', 'Your passwords does not match!');
                 }
             }
         }
