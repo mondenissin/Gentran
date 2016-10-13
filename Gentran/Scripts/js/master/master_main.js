@@ -5,6 +5,7 @@
         $('#fuProfPic').trigger('click');
     });
 });
+var hosts = window.location.origin + '/Gentran/';
 var host = window.location.origin + '/files/';
 
 function previewFile() {
@@ -53,10 +54,10 @@ function UserProfileValidate() {
 
     if ($('#txt_edituname').val() == "" || $('#txt_editfname').val() == "" || $('#txt_editlname').val() == "") {
 
-        alert('Please fill up all fields!');
+        warning('Warning!', 'Please fill up all fields!');
     }
     else if ($('#txt_editemail').val() !== "" && validateEmail($('#txt_editemail').val()) == false) {
-        alert('Invalid email!');
+        warning('Warning!', 'Invalid email!');
     }
     else {
         var Items = {}
@@ -77,7 +78,7 @@ function UserProfileValidate() {
         if (document.getElementById('chk_changepass').checked) {
 
             if ($('#txt_oldpass').val() == '' || $('#txt_newpass').val() == '' || $('#txt_confirmpass').val() == '') {
-                alert('Please fill up all fields!');
+                awarning('Warning!', 'Please fill up all fields!');
             }
             else {
                 Items.oldpassword = $('#txt_oldpass').val().replace(/\'/gi, '\'\'');
@@ -89,7 +90,7 @@ function UserProfileValidate() {
                     return Values;
                 }
                 else {
-                    alert('Your passwords does not match!');
+                    warning('Warning!', 'Your passwords does not match!');
                 }
             }
         }

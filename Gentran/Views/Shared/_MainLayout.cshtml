@@ -14,6 +14,8 @@
     <link href="~/Content/AdminLTE.min.css" rel="stylesheet" />
     <link href="~/Content/skins/_all-skins.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/Content/Site.css" /> 
+    <link href="~/Content/notification/notification.css" rel="stylesheet" />
+    <link href="~/Content/notification/waves-effect.css" rel="stylesheet" />
     @RenderSection("styles", required: false)
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -31,17 +33,11 @@
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                         <ul class="nav navbar-nav">
-                            <li class="active"><a href="@Url.Content("~/Home/Index")">Home <span class="sr-only">(current)</span></a></li>
+                            <li class="visitHome"><a href="@Url.Content("~/Home/Index")">Home <span class="sr-only">(current)</span></a></li>
                             <li><a href="@Url.Content("~/Admin/Index")">Admin</a></li>
-                            <li><a href="@Url.Content("~/Retrieve/Index")">PO Retrieve</a></li>
-                            <li><a href="@Url.Content("~/Order/Index")">Order</a></li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Monitoring <span class="caret"></span></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">PO Monitoring</a></li>
-                                    <li><a href="#">Transaction Logs</a></li>
-                                </ul>
-                            </li>
+                            <li class="visitRetrieve"><a href="@Url.Content("~/Retrieve/Index")">PO Retrieve</a></li>
+                            <li class="visitOrder"><a href="@Url.Content("~/Order/Index")">Order</a></li>
+                            <li class="visitMonitoring"><a href="@Url.Content("~/Monitoring/Index")">Monitoring</a></li>
                         </ul>
                     </div>
                     <!-- /.navbar-collapse -->
@@ -107,6 +103,12 @@
         <script type="text/javascript" src="~/Scripts/angular/angular.js"></script>
         <script type="text/javascript" src="~/Scripts/angular/angular-route.js"></script>
         <script type="text/javascript" src="~/Scripts/js/master/master_main.js"></script>
+
+        <script src="~/Scripts/notification/notifications.js"></script>
+        <script src="~/Scripts/notification/waves.js"></script>
+        <script src="~/Scripts/notification/notify.min.js"></script>
+        <script src="~/Scripts/notification/notify-metro.js"></script>
+        <script src="~/Scripts/js/master/master_balloon.js"></script>
 
         <script type="text/javascript">
             window.MyApp = {};

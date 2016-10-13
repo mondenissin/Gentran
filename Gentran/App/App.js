@@ -58,6 +58,30 @@ commonModule.factory('viewModelHelper', function ($http, $q, $window, $location)
                 });
         };
 
+        self.apiPut = function (uri, data, success, failure) {
+            self.modelIsValid = true;
+
+            $http.put(MyApp.rootPath + uri, data, {
+                  headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                  },
+                })
+                .then(function (result) {
+                    success(result);
+                }, function (result) {
+                    if (failure !== null) {
+                        failure(result);
+                    }
+                    else {
+                        var errorMessage = result.status + ':' + result.statusText;
+                        if (result.data !== null && result.data.Message !== null)
+                            errorMessage += ' - ' + result.data.Message;
+                        self.modelErrors = [errorMessage];
+                        self.modelIsValid = false;
+                    }
+                });
+        };
+
         self.goBack = function () {
             $window.history.back();
         };
