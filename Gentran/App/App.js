@@ -60,6 +60,7 @@ commonModule.factory('viewModelHelper', function ($http, $q, $window, $location)
 
         self.apiPut = function (uri, data, success, failure) {
             self.modelIsValid = true;
+
             $http.put(MyApp.rootPath + uri, data, {
                   headers: {
                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'

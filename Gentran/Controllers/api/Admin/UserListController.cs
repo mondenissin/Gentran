@@ -159,7 +159,7 @@ namespace Gentran.Controllers.api
         }
 
         // PUT api/userlis/5
-        public object Put(string id,[FromBody]Data values)
+        public object Put([FromBody]Data values)
         {
             Boolean success = false;
             string response = "";

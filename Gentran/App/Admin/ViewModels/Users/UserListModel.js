@@ -35,7 +35,7 @@
 
         viewModelHelper.apiPut('api/userlist', $.param({
                     values: JSON.stringify($scope.data)
-                }) , function (result) {
+                }), function (result) {
             var data = result.data;
             if (data.success === true) {
                 success('User Update', data.detail);
