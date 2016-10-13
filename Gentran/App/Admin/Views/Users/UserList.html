@@ -25,7 +25,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="p in people | filter:search ">
+        <tr sly-repeat="p in people | filter:search ">
             <td ng-cloak> {{p.UMId}} </td>
             <td ng-cloak> {{p.UMUsername}} </td>
             <td ng-cloak> {{p.UMFirstname}} {{p.UMLastname}} </td>

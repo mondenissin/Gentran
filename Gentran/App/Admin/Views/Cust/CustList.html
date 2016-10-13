@@ -22,7 +22,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="c in customers | filter:search">
+                <tr sly-repeat="c in customers | filter: search">
                     <td ng-cloak>
                         {{c.CMCode}}
                     </td>

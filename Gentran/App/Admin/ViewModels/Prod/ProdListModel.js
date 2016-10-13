@@ -1,4 +1,4 @@
-﻿adminModule.controller("prodViewModel", function ($scope, adminService, $http, $q, $routeParams, $window, $location, viewModelHelper, DTOptionsBuilder, DTColumnDefBuilder) {
+﻿adminModule.controller("prodViewModel", function ($scope, adminService, $http, $q, $routeParams, $window, $location,$timeout, viewModelHelper, DTOptionsBuilder, DTColumnDefBuilder) {
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.adminService = adminService;
@@ -12,6 +12,7 @@
         $scope.searchBy = "PMCode";
 
         viewModelHelper.apiGet('api/prod', null, function (result) {
+
             $scope.product = result.data.detail;
         });
 

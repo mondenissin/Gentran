@@ -191,7 +191,7 @@
                     LaodFile();
                 }, execTime);*/
             } else {
-                alert("Select File");
+                notif_warning('File Reader', 'Please select file to read');
             }
         });
     }
