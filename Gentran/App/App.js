@@ -82,6 +82,27 @@ commonModule.factory('viewModelHelper', function ($http, $q, $window, $location)
                 });
         };
 
+        self.saveTransaction = function (transactionData) {
+            self.apiPost('api/transactions', transactionData, function (result) {
+                var data = result.data;
+                if (data.success != true) {
+                    for (var i = 0; i < data.detail.length; i++) {
+                        if (data.detail[i].remarks != 'Successful') {
+                            notif_error('Transaction Log', data.detail[i].remarks);
+                        }
+                    }
+                }
+                else {
+                    for (var i = 0; i < data.detail.length; i++) {
+                        if (data.detail[i].remarks != 'Successful') {
+                            notif_error('Transaction Log', data.detail[i].remarks);
+                        }
+                    }
+                }
+            });
+
+        }
+
         self.goBack = function () {
             $window.history.back();
         };

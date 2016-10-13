@@ -53,7 +53,9 @@
                 $('#editUserModal').modal('hide');
                 resetFields();
                 $route.reload();
-                notif_success('User Profile Update', data.detail);
+                notif_success('User Profile Update', 'User successfully updated!');
+
+                viewModelHelper.saveTransaction(data.detail);
             } else {
                 notif_warning('User Profile Update', data.detail)
             }

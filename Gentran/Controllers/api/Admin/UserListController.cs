@@ -4,7 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Data;
 using System.Data.SqlClient;
+using System.Web;
+using System.Web.SessionState;
 using Newtonsoft.Json;
 
 namespace Gentran.Controllers.api
@@ -12,10 +15,12 @@ namespace Gentran.Controllers.api
     public class UserListController : ApiController
     {
         private AppSettings AppSettings = new AppSettings();
+        string userID = HttpContext.Current.Session["UserId"].ToString();
+        List<Transaction> rows = new List<Transaction>();
+        Boolean success = false;
         // GET api/userlis
         public Object Get()
-        {
-            bool success = true;
+        {                       
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
             String sQuery = "SELECT  UMId, UMUsername, UMEmail, UMStatus, (select USDescription from tbluserstatus where USId = UMStatus) as USStatus, UMNickname, UMFirstname, UMMiddlename, UMLastname,UMType,UMImage FROM tblusermaster where UMType != 'DEV'";
             SqlCommand cmd = new SqlCommand(sQuery, connection);
@@ -62,9 +67,19 @@ namespace Gentran.Controllers.api
         // POST api/userlis
         public object Post([FromBody]Data values)
         {
-            Boolean success = false;
+            string activity = "";
+
+            DateTime now = new DateTime();
+            now = DateTime.Now;
+                                          
+            string type = "ADM";
+            string changes = "";
+
+            string newpaypload = JsonConvert.SerializeObject(values.payload, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
+
             string response = "";
-            string error = "post";
+            string error = "";
 
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
 
@@ -92,6 +107,8 @@ namespace Gentran.Controllers.api
 
                     if (values.operation == "add_user")
                     {
+                        activity = "10ADD";
+
                         int userCount = 0;
                         string prefix = DateTime.Now.ToString("yy");
 
@@ -142,7 +159,10 @@ namespace Gentran.Controllers.api
                         connection.Close();
 
                         success = true;
-                        response = "User successfully added!";
+                        response = "Successful";
+
+                        rows.Add(new Transaction { activity = activity, date = now, remarks = response, user = userID, value = "User ID:" + uid, type = type, changes = changes, payloadvalue = newpaypload, customernumber = "", ponumber = "" });
+                        return new Response { success = success, detail = rows };
                     } 
 
                     error = success == false ? sQuery : "";
@@ -163,7 +183,19 @@ namespace Gentran.Controllers.api
         public object Put([FromBody]Data values)
         {
 
-            Boolean success = false;
+            string activity = "";
+
+            DateTime now = new DateTime();
+            now = DateTime.Now;
+
+            string remarks = "Successful!";       
+             
+            string type = "ADM";
+            string changes = "";
+
+            string newpaypload = JsonConvert.SerializeObject(values.payload, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
+
             string response = "";
             string error = "put";
 
@@ -193,6 +225,8 @@ namespace Gentran.Controllers.api
 
                     if (values.operation == "save_user")
                     {
+                        activity = "10UPD";
+
                         connection.Open();
 
                         if (values.payload[i].oldpassword != "unchanged")
@@ -235,7 +269,10 @@ namespace Gentran.Controllers.api
                                 connection.Close();
 
                                 success = true;
-                                response = "USER UPDATED!";
+                                response = "Successful";
+
+                                rows.Add(new Transaction { activity = activity, date = now, remarks = response, user = userID, value = "User ID:" + uid, type = type, changes = changes, payloadvalue = newpaypload, customernumber = "", ponumber = "" });
+                                return new Response { success = success, detail = rows };
                             }
                             else
                             {
@@ -278,13 +315,18 @@ namespace Gentran.Controllers.api
                             connection.Close();
 
                             success = true;
-                            response = "USER UPDATED!";
+                            response = "Successful";
+
+                            rows.Add(new Transaction { activity = activity, date = now, remarks = response, user = userID, value = "User ID:" + uid, type = type, changes = changes, payloadvalue = newpaypload, customernumber = "", ponumber = "" });
+                            return new Response { success = success, detail = rows };
                         }
 
                     }
 
                     else if (values.operation == "reset_user")
                     {
+
+                        activity = "10RES";
 
                         sQuery = "select UMId,UMType,UMFirstName,UMLastName from tblusermaster where UMId = '" + uid + "'";
 
@@ -319,7 +361,10 @@ namespace Gentran.Controllers.api
                             connection.Close();
 
                             success = true;
-                            response = "User has been reset!";
+                            response = "Successful";
+
+                            rows.Add(new Transaction { activity = activity, date = now, remarks = response, user = userID, value = "User ID:" + uid, type = type, changes = changes, payloadvalue = newpaypload, customernumber = "", ponumber = "" });
+                            return new Response { success = success, detail = rows };
                         }
                         else
                         {
@@ -330,6 +375,8 @@ namespace Gentran.Controllers.api
                     }
                     else if (values.operation == "deactivate_user")
                     {
+                        activity = "10DEA";
+
                         sQuery = "update tblusermaster set umstatus = 'DEA' where umid = '" + uid + "'";
                         connection.Open();
                         cmd = new SqlCommand(sQuery, connection);
@@ -337,7 +384,10 @@ namespace Gentran.Controllers.api
                         connection.Close();
 
                         success = true;
-                        response = "User has been deactivated!";
+                        response = "Successful";
+
+                        rows.Add(new Transaction { activity = activity, date = now, remarks = response, user = userID, value = "User ID:" + uid, type = type, changes = changes, payloadvalue = newpaypload, customernumber = "", ponumber = "" });
+                        return new Response { success = success, detail = rows };
                     }
 
                     error = success == false ? sQuery : "";
