@@ -147,7 +147,7 @@
                 listFile[ctr].fileName = this.nextElementSibling.children[0].children[2].textContent;
                 listFile[ctr].fileLogo = this.nextElementSibling.children[0].children[0].outerHTML;
                 listFile[ctr].name = this.nextElementSibling.children[0].children[1].textContent;
-                listFile[ctr].fileID = this.nextElementSibling.children[0].children[1].textContent.replace('.', '');
+                listFile[ctr].fileID = this.nextElementSibling.children[0].children[1].textContent.replace(/[. ]/g, '');
 
                 ctr++; 
             }
@@ -168,21 +168,18 @@
                     items.payload = fileName;
 
                     viewModelHelper.apiPost('api/masteruploader', JSON.stringify(items), function (result) {
-                        if (result.data.success) {
-                            var mapData = result.data.filecontent;
-                            execTime = result.data.execution;
-                            //console.log(mapData);
-                            console.log(execTime);
-                            $('#' + fileName[0].fileID).text("Reading");
-                            $('#' + fileName[0].fileID).animate({ width: '100%' }, execTime);
+                        var mapData = result.data.filecontent;
+                        execTime = result.data.execution;
+                        //console.log(mapData);
+                        console.log(execTime);
+                        $('#' + fileName[0].fileID).text("Reading");
+                        $('#' + fileName[0].fileID).animate({ width: '100%' }, execTime);
 
-                            setTimeout(function () {
-                                $('#' + fileName[0].fileID).text("Successful");
+                        setTimeout(function () {
+                            $('#' + fileName[0].fileID).text("Read Successful");
 
-                                //IF PO IS SUCCESSFUL
-                                $(elemName[0].element).remove();
-                            }, execTime);
-                        }
+                            $(elemName[0].element).remove();
+                        }, execTime);
                     });
 
                     i++;

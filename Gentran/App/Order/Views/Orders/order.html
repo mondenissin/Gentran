@@ -39,7 +39,7 @@
                 <td class="table-data-cqty">{{ o.countulquantity }}</td>
                 <td class="table-data-sqty">{{ o.sumulquantity }}</td>
                 <td class="table-data-uprice">₱{{o.uiprice }}</td>
-                <td class="table-data-ustat"><button class="btn btn-default btn-sm " ng-click="getStatus(o)" title="View Details"><i class="fa {{o.uicons}}" aria-hidden="true"></i></button></td>
+                <td><button class="btn btn-default btn-sm " ng-click="getStatus(o)" title="View Details"><i class="fa {{o.uicons}}" aria-hidden="true"></i></button><label class="table-data-ustat">{{o.sStatus}}</label></td>
                 <!--<img onclick="errorDetails(\'' + data.detail[i].ulid + '\',\'' + data.detail[i].ulstatus + '\')" title="View Error Details" src="img/master/error.png">-->
                 <td><a href="#" ng-click="showDetails(o)">Details</a></td>
             </tr>

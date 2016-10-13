@@ -77,19 +77,24 @@ namespace Gentran.Controllers.api.Order
                 foreach (DataRow dr in dt.Rows)
                 {
                     string icon = "";
+                    string sStat = "";
                     row = new Dictionary<object, object>();
                     foreach (DataColumn col in dt.Columns)
                     {
                         if (col.ColumnName == "ulstatus" && dr[col].ToString() == "11") {
+                            sStat = "Read Failed";
                             icon = "fa-exclamation-circle";
                         } else if (col.ColumnName == "ulstatus" && dr[col].ToString() == "20") {
+                            sStat = "New";
                             icon = "fa-check";
                         }
                         else if(col.ColumnName == "ulstatus"){
+                            sStat = "New";
                             icon = "fa-check";
                         }
                         row.Add(col.ColumnName, dr[col].ToString());
                     }
+                    row.Add("sStatus", sStat);
                     row.Add("uicons", icon);
                     rows.Add(row);
                 }

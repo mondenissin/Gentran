@@ -39,32 +39,41 @@
     $scope.submitOrder = function () {
 
         var selected = false;
+        var ifNew = true;
         var ctr = 0;
         var listOrder = [];
 
         $('.cbxSub').each(function () {
             if (this.checked == true) {
-                selected = true;
-                //this.checked = false;
+                var status = $(this).closest('tr').find('.table-data-ustat').text();
+                if (status == "New") {
+                    ifNew = true;
+                    selected = true;
 
-                listOrder[ctr] = {};
+                    listOrder[ctr] = {};
 
-                listOrder[ctr].PONum = $(this).closest('tr').find('.table-data-ponum').text();
-                listOrder[ctr].CustNum = $(this).closest('tr').find('.table-data-ucust').text();
-                listOrder[ctr].CustName = $(this).closest('tr').find('.table-data-cdesc').text();
-                listOrder[ctr].OrderDate = $(this).closest('tr').find('.table-data-uodate').text();
-                listOrder[ctr].Quantity = $(this).closest('tr').find('.table-data-sqty').text();
-
-                ctr++;
+                    listOrder[ctr].PONum = $(this).closest('tr').find('.table-data-ponum').text();
+                    listOrder[ctr].CustNum = $(this).closest('tr').find('.table-data-ucust').text();
+                    listOrder[ctr].CustName = $(this).closest('tr').find('.table-data-cdesc').text();
+                    listOrder[ctr].OrderDate = $(this).closest('tr').find('.table-data-uodate').text();
+                    listOrder[ctr].Quantity = $(this).closest('tr').find('.table-data-sqty').text();
+                    console.log();
+                    ctr++;
+                } else{
+                    ifNew = false;
+                }
             }
         }).promise().done(function () {
             $scope.submitQueue = listOrder;
 
             if (selected) {
                 $('#submitModal').modal('show');
-                
-            } else {
-                alert("Select order to submit");
+            }else {
+                if(!(ifNew)){
+                    alert("Only New PO's can be submit");
+                } else {
+                    alert("Select order to submit");
+                }
             }
         });
     }
@@ -75,45 +84,42 @@
 
     $scope.getStatus = function (id) {
         var datas = id.ulid + "," + id.ulstatus;
-        viewModelHelper.apiGet('api/ordererrors/' + datas, null, function (result) {
-            //READY FOR BALLOON RESPONSE
 
-            if (result.data.success == true) {
-                var error = "PO ID: " + result.data.detail[0].ELId + "\n";
-                for (var x = 0; x < result.data.detail.length; x++) {
-                    error += result.data.detail[x].ELDetail + "\n";
+        if(parseInt(id.ulstatus) < 20){
+            viewModelHelper.apiGet('api/ordererrors/' + datas, null, function (result) {
+                //READY FOR BALLOON RESPONSE    
+                if (result.data.success == true) {
+                    console.log(result.data.detail);
+                    for (var i = 0; i < result.data.detail.length; i++) {
+                        var error = "PO ID: " + result.data.detail[i].ELId + "\n";
+                        var productErrorDetail = "";
+                        var storeErrorDetail = "";
 
-                    var productError = "";
-                    var productErrorDetail = "";
-                    var storeError = "";
-                    var storeErrorDetail = "";
-
-                    if (result.data.detail[x].ELType == 'Invalid Product') {
-                        if (productErrorDetail == "") {
-                            productErrorDetail = "Product Code: " + data.detail[i].ELDetail;
-                            productError = data.detail[i].ELType;
+                        if (result.data.detail[i].ELType == 'Invalid Product') {
+                            if (productErrorDetail == "") {
+                                productErrorDetail = "Product Code: " + result.data.detail[i].ELDetail;
+                                error += result.data.detail[i].ELType + "\n"+ productErrorDetail + "\n";
+                            }
+                        }
+                        else if (result.data.detail[i].ELType == 'Invalid Customer') {
+                            if (storeErrorDetail == "") {
+                                storeErrorDetail = "Store Code: " + result.data.detail[i].ELDetail;
+                                error += result.data.detail[i].ELType + "\n" + storeErrorDetail + "\n";
+                            }
                         }
                         else {
-                            productErrorDetail = productErrorDetail + ", " + data.detail[i].ELDetail;
+                            error += result.data.detail[i].ELDetail + "\n";
                         }
-                    }
-                    else if (result.data.detail[x].ELType == 'Invalid Customer') {
-                        if (storeErrorDetail == "") {
-                            storeErrorDetail = "Store Code: " + data.detail[i].ELDetail;
-                            storeError = data.detail[i].ELType;
-                        }
-                        else {
-                            storeErrorDetail = storeErrorDetail + ", " + data.detail[i].ELDetail;
-                        }
-                    }
-                    else {
                         alert(error);
                     }
+                } else {
+                    alert("API ERROR!");
                 }
-            } else {
-                alert("API ERROR!");
-            }
-        });
+            });
+        }
+        else {
+            alert("Successful");
+        }
     }
 
     $scope.editDetails = function ($event) {

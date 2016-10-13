@@ -14,6 +14,7 @@ namespace Gentran.Controllers.api.Retrieve
 {
     public class MasterUploaderController : ApiController
     {
+        Boolean success = true;
         private DateTime uDate = DateTime.Now;
         private AppSettings app = new AppSettings();
         private string filePath = "", absoluteName = "";
@@ -45,7 +46,6 @@ namespace Gentran.Controllers.api.Retrieve
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
 
-            Boolean success = true;
             string tempCust = "";
             string[] data = { };
             string[] tempData = new string[8];
@@ -182,12 +182,10 @@ namespace Gentran.Controllers.api.Retrieve
 
 
         private void SaveData(List<Dictionary<string, object>> data) {
-
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
             string uQty = "", uPrice = "", uPONum = "", uAcct = "", uODate = "", uDDate = "", uUser = "",uRemarks = "", uCust = "",uID="",uProd="";
             string response = "";
             Boolean NoCustomer = false;
-            Boolean success = true;
             Boolean validPO = true;
 
             for (int x=0;x<data.Count;x++) {
