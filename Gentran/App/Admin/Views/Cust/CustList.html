@@ -7,7 +7,7 @@
 <hr />
 
 <div class="breadcrumb">
-    <button class="btn btn-default btn-xs icon-size" title="Add Customer" ng-click="addCustomer()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+    <button class="btn btn-default btn-xs icon-size" title="Add Customer" ng-click="ShowAddCustomerModal()"><i class="fa fa-plus" aria-hidden="true"></i></button>
     <button class="btn btn-default btn-xs icon-size" title="Batch Add Customer"><i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
 </div>
 <div class="page-table">
@@ -42,7 +42,7 @@
                         </span>
                     </td>
                     <td class="table-data-poptions" ng-cloak>
-                        <button class="btn btn-default btn-xs option-icon-size" ng-click="getDetails(c.CMCode)" title="View Customer Details"><i class="fa fa-search" aria-hidden="true"></i></button>
+                        <button class="btn btn-default btn-xs option-icon-size" ng-click="ViewCustomerDetails(c)" title="View Customer Details"><i class="fa fa-search" aria-hidden="true"></i></button>
                         <button class="btn btn-default btn-xs option-icon-size" ng-click="getMapping(c.CMCode)" title="Edit Customer Mapping"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                     </td>
                 </tr>
@@ -63,27 +63,25 @@
             <div class="modal-body">
                 <form role="form">
                     <div class="form-group">
-                        <label>Customer ID:</label>
-                        <input id="txt_custid" class="form-control input-sm" type="text" disabled/>
-                    </div>
-                    <div class="form-group">
-                        <label>Customer Area:</label> 
-                        <select id="ddl_custarea" class="form-control input-sm">
+                        <label>Customer Area: <span class="required">*</span></label>
+                        <select id="ddl_addcustarea" class="form-control input-sm">
                             <option selected disabled>-- Please Select Area --</option>
                             <option value="1">Luzon</option>
+                            <option value="2">Visayaz</option>
+                            <option value="3">Mindanao</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Customer Code:</label> 
-                        <input id="txt_custcode" class="form-control  input-sm" type="text" />
+                        <label>Customer Code:<span class="required">*</span></label>
+                        <input id="txt_addcustcode" class="form-control  input-sm" type="text" />
                     </div>
                     <div class="form-group">
-                        <label>Customer Name:</label> 
-                        <input id="txt_custname" class="form-control  input-sm" type="text" />
+                        <label>Customer Name:<span class="required">*</span></label>
+                        <input id="txt_addcustname" class="form-control  input-sm" type="text" />
                     </div>
                     <div class="form-group">
-                        <label>Customer Status:</label> 
-                        <select id="ddl_custstatus" class="form-control input-sm">
+                        <label>Customer Status:<span class="required">*</span></label>
+                        <select id="ddl_addcuststatus" class="form-control input-sm">
                             <option value="1">Active</option>
                             <option value="0">Inactive</option>
                         </select>
@@ -92,12 +90,63 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary btn-sm">Add Customer</button>
+                <button type="button" class="btn btn-primary btn-sm" ng-click="ValidateAddCustomer()">Add Customer</button>
             </div>
         </div>
     </div>
 </div>
 <!------- END OF ADD CUSTOMER MODAL ------->
+
+<!------- EDIT CUSTOMER MODAL ------->
+<div id="EditCustomerModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-user"></i> Add Customer</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label>Customer ID:</label>
+                        <input id="txt_editcustid" class="form-control input-sm" type="text" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label>Customer Area:</label>
+                        <select id="ddl_editcustarea" class="form-control input-sm" disabled>
+                            <option selected disabled>-- Please Select Area --</option>
+                            <option value="1">Luzon</option>
+                            <option value="2">Visayaz</option>
+                            <option value="3">Mindanao</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Customer Code:</label>
+                        <input id="txt_editcustcode" class="form-control  input-sm" type="text" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label>Customer Name:</label>
+                        <input id="txt_editcustname" class="form-control  input-sm" type="text" disabled/>
+                    </div>
+                    <div class="form-group">
+                        <label>Customer Status:</label>
+                        <select id="ddl_editcuststatus" class="form-control input-sm" disabled>
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-sm btn_editcust" ng-click="EditCustomer()"><i class="fa fa-pencil"></i> Edit Customer</button>
+                <button type="button" style="display:none;" class="btn btn-primary btn-sm btn_savecust" ng-click="ValidateEditCustomer()"><i class="fa fa-save"></i> Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!------- END OF EDIT CUSTOMER MODAL ------->
 
 <script>
     $(function () { 

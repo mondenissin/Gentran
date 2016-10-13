@@ -3,7 +3,7 @@ $.notify.addStyle("metro", {
         "<div>" +
             "<div class='image' data-notify-html='image'/>" +
             "<div class='text-wrapper'>" +
-                "<div class='title' data-notify-html='title' style='width:220px;'/>" +
+                "<div class='title' data-notify-html='title' style='width:auto;'/>" +
                 "<div class='text' data-notify-html='text'/>" +
             "</div>" +
         "</div>",

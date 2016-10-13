@@ -36,9 +36,18 @@
         viewModelHelper.apiPut('api/userlist', $scope.data, function (result) {
             var data = result.data;
             if (data.success === true) {
-                notif_success('User Update', data.detail);
+
+                if (operation == "reset_user") {
+                    notif_success('User Update', 'User has been reset!');
+                }
+                else if (operation == "deactivate_user") {
+                    notif_success('User Update', 'User has been deactivated!');
+                }
 
                 $('#userOptionsModal').modal('hide');
+
+                viewModelHelper.saveTransaction(data.detail);
+
                 setTimeout(function () {
                     $route.reload();
                 }, 300);
@@ -93,14 +102,17 @@
             viewModelHelper.apiPost('api/userlist', $scope.data, function (result) {
                 var data = result.data;
                 if (data.success === true) {
-                    resetFields();
+                    resetFields();                      
                     $('#AddUserModal').modal('hide');
 
                     setTimeout(function () {
                         $route.reload();
                     }, 300);
 
-                    notif_success('Add User', data.detail);
+                    notif_success('Add User', 'User Successfully added!');
+
+                    viewModelHelper.saveTransaction(data.detail);
+
                 } else {
                     notif_error('Add User', data.detail)
                 }

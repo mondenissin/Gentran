@@ -9,7 +9,7 @@
 <hr />
 
 <div class="breadcrumb">
-    <button class="btn btn-default btn-xs icon-size" title="Add Product" ng-click="addProduct()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+    <button class="btn btn-default btn-xs icon-size" title="Add Product" ng-click="ShowAddProductModal()"><i class="fa fa-plus" aria-hidden="true"></i></button>
     <button class="btn btn-default btn-xs icon-size" title="Batch Add Product"><i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
 </div>
 <table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-responsive table-bordered bordered table-striped table-condensed">
@@ -62,33 +62,29 @@
                     <div class="row">
                         <div class="form-group">
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label>Product ID:</label>
-                                <input id="txt_addprodID" class="form-control input-sm" type="text" disabled />
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label>Product Code:</label>
+                                <label>Product Code: <span class="required">*</span></label>
                                 <input id="txt_addprodCode" class="form-control  input-sm" type="text" />
                             </div>
-                        </div>
-                        <div class="form-group">
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label>Product Description:</label>
-                                <input id="txt_addprodDescription" class="form-control  input-sm" type="text" />
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label>Product Barcode:</label>
+                                <label>Product Barcode: <span class="required">*</span></label>
                                 <input id="txt_addprodBarcode" class="form-control  input-sm" type="text" />
                             </div>
                         </div>
                         <div class="form-group">
+                            <div class="col-xs-12">
+                                <label>Product Description: <span class="required">*</span></label>
+                                <input id="txt_addprodDescription" class="form-control input-sm" type="text" />
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label>Product Type:</label>
+                                <label>Product Category: <span class="required">*</span></label>
                                 <select id="ddl_addprodType" class="form-control input-sm">
                                     <option value="1">MNC</option>
                                 </select>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label>Product Status:</label>
+                                <label>Product Status: <span class="required">*</span></label>
                                 <select id="ddl_addprodStatus" class="form-control input-sm">
                                     <option value="1">Active</option>
                                     <option value="0">Inactive</option>
@@ -100,7 +96,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary btn-sm">Add Product</button>
+                <button type="button" class="btn btn-primary btn-sm" ng-click="ValidateAddProduct()">Add Product</button>
             </div>
         </div>
     </div>
