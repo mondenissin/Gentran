@@ -11,6 +11,11 @@
     <script src="~/App/Retrieve/RootViewModel.js"></script>
     <script src="~/App/Retrieve/ViewModels/SM/smModel.js"></script>
     <script src="~/App/Retrieve/ViewModels/Super8/superModel.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.visitRetrieve').addClass('active');
+        });
+    </script>
 }
 @*@section sidebar {
 <aside class="main-sidebar"> 
@@ -63,7 +68,7 @@
 </aside>
 }*@
 <div class="">
-    <div style="font-size: 30px; color:#24546f;" class="breadcrumb"><b>@ViewData["Title"]</b></div>
+    <div class="breadcrumb page-top-header"><b>@ViewData["Title"]</b></div>
     <div data-ng-app="retrieve" data-ng-controller="rootViewModel">
 
         <ul class="nav nav-tabs skin-blue">

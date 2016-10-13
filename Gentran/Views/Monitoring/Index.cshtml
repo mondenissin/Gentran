@@ -1,5 +1,21 @@
 ﻿@{
     ViewBag.Title = "Monitoring";
 }
-<h2>@ViewData["Title"].</h2>
+<div class="breadcrumb page-top-header"><b>@ViewData["Title"]</b></div>
 <h3>@ViewData["Message"]</h3>
+
+
+@section scripts {
+    <script src="~/App/Monitoring/App.js"></script>
+    <script src="~/App/Monitoring/RootViewModel.js"></script>
+    <script src="~/App/Monitoring/ViewModels/POMonitoring/MonitoringListModel.js"></script><script>
+    $(document).ready(function () {
+        $('.visitMonitoring').addClass('active');
+    });
+</script>
+}
+<div data-ng-app="monitoring" data-ng-controller="rootViewModel">
+    <div ng-view>
+
+    </div>
+</div>
