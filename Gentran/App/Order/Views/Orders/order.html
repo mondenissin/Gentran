@@ -1,11 +1,10 @@
-﻿<h3>Order List</h3>
-
-<div class="row">
+﻿<div class="row">
     <div class="col-md-4">
         <a href="#" ng-click="refreshOrders()"><span class="glyphicon glyphicon-refresh"></span></a>
     </div>
 </div>
 <div class="container">
+    <button class="btn btn-primary pull-right" ng-click="deleteOrder()">Delete</button>
     <button class="btn btn-primary pull-right" ng-click="submitOrder()">Submit</button>
     <hr />
     <table class="table table-striped table-hover">
@@ -113,15 +112,15 @@
 
                             <div class="form-group">
                                 <label>Order Date:</label>
-                                <input id="txt_orderdate" class="form-control input-sm" type="text" disabled ng-model="ordersInfo.txt_orderdate">
+                                <input id="txt_orderdate" class="form-control input-sm" type="date" disabled ng-model="ordersInfo.txt_orderdate">
                             </div>
 
                             <div class="form-group">
                                 <label>Delivery Date:</label>
-                                <input id="txt_deliverydate" class="form-control input-sm" type="text" disabled ng-model="ordersInfo.txt_deliverydate">
+                                <input id="txt_deliverydate" class="form-control input-sm" type="date" title="Day/Month/Year" disabled ng-model="ordersInfo.txt_deliverydate">
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group">    
                                 <label>Remarks / Ship to: </label>
                                 <input id="txt_remarks" class="form-control input-sm" type="text" disabled ng-model="ordersInfo.txt_remarks">
                             </div>
@@ -136,7 +135,7 @@
                                             <th>Quantity</th>
                                             <th>Price</th>
                                             <th>Total Price</th>
-                                            <th class="no-sort">Options</th>
+                                            <!--<th class="no-sort">Options</th>-->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -144,9 +143,9 @@
                                             <td>{{oi.UIProduct}}</td>
                                             <td>{{oi.PMDescription}}</td>
                                             <td>{{oi.UIQuantity}}</td>
-                                            <td>{{oi.UIPrice}}</td>
-                                            <td>{{oi.UITPrice}}</td>
-                                            <td><button class="btn btn-default btn-sm " ng-click="getStatus(o)" title="Delete Item" ng-hide="ifEdit"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+                                            <td>₱ {{oi.UIPrice}}</td>
+                                            <td>₱ {{oi.UITPrice}}</td>
+                                            <!--<td><button class="btn btn-default btn-sm " ng-click="delItem(oi,$event)" title="Delete Item" ng-hide="ifEdit"><i class="fa fa-trash" aria-hidden="true"></i></button></td>-->
                                         </tr>
                                     </tbody>
                                 </table>
@@ -160,7 +159,7 @@
                 <input type="hidden" id="txt_id" />
                 <input type="hidden" id="txt_status" />
                 <!--<input type="submit" class="btn btn-danger btn-sm pull-left" id="btn_editorder_delete" value="Delete"/>-->
-                <button class="btn btn-primary btn-sm " ng-click="editDetails($event)" title="Edit Items">Edit</button>
+                <button class="btn btn-primary btn-sm " ng-click="editDetails($event)" title="Edit Items" ng-show="ifEditable">Edit</button>
                 <input type="submit" class="btn btn-default btn-sm" id="btn_editorder_save_cancel" style="display:none;" data-dismiss="modal" value="Cancel" onclick="HideSaveBtn_order()" />
                 <input type="submit" class="btn btn-primary btn-sm" id="btn_editorder_save" value="Save" style="display:none;" onclick="kas_saveOrders()" />
             </div>
@@ -168,3 +167,43 @@
     </div>
 </div>
 <!-- END MODAL FOR ORDERS DETAIL-->
+
+
+<!-- START MODAL FOR DELETE-->
+<div id="deleteModal" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Delete files below?</h4>
+            </div>
+            <div class="modal-body">
+                <div class="map-orders table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>PO #</th>
+                                <th>Customer #</th>
+                                <th>Custoomer Name</th>
+                                <th>Order date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="dq in deleteQueue">
+                                <td>{{dq.PONum}}</td>
+                                <td>{{dq.CustNum}}</td>
+                                <td>{{dq.CustName}}</td>
+                                <td>{{dq.OrderDate}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default btn-sm " data-dismiss="modal" title="Wag idelete">No</button>
+                <button class="btn btn-primary btn-sm " ng-click="deleteYes(deleteQueue)" title="Delete Items">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END MODAL FOR DELETE-->

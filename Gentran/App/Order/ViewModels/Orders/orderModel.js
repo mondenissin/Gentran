@@ -18,22 +18,29 @@
     $scope.showDetails = function (order) {
         $scope.flags.shownFromList = true;
         
+        if (order.ulstatus == "20") {
+            $scope.ifEditable = true;
+        } else {
+            $scope.ifEditable = false;
+        }
         var orderDetails = [];
         orderDetails[0] = {};
         orderDetails.txt_ponum = order.ulponumber;
         orderDetails.txt_custnum = order.ulcustomer;
-        orderDetails.txt_orderdate = order.ulorderdate;
-        orderDetails.txt_deliverydate = order.uldeliverydate;
-        orderDetails.txt_remarks = "";
+        orderDetails.txt_orderdate = new Date(order.ulorderdate);
+        orderDetails.txt_deliverydate = new Date(order.uldeliverydate);
+        orderDetails.txt_remarks = order.ulremarks;
+        orderDetails.txt_status = order.ulstatus;
+        orderDetails.txt_orderid = order.ulid;
         $scope.ordersInfo = orderDetails;
 
         viewModelHelper.apiGet('api/order/' + order.ulid, null, function (result) {
             console.log(result.data.detail);
-            $scope.orderItems = result.data.detail;
+            $scope.orderItems = result.data.detail.filter(x=>x.UITPrice = parseInt(x.UITPrice).toLocaleString());
+            $scope.orderItems = result.data.detail.filter(x=>x.UIPrice = parseInt(x.UIPrice).toLocaleString());
         });
 
         $('#orderDetailsModal').modal('show');
-        //viewModelHelper.navigateTo('order/show/' + order.OrderId);
     }
 
     $scope.submitOrder = function () {
@@ -46,8 +53,9 @@
         $('.cbxSub').each(function () {
             if (this.checked == true) {
                 var status = $(this).closest('tr').find('.table-data-ustat').text();
-                if (status == "New") {
-                    ifNew = true;
+                if (status == "Read Failed") {
+                    ifNew = false;
+                } else{
                     selected = true;
 
                     listOrder[ctr] = {};
@@ -57,22 +65,19 @@
                     listOrder[ctr].CustName = $(this).closest('tr').find('.table-data-cdesc').text();
                     listOrder[ctr].OrderDate = $(this).closest('tr').find('.table-data-uodate').text();
                     listOrder[ctr].Quantity = $(this).closest('tr').find('.table-data-sqty').text();
-                    console.log();
                     ctr++;
-                } else{
-                    ifNew = false;
                 }
             }
         }).promise().done(function () {
             $scope.submitQueue = listOrder;
 
-            if (selected) {
-                $('#submitModal').modal('show');
-            }else {
-                if(!(ifNew)){
-                    alert("Only New PO's can be submit");
+            if (!(ifNew)) {
+                notif_warning("Warning", "Only New PO's can be submit");
+            } else {
+                if (selected) {
+                    $('#submitModal').modal('show');
                 } else {
-                    alert("Select order to submit");
+                    notif_info("Orders", "Select order to submit");
                 }
             }
         });
@@ -82,6 +87,42 @@
         console.log(queued);
     }
 
+    $scope.deleteOrder = function () {
+        var ctr = 0;
+        var listDel = [];
+        var selected = false;
+
+        $('.cbxSub').each(function () {
+            if (this.checked == true) {
+                selected = true;
+                listDel[ctr] = {};
+                listDel[ctr].PONum = $(this).closest('tr').find('.table-data-ponum').text();
+                listDel[ctr].CustNum = $(this).closest('tr').find('.table-data-ucust').text();
+                listDel[ctr].CustName = $(this).closest('tr').find('.table-data-cdesc').text();
+                listDel[ctr].OrderDate = $(this).closest('tr').find('.table-data-uodate').text();
+
+                ctr++;
+            }
+        }).promise().done(function () {
+            $scope.deleteQueue = listDel;
+
+            if (selected) {
+                $('#deleteModal').modal('show');
+            } else {
+                notif_info("Orders", "Select order to Delete");
+            }
+        });
+    }
+
+    $scope.deleteYes = function (toDelete) {
+
+        console.log(toDelete);
+    }
+    /*$scope.delItem = function (item, $event) {
+        console.log($($(event.target))[0].lastChild.className);
+        
+    }*/
+    
     $scope.getStatus = function (id) {
         var datas = id.ulid + "," + id.ulstatus;
 
@@ -89,47 +130,109 @@
             viewModelHelper.apiGet('api/ordererrors/' + datas, null, function (result) {
                 //READY FOR BALLOON RESPONSE    
                 if (result.data.success == true) {
-                    console.log(result.data.detail);
-                    for (var i = 0; i < result.data.detail.length; i++) {
-                        var error = "PO ID: " + result.data.detail[i].ELId + "\n";
-                        var productErrorDetail = "";
-                        var storeErrorDetail = "";
+                    
+                    var productErrorDetail = "";
+                    var storeErrorDetail = "";
 
+                    for (var i = 0; i < result.data.detail.length; i++) {
+                        var error = "";
                         if (result.data.detail[i].ELType == 'Invalid Product') {
                             if (productErrorDetail == "") {
-                                productErrorDetail = "Product Code: " + result.data.detail[i].ELDetail;
-                                error += result.data.detail[i].ELType + "\n"+ productErrorDetail + "\n";
+                                productErrorDetail = result.data.detail[i].ELDetail;
+                            } else {
+                                productErrorDetail += ", " + result.data.detail[i].ELDetail;
                             }
                         }
                         else if (result.data.detail[i].ELType == 'Invalid Customer') {
                             if (storeErrorDetail == "") {
-                                storeErrorDetail = "Store Code: " + result.data.detail[i].ELDetail;
-                                error += result.data.detail[i].ELType + "\n" + storeErrorDetail + "\n";
+                                storeErrorDetail = result.data.detail[i].ELDetail;
+                            } else {
+                                storeErrorDetail += ", " + result.data.detail[i].ELDetail;
                             }
                         }
                         else {
                             error += result.data.detail[i].ELDetail + "\n";
+                            notif_error("", error);
                         }
-                        alert(error);
+
                     }
+                    if(productErrorDetail!="")
+                        notif_error("Invalid Product Code", productErrorDetail);
+                    if(storeErrorDetail!="")
+                        notif_error("Invalid Store Code", storeErrorDetail);
                 } else {
-                    alert("API ERROR!");
+                    notif_error("Error Detail", result.data.detail);
                 }
             });
         }
         else {
-            alert("Successful");
+            notif_success("New order","Successful");
         }
     }
 
+    var cust = "";
+    var delDate = "";
+    var remarks = "";
+
     $scope.editDetails = function ($event) {
+        var changes = "";
 
         if ($($($event.target)[0]).text() == "Edit") {
-            $scope.ifEdit = false;
+            cust = $scope.ordersInfo.txt_custnum;
+            delDate = $scope.ordersInfo.txt_deliverydate;
+            remarks = $scope.ordersInfo.txt_remarks;
+
+            //$scope.ifEdit = false;
             $($($event.target)[0]).text("Save")
+            $('#txt_remarks')[0].disabled = false;
+            $('#txt_deliverydate')[0].disabled = false;
+            $('#txt_custnum')[0].disabled = false;
+
         } else {
-            $scope.ifEdit = true;
+            var newCust = $scope.ordersInfo.txt_custnum;
+            var newDelDate = $scope.ordersInfo.txt_deliverydate;
+            var newRemarks = $scope.ordersInfo.txt_remarks;
+
+            if(cust == newCust && delDate == newDelDate && remarks == newRemarks){
+                notif_info("Information","No data has been changed");
+            } else {
+                var Item = {};
+
+                if(cust != newCust)
+                    changes += "Customer Code: " + cust + " - " + newCust + "\n";
+                if(delDate != newDelDate)
+                    changes += "Delivery Date: " + delDate.toString().slice(0, 10) + " - " + newDelDate.toString().slice(0, 10) + "\n";
+                if (remarks != newRemarks)
+                    changes += "Remarks: " + remarks + " - " + newRemarks + "\n";
+
+                Item.customernumber = newCust;
+                Item.DeliveryDate = (newDelDate.getMonth() + 1) + "/" + newDelDate.getDate() + "/" + newDelDate.getFullYear();
+                Item.remarks = newRemarks;
+                Item.ponumber = $scope.ordersInfo.txt_ponum;
+                Item.ulstatus = $scope.ordersInfo.txt_status;;
+                Item.ULId = $scope.ordersInfo.txt_orderid;
+
+                $scope.data = {};
+                $scope.data.operation = "edit_po";
+                $scope.data.payload = _payloadParser(Item);
+
+                viewModelHelper.apiPut('api/order', $scope.data, function (result) {
+                    var data = result.data;
+                    console.log(data);
+
+                    if (data.success === true) {
+                        notif_success('PO Updated', changes);
+                        $scope.refreshOrders();
+                    } else {
+                        notif_error('Error!', data.detail)
+                    }
+                });
+            }
+            //$scope.ifEdit = true;
             $($($event.target)[0]).text("Edit")
+            $('#txt_remarks')[0].disabled = true;
+            $('#txt_deliverydate')[0].disabled = true;
+            $('#txt_custnum')[0].disabled = true;
         }
     }
 

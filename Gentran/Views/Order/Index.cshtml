@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Orders";
 }
-<div class="breadcrumb page-top-header"><b>@ViewData["Title"]</b></div>
+<div class="breadcrumb page-top-header"><b>@ViewData["Title"] List</b></div>
 <h3>@ViewData["Message"]</h3>
 
 
@@ -16,12 +16,12 @@
 }
 
 <div data-ng-app="order" data-ng-controller="rootViewModel">
-    <div class="row">
+    <!--<div class="row">
         <div class="col-md-4">
             <button class="btn btn-primary" ng-click="showOrder()" disabled>Search: </button>&nbsp;
             <input type="text" ng-model="orderService.orderId" placeholder="Enter PO Number" disabled/>
         </div>
     </div>
-    <hr />
+    <hr />-->
     <div ng-view></div>
 </div>

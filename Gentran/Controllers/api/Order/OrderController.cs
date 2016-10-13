@@ -36,6 +36,7 @@ namespace Gentran.Controllers.api.Order
                             ui.sumulquantity,
                             ui.countulquantity,
                             ul.ulstatus,
+                            ul.ulremarks,
                             ul.ulfilename,
                             ui.uiprice 
                             FROM tblUploadLog ul
@@ -191,8 +192,107 @@ namespace Gentran.Controllers.api.Order
         }
 
         // PUT api/order/5
-        public void Put(int id, [FromBody]string value)
+        public object Put([FromBody]Data values)
         {
+            bool success = true;
+            string response = "Successful";
+            string error = "";
+            String status = "", sQuery = string.Empty;
+            String CustomerNumber = "";
+            DateTime now = new DateTime();
+            now = DateTime.Now;
+
+            if (values.payload[0].ulstatus == "15")
+            {
+                status = "20";
+            }
+            else
+            {
+                status = values.payload[0].ulstatus;
+            }
+
+            SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
+            try
+            {
+                String selectCMId = "select cmid from tblcustomermaster where cmcode ='" + values.payload[0].customernumber + "'";
+                connection.Open();
+                SqlCommand selectCmdCMId = new SqlCommand(selectCMId, connection);
+                SqlDataReader dr = selectCmdCMId.ExecuteReader();
+                if (dr.HasRows)
+                {
+                    dr.Read();
+                    CustomerNumber = dr["cmid"].ToString();
+                    connection.Close();
+                    if (CustomerNumber == "0")
+                    {
+                        success = false;
+                        response = "Please enter a Customer Code!";
+                    }
+                    else
+                    {
+                        if (values.payload[0].ULId == CustomerNumber + values.payload[0].ponumber)
+                        {
+                            String updateULId = "update tbluploadlog set ULStatus = '" + status + "',ULId = '" + CustomerNumber + values.payload[0].ponumber + "', ulcustomer = '" + CustomerNumber + "', ULDeliveryDate = '" + values.payload[0].DeliveryDate + "', ulremarks = '" + values.payload[0].remarks + "' where ULId = '" + values.payload[0].ULId + "'";
+                            //GMC String updateULId = "update tbluploadlog set ULPONumber = '" + values.payload[0].ULPONumber + "',ULStatus = '" + status + "',ULId = '" + CustomerNumber + values.payload[0].ULPONumber + "', ulcustomer = '" + CustomerNumber + "', ULDeliveryDate = '" + values.payload[0].ULDeliveryDate + "', ulremarks = '" + values.payload[0].ULRemarks + "' where ULId = '" + values.payload[0].ULId + "'";
+
+                            connection.Open();
+                            SqlCommand updateCmdULId = new SqlCommand(updateULId, connection);
+                            updateCmdULId.ExecuteNonQuery();
+                            connection.Close();
+                        }
+                    }
+                }
+                else
+                {
+                    connection.Close();
+                    success = false;
+                    response = "Invalid Customer Code!";
+                }
+
+                /*if (success == true)
+                {
+                    String Product = "";
+                    String Products = "";
+
+                    for (int i = 0; i < values.payload.Count; i++)
+                    {
+                        String selectPMId = "select * from tblproductmaster where pmcode = '" + values.payload[i].UIProduct + "'";
+                        connection.Open();
+                        SqlCommand selectCmdPMId = new SqlCommand(selectPMId, connection);
+                        SqlDataReader drPMId = selectCmdPMId.ExecuteReader();
+
+                        if (drPMId.HasRows)
+                        {
+                            drPMId.Read();
+                            Product = drPMId["PMId"].ToString();
+                            connection.Close();
+                        }
+                        else
+                        {
+                            connection.Close();
+                            success = false;
+                            response = "Invalid Product Code " + values.payload[i].UIProduct;
+                        }
+
+                        if (i == 0)
+                        {
+                            Products = Product;
+                        }
+                        else
+                        {
+                            Products = Products + "," + Product;
+                        }
+                    }
+                }*/
+            }
+            catch (Exception ex)
+            {
+                connection.Close();
+                success = false;
+                response = ex.Message;
+            }
+            
+            return new Response { success = success, detail = response, errortype = error };
         }
 
         // DELETE api/order/5

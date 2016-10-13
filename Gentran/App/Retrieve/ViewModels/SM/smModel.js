@@ -156,7 +156,7 @@
             
             if (chk) {
                 $('#mapModal').modal('show');
-                /*var i = 0, count = listFile.length;
+                var i = 0, count = listFile.length;
                 var execTime;
                 function LaodFile() {
                     var fileName = [];
@@ -189,7 +189,7 @@
                 }
                 setTimeout(function () {
                     LaodFile();
-                }, execTime);*/
+                }, execTime);
             } else {
                 notif_warning('File Reader', 'Please select file to read');
             }
