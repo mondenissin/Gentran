@@ -6,13 +6,25 @@
     var initialize = function () {
         $scope.refreshUser();
     }
+    $scope.currentPage = 1, $scope.numPerPage = 50, $scope.maxSize = 5;
 
     $scope.refreshUser = function () {
         $scope.search = {};
         $scope.searchBy = "UMId";
 
         viewModelHelper.apiGet('api/userlist', null, function (result) {
-            $scope.people = result.data.detail;
+            $scope.peoplePerPage = result.data.detail;
+
+            $scope.numPages = function () {
+                return Math.ceil($scope.peoplePerPage.length / $scope.numPerPage);
+            };
+
+            $scope.$watch('currentPage + numPerPage', function () {
+                var begin = (($scope.currentPage - 1) * $scope.numPerPage),
+                  end = begin + $scope.numPerPage;
+
+                $scope.people = $scope.peoplePerPage.slice(begin, end);
+            });
         });
 
         $scope.dtOptions = DTOptionsBuilder.newOptions();

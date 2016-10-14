@@ -1,16 +1,20 @@
-﻿<hr />
-<input type="text" ng-model="search[searchBy]" />Search By:
-<select ng-model="searchBy">
-    <option value="CMCode" selected>Customer Code</option>
-    <option value="CMDescription">Customer Name</option>
-</select>
-<hr />
-
-<div class="breadcrumb">
+﻿<div class="breadcrumb">
     <button class="btn btn-default btn-xs icon-size" title="Add Customer" ng-click="ShowAddCustomerModal()"><i class="fa fa-plus" aria-hidden="true"></i></button>
     <button class="btn btn-default btn-xs icon-size" title="Batch Add Customer"><i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
+    <div class="pull-right">
+        <div class="form-inline">
+            <select ng-model="searchBy" class="form-control">
+                <option value="CMCode" selected>Customer Code</option>
+                <option value="CMDescription">Customer Name</option>
+            </select>
+            <input type="text" ng-model="search[searchBy]"  class="form-control" placeholder="Search"/>
+        </div>
+    </div>
 </div>
-<div class="page-table">
+<div class="page-table" >
+    <div data-pagination="" data-num-pages="numPages()"
+         data-current-page="currentPage" data-max-size="maxSize"
+         data-boundary-links="true"></div>
     <table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-bordered bordered table-striped table-condensed datatable">
             <thead>
                 <tr>
@@ -48,6 +52,9 @@
                 </tr>
             </tbody>
         </table>
+    <div data-pagination="" data-num-pages="numPages()"
+         data-current-page="currentPage" data-max-size="maxSize"
+         data-boundary-links="true"></div>
 </div>
 
 

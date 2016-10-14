@@ -6,6 +6,7 @@
     var initialize = function () {
         $scope.refreshProd();
     }
+    $scope.currentPage = 1, $scope.numPerPage = 50, $scope.maxSize = 5;
 
     $scope.refreshProd = function () {
         $scope.search = {};
@@ -13,7 +14,17 @@
 
         viewModelHelper.apiGet('api/prod', null, function (result) {
 
-            $scope.product = result.data.detail;
+            $scope.productPerPage = result.data.detail;
+            $scope.numPages = function () {
+                return Math.ceil($scope.productPerPage.length / $scope.numPerPage);
+            };
+
+            $scope.$watch('currentPage + numPerPage', function () {
+                var begin = (($scope.currentPage - 1) * $scope.numPerPage),
+                  end = begin + $scope.numPerPage;
+
+                $scope.product = $scope.productPerPage.slice(begin, end);
+            });
         });
 
         $scope.dtOptions = DTOptionsBuilder.newOptions();
