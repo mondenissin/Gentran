@@ -57,7 +57,7 @@ namespace Gentran.Controllers.api.Retrieve
                     string[] temp = values.payload[0].fileName.Split('\\');
                     absoluteName = temp[temp.Length - 1];
                     filePath = values.payload[0].fileName;
-                    data = csv(values.payload[0].fileName);
+                    data = app.csv(values.payload[0].fileName);
 
                     File.Move(values.payload[0].fileName, @"C:\inetpub\wwwroot\files\Gentran\queued\" + absoluteName);
                     /*SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
@@ -168,18 +168,6 @@ namespace Gentran.Controllers.api.Retrieve
         public void Delete(int id)
         {
         }
-
-        private string[] csv(string fileName) {
-
-
-            string[] readed = { };
-            string filepath;
-            filepath = fileName;
-            readed = File.ReadAllLines(filepath);
-
-            return readed;
-        }
-
 
         private void SaveData(List<Dictionary<string, object>> data) {
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
