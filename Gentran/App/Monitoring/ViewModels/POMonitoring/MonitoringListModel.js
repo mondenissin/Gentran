@@ -1,4 +1,4 @@
-﻿monitoringModule.controller("monitoringViewModel", function ($scope, monitoringService, $http, $q, $routeParams, $window, $location, viewModelHelper) {
+﻿monitoringModule.controller("monitoringViewModel", function ($scope, monitoringService, $http, $q, $routeParams, $window, $location, viewModelHelper, DTOptionsBuilder, DTColumnDefBuilder) {
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.monitoringService = monitoringService;

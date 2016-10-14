@@ -115,56 +115,12 @@
     }
 
     $scope.deleteYes = function (toDelete) {
-        
-        var items = {};
-        var listDelete = [];
 
-        for (var x = 0, y = toDelete.length; x < y; x++) {
-            listDelete[x] = {};
-            listDelete[x].ponumber = toDelete[x].PONum;
-            listDelete[x].customernumber = toDelete[x].CustNum;
-        }
-        items.payload = listDelete;
-        viewModelHelper.apiPost('api/deleteorder', items, function (result) {
-            var data = result.data;
-            console.log(data);
-
-            if (data.success === true) {
-                $('#deleteModal').modal('hide');
-                $scope.refreshOrders();
-                notif_success('Deleted', data.detail);
-            } else {
-                notif_error('Error!', data.detail)
-            }
-        });
-        
         console.log(toDelete);
     }
-
-    $scope.deleteThis = function (deleteID) {
-
-        var id = {};
-        var items = {};
-        id.ULId = deleteID;
-        items.payload = _payloadParser(id);
-
-        viewModelHelper.apiPut('api/deleteorder', items, function (result) {
-            var data = result.data;
-            console.log(data);
-
-            if (data.success === true) {
-                $scope.refreshOrders();
-                $('#orderDetailsModal').modal('hide');
-                notif_success('Deleted', data.detail);
-            } else {
-                notif_error('Error!', data.detail)
-            }
-        });
-        console.log(deleteID);
-    }
-
     /*$scope.delItem = function (item, $event) {
         console.log($($(event.target))[0].lastChild.className);
+        
     }*/
     
     $scope.getStatus = function (id) {
@@ -255,7 +211,6 @@
                 Item.ponumber = $scope.ordersInfo.txt_ponum;
                 Item.ulstatus = $scope.ordersInfo.txt_status;;
                 Item.ULId = $scope.ordersInfo.txt_orderid;
-                Item.changes = changes;
 
                 $scope.data = {};
                 $scope.data.operation = "edit_po";
@@ -267,9 +222,6 @@
 
                     if (data.success === true) {
                         notif_success('PO Updated', changes);
-
-                        viewModelHelper.saveTransaction(data.detail);
-
                         $scope.refreshOrders();
                     } else {
                         notif_error('Error!', data.detail)
