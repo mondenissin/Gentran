@@ -133,6 +133,7 @@
     <Compile Include="Controllers\api\Admin\UserListController.cs" />
     <Compile Include="Controllers\api\Login\LoginController.cs" />
     <Compile Include="Controllers\api\Master\TransactionsController.cs" />
+    <Compile Include="Controllers\api\Order\DeleteOrderController.cs" />
     <Compile Include="Controllers\api\Order\OrderController.cs" />
     <Compile Include="Controllers\api\Order\OrderErrorsController.cs" />
     <Compile Include="Controllers\api\Retrieve\FTPController.cs" />
