@@ -245,7 +245,7 @@ namespace Gentran.Controllers.api.Order
 
                             string newpaypload = JsonConvert.SerializeObject(values.payload, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
-                            rows.Add(new Transaction { activity = "EDI20", date = now, remarks = values.payload[0].changes, user = userID, type = "ADM", value = "PO #:" + values.payload[0].ponumber, changes = "", payloadvalue = newpaypload, customernumber = "", ponumber = "" });
+                            rows.Add(new Transaction { activity = "EDI20", date = now, remarks = values.payload[0].changes, user = userID, type = "ADM", value = "PO ID:" + CustomerNumber + values.payload[0].ponumber, changes = "", payloadvalue = newpaypload, customernumber = "", ponumber = "" });
                             return new Response { success = success, detail = rows, notiftext = response };
                         }
                     }

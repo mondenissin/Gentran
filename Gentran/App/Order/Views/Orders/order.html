@@ -158,7 +158,7 @@
                 <input type="hidden" id="txt_account" />
                 <input type="hidden" id="txt_id" />
                 <input type="hidden" id="txt_status" />
-                <!--<input type="submit" class="btn btn-danger btn-sm pull-left" id="btn_editorder_delete" value="Delete"/>-->
+                <button class="btn btn-danger btn-sm  pull-left" ng-click="deleteThis(ordersInfo.txt_orderid)" title="Delete this Item?">Delete</button>
                 <button class="btn btn-primary btn-sm " ng-click="editDetails($event)" title="Edit Items" ng-show="ifEditable">Edit</button>
                 <input type="submit" class="btn btn-default btn-sm" id="btn_editorder_save_cancel" style="display:none;" data-dismiss="modal" value="Cancel" onclick="HideSaveBtn_order()" />
                 <input type="submit" class="btn btn-primary btn-sm" id="btn_editorder_save" value="Save" style="display:none;" onclick="kas_saveOrders()" />
