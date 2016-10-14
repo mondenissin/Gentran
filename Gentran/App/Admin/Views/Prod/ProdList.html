@@ -1,171 +1,177 @@
-﻿<hr />
-<input type="text" ng-model="search[searchBy]" />Search By:
-<select ng-model="searchBy">
-    <option value="PMCode" selected>Product Code</option>
-    <option value="PMDescription">Product Name</option>
-    <option value="PMBarcode">Product Barcode</option>
-    <option value="PSDescription">Product Status</option>
-</select>
-<hr />
-
-<div class="breadcrumb">
+﻿<div class="breadcrumb">
     <button class="btn btn-default btn-xs icon-size" title="Add Product" ng-click="ShowAddProductModal()"><i class="fa fa-plus" aria-hidden="true"></i></button>
     <button class="btn btn-default btn-xs icon-size" title="Batch Add Product"><i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
-</div>
-<table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-responsive table-bordered bordered table-striped table-condensed">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Product Code</th>
-            <th>Product Description</th>
-            <th>Product Barcode</th>
-            <th>Status</th>
-            <th class="no-sort">Options</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr sly-repeat="p in product | filter:search">
-            <td class="table-data-id" ng-cloak>
-                {{p.PMId}}
-            </td>
-            <td class="table-data-pcode" ng-cloak>
-                {{p.PMCode}}
-            </td>
-            <td class="table-data-pdesc" ng-cloak>
-                {{p.PMDescription}}
-            </td>
-            <td class="table-data-pbcode" ng-cloak>
-                {{p.PMBarcode}}
-            </td>
-            <td class="table-data-pstatus" ng-cloak>
-                {{p.PSDescription}}
-            </td>
-            <td class="table-data-poptions" ng-cloak>
-                <button class="btn btn-default btn-xs option-icon-size" ng-click="getDetails(p)" title="View Product Details"><i class="fa fa-search" aria-hidden="true"></i></button>
-                <button class="btn btn-default btn-xs option-icon-size" ng-click="getMapping(p)" title="Edit Product Mapping"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-<!------- ADD PRODUCT MODAL ------->
-<div id="AddProductModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title"><i class="fa fa-pencil"></i> Add Product</h4>
-            </div>
-            <div class="modal-body">
-                <form role="form">
-                    <div class="row">
-                        <div class="form-group">
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label>Product Code: <span class="required">*</span></label>
-                                <input id="txt_addprodCode" class="form-control  input-sm" type="text" />
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label>Product Barcode: <span class="required">*</span></label>
-                                <input id="txt_addprodBarcode" class="form-control  input-sm" type="text" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-xs-12">
-                                <label>Product Description: <span class="required">*</span></label>
-                                <input id="txt_addprodDescription" class="form-control input-sm" type="text" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label>Product Category: <span class="required">*</span></label>
-                                <select id="ddl_addprodType" class="form-control input-sm">
-                                    <option value="1">MNC</option>
-                                </select>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label>Product Status: <span class="required">*</span></label>
-                                <select id="ddl_addprodStatus" class="form-control input-sm">
-                                    <option value="1">Active</option>
-                                    <option value="0">Inactive</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary btn-sm" ng-click="ValidateAddProduct()">Add Product</button>
-            </div>
+    <div class="pull-right">
+        <div class="form-inline">
+            <select ng-model="searchBy" class="form-control">
+                <option value="PMCode" selected>Product Code</option>
+                <option value="PMDescription">Product Name</option>
+                <option value="PMBarcode">Product Barcode</option>
+                <option value="PSDescription">Product Status</option>
+            </select>
+            <input type="text" ng-model="search[searchBy]"  class="form-control" placeholder="Search"/>
         </div>
     </div>
 </div>
-<!------- END OF ADD PRODUCT MODAL ------->
+    <div data-pagination="" data-num-pages="numPages()"
+     data-current-page="currentPage" data-max-size="maxSize"
+     data-boundary-links="true"></div>
+        <table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-responsive table-bordered bordered table-striped table-condensed">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Product Code</th>
+                    <th>Product Description</th>
+                    <th>Product Barcode</th>
+                    <th>Status</th>
+                    <th class="no-sort">Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr sly-repeat="p in product | filter:search">
+                    <td class="table-data-id" ng-cloak>
+                        {{p.PMId}}
+                    </td>
+                    <td class="table-data-pcode" ng-cloak>
+                        {{p.PMCode}}
+                    </td>
+                    <td class="table-data-pdesc" ng-cloak>
+                        {{p.PMDescription}}
+                    </td>
+                    <td class="table-data-pbcode" ng-cloak>
+                        {{p.PMBarcode}}
+                    </td>
+                    <td class="table-data-pstatus" ng-cloak>
+                        {{p.PSDescription}}
+                    </td>
+                    <td class="table-data-poptions" ng-cloak>
+                        <button class="btn btn-default btn-xs option-icon-size" ng-click="getDetails(p)" title="View Product Details"><i class="fa fa-search" aria-hidden="true"></i></button>
+                        <button class="btn btn-default btn-xs option-icon-size" ng-click="getMapping(p)" title="Edit Product Mapping"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
+    <div data-pagination="" data-num-pages="numPages()"
+     data-current-page="currentPage" data-max-size="maxSize"
+     data-boundary-links="true"></div>
 
-<!------- PRODUCT DETAILS MODAL ------->
-<div id="ProductDetailsModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
+        <!------- ADD PRODUCT MODAL ------->
+        <div id="AddProductModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
 
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Product Details</h4>
-            </div>
-            <div class="modal-body">
-                <form role="form">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label>Product ID:</label>
-                                <input id="txt_prodID" class="form-control input-sm" type="text" disabled />
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label>Product Code:</label>
-                                <input id="txt_prodCode" class="form-control  input-sm" type="text" disabled />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label>Product Description:</label>
-                                <input id="txt_prodDescription" class="form-control  input-sm" type="text" disabled />
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label>Product Barcode:</label>
-                                <input id="txt_prodBarcode" class="form-control  input-sm" type="text" disabled />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label>Product Type:</label>
-                                <input id="txt_prodType" class="form-control input-sm" type="text" disabled />
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <label>Product Status:</label>
-                                <input id="txt_prodStatus" class="form-control  input-sm" type="text" disabled />
-                            </div>
-                        </div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"><i class="fa fa-pencil"></i> Add Product</h4>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-
+                    <div class="modal-body">
+                        <form role="form">
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                        <label>Product Code: <span class="required">*</span></label>
+                                        <input id="txt_addprodCode" class="form-control  input-sm" type="text" />
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                        <label>Product Barcode: <span class="required">*</span></label>
+                                        <input id="txt_addprodBarcode" class="form-control  input-sm" type="text" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-12">
+                                        <label>Product Description: <span class="required">*</span></label>
+                                        <input id="txt_addprodDescription" class="form-control input-sm" type="text" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                        <label>Product Category: <span class="required">*</span></label>
+                                        <select id="ddl_addprodType" class="form-control input-sm">
+                                            <option value="1">MNC</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                        <label>Product Status: <span class="required">*</span></label>
+                                        <select id="ddl_addprodStatus" class="form-control input-sm">
+                                            <option value="1">Active</option>
+                                            <option value="0">Inactive</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary btn-sm" ng-click="ValidateAddProduct()">Add Product</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-<!------- END OF PRODUCT DETAILS MODAL -------> 
+        <!------- END OF ADD PRODUCT MODAL ------->
+        <!------- PRODUCT DETAILS MODAL ------->
+        <div id="ProductDetailsModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Product Details</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                        <label>Product ID:</label>
+                                        <input id="txt_prodID" class="form-control input-sm" type="text" disabled />
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                        <label>Product Code:</label>
+                                        <input id="txt_prodCode" class="form-control  input-sm" type="text" disabled />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                        <label>Product Description:</label>
+                                        <input id="txt_prodDescription" class="form-control  input-sm" type="text" disabled />
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                        <label>Product Barcode:</label>
+                                        <input id="txt_prodBarcode" class="form-control  input-sm" type="text" disabled />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                        <label>Product Type:</label>
+                                        <input id="txt_prodType" class="form-control input-sm" type="text" disabled />
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                        <label>Product Status:</label>
+                                        <input id="txt_prodStatus" class="form-control  input-sm" type="text" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!------- END OF PRODUCT DETAILS MODAL ------->
 
 
-<script>
-    $(function () {
-        var parent = $('.data-management');
-        parent.addClass('menu-open').css({ 'display': 'block' });
-        var elem = $('.btnprod');
-        parent.find('li').each(function () {
-            $(this).removeClass('active');
-        });
-        elem.closest('li').addClass(' active');
-    });
-</script>
+        <script>
+            $(function () {
+                var parent = $('.data-management');
+                parent.addClass('menu-open').css({ 'display': 'block' });
+                var elem = $('.btnprod');
+                parent.find('li').each(function () {
+                    $(this).removeClass('active');
+                });
+                elem.closest('li').addClass(' active');
+            });
+        </script>

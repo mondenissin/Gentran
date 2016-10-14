@@ -6,13 +6,26 @@
     var initialize = function () {
         $scope.refreshCust();
     }
+    $scope.currentPage = 1, $scope.numPerPage = 50, $scope.maxSize = 5;
 
     $scope.refreshCust = function () {
         $scope.search = {};
         $scope.searchBy = "CMCode";
 
         viewModelHelper.apiGet('api/cust', null, function (result) {
-            $scope.customers = result.data.detail;
+            
+            $scope.customersPerPage = result.data.detail;
+
+            $scope.numPages = function () {
+                return Math.ceil($scope.customersPerPage.length / $scope.numPerPage);
+            };
+
+            $scope.$watch('currentPage + numPerPage', function () {
+                var begin = (($scope.currentPage - 1) * $scope.numPerPage),
+                  end = begin + $scope.numPerPage;
+
+                $scope.customers = $scope.customersPerPage.slice(begin, end);
+            });
         }); 
 
         $scope.dtOptions = DTOptionsBuilder.newOptions();
