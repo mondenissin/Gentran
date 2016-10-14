@@ -132,7 +132,9 @@
     <Compile Include="Controllers\api\Admin\ProdController.cs" />
     <Compile Include="Controllers\api\Admin\UserListController.cs" />
     <Compile Include="Controllers\api\Login\LoginController.cs" />
+    <Compile Include="Controllers\api\Master\TransactionsController.cs" />
     <Compile Include="Controllers\api\Order\OrderController.cs" />
+    <Compile Include="Controllers\api\Order\OrderErrorsController.cs" />
     <Compile Include="Controllers\api\Retrieve\FTPController.cs" />
     <Compile Include="Controllers\api\Retrieve\MasterUploaderController.cs" />
     <Compile Include="Controllers\mvc\AdminController.cs" />
@@ -160,6 +162,10 @@
     <Content Include="App\Admin\Views\TransLog\TransLogList.html" />
     <Content Include="App\Admin\Views\Users\UserList.html" />
     <Content Include="App\App.js" />
+    <Content Include="App\Monitoring\App.js" />
+    <Content Include="App\Monitoring\RootViewModel.js" />
+    <Content Include="App\Monitoring\ViewModels\POMonitoring\MonitoringListModel.js" />
+    <Content Include="App\Monitoring\Views\POMonitoring\pomonitoring.html" />
     <Content Include="App\Order\App.js" />
     <Content Include="App\Order\RootViewModel.js" />
     <Content Include="App\Order\ViewModels\Orders\orderModel.js" />
@@ -1173,11 +1179,11 @@
     <Folder Include="App\Admin\ViewModels\Connections\" />
     <Folder Include="App\Admin\Views\Connections\" />
     <Folder Include="App\Home\" />
-    <Folder Include="App\Monitoring\" />
     <Folder Include="App\Retrieve\ViewModels\FTP\" />
     <Folder Include="App\Retrieve\Views\FTP\" />
     <Folder Include="App_Data\" />
     <Folder Include="Content\css\order\" />
+    <Folder Include="Controllers\api\Monitoring\" />
     <Folder Include="Scripts\angular\i18n\ngLocale\" />
   </ItemGroup>
   <ItemGroup>

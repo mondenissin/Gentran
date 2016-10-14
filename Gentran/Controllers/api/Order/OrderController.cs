@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -12,6 +13,8 @@ namespace Gentran.Controllers.api.Order
 {
     public class OrderController : ApiController
     {
+        string userID = HttpContext.Current.Session["UserId"].ToString();
+        List<Transaction> rows = new List<Transaction>();
         // GET api/order
         public object Get()
         {
@@ -192,7 +195,7 @@ namespace Gentran.Controllers.api.Order
         }
 
         // PUT api/order/5
-        public object Put([FromBody]Data values)
+        public object Put([FromBody]Data values)   // FOR EDIT PO DETAILS
         {
             bool success = true;
             string response = "Successful";
@@ -239,6 +242,11 @@ namespace Gentran.Controllers.api.Order
                             SqlCommand updateCmdULId = new SqlCommand(updateULId, connection);
                             updateCmdULId.ExecuteNonQuery();
                             connection.Close();
+
+                            string newpaypload = JsonConvert.SerializeObject(values.payload, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
+                            rows.Add(new Transaction { activity = "EDI20", date = now, remarks = values.payload[0].changes, user = userID, type = "ADM" ,value = "PO ID:" + CustomerNumber + values.payload[0].ponumber, changes = values.payload[0].changes, payloadvalue = newpaypload, customernumber = CustomerNumber, ponumber = values.payload[0].ponumber });
+                            return new Response { success = success, detail = rows };
                         }
                     }
                 }

@@ -255,6 +255,7 @@
                 Item.ponumber = $scope.ordersInfo.txt_ponum;
                 Item.ulstatus = $scope.ordersInfo.txt_status;;
                 Item.ULId = $scope.ordersInfo.txt_orderid;
+                Item.changes = changes;
 
                 $scope.data = {};
                 $scope.data.operation = "edit_po";
@@ -266,6 +267,11 @@
 
                     if (data.success === true) {
                         notif_success('PO Updated', changes);
+
+                        console.log(data.detail);
+
+                        viewModelHelper.saveTransaction(data.detail);
+
                         $scope.refreshOrders();
                     } else {
                         notif_error('Error!', data.detail)
