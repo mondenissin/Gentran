@@ -6,7 +6,7 @@
             <li><button class = "tn btn-default btn-sm" ng-click="getSelected()" ng-show="files">Read files</button></li>
         </ul>
     </div>
-    <div class="po-files-h" ng-repeat="f in files" ng-init="$last ? loadHover() : angular.noop()">
+    <div class="po-files-h" sly-repeat="f in files" ng-init="$last ? loadHover() : angular.noop()">
         <input class="po-cbx" ng-click="$event = $event" ng-change="selectFile($event)" type="checkbox" ng-model="check" ng-checked="all" />
         <div class="po-files">
             {{f}}<!--<img ng-src = "{{f.directory}}" Content-type="image/jpeg"/>-->

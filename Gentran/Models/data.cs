@@ -255,6 +255,7 @@ public class Response
     public string[] filecontent { get; set; }
     public string payloadvalue { get; set; }
     public long execution { get; set; }
+    public string notiftext { get; set; }
 }
 public class Transaction
 {

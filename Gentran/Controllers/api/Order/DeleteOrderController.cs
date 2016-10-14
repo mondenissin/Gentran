@@ -1,15 +1,19 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 
 namespace Gentran.Controllers.api.Order
 {
     public class DeleteOrderController : ApiController
     {
+        string userID = HttpContext.Current.Session["UserId"].ToString();
+        List<Transaction> rows = new List<Transaction>();
         // GET api/deleteorder
         public IEnumerable<string> Get()
         {
@@ -28,6 +32,8 @@ namespace Gentran.Controllers.api.Order
             bool success = true;
             string response = "";
             string POid = "";
+            DateTime now = new DateTime();
+            now = DateTime.Now;
 
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
             try
@@ -63,6 +69,10 @@ namespace Gentran.Controllers.api.Order
                         response = "Customer Not Found!";
                     }
                 }
+                string newpaypload = JsonConvert.SerializeObject(values.payload, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
+                rows.Add(new Transaction { activity = "DEL20", date = now, remarks = "PO # "+response , user = userID, type = "ADM", value = "PO ID:" + POid, changes = "", payloadvalue = newpaypload, customernumber = "", ponumber = "" });
+                return new Response { success = success, detail = rows, notiftext = response };
             }
             catch (Exception ex)
             {
@@ -80,8 +90,10 @@ namespace Gentran.Controllers.api.Order
             bool success = true;
             string response = "";
             String sQuery = "";
-            SqlCommand cCmd;
+            DateTime now = new DateTime();
+            now = DateTime.Now;
 
+            SqlCommand cCmd;
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
             try
             {
@@ -98,6 +110,11 @@ namespace Gentran.Controllers.api.Order
                 connection.Close();
 
                 response = "PO ID : " + values.payload[0].ULId;
+
+                string newpaypload = JsonConvert.SerializeObject(values.payload, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
+                rows.Add(new Transaction { activity = "DEL20", date = now, remarks = response, user = userID, type = "ADM", value = "PO ID:" + values.payload[0].ULId, changes = "", payloadvalue = newpaypload, customernumber = "", ponumber = "" });
+                return new Response { success = success, detail = rows ,notiftext = response };
             }
             catch (Exception ex)
             {

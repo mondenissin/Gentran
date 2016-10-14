@@ -14,6 +14,8 @@ namespace Gentran.Controllers.api.Retrieve
 {
     public class MasterUploaderController : ApiController
     {
+        List<Transaction> trows = new List<Transaction>();
+        string userID = HttpContext.Current.Session["UserId"].ToString();
         Boolean success = true;
         private DateTime uDate = DateTime.Now;
         private AppSettings app = new AppSettings();
@@ -140,7 +142,7 @@ namespace Gentran.Controllers.api.Retrieve
             time.Stop();
             var execTime = time.ElapsedMilliseconds;
 
-            return new Response { success = success, filecontent = data, execution = execTime};
+            return new Response { success = success, filecontent = data, execution = execTime, detail = trows};
             //return new Response { success = success, filecontent = readed, execution = execTime ,detail = map,unmapdetail = unmap};
             
             /*
@@ -414,29 +416,34 @@ namespace Gentran.Controllers.api.Retrieve
                     //DTO
                     //if (!values.payload[0].ReUpload)
                     //{
-                        String source = @"C:\inetpub\wwwroot\files\Gentran\queued\" + absoluteName;
+                    String source = @"C:\inetpub\wwwroot\files\Gentran\queued\" + absoluteName;
 
-                        String destination = @"C:\inetpub\wwwroot\files\Gentran\" + destinationFolder + @"\" + uID + "." + fileExtension;
+                    String destination = @"C:\inetpub\wwwroot\files\Gentran\" + destinationFolder + @"\" + uID + "." + fileExtension;
 
-                        String failed = @"C:\inetpub\wwwroot\files\Gentran\failed\" + uID + "." + fileExtension;
+                    String failed = @"C:\inetpub\wwwroot\files\Gentran\failed\" + uID + "." + fileExtension;
 
-                        if (destinationFolder == "successful")
+                    if (destinationFolder == "successful")
+                    {
+                        if (File.Exists(failed))
                         {
-                            if (File.Exists(failed))
-                            {
-                                File.Delete(failed);
-                            }
+                            File.Delete(failed);
                         }
+                    }
 
-                        if (File.Exists(destination))
-                        {
-                            File.Delete(destination);
-                        }
+                    if (File.Exists(destination))
+                    {
+                        File.Delete(destination);
+                    }
 
-                        if (ifMult)
-                            File.Copy(source, destination);
-                        else
-                            File.Move(source, destination);
+                    if (ifMult)
+                        File.Copy(source, destination);
+                    else
+                        File.Move(source, destination);
+
+
+                    string newpaypload = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                    trows.Add(new Transaction { activity = "UPL20", date = uDate, remarks = uPONum, user = userID, type = "ADM", value = "PO ID:" + uCust + uPONum, changes = "", payloadvalue = newpaypload, customernumber = uCust, ponumber = uPONum });
+
                     /*}
                     else
                     {

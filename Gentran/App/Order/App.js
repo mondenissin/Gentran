@@ -1,4 +1,4 @@
-﻿var orderModule = angular.module('order', ['common'])
+﻿var orderModule = angular.module('order', ['common','sly'])
     .config(function ($routeProvider, $locationProvider) {
         var _root = getRoot();
         $routeProvider.when(_root + 'Order/OrderList', { templateUrl: _root + 'App/Order/Views/Orders/order.html', controller: 'orderViewModel' });
@@ -8,6 +8,7 @@
             requireBase: false
         });
     });
+
 orderModule.factory('orderService', function ($rootScope, $http, $q, $location, viewModelHelper) { return MyApp.orderService($rootScope, $http, $q, $location, viewModelHelper); });
 
 

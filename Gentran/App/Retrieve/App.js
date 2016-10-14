@@ -1,4 +1,4 @@
-﻿var retrieveModule = angular.module('retrieve', ['common'])
+﻿var retrieveModule = angular.module('retrieve', ['common','sly'])
     .config(function ($routeProvider, $locationProvider) {
         var _root = getRoot();
         $routeProvider.when(_root + 'Retrieve/SM', { templateUrl: _root + 'App/Retrieve/Views/SM/sm.html', controller: 'smViewModel' });

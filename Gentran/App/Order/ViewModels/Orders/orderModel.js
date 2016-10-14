@@ -77,7 +77,7 @@
                 if (selected) {
                     $('#submitModal').modal('show');
                 } else {
-                    notif_info("Orders", "Select order to submit");
+                    notif_warning("Orders", "Select order to submit");
                 }
             }
         });
@@ -109,7 +109,7 @@
             if (selected) {
                 $('#deleteModal').modal('show');
             } else {
-                notif_info("Orders", "Select order to Delete");
+                notif_warning("Orders", "Select order to Delete");
             }
         });
     }
@@ -132,7 +132,10 @@
             if (data.success === true) {
                 $('#deleteModal').modal('hide');
                 $scope.refreshOrders();
-                notif_success('Deleted', data.detail);
+
+                viewModelHelper.saveTransaction(data.detail);
+
+                notif_success('Deleted', data.notiftext);
             } else {
                 notif_error('Error!', data.detail)
             }
@@ -155,7 +158,10 @@
             if (data.success === true) {
                 $scope.refreshOrders();
                 $('#orderDetailsModal').modal('hide');
-                notif_success('Deleted', data.detail);
+
+                viewModelHelper.saveTransaction(data.detail);
+
+                notif_success('Deleted', data.notiftext);
             } else {
                 notif_error('Error!', data.detail)
             }

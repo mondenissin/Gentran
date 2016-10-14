@@ -26,8 +26,8 @@
                 <th class="no-sort">Options</th>
             </tr>
         </thead>
-        <tbody ng-repeat="o in order">
-            <tr>
+        <tbody sly-repeat="o in order">
+            <tr ng-cloak>
                 <td><input id="{{o.ul}}" class="cbxSub" type="checkbox" ng-checked="allOrders"/></td>
                 <td class="table-data-ponum">{{ o.ulponumber }}</td>
                 <td class="table-data-ucust">{{ o.ulcustomer }}</td>
@@ -67,7 +67,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="sq in submitQueue">
+                            <tr sly-repeat="sq in submitQueue">
                                 <td>{{sq.PONum}}</td>
                                 <td>{{sq.CustNum}}</td>
                                 <td>{{sq.CustName}}</td>
@@ -139,7 +139,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="oi in orderItems">
+                                        <tr sly-repeat="oi in orderItems">
                                             <td>{{oi.UIProduct}}</td>
                                             <td>{{oi.PMDescription}}</td>
                                             <td>{{oi.UIQuantity}}</td>
@@ -189,7 +189,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="dq in deleteQueue">
+                            <tr sly-repeat="dq in deleteQueue">
                                 <td>{{dq.PONum}}</td>
                                 <td>{{dq.CustNum}}</td>
                                 <td>{{dq.CustName}}</td>

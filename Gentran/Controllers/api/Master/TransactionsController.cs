@@ -31,7 +31,6 @@ namespace Gentran.Controllers.api
             now = DateTime.Now;
             List<Transaction> rows = new List<Transaction>();
 
-
             //string folderPath = System.Web.Hosting.HostingEnvironment.MapPath("~/transactions/");
             string folderPath = @"C:\inetpub\wwwroot\files\Gentran\transactions\";
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);

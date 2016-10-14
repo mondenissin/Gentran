@@ -63,7 +63,7 @@ namespace Gentran.Controllers.api.Order
                             WHERE uistatus NOT IN ('3','0')
                             group by uiid ) ui 
                             ON ul.ulid = ui.uiid 
-                            WHERE ua.uauser = '" + HttpContext.Current.Session["UserId"].ToString() + @"'
+                            WHERE ua.uauser = '" + userID + @"'
                             AND uatype = 'KAS' 
                             AND ulstatus !=0  
                             AND ulstatus !=10 
