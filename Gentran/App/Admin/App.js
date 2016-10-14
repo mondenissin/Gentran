@@ -1,4 +1,4 @@
-﻿var adminModule = angular.module('admin', ['common', 'datatables','sly', 'ui.bootstrap'])
+﻿var adminModule = angular.module('admin', ['common', 'datatables','sly'])
 .config(function ($routeProvider, $locationProvider) {
     var _root = getRoot();
     $routeProvider.when(_root+'Admin/Users', { templateUrl: _root+'App/Admin/Views/Users/UserList.html', controller: 'userViewModel' });
@@ -15,10 +15,10 @@
 
 adminModule.run(function (DTDefaultOptions) {
     // Display 50 items per page by default
-    DTDefaultOptions.setDisplayLength(-1);
-    var cDom = "<'row dt-info'<'col-sm-5 '><'col-sm-7'>>" +
+    DTDefaultOptions.setDisplayLength(50);
+    var cDom = "<'row dt-info'<'col-sm-5 'i><'col-sm-7'p>>" +
             "<'row'<'col-sm-12'tr>>" +
-            "<'row'<'col-sm-5'><'col-sm-7'>>";
+            "<'row'<'col-sm-5'><'col-sm-7'p>>";
     DTDefaultOptions.setOption('dom', cDom);
 });
 

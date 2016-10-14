@@ -1,56 +1,49 @@
-﻿<div class="breadcrumb">
-    <button class="btn btn-default btn-xs icon-size" title="Pending Button"><i class="fa" aria-hidden="true"></i></button>
-    <div class="pull-right">
-        <div class="form-inline">
-            <select ng-model="searchBy" class="form-control">
-                <option value="TLId" selected>Transaction ID</option>
-                <option value="UMUsername">User Name</option>
-                <option value="TLDate">Date</option>
-                <option value="TADescription">Description</option>
-                <option value="TLValue">Product Value</option>
-                <option value="TLRemarks">Remarks</option>
-            </select>
-            <input type="text" ng-model="search[searchBy]" placeholder="Search" class="form-control"/>
-        </div>
-    </div>
-</div>
-        <div data-pagination="" data-num-pages="numPages()"
-             data-current-page="currentPage" data-max-size="maxSize"
-             data-boundary-links="true"></div>
-        <table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-bordered bordered table-striped table-condensed datatable">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Date</th>
-                    <th>Description</th>
-                    <th>Value</th>
-                    <th>Remarks</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="l in transactions | filter:search">
-                    <td ng-cloak> {{l.TLId}} </td>
-                    <td ng-cloak> {{l.UMUsername}} </td>
-                    <td ng-cloak> {{l.TLDate}} </td>
-                    <td ng-cloak> {{l.TADescription}} </td>
-                    <td ng-cloak> {{l.TLValue}} </td>
-                    <td ng-cloak> {{l.TLRemarks}} </td>
-                </tr>
-            </tbody>
-        </table>
-        <div data-pagination="" data-num-pages="numPages()"
-             data-current-page="currentPage" data-max-size="maxSize"
-             data-boundary-links="true"></div>
+﻿<hr />
+<input type="text" ng-model="search[searchBy]" />Search By:
+<select ng-model="searchBy">
+    <option value="TLId" selected>Transaction ID</option>
+    <option value="UMUsername">User Name</option>
+    <option value="TLDate">Date</option>
+    <option value="TADescription">Description</option>
+    <option value="TLValue">Product Value</option>
+    <option value="TLRemarks">Remarks</option>
+</select>
+<hr />
 
-        <script>
-            $(function () {
-                var parent = $('.data-management');
-                parent.addClass('menu-open').css({ 'display': 'block' });
-                var elem = $('.btnlogs');
-                parent.find('li').each(function () {
-                    $(this).removeClass('active');
-                });
-                elem.closest('li').addClass(' active');
-            });
-        </script>
+<div class="breadcrumb">
+    <button class="btn btn-default btn-xs icon-size" title="Pending Button"><i class="fa" aria-hidden="true"></i></button>
+</div> 
+<table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-bordered bordered table-striped table-condensed datatable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Value</th>
+            <th>Remarks</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="l in transactions | filter:search">
+            <td ng-cloak> {{l.TLId}} </td>
+            <td ng-cloak> {{l.UMUsername}} </td>
+            <td ng-cloak> {{l.TLDate}} </td>
+            <td ng-cloak> {{l.TADescription}} </td>
+            <td ng-cloak> {{l.TLValue}} </td>
+            <td ng-cloak> {{l.TLRemarks}} </td>
+        </tr>
+    </tbody>
+</table>  
+
+<script>
+    $(function () {
+        var parent = $('.data-management');
+        parent.addClass('menu-open').css({ 'display': 'block' });
+        var elem = $('.btnlogs');
+        parent.find('li').each(function () {
+            $(this).removeClass('active');
+        });
+        elem.closest('li').addClass(' active');
+    });
+</script>
