@@ -88,4 +88,15 @@ public class AppSettings
 
         return date;
     }
+    
+    public string[] csv(string fileName)
+    {
+        string[] readed = { };
+        string filepath;
+        filepath = fileName;
+        readed = File.ReadAllLines(filepath);
+
+        return readed;
+    }
+
 }

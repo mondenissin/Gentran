@@ -43,14 +43,14 @@
              data-current-page="currentPage" data-max-size="maxSize"
              data-boundary-links="true"></div>
 
-        <script>
-            $(function () {
-                var parent = $('.data-management');
-                parent.addClass('menu-open').css({ 'display': 'block' });
-                var elem = $('.btnlogs');
-                parent.find('li').each(function () {
-                    $(this).removeClass('active');
-                });
-                elem.closest('li').addClass(' active');
-            });
-        </script>
+<script>
+    $(function () {
+        var parent = $('.data-management');
+        parent.addClass('menu-open').css({ 'display': 'block' });
+        var elem = $('.btnlogs');
+        parent.find('li').each(function () {
+            $(this).removeClass('active');
+        });
+        elem.closest('li').addClass(' active');
+    });
+</script>

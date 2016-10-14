@@ -11,7 +11,7 @@
 }
 
 /* Set widths on the form inputs since otherwise they're 100% wide */
-input:not('.form-control'),
+input:not(.form-control),
 select,
 textarea { 
     max-width: 280px;
@@ -302,11 +302,11 @@ button.btn.btn-link i, button.btn.btn-link span {
     display:block;
     float:left;
 }
-.page-table table td input
+.page-table table:not(.modal-table) td input
 {
     margin-top: 50%;
 }
-.page-table table td img
+.page-table table:not(.modal-table) td img
 {
     float:left;
     padding: 2px;
@@ -351,6 +351,97 @@ button.btn.btn-link i, button.btn.btn-link span {
 }
 
 /* ======================================== END OF PAGE TABLE ========================================== */
+/* ======================================== MODAL TABLE ========================================== */
+.modal-table tr.table-row-edit td
+{
+    padding: 3px !important;
+    vertical-align: middle;
+}
+.modal-table td input,.modal-table td select
+{
+    width: 100%;
+    padding: 3px 8px;
+    font-size: 11px;
+    height: 23px;
+}
+.modal-table tr.table-row-edit td.table-data-delete ,.modal-table th.table-header-button
+{
+    padding: 3px !important; 
+    vertical-align: middle;  
+}
+.modal-table td img,.modal-table th img
+{
+    float: left;
+    padding: 0px;
+    width: 20px;
+    height: 20px;
+    margin: 0px 0px 0 0;
+    border: 1px solid #d0d0d0;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.modal-table tbody
+{
+  overflow-y: auto;
+  height: 200px;
+  width: 100%;
+}
+
+.modal-body table td {
+    border-top: none !important; 
+    height:25px !important;
+    line-height:25px !important;
+}
+
+.modal-body table th:last-child {
+    border-right: 0.5px solid #e0e0e0!important;
+}
+
+
+.inner-addon { 
+    position: relative; 
+}
+
+.inner-addon .currency {
+  position: absolute;
+  line-height: 27px;
+  padding-left: 8px;
+  pointer-events: none;
+  font-size: 15px;
+}
+.left-addon .currency  { left:  0px;}
+.right-addon .currency { right: 0px;}
+.left-addon input  { padding-left:  25px !important; }
+.right-addon input { padding-right: 25px !important; }
+
+.tbl-data-qty {
+    padding: 0px!important;
+}
+
+.tbl-data-qty div {
+    margin: 1px;
+    border: 1px solid #ccc;
+    padding: 2px 4px;
+    border-radius: 3px;
+    background-color: white;
+}
+
+.add-assigned 
+{
+    background-color:#eefbec;
+}
+
+.add-assigned span
+{
+    color: red;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* ======================================== END OF MODAL TABLE ========================================== */
+
 .paginate_button {
     padding: 2px!important;
 }

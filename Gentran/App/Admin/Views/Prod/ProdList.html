@@ -110,68 +110,105 @@
             </div>
         </div>
         <!------- END OF ADD PRODUCT MODAL ------->
-        <!------- PRODUCT DETAILS MODAL ------->
-        <div id="ProductDetailsModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
 
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Product Details</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form role="form">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                        <label>Product ID:</label>
-                                        <input id="txt_prodID" class="form-control input-sm" type="text" disabled />
-                                    </div>
-                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                        <label>Product Code:</label>
-                                        <input id="txt_prodCode" class="form-control  input-sm" type="text" disabled />
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                        <label>Product Description:</label>
-                                        <input id="txt_prodDescription" class="form-control  input-sm" type="text" disabled />
-                                    </div>
-                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                        <label>Product Barcode:</label>
-                                        <input id="txt_prodBarcode" class="form-control  input-sm" type="text" disabled />
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                        <label>Product Type:</label>
-                                        <input id="txt_prodType" class="form-control input-sm" type="text" disabled />
-                                    </div>
-                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                        <label>Product Status:</label>
-                                        <input id="txt_prodStatus" class="form-control  input-sm" type="text" disabled />
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-
+<!------- PRODUCT MAPPING MODAL ------->
+<div id="ProductMappingModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-list" aria-hidden="true"></i> Data Mapping for Product: <span id="spn_mappmcode"></span></h4>
+                <input type="hidden" id="txt_mappmid" />
+                <span class="pull-right">{{ maxAccount - modalRows }} available account(s)</span>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="modal-table-container">
+                            <table class="table table-hover table-responsive table-bordered table-scrollable modal-table" id="MappingModalTable" fixed-header>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 45%">Account Type</th>
+                                        <th style="width: 50%">Assigned Code</th>
+                                        <th class="table-header-add-assign table-header-button" style="width: 5%"><img src="../Images/master/add.png" title="Add new row" alt="Add" ng-click="addModalRow()"/></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary btn-sm" ng-click="ValidateSaveMaping()">Save</button>
+            </div>
         </div>
-        <!------- END OF PRODUCT DETAILS MODAL ------->
+    </div>
+</div>
+<!------- END OF PRODUCT MAPPING MODAL ------->
+
+<!------- PRODUCT DETAILS MODAL ------->
+<div id="ProductDetailsModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Product Details</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label>Product ID:</label>
+                                <input id="txt_prodID" class="form-control input-sm" type="text" disabled />
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label>Product Code:</label>
+                                <input id="txt_prodCode" class="form-control  input-sm" type="text" disabled />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label>Product Description:</label>
+                                <input id="txt_prodDescription" class="form-control  input-sm" type="text" disabled />
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label>Product Barcode:</label>
+                                <input id="txt_prodBarcode" class="form-control  input-sm" type="text" disabled />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label>Product Type:</label>
+                                <input id="txt_prodType" class="form-control input-sm" type="text" disabled />
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <label>Product Status:</label>
+                                <input id="txt_prodStatus" class="form-control  input-sm" type="text" disabled />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!------- END OF PRODUCT DETAILS MODAL -------> 
 
 
-        <script>
-            $(function () {
-                var parent = $('.data-management');
-                parent.addClass('menu-open').css({ 'display': 'block' });
-                var elem = $('.btnprod');
-                parent.find('li').each(function () {
-                    $(this).removeClass('active');
-                });
-                elem.closest('li').addClass(' active');
-            });
-        </script>
+<script>
+    $(function () {
+        var parent = $('.data-management');
+        parent.addClass('menu-open').css({ 'display': 'block' });
+        var elem = $('.btnprod');
+        parent.find('li').each(function () {
+            $(this).removeClass('active');
+        });
+        elem.closest('li').addClass(' active');
+    });
+</script>

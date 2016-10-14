@@ -60,9 +60,8 @@
 
                 viewModelHelper.saveTransaction(data.detail);
 
-                setTimeout(function () {
-                    $route.reload();
-                }, 300);
+                $scope.refreshUser();
+
             } else {
                 notif_error('Error!',data.detail)
             }
