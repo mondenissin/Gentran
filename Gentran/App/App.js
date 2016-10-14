@@ -22,7 +22,7 @@ commonModule.factory('viewModelHelper', function ($http, $q, $window, $location)
 
         self.apiGet = function (uri, data, success, failure) {
             self.modelIsValid = true;
-            $http.get(MyApp.rootPath + uri, data)
+            $http.get(MyApp.rootPath + uri, { 'params': { 'value': data } })
                 .then(function (result) {
                     success(result);
                 }, function (result) {
