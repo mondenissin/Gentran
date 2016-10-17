@@ -16,6 +16,10 @@
         viewModelHelper.navigateTo('Admin/Users');
     }
 
+    $scope.userCards = function () {
+        viewModelHelper.navigateTo('Admin/Users-Cards');
+    }
+
     $scope.prodList = function () {
         viewModelHelper.navigateTo('Admin/Products');
     }

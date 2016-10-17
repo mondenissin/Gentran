@@ -203,7 +203,7 @@ namespace Gentran.Controllers.api
                 {
 
                     activity = "EDI40";
-
+                                      
                     string pmcode = "";
                     string pmid = "";
                     string pacode = "";
@@ -212,12 +212,13 @@ namespace Gentran.Controllers.api
 
                     for (int i = 0; i < values.payload.Count; i++)
                     {
+                        pmcode = values.payload[i].pmcode;
+                        pmid = values.payload[i].pmid;
+                        pacode = values.payload[i].assignedcode;
+                        paaccount = values.payload[i].acctype;
+
                         if (values.payload[i].Status == "1")
                         {
-                            pmcode = values.payload[i].pmcode;
-                            pmid = values.payload[i].pmid;
-                            pacode = values.payload[i].assignedcode;
-                            paaccount = values.payload[i].acctype;
 
                             sQuery = "select * from tblproductassignment where paproduct='" + pmid + "' AND paaccount='" + paaccount + "'";
 
@@ -265,7 +266,7 @@ namespace Gentran.Controllers.api
                                 connection.Close();
                                 success = true;
                             }
-                        }
+                        }       
                     }
                     string Accounts = "";
                     for (int ctr = 0; ctr < values.payload.Count; ctr++)
@@ -287,11 +288,11 @@ namespace Gentran.Controllers.api
 
                     if (Accounts != "")
                     {
-                        sQuery = "select distinct PAAccount, atdescription, PACode, PMCode from tblProductAssignment left join tblProductMaster on PMId = PAProduct left join tblAccountType on atid = PAAccount where PAAccount not in (" + Accounts + ") and PAProduct='" + values.payload[0].pmid + "'";
+                        sQuery = "select distinct PAAccount, atdescription, PACode, PMCode from tblProductAssignment left join tblProductMaster on PMId = PAProduct left join tblAccountType on atid = PAAccount where PAAccount not in (" + Accounts + ") and PAProduct='" + pmid + "'";
                     }
                     else
                     {
-                        sQuery = "select distinct PAAccount, atdescription, PACode, PMCode from tblProductAssignment left join tblProductMaster on PMId = PAProduct left join tblAccount on atid = PAAccount where PAProduct='" + values.payload[0].pmid + "'";
+                        sQuery = "select distinct PAAccount, atdescription, PACode, PMCode from tblProductAssignment left join tblProductMaster on PMId = PAProduct left join tblAccount on atid = PAAccount where PAProduct='" + pmid + "'";
                     }
 
                     connection.Open();

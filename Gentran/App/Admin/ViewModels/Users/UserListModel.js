@@ -1,4 +1,4 @@
-﻿adminModule.controller("userViewModel", function ($scope, adminService, $http, $q, $routeParams, $window, $location, viewModelHelper, DTOptionsBuilder, DTColumnDefBuilder,$route) {
+﻿adminModule.controller("userViewModel", function ($scope, adminService, $http, $q, $routeParams, $window, $location, viewModelHelper, DTOptionsBuilder, DTColumnDefBuilder, $route, filterFilter) {
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.adminService = adminService;
@@ -6,24 +6,21 @@
     var initialize = function () {
         $scope.refreshUser();
     }
-    $scope.currentPage = 1, $scope.numPerPage = 50, $scope.maxSize = 5;
 
     $scope.refreshUser = function () {
         $scope.search = {};
         $scope.searchBy = "UMId";
 
         viewModelHelper.apiGet('api/userlist', null, function (result) {
-            $scope.peoplePerPage = result.data.detail;
+            $scope.pageSize = 5;
+            $scope.entryLimit = 50;
 
-            $scope.numPages = function () {
-                return Math.ceil($scope.peoplePerPage.length / $scope.numPerPage);
-            };
+            $scope.people = result.data.detail;
 
-            $scope.$watch('currentPage + numPerPage', function () {
-                var begin = (($scope.currentPage - 1) * $scope.numPerPage),
-                  end = begin + $scope.numPerPage;
-
-                $scope.people = $scope.peoplePerPage.slice(begin, end);
+            $scope.$watch('search[searchBy]', function () {
+                $scope.filterList = filterFilter($scope.people, $scope.search);
+                $scope.noOfPages = Math.ceil($scope.filterList.length / $scope.entryLimit);
+                $scope.currentPage = 1;
             });
         });
 
@@ -157,7 +154,18 @@
         }
 
         $('#editUserModal').modal('show');
-    }
-     
-    initialize();
+	}
+
+	$scope.clearSearch = function () {
+	    $scope.search = {};
+	}
+
+	initialize();
+}).filter('start', function () {
+    return function (input, start) {
+        if (!input || !input.length) { return; }
+
+        start = +start;
+        return input.slice(start);
+    };
 });

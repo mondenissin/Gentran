@@ -1,21 +1,20 @@
 ﻿<div class="breadcrumb">
     <button class="btn btn-default btn-xs icon-size" title="Add User" ng-click="addUser()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+    <button class="btn btn-default btn-xs icon-size" title="Cards View" ng-click="userCards()"><i class="fa fa-th-large" aria-hidden="true"></i></button>
     <div class="pull-right">
         <div class="form-inline">
-            <select ng-model="searchBy" class="form-control">
+            <select ng-model="searchBy" class="form-control" ng-change="clearSearch()">
                 <option value="UMId" selected>User ID</option>
                 <option value="UMUsername">Username</option>
                 <option value="UMFirstname">First Name</option>
                 <option value="UMLastname">Last Name</option>
                 <option value="UMEmail">Email</option>
             </select>
-            <input type="text" ng-model="search[searchBy]"  placeholder="Search" class="form-control"/>
+            <input type="text" ng-model="search[searchBy]" ng-model-options="{debounce: {'default': 100, 'blur': 0}}" placeholder="Search" class="form-control"/>
         </div>
     </div>
 </div>
-    <div data-pagination="" data-num-pages="numPages()"
-     data-current-page="currentPage" data-max-size="maxSize"
-     data-boundary-links="true"></div>
+    <pagination data-boundary-links="true" data-num-pages="noOfPages" data-current-page="currentPage" max-size="pageSize" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
         <table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-responsive table-bordered bordered table-striped table-condensed datatable">
             <thead>
                 <tr>
@@ -29,7 +28,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr sly-repeat="p in people | filter:search ">
+                <tr ng-repeat="p in filterList | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
                     <td ng-cloak> {{p.UMId}} </td>
                     <td ng-cloak> {{p.UMUsername}} </td>
                     <td ng-cloak> {{p.UMFirstname}} {{p.UMLastname}} </td>
@@ -58,9 +57,7 @@
             </tbody>
         </table>
 
-    <div data-pagination="" data-num-pages="numPages()"
-     data-current-page="currentPage" data-max-size="maxSize"
-     data-boundary-links="true"></div>
+    <pagination data-boundary-links="true" data-num-pages="noOfPages" data-current-page="currentPage" max-size="pageSize" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
 
 <!-- ================================== MODALS ================================= -->
 <!------- ADD USER MODAL ------->

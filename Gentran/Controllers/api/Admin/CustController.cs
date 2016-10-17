@@ -198,12 +198,13 @@ namespace Gentran.Controllers.api
 
                     for (int i = 0; i < values.payload.Count; i++)
                     {
+                        cmID = values.payload[i].cmID;
+                        cmCode = values.payload[i].cmCode;
+                        caCode = values.payload[i].assignedcode;
+                        caaccount = values.payload[i].acctype;
+
                         if (values.payload[i].Status == "1")
                         {
-                            cmID = values.payload[i].cmID;
-                            cmCode = values.payload[i].cmCode;
-                            caCode = values.payload[i].assignedcode;
-                            caaccount = values.payload[i].acctype;
 
                             sQuery = "select * from tblcustomerassignment where cacustomer='" + cmID + "' AND caaccount='" + caaccount + "'";
 
@@ -260,13 +261,13 @@ namespace Gentran.Controllers.api
                     success = true;
                     string ATDescription = "";
 
-                    if (Accounts.Length > 0)
+                    if (Accounts!= "")
                     {
-                        sQuery = "select distinct CAAccount, ATDescription, CACode, CMCode from tblCustomerAssignment left join tblCustomerMaster on CMId = CACustomer left join tblAccountType on ATId = CAAccount where CAAccount not in (" + Accounts + ") and CACustomer='" + values.payload[0].cmID + "'";
+                        sQuery = "select distinct CAAccount, ATDescription, CACode, CMCode, CMId from tblCustomerAssignment left join tblCustomerMaster on CMId = CACustomer left join tblAccountType on ATId = CAAccount where CAAccount not in (" + Accounts + ") and CACustomer='" + cmID + "'";
                     }
                     else
                     {
-                        sQuery = "select distinct CAAccount, ATDescription, CACode, CMCode from tblCustomerAssignment left join tblCustomerMaster on CMId = CACustomer left join tblAccountType on ATId = CAAccount where CACustomer='" + values.payload[0].cmID + "'";
+                        sQuery = "select distinct CAAccount, ATDescription, CACode, CMCode, CMId from tblCustomerAssignment left join tblCustomerMaster on CMId = CACustomer left join tblAccountType on ATId = CAAccount where CACustomer='" + cmID + "'";
                     }
 
                     connection.Open();

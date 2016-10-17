@@ -1,4 +1,4 @@
-﻿adminModule.controller("prodViewModel", function ($scope, adminService, $http, $q, $routeParams, $window, $location, $timeout, viewModelHelper, DTOptionsBuilder, DTColumnDefBuilder, $route) {
+﻿adminModule.controller("prodViewModel", function ($scope, adminService, $http, $q, $routeParams, $window, $location, $timeout, viewModelHelper, DTOptionsBuilder, DTColumnDefBuilder, $route, filterFilter) {
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.adminService = adminService;
@@ -12,7 +12,6 @@
         $scope.getAccounts();
         $scope.accountSelections = "";
     }
-    $scope.currentPage = 1, $scope.numPerPage = 50, $scope.maxSize = 5;
 
     $scope.refreshProd = function () {
         $scope.search = {};
@@ -20,16 +19,15 @@
 
         viewModelHelper.apiGet('api/prod', null, function (result) {
 
-            $scope.productPerPage = result.data.detail;
-            $scope.numPages = function () {
-                return Math.ceil($scope.productPerPage.length / $scope.numPerPage);
-            };
+            $scope.pageSize = 5;
+            $scope.entryLimit = 50;
 
-            $scope.$watch('currentPage + numPerPage', function () {
-                var begin = (($scope.currentPage - 1) * $scope.numPerPage),
-                  end = begin + $scope.numPerPage;
+            $scope.product = result.data.detail;
 
-                $scope.product = $scope.productPerPage.slice(begin, end);
+            $scope.$watch('search[searchBy]', function () {
+                $scope.filterList = filterFilter($scope.product, $scope.search);
+                $scope.noOfPages = Math.ceil($scope.filterList.length / $scope.entryLimit);
+                $scope.currentPage = 1;
             });
         });
 
@@ -258,5 +256,17 @@
         });
     }
     // End of Product Mapping -------->
+
+    $scope.clearSearch = function () {
+        $scope.search = {};
+    }
+
     initialize();
+}).filter('start', function () {
+    return function (input, start) {
+        if (!input || !input.length) { return; }
+
+        start = +start;
+        return input.slice(start);
+    };
 });

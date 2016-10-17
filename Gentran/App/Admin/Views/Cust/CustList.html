@@ -3,18 +3,16 @@
     <button class="btn btn-default btn-xs icon-size" title="Batch Add Customer"><i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
     <div class="pull-right">
         <div class="form-inline">
-            <select ng-model="searchBy" class="form-control">
+            <select ng-model="searchBy" class="form-control" ng-change="clearSearch()">
                 <option value="CMCode" selected>Customer Code</option>
                 <option value="CMDescription">Customer Name</option>
             </select>
-            <input type="text" ng-model="search[searchBy]"  class="form-control" placeholder="Search"/>
+            <input type="text" ng-model="search[searchBy]" ng-model-options="{debounce: {'default': 100, 'blur': 0}}" class="form-control" placeholder="Search"/>
         </div>
     </div>
 </div>
 <div class="page-table" >
-    <div data-pagination="" data-num-pages="numPages()"
-         data-current-page="currentPage" data-max-size="maxSize"
-         data-boundary-links="true"></div>
+    <pagination data-boundary-links="true" data-num-pages="noOfPages" data-current-page="currentPage" max-size="pageSize" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
     <table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-bordered bordered table-striped table-condensed datatable">
             <thead>
                 <tr>
@@ -26,7 +24,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr sly-repeat="c in customers | filter: search">
+                <tr ng-repeat="c in filterList | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
                     <td ng-cloak>
                         {{c.CMCode}}
                     </td>
@@ -52,9 +50,7 @@
                 </tr>
             </tbody>
         </table>
-    <div data-pagination="" data-num-pages="numPages()"
-         data-current-page="currentPage" data-max-size="maxSize"
-         data-boundary-links="true"></div>
+    <pagination data-boundary-links="true" data-num-pages="noOfPages" data-current-page="currentPage" max-size="pageSize" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
 </div>
 
 
@@ -201,5 +197,7 @@
         });
         elem.closest('li').addClass('active');
     });
+
+    
 
 </script>

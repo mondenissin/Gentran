@@ -1,0 +1,206 @@
+﻿<div class="breadcrumb">
+    <button class="btn btn-default btn-xs icon-size" title="Add User" ng-click="addUser()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+    <button class="btn btn-default btn-xs icon-size" title="List View" ng-click="userList()"><i class="fa fa-th-list" aria-hidden="true"></i></button>
+    <div class="pull-right">
+        <div class="form-inline">
+            <select ng-model="searchBy" class="form-control">
+                <option value="UMId" selected>User ID</option>
+                <option value="UMUsername">Username</option>
+                <option value="UMFirstname">First Name</option>
+                <option value="UMLastname">Last Name</option>
+                <option value="UMEmail">Email</option>
+            </select>
+            <input type="text" ng-model="search[searchBy]"  placeholder="Search" class="form-control"/>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="searchable-container">
+            <div sly-repeat="p in people | filter:search | orderBy : 'UMUsername'" class="items col-xs-12 col-sm-12 col-md-4 col-lg-4 clearfix">
+
+                <div class="info-block block-info clearfix">
+                    <div class="row card-header">
+                        <div class="col-md-8">
+                            <span class="span-uname">{{p.UMUsername}}</span>
+                        </div>
+                        <div class="col-md-4 header-options">
+                            <div ng-cloak ng-switch="p.UMStatus">
+                                <div class="case pull-right" ng-switch-when="ACT">
+                                    <button class="btn btn-default btn-xs option-icon-size" ng-click="userDetails(p)" title="Edit User Details"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                    <button class="btn btn-default btn-xs option-icon-size" ng-click="ShowConfirmModal('reset',p)" title="Reset"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                                    <button class="btn btn-default btn-xs option-icon-size" ng-click="ShowConfirmModal('deact',p)" title="Deactivate"><i class="fa fa-power-off" aria-hidden="true"></i></button>
+                                </div>
+                                <div class="case pull-right" ng-switch-when="INA">
+                                    <button class="btn btn-default btn-xs option-icon-size" ng-click="userDetails(p)" title="Edit User Details"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                    <button class="btn btn-default btn-xs option-icon-size" ng-click="ShowConfirmModal('deact',p)" title="Deactivate"><i class="fa fa-power-off" aria-hidden="true"></i></button>
+                                </div>
+                                <div class="case pull-right" ng-switch-when="DEA">
+                                    <button class="btn btn-default btn-xs option-icon-size" ng-click="ShowConfirmModal('reset',p)" title="Reset"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                                </div>
+                                <div class="case" ng-switch-default>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="square-box pull-left">
+                            <div style="height:100px; width:100px; background: black; border-radius:50%;" class="card-view-imgprof card-view" title="Click to change." ng-if="p.UMImage.length >= 100">
+                                <img style="border:none;" src="{{p.UMImage}}" />
+                            </div>
+                            <div style="height:100px; width:100px; background: #282E6C; border-radius:50%; line-height: 100px;" class="card-view-imgprof" title="Click to change." ng-if="p.UMImage.length < 100">
+                                {{p.UMFirstname.charAt(0)}}{{p.UMLastname.charAt(0)}}
+                            </div>
+                        </div>
+
+                        <span class="span-uid">User ID: {{p.UMId}}</span>
+                        <span class="span-name">Name: {{p.UMFirstname}} {{p.UMLastname}}</span>
+                        <span class="span-type">Type: {{p.UMType}}</span>
+                        <span class="span-status">Status: <text class="{{p.USStatus == 'Activated' ? 'active' : 'inactive' }}">{{p.USStatus}}</text></span>
+                        <span class="span-email">Email: {{p.UMEmail}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--<table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-responsive table-bordered bordered table-striped table-condensed datatable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th class="no-sort">Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr sly-repeat="p in people | filter:search ">
+            <td ng-cloak> {{p.UMId}} </td>
+            <td ng-cloak> {{p.UMUsername}} </td>
+            <td ng-cloak> {{p.UMFirstname}} {{p.UMLastname}} </td>
+            <td ng-cloak> {{p.UMEmail}} </td>
+            <td ng-cloak> {{p.UMType}} </td>
+            <td ng-cloak> {{p.USStatus}} </td>
+            <td ng-cloak ng-switch="p.UMStatus">
+                <div class="case" ng-switch-when="ACT">
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="userDetails(p)" title="Edit User Details"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="ShowConfirmModal('reset',p)" title="Reset"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="ShowConfirmModal('deact',p)" title="Deactivate"><i class="fa fa-power-off" aria-hidden="true"></i></button>
+                </div>
+                <div class="case" ng-switch-when="INA">
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="userDetails(p)" title="Edit User Details"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="ShowConfirmModal('deact',p)" title="Deactivate"><i class="fa fa-power-off" aria-hidden="true"></i></button>
+                </div>
+                <div class="case" ng-switch-when="DEA">
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="ShowConfirmModal('reset',p)" title="Reset"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                </div>
+                <div class="case" ng-switch-default>
+
+                </div>
+
+            </td>
+        </tr>
+    </tbody>
+</table>-->
+<!-- ================================== MODALS ================================= -->
+<!------- ADD USER MODAL ------->
+<div id="AddUserModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-user"></i> Add User</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                        <div class="form-group">
+                                <label>User Type:</label> <span class="required">*</span>
+                                <select id="ddl_addusertype" class="form-control input-sm">
+                                    <option selected disabled>-- Please Select User Type --</option>
+                                    <option value="ADM">Administrator</option>
+                                </select>
+                        </div>
+                        <div class="form-group">
+                            
+                                <label>Nickname:</label>
+                                <input id="txt_addnname" class="form-control input-sm" type="text" />
+                            
+                        </div>
+                        <div class="form-group">
+                           
+                                <label>First Name:</label> <span class="required">*</span>
+                                <input id="txt_addfname" class="form-control input-sm" type="text" />
+                           
+                        </div>
+                        <div class="form-group">
+                           
+                                <label>Middle Name:</label> <span class="required">*</span>
+                                <input id="txt_addmname" class="form-control input-sm" type="text" />
+                            
+                        </div>
+                        <div class="form-group">
+                            
+                                <label>Last Name:</label> <span class="required">*</span>
+                                <input id="txt_addlname" class="form-control input-sm" type="text" />
+                           
+                        </div>
+                        <div class="form-group">
+                                <label>Email:</label> 
+                                <input id="txt_addemail" class="form-control  input-sm" type="email" />
+                           
+                        </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-sm" ng-click="saveAddUser()">Save User</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!------- END OF ADD USER MODAL ------->
+
+<!------- DEACTIVATE/RESET MODAL ------->
+<div id="userOptionsModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title confirm-header-message">Action Type</h4>
+                <input type="hidden" class="txt_hidden_umid" />
+                <input type="hidden" class="txt_hidden_operation" />
+            </div>
+            <div class="modal-body">
+                <p class="confirmMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary btn-md" ng-click="ActionSelected()">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!------- END OF DEACTIVATE/RESET MODAL ------->
+
+<!-- ================================== END OF MODALS ================================= -->
+<script>
+    $(function () {
+        var parent = $('.data-management');
+        parent.addClass('menu-open').css({ 'display': 'block' });
+        var elem = $('.btnuser');
+        parent.find('li').each(function () {
+            $(this).removeClass('active');
+        });
+        elem.closest('li').addClass(' active');
+    });
+</script>
