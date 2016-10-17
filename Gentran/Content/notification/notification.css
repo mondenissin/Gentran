@@ -27,7 +27,7 @@
 }
 
 .notifyjs-metro-base .text-wrapper {
-    display: inline-block;
+    /*display: inline-block;*/
     vertical-align: top;
     text-align: left;
     margin: 10px 10px 10px 52px;

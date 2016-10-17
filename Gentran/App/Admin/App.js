@@ -1,7 +1,8 @@
 ﻿var adminModule = angular.module('admin', ['common', 'datatables','sly', 'ui.bootstrap'])
 .config(function ($routeProvider, $locationProvider) {
     var _root = getRoot();
-    $routeProvider.when(_root+'Admin/Users', { templateUrl: _root+'App/Admin/Views/Users/UserList.html', controller: 'userViewModel' });
+    $routeProvider.when(_root + 'Admin/Users', { templateUrl: _root + 'App/Admin/Views/Users/UserList.html', controller: 'userViewModel' });
+    $routeProvider.when(_root + 'Admin/Users-Cards', { templateUrl: _root + 'App/Admin/Views/Users/UserCards.html', controller: 'userViewModel' });
     $routeProvider.when(_root + 'Admin/Products', { templateUrl: _root + 'App/Admin/Views/Prod/ProdList.html', controller: 'prodViewModel' });
     $routeProvider.when(_root + 'Admin/Customers', { templateUrl: _root + 'App/Admin/Views/Cust/CustList.html', controller: 'custViewModel' });
     $routeProvider.when(_root + 'Admin/TransactionLogs', { templateUrl: _root + 'App/Admin/Views/TransLog/TransLogList.html', controller: 'translogViewModel' });
