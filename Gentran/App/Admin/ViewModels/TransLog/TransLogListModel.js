@@ -1,4 +1,4 @@
-﻿adminModule.controller("translogViewModel", function ($scope, adminService, $http, $q, $routeParams, $window, $location, viewModelHelper, DTOptionsBuilder) {
+﻿adminModule.controller("translogViewModel", function ($scope, adminService, $http, $q, $routeParams, $window, $location, viewModelHelper, DTOptionsBuilder, filterFilter) {
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.adminService = adminService;
@@ -7,27 +7,35 @@
         $scope.refreshLogs();
     }
 
-    $scope.currentPage = 1, $scope.numPerPage = 50, $scope.maxSize = 5;
 
     $scope.refreshLogs = function () {
         $scope.search = {};
         $scope.searchBy = "TLId";
 
         viewModelHelper.apiGet('api/logs', null, function (result) {
-            $scope.transactionsPerPage = result.data.detail;
+            $scope.pageSize = 5;
+            $scope.entryLimit = 50;
 
-            $scope.numPages = function () {
-                return Math.ceil($scope.transactionsPerPage.length / $scope.numPerPage);
-            };
+            $scope.transactions = result.data.detail;
 
-            $scope.$watch('currentPage + numPerPage', function () {
-                var begin = (($scope.currentPage - 1) * $scope.numPerPage),
-                  end = begin + $scope.numPerPage;
-
-                $scope.transactions = $scope.transactionsPerPage.slice(begin, end);
+            $scope.$watch('search[searchBy]', function () {
+                $scope.filterList = filterFilter($scope.transactions, $scope.search);
+                $scope.noOfPages = Math.ceil($scope.filterList.length / $scope.entryLimit);
+                $scope.currentPage = 1;
             });
         });
     }
 
+    $scope.clearSearch = function () {
+        $scope.search = {};
+    }
+
     initialize();
+}).filter('start', function () {
+    return function (input, start) {
+        if (!input || !input.length) { return; }
+
+        start = +start;
+        return input.slice(start);
+    };
 });
