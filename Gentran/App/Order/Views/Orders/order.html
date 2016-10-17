@@ -38,9 +38,26 @@
                 <td class="table-data-cqty">{{ o.countulquantity }}</td>
                 <td class="table-data-sqty">{{ o.sumulquantity }}</td>
                 <td class="table-data-uprice">₱{{o.uiprice }}</td>
-                <td><button class="btn btn-default btn-sm " ng-click="getStatus(o)" title="View Details"><i class="fa {{o.uicons}}" aria-hidden="true"></i></button><label class="table-data-ustat">{{o.sStatus}}</label></td>
-                <!--<img onclick="errorDetails(\'' + data.detail[i].ulid + '\',\'' + data.detail[i].ulstatus + '\')" title="View Error Details" src="img/master/error.png">-->
-                <td><a href="#" ng-click="showDetails(o)">Details</a></td>
+                <td style="position:relative;">
+                    <div class="orderOverlay" hidden>
+                        <div class="row">
+                            <div class="col-sm-10 col-md-10 col-md-offset-1" style="overflow:auto;">
+                                <h3 class="text-center text-bold">Read Failed</h3>
+                                <hr />
+                                <ul>
+                                    <li sly-repeat="err in errorPO"><b>{{err.errorDet}}</b></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <button class="btn btn-default btn-sm overlayBtn" ng-click="getStatus(o,$event)" title="View Details"><i class="fa {{o.uicons}}" aria-hidden="true"></i><span class="label-danger" ng-show="o.eCtr" ng-cloak>{{o.eCtr}}</span></button><label class="table-data-ustat">{{o.sStatus}}</label>
+                </td><!--<img onclick="errorDetails(\'' + data.detail[i].ulid + '\',\'' + data.detail[i].ulstatus + '\')" title="View Error Details" src="img/master/error.png">-->
+                <td>
+                    <a href="#" ng-click="showDetails(o)" title="Order Details">Details</a>
+                    <a href="#" ng-click="reuploadPO(o)" title="Reupload" ng-show="o.ulstatus == '11' ? true:false">ReUp</a>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -207,3 +224,45 @@
     </div>
 </div>
 <!-- END MODAL FOR DELETE-->
+
+
+<!-- START UPLOAD MODAL-->
+<div id="reupModal" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Reuploading PO</h4>
+            </div>
+            <div class="modal-body">
+                <div class="map-orders table-responsive">
+                    <div style="position:relative;text-align:center;width:100%;height:40px;background:#f0f0f0;">
+                        <div id="progress" style="position:absolute;top:0px;width:0.9%;height:inherit;background:#e5c638;padding-top:2%;">Reading</div>
+                    </div>
+                    <hr />
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>PO #</th>
+                                <th>Response</th>
+                                <th>Order Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td ng-show="reupRes">{{reupPO.ulponumber}}</td>
+                                <td>{{reupRes.response}}</td>
+                                <td ng-show="reupRes">{{reupPO.ulorderdate}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!--<button class="btn btn-default btn-sm " data-dismiss="modal" title="Wag idelete">No</button>
+                <button class="btn btn-primary btn-sm " ng-click="deleteYes(deleteQueue)" title="Delete Items">Yes</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END UPLOAD MODAL-->

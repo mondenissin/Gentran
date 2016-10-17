@@ -270,4 +270,5 @@ public class Transaction
     public string payloadvalue { get; set; }
     public string changes { get; set; }
     public string operation { get; set; }
+    public string response { get; set; }
 }
