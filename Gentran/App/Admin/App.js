@@ -17,7 +17,7 @@
 adminModule.run(function (DTDefaultOptions) {
     // Display 50 items per page by default
     DTDefaultOptions.setDisplayLength(-1);
-    var cDom = "<'row dt-info'<'col-sm-5 '><'col-sm-7'>>" +
+    var cDom = "<'row dt-info'<'col-sm-5'><'col-sm-7'>>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'><'col-sm-7'>>";
     DTDefaultOptions.setOption('dom', cDom);
