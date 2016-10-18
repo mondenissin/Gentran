@@ -127,6 +127,7 @@
         var chk = false;
         var ctr = 0;
         var listFile = [];
+        var listElem = [];
         
         $('.po-cbx').each(function () {
 
@@ -138,6 +139,10 @@
                 //this.checked = false;
 
                 listFile[ctr] = {};
+
+                listElem[ctr] = {};
+                listElem[ctr].element = $(this.parentElement);
+
                 listFile[ctr].outlet = "SM";
                 listFile[ctr].fileName = this.nextElementSibling.children[0].children[2].textContent;
                 listFile[ctr].fileLogo = this.nextElementSibling.children[0].children[0].outerHTML;
@@ -155,8 +160,10 @@
                 var execTime;
                 function LaodFile() {
                     var fileName = [];
+                    var elemName = [];
                     var items = {};
 
+                    elemName[0] = listElem[i];
                     fileName[0] = listFile[i];
                     items.payload = fileName;
 
@@ -174,7 +181,8 @@
 
                             $('#' + fileName[0].fileID).text("Read Successful");
 
-                            $scope.refreshSM();
+                            $(elemName[0].element).remove();
+                            //$scope.refreshSM();
                         }, execTime);
                     });
 

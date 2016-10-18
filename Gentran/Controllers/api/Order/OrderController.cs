@@ -41,7 +41,8 @@ namespace Gentran.Controllers.api.Order
                             ul.ulstatus,
                             ul.ulremarks,
                             ul.ulfilename,
-                            ui.uiprice 
+                            ui.uiprice,
+                            ul.ulaccount
                             FROM tblUploadLog ul
                             LEFT JOIN (SELECT * from tblCustomerMaster ) cm
                             ON ul.ulcustomer = cm.cmid 
@@ -82,6 +83,7 @@ namespace Gentran.Controllers.api.Order
                 {
                     string icon = "";
                     string sStat = "";
+                    int eCtr = 0;
                     row = new Dictionary<object, object>();
                     foreach (DataColumn col in dt.Columns)
                     {
@@ -100,6 +102,7 @@ namespace Gentran.Controllers.api.Order
                     }
                     row.Add("sStatus", sStat);
                     row.Add("uicons", icon);
+                    row.Add("eCtr", eCtr);
                     rows.Add(row);
                 }
                 

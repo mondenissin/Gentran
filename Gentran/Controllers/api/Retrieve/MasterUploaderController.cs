@@ -48,45 +48,52 @@ namespace Gentran.Controllers.api.Retrieve
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
 
+            bool ifFormatted = false;
             string tempCust = "";
             string[] data = { };
             string[] tempData = new string[8];
-            string[] colName = {"CustNo","PONum","oDate","dDate","ProdCode","qty","uUser","uAcct"};
-            
+            string[] colName = { "CustNo", "PONum", "oDate", "dDate", "ProdCode", "qty", "uUser", "uAcct" };
+
             try
             {
-                if (values.payload[0].outlet == "SM") {
+                if (values.payload[0].outlet == "SM")
+                {
+                    data = csv(values.payload[0].fileName);
+                    ifFormatted = true;
+                }
+                else if (values.payload[0].outlet == "S8") {
+                    //FILE TYPE
+                    //ifFormatted = true;
+                }
+
+                if (ifFormatted)
+                {
                     string[] temp = values.payload[0].fileName.Split('\\');
                     absoluteName = temp[temp.Length - 1];
                     filePath = values.payload[0].fileName;
-                    data = csv(values.payload[0].fileName);
 
                     File.Move(values.payload[0].fileName, @"C:\inetpub\wwwroot\files\Gentran\queued\" + absoluteName);
-                    /*SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
-                    String sQuery = "select * from tblproductmaster";
-                    SqlDataAdapter dataAdap = new SqlDataAdapter(sQuery, connection);
-                    connection.Open();
-                    dataAdap.Fill(dtP);
-                    connection.Close();*/
 
                     for (int x = 0, y = data.Length; x < y; x++)
                     {
                         //string[] split = tempdata[x].Split(',').Where(a => !String.IsNullOrEmpty(a)).ToArray();
                         string[] split = data[x].Split(',');
-                        if(x==1) tempCust = split[0];
+                        if (x == 1) tempCust = split[0];
 
-                        if (split[4] == "") {
+                        if (split[4] == "")
+                        {
                             tempData[0] = split[0];
                             tempData[1] = split[1];
                             tempData[2] = app.toDate((split[2]));
-                            tempData[3] = app.toDate(split[3]);                            
+                            tempData[3] = app.toDate(split[3]);
                             tempData[4] = split[7];
                             tempData[5] = split[8];
                             tempData[6] = HttpContext.Current.Session["UserId"].ToString();
                             tempData[7] = "SM";
 
                             row = new Dictionary<string, object>();
-                            if (tempCust != tempData[0]) {
+                            if (tempCust != tempData[0])
+                            {
                                 ifMult = true;
                                 SaveData(rows);
                                 tempCust = tempData[0];
@@ -94,48 +101,63 @@ namespace Gentran.Controllers.api.Retrieve
                                 rows.Clear();
                             }
 
-                            for (int z=0;z<colName.Length;z++) {
+                            for (int z = 0; z < colName.Length; z++)
+                            {
                                 row.Add(colName[z], tempData[z]);
                             }
                             rows.Add(row);
 
-                            if (x == data.Length-1) {
+                            if (x == data.Length - 1)
+                            {
                                 ifMult = false;
                                 SaveData(rows);
                             }
                         }
                     }
-
-                    //var datas = (from prod in dtP.AsEnumerable() where split.Any(c => c.Equals(prod.Field<string>("PMCode"))) select prod.ItemArray[1]);
-                    //var eDatas = (from prod in dtP.AsEnumerable() where split.Any(c => c!=prod.Field<string>("PMCode")) select prod.ItemArray[1]);
-
-                    //foreach (var d in datas) { map.Add(new MapData { POCode = d.ToString(), CustCode = custcode }); }
-                    //foreach (var d in eDatas) { unmap.Add(new UnmapData { ErrorData = d.ToString() }); }
-
-                    /*for (int z=0,c = split.Length; z<c; z++) {
-                        var product = from prod in dtP.AsEnumerable() where prod.Field<string>("PMCode") == split[z] select prod.ItemArray[1];
-                        //var customer = from cust in dtC.AsEnumerable() where cust.Field<int>("CMCode") == Convert.ToInt32(split[z]) select cust.ItemArray[1];
-                        foreach (var pr in product){
-                            map.Add(new MapData { POCode = pr.ToString(), CustCode = custcode });
-                        }
-                        //foreach (var cc in customer) { custcode = cc.ToString(); }
-
-                        /*row = new Dictionary<string, object>();
-                        row.Add("Error", ex.Message);
-                        rows.Add(row);*/
-                    //}
-
-
-                    //var qwe = map;
-                    //var product = from prod in dt.AsEnumerable() where prod.Field<string>("PMCode") == "PSSC12X110G11" select prod.ItemArray[1];
-                    //string asd = product.ToString();
-
-                    //success = true;
                 }
+                else {
+                    data[0] = "File not formatted!";
+                }
+                #region Version2_Linq
+
+                /*SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
+                String sQuery = "select * from tblproductmaster";
+                SqlDataAdapter dataAdap = new SqlDataAdapter(sQuery, connection);
+                connection.Open();
+                dataAdap.Fill(dtP);
+                connection.Close();*/
+
+                //var datas = (from prod in dtP.AsEnumerable() where split.Any(c => c.Equals(prod.Field<string>("PMCode"))) select prod.ItemArray[1]);
+                //var eDatas = (from prod in dtP.AsEnumerable() where split.Any(c => c!=prod.Field<string>("PMCode")) select prod.ItemArray[1]);
+
+                //foreach (var d in datas) { map.Add(new MapData { POCode = d.ToString(), CustCode = custcode }); }
+                //foreach (var d in eDatas) { unmap.Add(new UnmapData { ErrorData = d.ToString() }); }
+
+                /*for (int z=0,c = split.Length; z<c; z++) {
+                    var product = from prod in dtP.AsEnumerable() where prod.Field<string>("PMCode") == split[z] select prod.ItemArray[1];
+                    //var customer = from cust in dtC.AsEnumerable() where cust.Field<int>("CMCode") == Convert.ToInt32(split[z]) select cust.ItemArray[1];
+                    foreach (var pr in product){
+                        map.Add(new MapData { POCode = pr.ToString(), CustCode = custcode });
+                    }
+                    //foreach (var cc in customer) { custcode = cc.ToString(); }
+
+                    /*row = new Dictionary<string, object>();
+                    row.Add("Error", ex.Message);
+                    rows.Add(row);*/
+                //}
+
+
+                //var qwe = map;
+                //var product = from prod in dt.AsEnumerable() where prod.Field<string>("PMCode") == "PSSC12X110G11" select prod.ItemArray[1];
+                //string asd = product.ToString();
+
+                //success = true;
+                #endregion
+                
             }
             catch (Exception ex)
             {
-                //response = ex.Message;
+                data[0] = ex.Message;
                 success = false;
             }
 
@@ -143,22 +165,6 @@ namespace Gentran.Controllers.api.Retrieve
             var execTime = time.ElapsedMilliseconds;
 
             return new Response { success = success, filecontent = data, execution = execTime, detail = trows};
-            //return new Response { success = success, filecontent = readed, execution = execTime ,detail = map,unmapdetail = unmap};
-            
-            /*
-                bool success = true;
-                string response = "";
-                DateTime now = new DateTime();
-                List<Transaction> rows = new List<Transaction>();
-
-                SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
-                String sQuery = "select * from tblproductmaster left join tblProductStatus on PMStatus = PSId";
-                SqlCommand cmd = new SqlCommand(sQuery, connection);
-
-                string newpaypload = JsonConvert.SerializeObject(values.payload, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
-                rows.Add(new Transaction { type = "KAS", activity = "UPL20", value = "" + values.payload[0].ULPONumber, remarks = response, date = now, user = values.payload[0].ULUser, payloadvalue = newpaypload, changes = "No changes" });
-                return new Response { success = success, detail = rows };*/
         }
 
         // PUT api/masteruploader/5
@@ -186,7 +192,7 @@ namespace Gentran.Controllers.api.Retrieve
         private void SaveData(List<Dictionary<string, object>> data) {
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
             string uQty = "", uPrice = "", uPONum = "", uAcct = "", uODate = "", uDDate = "", uUser = "",uRemarks = "", uCust = "",uID="",uProd="";
-            string response = "";
+            string response = "Successful";
             Boolean NoCustomer = false;
             Boolean validPO = true;
 
@@ -442,7 +448,7 @@ namespace Gentran.Controllers.api.Retrieve
 
 
                     string newpaypload = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                    trows.Add(new Transaction { activity = "UPL20", date = uDate, remarks = uPONum, user = userID, type = "ADM", value = "PO ID:" + uCust + uPONum, changes = "", payloadvalue = newpaypload, customernumber = uCust, ponumber = uPONum });
+                    trows.Add(new Transaction { response = response, activity = "UPL20", date = uDate, remarks = uPONum, user = userID, type = "ADM", value = "PO ID:" + uCust + uPONum, changes = "", payloadvalue = newpaypload, customernumber = uCust, ponumber = uPONum });
 
                     /*}
                     else
@@ -476,7 +482,7 @@ namespace Gentran.Controllers.api.Retrieve
             {
                 try
                 {
-                    String source = @"C:\inetpub\wwwroot\files\pos\scheduled\" + "";
+                    String source = @"C:\inetpub\wwwroot\files\Gentran\scheduled\" + "";
 
                     if (File.Exists(source))
                     {

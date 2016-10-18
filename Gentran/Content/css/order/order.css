@@ -1,0 +1,31 @@
+﻿
+.orderOverlay {
+    position:absolute;
+    width:300px;
+    height:300px;
+    background:white;
+    border:1px solid rgba(239, 83, 80, 0.8);
+    left:-300px;
+    top:-150px;
+    overflow-y:auto;
+}
+
+    .orderOverlay ul {
+        padding-left:25px;
+    }
+
+
+.label-danger {
+    position:absolute;
+    top:1px;
+    right:7px;
+    text-align:center;
+    font-size:9px;
+    padding:2px 3px;
+    line-height:.9;
+    background-color:#dd4b39 !important;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}

@@ -11,7 +11,17 @@
         $scope.ifEdit = true;
         viewModelHelper.apiGet('api/order', null, function (result) {
             console.log(result.data.detail);
-            $scope.order = result.data.detail.filter(x=>x.uiprice = parseInt(x.uiprice).toLocaleString());
+            var orders = result.data.detail.filter(x=>x.uiprice = parseInt(x.uiprice).toLocaleString());
+            orders.filter(x=> {
+                var data = x.ulid + "," + x.ulstatus;
+                if (x.ulstatus < 20) {
+                    viewModelHelper.apiGet('api/ordererrors/' + data, null, function (result) {
+                        x.eCtr = result.data.detail.length;
+                    });
+                }
+            });
+            console.log(orders);
+            $scope.order = orders;
         });
     }
 
@@ -41,6 +51,40 @@
         });
 
         $('#orderDetailsModal').modal('show');
+    }
+
+    $scope.reuploadPO = function (order) {
+        $('#progress').css('width','0.9%');
+        $scope.reupRes = null;
+        $scope.reupPO = order;
+        var items = {};
+        var obj = [];
+        obj[0] = {};
+        obj[0].fileName = "C:\\inetpub\\wwwroot\\files\\Gentran\\failed\\" + order.ulfilename;
+        obj[0].outlet = order.ulaccount;
+        items.payload = obj;
+
+        $('#reupModal').modal('show');
+        
+        viewModelHelper.apiPost('api/masteruploader', JSON.stringify(items), function (result) {
+            var mapData = result.data.filecontent;
+            execTime = result.data.execution;
+            //console.log(mapData);
+            console.log(execTime);
+
+            $('#reupMdal').modal('show');
+
+            $('#progress').animate({ width: '100%' }, execTime);
+            
+            setTimeout(function () {
+                $scope.reupRes = result.data.detail.filter(x=>x.ponumber == order.ulponumber)[0];
+                $('#progress').text("Reupload Completed!");
+                viewModelHelper.saveTransaction(result.data.detail);
+
+                $scope.refreshOrders();
+            }, execTime);
+            
+        });
     }
 
     $scope.submitOrder = function () {
@@ -173,50 +217,67 @@
         console.log($($(event.target))[0].lastChild.className);
     }*/
     
-    $scope.getStatus = function (id) {
+    $scope.getStatus = function (id, $event) {
         var datas = id.ulid + "," + id.ulstatus;
-
+        $scope.errorPO = "";
         if(parseInt(id.ulstatus) < 20){
             viewModelHelper.apiGet('api/ordererrors/' + datas, null, function (result) {
                 //READY FOR BALLOON RESPONSE    
                 if (result.data.success == true) {
-                    
+                    $scope.errorNotifCtr = result.data.detail.length;
                     var productErrorDetail = "";
                     var storeErrorDetail = "";
-
+                    var error = "";
                     for (var i = 0; i < result.data.detail.length; i++) {
-                        var error = "";
                         if (result.data.detail[i].ELType == 'Invalid Product') {
                             if (productErrorDetail == "") {
-                                productErrorDetail = result.data.detail[i].ELDetail;
+                                productErrorDetail = "Invalid Product Code: " + result.data.detail[i].ELDetail + ",";
                             } else {
-                                productErrorDetail += ", " + result.data.detail[i].ELDetail;
+                                productErrorDetail += "Invalid Product Code: " + result.data.detail[i].ELDetail + ",";
                             }
                         }
                         else if (result.data.detail[i].ELType == 'Invalid Customer') {
                             if (storeErrorDetail == "") {
-                                storeErrorDetail = result.data.detail[i].ELDetail;
+                                storeErrorDetail = "Invalid Store Code: " + result.data.detail[i].ELDetail + ",";
                             } else {
-                                storeErrorDetail += ", " + result.data.detail[i].ELDetail;
+                                storeErrorDetail += "Invalid Store Code: " + result.data.detail[i].ELDetail + ",";
                             }
                         }
                         else {
-                            error += result.data.detail[i].ELDetail + "\n";
-                            notif_error("", error);
+                            error += result.data.detail[i].ELDetail + ",";
+                            $scope.errorPO += error;
                         }
 
                     }
-                    if(productErrorDetail!="")
-                        notif_error("Invalid Product Code", productErrorDetail);
-                    if(storeErrorDetail!="")
-                        notif_error("Invalid Store Code", storeErrorDetail);
+                    if (productErrorDetail != "") {
+                        error += productErrorDetail;
+                    }
+                    if (storeErrorDetail != "") {
+                        error += storeErrorDetail;
+                    }
+
+                    var eSplit = error.split(',');
+                    $scope.errorPO = [];
+                    for (var i = 0, j = eSplit.length;i<j-1;i++){
+                        $scope.errorPO[i] = {};
+                        $scope.errorPO[i].errorDet = eSplit[i];
+                    }
+                    showOverlay();
                 } else {
-                    notif_error("Error Detail", result.data.detail);
+                    $scope.errorPO += result.data.detail;
                 }
             });
         }
         else {
             notif_success("New order","Successful");
+        }
+
+        function showOverlay() {
+            var row = $($($($event.target)[0].offsetParent)[0].firstElementChild);
+            row.toggle();
+            $('.overlayBtn').focusout(function () {
+                row.hide();
+            });
         }
     }
 

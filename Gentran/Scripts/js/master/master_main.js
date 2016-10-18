@@ -16,7 +16,7 @@ function previewFile() {
     reader.addEventListener("load", function () {
 
         if (preview.length <= 0) {
-            $('#imgEditProf').remove();
+            $('#imgEditProf').remove(); 
             $('.link-user-imgprof').text('');
             $('.link-user-imgprof').css('line-height', '');
             $('.link-user-imgprof').css('background-color', '');
