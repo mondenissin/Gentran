@@ -17,8 +17,8 @@
     <link rel="stylesheet" href="~/Content/Site.css" />
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-    <div class="fixed" data-ng-app="admin">
-        <header class="main-header" data-ng-controller="rootViewModel">
+    <div class="fixed">
+        <header class="main-header">
             <!-- Logo -->
             <a href='@Url.Content("~/Home/Index")' class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
@@ -59,7 +59,7 @@
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <button ng-click="getUserProfile()" class="btn btn-default btn-flat">Profile</button>
+                                        <button onclick="angular.element($('#actionbar')).scope().getUserProfile()" class="btn btn-default btn-flat">Profile</button>
                                     </div>
                                     <div class="pull-right">
                                         <a href="" class="btn btn-default btn-flat">Sign out</a>
@@ -71,10 +71,10 @@
                 </div>
             </nav>
         </header>
-        <div data-ng-controller="rootViewModel">
+        <div  data-ng-app="admin" data-ng-controller="rootViewModel">
             @RenderSection("header_menu", required: false)
             <div class="content-wrapper">
-                <div class="action_bar">
+                <div class="action_bar" id="actionbar">
                     @RenderSection("action_menu", required: false)
                 </div> 
                 <section class="content">
@@ -222,8 +222,8 @@
             <!-- =================================== END OF MODALS ==================================== -->
 
         </div>
-    </div> 
-
+    </div>
+    @*<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>*@
     <script src="~/Scripts/jquery/jquery-2.2.3.min.js"></script>
     <script src="~/Scripts/plugins/raphael-min.js"></script>
     <script src="~/Scripts/bootstrap-js/bootstrap.js"></script>

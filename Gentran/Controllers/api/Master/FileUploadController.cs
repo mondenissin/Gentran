@@ -57,7 +57,7 @@ namespace Gentran.Controllers.api.Master
             catch (Exception ex)
             {
                 response = ex.Message;
-                success = true;
+                success = false;
             }
 
             return new Response { success = success, detail = response };
