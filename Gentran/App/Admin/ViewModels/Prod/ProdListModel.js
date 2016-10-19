@@ -257,6 +257,31 @@
     }
     // End of Product Mapping -------->
 
+    $scope.fileUpload = function (files) {
+        if (files.length > 0) {
+            if (files[0].name.split('.').pop().toLowerCase() == 'csv') {
+                if (files[0].size <= 1048576) {
+                    var formData = new FormData();
+                    formData.append("file", files[0]);
+                    viewModelHelper.apiFileUpload('api/FileUpload', formData, function (result) {
+                        var data = result.data;
+                        if (data.success == true) {
+                            notif_success('Batch Mapping', data.detail);
+                        } else {
+                            notif_error('Batch Mapping', data.detail);
+                        }
+                    });
+                } else {
+                    notif_error('Batch Mapping', 'Maximim file size has been reached! Must be less than 1MB.');
+                }
+            } else {
+                notif_error('Batch Mapping', 'Invalid file type. Must be a CSV file!');
+            }
+        } else {
+            return false;
+        }
+    }
+
     $scope.clearSearch = function () {
         $scope.search = {};
     }

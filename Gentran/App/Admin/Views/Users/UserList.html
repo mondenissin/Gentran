@@ -24,18 +24,18 @@
                     <th>Email</th>
                     <th>Type</th>
                     <th>Status</th>
-                    <th class="no-sort">Options</th>
+                    <th class="no-sort" style="width: auto!important">Options</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="p in filterList | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
-                    <td ng-cloak> {{p.UMId}} </td>
-                    <td ng-cloak> {{p.UMUsername}} </td>
-                    <td ng-cloak> {{p.UMFirstname}} {{p.UMLastname}} </td>
-                    <td ng-cloak> {{p.UMEmail}} </td>
-                    <td ng-cloak> {{p.UMUType}} </td>
-                    <td ng-cloak> {{p.USStatus}} </td>
-                    <td ng-cloak ng-switch="p.UMStatus">
+                    <td class="table-data-umid" ng-cloak> {{p.UMId}} </td>
+                    <td class="table-data-uname" ng-cloak> {{p.UMUsername}} </td>
+                    <td class="table-data-fname" ng-cloak> {{p.UMFirstname}} {{p.UMLastname}} </td>
+                    <td class="table-data-email" ng-cloak> {{p.UMEmail}} </td>
+                    <td class="table-data-utype" ng-cloak> {{p.UMUType}} </td>
+                    <td class="table-data-ustat" ng-cloak> {{p.USStatus}} </td>
+                    <td class="table-data-uOptions" ng-cloak ng-switch="p.UMStatus">
                         <div class="case" ng-switch-when="ACT">
                             <button class="btn btn-default btn-xs option-icon-size" ng-click="userDetails(p)" title="Edit User Details"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                             <button class="btn btn-default btn-xs option-icon-size" ng-click="ShowConfirmModal('reset',p)" title="Reset"><i class="fa fa-refresh" aria-hidden="true"></i></button>
