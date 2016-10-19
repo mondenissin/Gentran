@@ -371,7 +371,6 @@ button.btn.btn-link i, button.btn.btn-link span {
 }
 .modal-table td img,.modal-table th img
 {
-    float: left;
     padding: 0px;
     width: 20px;
     height: 20px;
@@ -501,6 +500,11 @@ button.btn.btn-link i, button.btn.btn-link span {
 }
 
 /*  */
+div.item {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
 .info-block {
     border: 2px solid black;
 }
@@ -555,8 +559,14 @@ button.btn.btn-link i, button.btn.btn-link span {
     color: #008d00;
 }
 .span-status .inactive {
+    color: blue;
+}
+
+.span-status .deactivated {
     color: red;
 }
+
+
 
 .card-view-imgprof
 {

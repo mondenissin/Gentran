@@ -78,6 +78,22 @@ namespace Gentran.Controllers.api
             {
                 sQuery = "select ATDescription,CAAccount,CACode,CACustomer from tblcustomerassignment left join tblaccounttype on CAAccount = ATId where CACustomer = '" + values.payload[0].cmID + "' order by ATDescription asc";
             }
+            else if (values.operation == "get_userAssignment") //user - customer mapping
+            {
+                sQuery = "select UACustomer,UAUser,UAType,UMFirstname,UMMiddlename,UMLastname from tblUserassignment left join tblUserMaster on UAUser = UMId where UACustomer = '" + values.payload[0].cmID + "' order by UMFirstname asc";
+            }
+            else if (values.operation == "get_users") //user - customer mapping
+            {
+                sQuery = "select UMId, UMFirstname, UMLastname from tblusermaster order by UMLastname,UMFirstname";
+            }
+            else if (values.operation == "get_unassigned_users") //user - customer mapping
+            {
+                sQuery = "select UMId, UMFirstname, UMLastname from tblusermaster where umid not in (" + values.payload[0].keyword + ") order by UMLastname,UMFirstname";
+            }
+            else if (values.operation == "add_users_to_table") //user - customer mapping
+            {
+                sQuery = "select UMId, UMFirstname, UMLastname from tblusermaster where umid in (" + values.payload[0].keyword + ") order by UMLastname,UMFirstname";
+            }
             else
             {
                 sQuery = "select CMId, CMCode, CMDescription, CMStatus, CMArea, COUNT(distinct UAUser) as UCount from tblCustomerMaster left join tblUserAssignment on UACustomer = CMId group by CMId,CMCode, CMDescription, CMStatus,CMArea order by cmid desc";
@@ -185,7 +201,8 @@ namespace Gentran.Controllers.api
                     }
 
                 }
-                else if (values.operation == "update_mapping") {
+                else if (values.operation == "update_mapping")
+                {
 
                     activity = "EDI30";
 
@@ -261,7 +278,7 @@ namespace Gentran.Controllers.api
                     success = true;
                     string ATDescription = "";
 
-                    if (Accounts!= "")
+                    if (Accounts != "")
                     {
                         sQuery = "select distinct CAAccount, ATDescription, CACode, CMCode, CMId from tblCustomerAssignment left join tblCustomerMaster on CMId = CACustomer left join tblAccountType on ATId = CAAccount where CAAccount not in (" + Accounts + ") and CACustomer='" + cmID + "'";
                     }
@@ -295,6 +312,91 @@ namespace Gentran.Controllers.api
 
                         success = true;
                     }
+                    value = cmCode;
+                }
+                else if (values.operation == "update_user_assignment")
+                {
+
+                    activity = "EDI50";
+
+                    string cmID = "";
+                    string umID = "";
+                    string cmCode = "";
+                    
+                    for (int i = 0; i < values.payload.Count; i++)
+                    {
+                        cmID = values.payload[i].cmID;
+                        cmCode = values.payload[i].cmCode;
+                        umID = values.payload[i].umid;
+
+                        sQuery = "select * from tblusermaster where umid='" + umID + "'";
+
+                        connection.Close();
+
+                        connection.Open();
+                        cmd = new SqlCommand(sQuery, connection);
+                        dr = cmd.ExecuteReader();
+                        if (dr.HasRows)
+                        {
+                            connection.Close();
+
+                            sQuery = "select * from tbluserassignment where uauser='" + umID + "' and uacustomer='" + cmID + "'";
+                            connection.Open();
+                            cmd = new SqlCommand(sQuery, connection);
+                            dr2 = cmd.ExecuteReader();
+                            if (!dr2.HasRows)
+                            {
+                                connection.Close();
+                                changes += "Assigned User(" + umID + ") to Customer(" + cmCode + "), ";
+
+                                sQuery = "insert into tbluserassignment select '" + cmID + "','" + umID + "','KAS'";
+                                connection.Open();
+                                cmd = new SqlCommand(sQuery, connection);
+                                cmd.ExecuteNonQuery();
+                                connection.Close();
+                                success = true;
+                            }
+                            connection.Close();
+                        }
+                    }
+
+                    string UMIDs = "";
+                    cmID = values.payload[0].cmID;
+                    cmCode = values.payload[0].cmCode;
+
+
+                    for (int ctr = 0; ctr < values.payload.Count; ctr++)
+                    {
+                        UMIDs += (UMIDs == "") ? values.payload[ctr].umid : "," + values.payload[ctr].umid;
+                    }
+
+                    success = true;
+
+                    sQuery = "select distinct uacustomer, uauser from tbluserassignment where uauser not in (" + UMIDs + ") and uacustomer='" + cmID + "'";
+
+                    connection.Open();
+                    cmd = new SqlCommand(sQuery, connection);
+                    dr = cmd.ExecuteReader();
+                    if (dr.HasRows)
+                    {
+                        sQuery = "";
+                        while (dr.Read())
+                        {
+                            umID = dr["uauser"].ToString();
+                            sQuery += "DELETE FROM tbluserassignment WHERE uacustomer='" + cmID + "' AND uauser='" + umID + "';";
+                            changes += "Delete assignment of User(" + umID + ") to Customer(" + cmCode + "), ";
+                        }
+
+                        dr.Close();
+                        connection.Close();
+
+                        connection.Open();
+                        cmd = new SqlCommand(sQuery, connection);
+                        cmd.ExecuteNonQuery();
+                        connection.Close();
+
+                        success = true;
+                    }   
                     value = cmCode;
                 }
             }
