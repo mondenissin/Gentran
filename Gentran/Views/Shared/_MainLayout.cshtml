@@ -14,6 +14,7 @@
     <link href="~/Content/AdminLTE.min.css" rel="stylesheet" />
     <link href="~/Content/skins/_all-skins.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/Content/Site.css" /> 
+    <link href="~/Content/jquery/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="~/Content/notification/notification.css" rel="stylesheet" />
     <link href="~/Content/notification/waves-effect.css" rel="stylesheet" />
     @RenderSection("styles", required: false)
@@ -25,7 +26,7 @@
             <nav class="navbar navbar-static-top">
                 <div class="container-fluid">
                     <div class="navbar-header">
-                        <a href="#" class="navbar-brand"><b>Admin</b>LTE</a>
+                        <a href="#" class="navbar-brand"><b>Gen</b>tran</a>
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
                             <i class="fa fa-bars"></i>
                         </button>
@@ -93,17 +94,28 @@
                     </footer> 
                 </section>
         </div>
-    </div>
-        @*<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>*@
+    </div> 
+
         <script src="~/Scripts/jquery/jquery-2.2.3.min.js"></script>
         @*<script src="~/Scripts/plugins/raphael-min.js"></script>*@
         <script src="~/Scripts/bootstrap-js/bootstrap.js"></script>
         <script src="~/Scripts/js/app.min.js"></script>
         <script type="text/javascript" src="~/Scripts/js/master/master_ajax.js"></script>
         <script type="text/javascript" src="~/Scripts/angular/angular.js"></script>
+        <script src="~/Scripts/angular/src/ui-bootstrap-tpls-0.3.0.min.js"></script>
         <script type="text/javascript" src="~/Scripts/angular/angular-route.js"></script>
         <script type="text/javascript" src="~/Scripts/js/master/master_main.js"></script>
         
+
+        <script src="~/Scripts/angular/src/jquery.dataTables.js"></script>
+        <script src="~/Scripts/angular/src/dataTables.bootstrap.js"></script>
+        <script src="~/Scripts/angular/src/angular-datatables.js"></script>
+        <script src="~/Scripts/angular/src/angular-datatables.directive.js"></script>
+        <script src="~/Scripts/angular/src/angular-datatables.factory.js"></script>
+        <script src="~/Scripts/angular/src/angular-datatables.options.js"></script>
+        <script src="~/Scripts/angular/src/angular-datatables.renderer.js"></script>
+        <script src="~/Scripts/angular/src/angular-datatables.util.js"></script>
+        <script src="~/Scripts/angular/src/angular-datatables.instances.js"></script>
         <!--NOTIFICTIONS-->
         <script src="~/Scripts/notification/notifications.js"></script>
         <script src="~/Scripts/notification/waves.js"></script>

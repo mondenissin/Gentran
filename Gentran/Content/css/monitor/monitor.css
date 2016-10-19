@@ -1,0 +1,8 @@
+﻿.monitor-menu {
+    height:58px; 
+    line-height:40px;
+}
+
+table.dataTable thead th.sorting_asc:first-child {
+    background:none !important;
+}

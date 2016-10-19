@@ -1,29 +1,45 @@
-﻿monitoringModule.controller("monitoringViewModel", function ($scope, monitoringService, $http, $q, $routeParams, $window, $location, viewModelHelper, DTOptionsBuilder, DTColumnDefBuilder) {
+﻿monitoringModule.controller("monitoringViewModel", function ($scope, monitoringService, $http, $q, $routeParams, $window, $location, viewModelHelper, DTOptionsBuilder, DTColumnDefBuilder, filterFilter) {
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.monitoringService = monitoringService;
 
     var initialize = function () {
-        //$scope.refreshCust();
+        $scope.refreshCust();
     }
 
-    //$scope.refreshCust = function () {
+    $scope.refreshCust = function () {
     //    $scope.search = {};
     //    $scope.searchBy = "CMCode";
 
     //    viewModelHelper.apiGet('api/cust', null, function (result) {
-    //        $scope.customers = result.data.detail;
+    //            $scope.pageSize = 5;
+     //           $scope.entryLimit = 50;
+
+    //          $scope.monitor = result.data.detail;
+
+                //$scope.$watch('search[searchBy]', function () {
+                //    $scope.filterList = filterFilter($scope.monitor, $scope.search);
+                //    $scope.noOfPages = Math.ceil($scope.filterList.length / $scope.entryLimit);
+                //    $scope.currentPage = 1;
+                //});
     //    });
 
-    //    $scope.dtOptions = DTOptionsBuilder.newOptions();
-    //    $scope.dtColumnDefs = [
-    //       DTColumnDefBuilder.newColumnDef('no-sort').notSortable()
-    //    ];
-    //}
+        $scope.dtOptions = DTOptionsBuilder.newOptions();
+        $scope.dtColumnDefs = [
+           DTColumnDefBuilder.newColumnDef('no-sort').notSortable()
+        ];
+    }
 
-    //$scope.addCustomer = function () {
-    //    $('#AddCustomerModal').modal('show');
+    //$scope.clearSearch = function () {
+    //    $scope.search = {};
     //}
 
     initialize();
+}).filter('start', function () {
+    return function (input, start) {
+        if (!input || !input.length) { return; }
+
+        start = +start;
+        return input.slice(start);
+    };
 });

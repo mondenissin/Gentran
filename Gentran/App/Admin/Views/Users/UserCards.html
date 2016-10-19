@@ -14,12 +14,12 @@
         </div>
     </div>
 </div>
-
+<pagination data-boundary-links="true" data-num-pages="noOfPagesCards" data-current-page="currentPage" max-size="pageSize" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
 
 <div class="container-fluid">
     <div class="row">
-        <div class="searchable-container">
-            <div sly-repeat="p in people | filter:search | orderBy : 'UMUsername'" class="items col-xs-12 col-sm-12 col-md-4 col-lg-4 clearfix">
+        <div class="col-md-12 searchable-container">
+            <div sly-repeat="p in filterList | start: (currentPage - 1) * entryLimitCards | limitTo: entryLimitCards | orderBy: 'UMUsername'" class="items col-xs-12 col-sm-12 col-md-4 col-lg-4 clearfix">
 
                 <div class="info-block block-info clearfix">
                     <div class="row card-header">
@@ -58,8 +58,12 @@
 
                         <span class="span-uid">User ID: {{p.UMId}}</span>
                         <span class="span-name">Name: {{p.UMFirstname}} {{p.UMLastname}}</span>
-                        <span class="span-type">Type: {{p.UMType}}</span>
-                        <span class="span-status">Status: <text class="{{p.USStatus == 'Activated' ? 'active' : 'inactive' }}">{{p.USStatus}}</text></span>
+                        <span class="span-type">Type: {{p.UMUType}}</span>
+                        <span class="span-status">Status:
+                            <i class="fa fa-circle text-success" ng-if="p.USStatus == 'Activated'"></i>
+                            <i class="fa fa-circle text-blue" ng-if="p.USStatus == 'Inactive'"></i>
+                            <i class="fa fa-circle text-red" ng-if="p.USStatus == 'Deactivated'"></i>
+                        {{p.USStatus}}</span>
                         <span class="span-email">Email: {{p.UMEmail}}</span>
                     </div>
                 </div>

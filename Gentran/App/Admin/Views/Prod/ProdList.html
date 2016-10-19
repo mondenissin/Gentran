@@ -1,6 +1,6 @@
 ﻿<div class="breadcrumb">
     <button class="btn btn-default btn-xs icon-size" title="Add Product" ng-click="ShowAddProductModal()"><i class="fa fa-plus" aria-hidden="true"></i></button>
-    <button class="btn btn-default btn-xs icon-size" title="Batch Add Product"><i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
+    <button class="btn btn-default btn-xs icon-size" type="button" title="Batch Assign Product" data-toggle="modal" data-target="#batchAssignProduct"><i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
     <div class="pull-right">
         <div class="form-inline">
             <select ng-model="searchBy" class="form-control" ng-change="clearSearch()">
@@ -194,7 +194,46 @@
         </div>
     </div>
 </div>
-<!------- END OF PRODUCT DETAILS MODAL -------> 
+<!------- END OF PRODUCT DETAILS MODAL ------->
+
+<div id="batchAssignProduct" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Batch Assign Product</h4>
+            </div>
+            <div class="modal-body">
+                <div class="progress" style="float:none;display:none;"></div>
+                <div class="upload-image" style="display:none;"></div>
+                <div class="batch-log table-responsive" style="display:none;">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>MNC Code</th>
+                                <th>Product Code</th>
+                                <th>Account</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <div class="dropzone" id="dropzone" style="display:block;">
+                    <label class="file-upload">
+                        <input type="file" id="fuBatch" onchange="angular.element(this).scope().fileUpload(this.files)" name="default" multiple="multiple" class="file-upload-class" />
+                        <span class="batch-content">CLICK TO BROWSE OR DRAG/DROP FILES HERE</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!------- END OF BATCH ASSIGN PRODUCT MODAL ------------> 
 
 
 <script>

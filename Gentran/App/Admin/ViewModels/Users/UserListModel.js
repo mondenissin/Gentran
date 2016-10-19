@@ -14,12 +14,16 @@
         viewModelHelper.apiGet('api/userlist', null, function (result) {
             $scope.pageSize = 5;
             $scope.entryLimit = 50;
+            $scope.entryLimitCards = 12;
 
             $scope.people = result.data.detail;
 
             $scope.$watch('search[searchBy]', function () {
                 $scope.filterList = filterFilter($scope.people, $scope.search);
+
                 $scope.noOfPages = Math.ceil($scope.filterList.length / $scope.entryLimit);
+                $scope.noOfPagesCards = Math.ceil($scope.filterList.length / $scope.entryLimitCards);
+
                 $scope.currentPage = 1;
             });
         });
@@ -113,9 +117,7 @@
                     resetFields();                      
                     $('#AddUserModal').modal('hide');
 
-                    setTimeout(function () {
-                        $route.reload();
-                    }, 300);
+                    $scope.refreshUser();
 
                     notif_success('Add User', 'User Successfully added!');
 

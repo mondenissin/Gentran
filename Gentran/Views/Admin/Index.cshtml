@@ -6,7 +6,9 @@
 @section styles{
 <link href="~/Content/AdminLTE.min.css" rel="stylesheet" />
 <link href="~/Content/skins/_all-skins.min.css" rel="stylesheet" />  
-<link href="~/Content/ngDialog.css" rel="stylesheet" />  
+<link href="~/Content/ngDialog.css" rel="stylesheet" /> 
+
+<link href="~/Content/bootstrap/bootstrap-select.css" rel="stylesheet" />    
 }
 
 @section scripts{
@@ -18,6 +20,7 @@
     <script src="~/App/Admin/ViewModels/Cust/CustListModel.js"></script>
     <script src="~/App/Admin/ViewModels/TransLog/TransLogListModel.js"></script>
 
+    <script src="~/Scripts/bootstrap-js/bootstrap-select.min.js"></script>
     <script src="~/Scripts/js/admin/users.js"></script> @*MNS20161011*@
 }
 
@@ -29,25 +32,13 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="~/Images/shermaine.jpg" class="img-circle" alt="User Image">
+                <img src="~/Images/master/default.png" class="img-circle img_userProfPic" alt="User Image">
             </div>
             <div class="pull-left info">
-                <p>Shermaine Gae Tan</p>
+                <p><span class="lbl_userfullname">Lorem ipsum</span></p>
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
-        <!-- search form -->
-        <form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="Search...">
-                <span class="input-group-btn">
-                    <button type="submit" name="search" id="search-btn" class="btn btn-flat">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </span>
-            </div>
-        </form>
-        <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
                 <li class="header">MAIN NAVIGATION</li>

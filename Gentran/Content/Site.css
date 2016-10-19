@@ -287,6 +287,10 @@ button.btn.btn-link i, button.btn.btn-link span {
     padding: 4px 10px!important;
 }
 
+th.options {
+    width: 10%!important;
+}
+
 .page-table table td label
 {
     float:left;
@@ -350,7 +354,155 @@ button.btn.btn-link i, button.btn.btn-link span {
     width: 10%!important;
 }
 
+.table-data-umid{
+    align-content: left;
+    text-align: right!important;
+    width: 5%!important;
+}
+.table-data-uname{
+    text-align:left!important;
+    width: 25%!important;
+}
+.table-data-fname{ 
+    text-align:left!important;
+    width: 25%!important;
+}
+.table-data-email{
+    text-align:left!important;
+    width: 5%!important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.table-data-utype{
+    text-align:left!important;
+    width: 20%!important;
+    white-space: nowrap;
+}
+.table-data-ustat{
+    text-align:center!important;
+    width: 10%!important;
+}
+.table-data-uOptions {
+    text-align:left!important; 
+    width: 10%!important;
+}
+
 /* ======================================== END OF PAGE TABLE ========================================== */
+
+/* ============================================== FILE UPLOAD =========================================*/
+
+ .dropzone
+{
+    width:90%;
+    margin:20px auto;
+    background:#f1f1f1;
+    overflow:hidden;
+    border:2px dashed #ccc;
+}
+.dropzone.dragover
+{
+    border-color:#000;
+    color:#000;
+}
+.file-upload-class
+{
+    position:fixed;
+    top:-2000px;
+}
+.file-upload {
+    display:inline-block;
+    width:100%;
+    height:350px;
+    text-align:center;
+    line-height:350px;
+    cursor:pointer;
+}
+/*GMC UPDATES 07082016*/
+
+.progress-bar
+{
+    margin-bottom:1%;   
+}
+.progress-bar-fill-load
+{
+    width:0%;
+    background:#00b300;
+    height:35px;
+    line-height:35px;
+}
+.batch-log
+{
+    height:250px;
+    overflow:auto;    
+}
+.progress-bar-txt
+{
+    height:35px;
+    line-height:35px;
+    margin:-3px auto 0 43%;
+    overflow:hidden;
+    color:#000;
+    position:absolute;
+}
+.upload-image
+{
+    display:inline-block;
+    width:100%;
+    height:120px;
+    overflow:auto;
+    margin:20px auto;
+    border:2px solid #ddd;
+}
+.upload-image-icon
+{
+    position:relative;
+    margin: 10px 20px;
+    display:inline-block;
+    overflow:hidden;
+    border-radius:10px;
+    width:80px;
+    height:110px;
+    text-align:center;
+}
+.upload-image-icon img, .img-link
+{
+    width:100%;
+    height:70%;
+}
+.img-check
+{
+    display:none;
+    width:35px;
+    height:35px;
+    line-height:35px;
+    margin:-3px 0 0 38%;
+    overflow:hidden;
+    color:#000;
+    position: absolute;
+}
+
+.progress {
+    height: 30px;
+}
+
+.upload-log {
+    max-height: 250px;
+    overflow-y:scroll;
+}
+
+div[dropzone] {
+    border: 2px dashed #bbb;
+    border-radius: 5px;
+    padding: 25px;
+    text-align: center;
+    font: 20pt bold;
+    color: #bbb;
+    margin-bottom: 20px;
+}
+
+ /* ============================================== END OF FILE UPLOAD =========================================*/
+
 /* ======================================== MODAL TABLE ========================================== */
 .modal-table tr.table-row-edit td
 {
@@ -371,7 +523,6 @@ button.btn.btn-link i, button.btn.btn-link span {
 }
 .modal-table td img,.modal-table th img
 {
-    float: left;
     padding: 0px;
     width: 20px;
     height: 20px;
@@ -501,6 +652,11 @@ button.btn.btn-link i, button.btn.btn-link span {
 }
 
 /*  */
+div.item {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
 .info-block {
     border: 2px solid black;
 }
@@ -555,8 +711,14 @@ button.btn.btn-link i, button.btn.btn-link span {
     color: #008d00;
 }
 .span-status .inactive {
+    color: blue;
+}
+
+.span-status .deactivated {
     color: red;
 }
+
+
 
 .card-view-imgprof
 {
@@ -609,4 +771,12 @@ button.btn.btn-link i, button.btn.btn-link span {
 }
 
 
-/* ======================================= MODALS ============================================= */
+
+/* ======================================= User Panel ============================================= */
+
+.user-panel>.image>img {
+    height: 45px;
+}
+.navbar-nav>.user-menu>.dropdown-menu>li.user-header {
+    height: auto;
+}

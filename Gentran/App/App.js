@@ -7,6 +7,8 @@ var mainModule = angular.module('main', ['common']);
 
 commonModule.factory('viewModelHelper', function ($http, $q, $window, $location) { return MyApp.viewModelHelper($http, $q, $window, $location); });
 
+
+
 (function (myApp) {
     var viewModelHelper = function ($http, $q, $window, $location) {
 
@@ -42,6 +44,28 @@ commonModule.factory('viewModelHelper', function ($http, $q, $window, $location)
         self.apiPost = function (uri, data, success, failure) {
             self.modelIsValid = true;
             $http.post(MyApp.rootPath + uri, data)
+                .then(function (result) {
+                    success(result);
+                }, function (result) {
+                    if (failure !== null) {
+                        failure(result);
+                    }
+                    else {
+                        var errorMessage = result.status + ':' + result.statusText;
+                        if (result.data !== null && result.data.Message !== null)
+                            errorMessage += ' - ' + result.data.Message;
+                        self.modelErrors = [errorMessage];
+                        self.modelIsValid = false;
+                    }
+                });
+        };
+
+        self.apiFileUpload = function (uri, data, success, failure) {
+            self.modelIsValid = true;
+            $http.post(MyApp.rootPath + uri, data, {
+                transformRequest: angular.identity,
+                headers: { 'Content-Type': undefined }
+                })
                 .then(function (result) {
                     success(result);
                 }, function (result) {
@@ -102,7 +126,21 @@ commonModule.factory('viewModelHelper', function ($http, $q, $window, $location)
             });
 
         }
+        self.loadUserProfile = function () {
+            var data = {};
+            data.operation = 'get_user_profile';
 
+            self.apiGet('api/master', data, function (result) {
+                var data = result.data;
+                for (var i = 0; i < data.detail.length; i++) {
+                    $('.img_userProfPic').prop('src', data.detail[i].UMImage);
+                    $('.lbl_userfullname').text(data.detail[i].UMFirstname + ' ' + data.detail[i].UMLastname);
+                    $('.lbl_username').text(data.detail[i].UMUsername);
+                    $('.lbl_userid').text(data.detail[i].UMId);
+                    $('.lbl_usertype').text(data.detail[i].UTDescription);
+                }
+            });
+        }
         self.goBack = function () {
             $window.history.back();
         };
@@ -122,7 +160,11 @@ commonModule.factory('viewModelHelper', function ($http, $q, $window, $location)
             return myApp.rootPath;
         };
 
+        self.loadUserProfile();
+
         return this;
     };
+
+    
     myApp.viewModelHelper = viewModelHelper;
 }(window.MyApp));

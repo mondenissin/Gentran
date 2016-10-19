@@ -1,4 +1,4 @@
-﻿var monitoringModule = angular.module('monitoring', ['common'])
+﻿var monitoringModule = angular.module('monitoring', ['common', 'datatables', 'sly', 'ui.bootstrap'])
     .config(function ($routeProvider, $locationProvider) {
         var _root = getRoot();
         $routeProvider.when(_root + 'Monitoring', { templateUrl: _root + 'App/Monitoring/Views/POMonitoring/pomonitoring.html', controller: 'monitoringViewModel' });
@@ -8,6 +8,15 @@
             requireBase: false
         });
     });
+
+monitoringModule.run(function (DTDefaultOptions) {
+    // Display 50 items per page by default
+    DTDefaultOptions.setDisplayLength(-1);
+    var cDom = "<'row dt-info'<'col-sm-5 '><'col-sm-7'>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-5'><'col-sm-7'>>";
+    DTDefaultOptions.setOption('dom', cDom);
+});
 
 monitoringModule.factory('monitoringService', function ($rootScope, $http, $q, $location, viewModelHelper) { return MyApp.monitoringService($rootScope, $http, $q, $location, viewModelHelper); });
 
