@@ -1,4 +1,4 @@
-﻿var orderModule = angular.module('order', ['common','sly'])
+﻿var orderModule = angular.module('order', ['common', 'datatables', 'sly', 'ui.bootstrap'])
     .config(function ($routeProvider, $locationProvider) {
         var _root = getRoot();
         $routeProvider.when(_root + 'Order/OrderList', { templateUrl: _root + 'App/Order/Views/Orders/order.html', controller: 'orderViewModel' });
@@ -9,8 +9,16 @@
         });
     });
 
-orderModule.factory('orderService', function ($rootScope, $http, $q, $location, viewModelHelper) { return MyApp.orderService($rootScope, $http, $q, $location, viewModelHelper); });
+orderModule.run(function (DTDefaultOptions) {
+    // Display 50 items per page by default
+    DTDefaultOptions.setDisplayLength(-1);
+    var cDom = "<'row dt-info'<'col-sm-5 '><'col-sm-7'>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-5'><'col-sm-7'>>";
+    DTDefaultOptions.setOption('dom', cDom);
+});
 
+orderModule.factory('orderService', function ($rootScope, $http, $q, $location, viewModelHelper) { return MyApp.orderService($rootScope, $http, $q, $location, viewModelHelper); });
 
 (function (myApp) {
     var orderService = function ($rootScope, $http, $q, $location, viewModelHelper) {
