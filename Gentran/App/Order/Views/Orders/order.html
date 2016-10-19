@@ -1,16 +1,27 @@
-﻿<div class="row">
-    <div class="col-md-4">
-        <a href="#" ng-click="refreshOrders()"><span class="glyphicon glyphicon-refresh"></span></a>
+﻿<div class="breadcrumb order-menu">
+    <b class="page-top-header">Order Lists</b>
+    <div class="pull-right">
+        <div class="form-inline">
+            <select ng-model="searchBy" class="form-control" ng-change="clearSearch()">
+                <option value="ulponumber" selected>PO Number</option>
+                <option value="ulcustomer">Customer Number</option>
+                <option value="cmdescription">Customer Name</option>
+            </select>
+            <input type="text" ng-model="search[searchBy]" ng-model-options="{debounce: {'default': 100, 'blur': 0}}" class="form-control" placeholder="Search" />
+        </div>
     </div>
 </div>
-<div class="container">
-    <button class="btn btn-primary pull-right" ng-click="deleteOrder()">Delete</button>
-    <button class="btn btn-primary pull-right" ng-click="submitOrder()">Submit</button>
-    <hr />
-    <table class="table table-striped table-hover">
+<div class="page-table">
+
+    <button class="btn btn-default btn-xs icon-size" ng-click="submitOrder()" title="Submit Orders"><i class="fa fa-paper-plane"></i></button>
+    <button class="btn btn-default btn-xs icon-size" ng-click="deleteOrder()" title="Delete Orders"><i class="fa fa-trash-o"></i></button>
+  
+    <pagination data-boundary-links="true" data-num-pages="noOfPages" data-current-page="currentPage" max-size="pageSize" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
+    
+    <table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-responsive table-bordered bordered table-striped table-condensed datatable">
         <thead>
             <tr>
-                <th class="no-sort">
+                <th class="no-sort" id="no-sort">
                     <input id="cbxMain" class="styled cbxMain" type="checkbox" ng-model="allOrders" />
                 </th>
                 <th>PO #</th>
@@ -26,20 +37,20 @@
                 <th class="no-sort">Options</th>
             </tr>
         </thead>
-        <tbody sly-repeat="o in order">
-            <tr ng-cloak>
-                <td><input id="{{o.ul}}" class="cbxSub" type="checkbox" ng-checked="allOrders"/></td>
-                <td class="table-data-ponum">{{ o.ulponumber }}</td>
-                <td class="table-data-ucust">{{ o.ulcustomer }}</td>
-                <td class="table-data-cdesc">{{ o.cmdescription}}</td>
-                <td class="table-data-uodate">{{ o.ulorderdate }}</td>
-                <td class="table-data-uddate">{{ o.uldeliverydate }}</td>
-                <td class="table-data-uudate">{{ o.uluploaddate }}</td>
-                <td class="table-data-cqty">{{ o.countulquantity }}</td>
-                <td class="table-data-sqty">{{ o.sumulquantity }}</td>
-                <td class="table-data-uprice">₱{{o.uiprice }}</td>
-                <td style="position:relative;">
-                    <div class="orderOverlay" hidden>
+        <tbody>
+            <tr ng-repeat="o in filterList | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
+                <td ng-cloak style="text-align: center;"><input id="{{o.ul}}" class="cbxSub" type="checkbox" ng-checked="allOrders" /></td>
+                <td ng-cloak class="table-data-ponum">{{ o.ulponumber }}</td>
+                <td ng-cloak class="table-data-ucust">{{ o.ulcustomer }}</td>
+                <td ng-cloak class="table-data-cdesc" style="width:30%;">{{ o.cmdescription}}</td>
+                <td ng-cloak class="table-data-uodate">{{ o.ulorderdate }}</td>
+                <td ng-cloak class="table-data-uddate">{{ o.uldeliverydate }}</td>
+                <td ng-cloak class="table-data-uudate">{{ o.uluploaddate }}</td>
+                <td ng-cloak class="table-data-cqty">{{ o.countulquantity }}</td>
+                <td ng-cloak class="table-data-sqty">{{ o.sumulquantity }}</td>
+                <td ng-cloak class="table-data-uprice">₱{{o.uiprice }}</td>
+                <td ng-cloak style="position:relative;width:30%;">
+                    <!--<div class="orderOverlay" hidden>
                         <div class="row">
                             <div class="col-sm-10 col-md-10 col-md-offset-1" style="overflow:auto;">
                                 <h3 class="text-center text-bold">Read Failed</h3>
@@ -49,220 +60,240 @@
                                 </ul>
                             </div>
                         </div>
+                    </div>-->
+
+                    <!-- START MODAL FOR ERROR OF ORDERS-->
+                    <div id="ErrorModal" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title"><i class="fa fa-exclamation-circle" style="color:red;"></i> Error Details for PO #: <b style="color:red;">{{ o.ulponumber }}</b></h4>
+                                </div>
+                                <div class="modal-body" style="overflow-y:scroll; height:426px; overflow:hidden">
+                                    <table class="table table-striped">
+                                        <tr sly-repeat="err in errorPO" >
+                                            <td>{{err.errorDet}}</td>
+                                        </tr>
+                                    </table>
+                                        
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default btn-sm pull-right" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <!-- END MODAL FOR ERROR OF ORDERS-->
 
                     
-                    <button class="btn btn-default btn-sm overlayBtn" ng-click="getStatus(o,$event)" title="View Details"><i class="fa {{o.uicons}}" aria-hidden="true"></i><span class="label-danger" ng-show="o.eCtr" ng-cloak>{{o.eCtr}}</span></button><label class="table-data-ustat">{{o.sStatus}}</label>
+                    <span class="table-data-ustat">{{o.sStatus}}&nbsp;</span><button class="btn btn-default btn-xs option-icon-size overlayBtn" ng-click="getStatus(o,$event)" data-toggle="modal" data-target="#ErrorModal" title="View Details"><i class="fa {{o.uicons}}" aria-hidden="true" style="color: {{ o.uicons == 'fa-check' ? 'green' : 'red';  }} "><span class="label-danger" ng-show="o.eCtr" ng-cloak>{{o.eCtr}}</span></i></button>
                 </td><!--<img onclick="errorDetails(\'' + data.detail[i].ulid + '\',\'' + data.detail[i].ulstatus + '\')" title="View Error Details" src="img/master/error.png">-->
-                <td>
-                    <a href="#" ng-click="showDetails(o)" title="Order Details">Details</a>
-                    <a href="#" ng-click="reuploadPO(o)" title="Reupload" ng-show="o.ulstatus == '11' ? true:false">ReUp</a>
+                <td ng-cloak>
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="showDetails(o)" title="Order Details"><i class="fa fa-info"></i></button>
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="reuploadPO(o)" title="Reupload" ng-show="o.ulstatus == '11' ? true:false"><i class="fa fa-upload"></i></button>
                 </td>
             </tr>
         </tbody>
     </table>
+    <pagination data-boundary-links="true" data-num-pages="noOfPages" data-current-page="currentPage" max-size="pageSize" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
 </div>
-
-<!-- START MODAL FOR ORDERS TO BE SUBMITTED-->
-<div id="submitModal" class="modal fade" data-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Submitting Orders</h4>
-            </div>
-            <div class="modal-body">
-                <div class="map-orders table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>PO #</th>
-                                <th>Customer #</th>
-                                <th>Customer Name</th>
-                                <th>Order Date</th>
-                                <th>Total Quantity</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr sly-repeat="sq in submitQueue">
-                                <td>{{sq.PONum}}</td>
-                                <td>{{sq.CustNum}}</td>
-                                <td>{{sq.CustName}}</td>
-                                <td>{{sq.OrderDate}}</td>
-                                <td>{{sq.Quantity}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+   
+    <!-- START MODAL FOR ORDERS TO BE SUBMITTED-->
+    <div id="submitModal" class="modal fade" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Submitting Orders</h4>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">No</button>
-                <button type="button" class="btn btn-primary btn-sm" ng-click="submittingOrders(submitQueue)">Yes</button>
+                <div class="modal-body">
+                    <div class="map-orders table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>PO #</th>
+                                    <th>Customer #</th>
+                                    <th>Customer Name</th>
+                                    <th>Order Date</th>
+                                    <th>Total Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr sly-repeat="sq in submitQueue">
+                                    <td>{{sq.PONum}}</td>
+                                    <td>{{sq.CustNum}}</td>
+                                    <td>{{sq.CustName}}</td>
+                                    <td>{{sq.OrderDate}}</td>
+                                    <td>{{sq.Quantity}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-primary btn-sm" ng-click="submittingOrders(submitQueue)">Yes</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!-- END MODAL FOR ORDERS TO BE SUBMITTED-->
+    <!-- END MODAL FOR ORDERS TO BE SUBMITTED-->
+    <!-- START MODAL FOR ORDERS DETAIL-->
+    <div id="orderDetailsModal" class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Order Details</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>PO Number:</label>
+                                    <input id="txt_ponum" class="form-control input-sm" type="text" disabled ng-model="ordersInfo.txt_ponum">
+                                </div>
 
+                                <div class="form-group">
+                                    <label>Customer Number:</label>
+                                    <input id="txt_custnum" class="form-control input-sm" type="text" disabled ng-model="ordersInfo.txt_custnum">
+                                </div>
 
-<!-- START MODAL FOR ORDERS DETAIL-->
-<div id="orderDetailsModal" class="modal fade">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Order Details</h4>
-            </div>
-            <div class="modal-body">
-                <form role="form">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>PO Number:</label>
-                                <input id="txt_ponum" class="form-control input-sm" type="text" disabled ng-model="ordersInfo.txt_ponum">
+                                <div class="form-group">
+                                    <label>Order Date:</label>
+                                    <input id="txt_orderdate" class="form-control input-sm" type="date" disabled ng-model="ordersInfo.txt_orderdate">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Delivery Date:</label>
+                                    <input id="txt_deliverydate" class="form-control input-sm" type="date" title="Day/Month/Year" disabled ng-model="ordersInfo.txt_deliverydate">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Remarks / Ship to: </label>
+                                    <input id="txt_remarks" class="form-control input-sm" type="text" disabled ng-model="ordersInfo.txt_remarks">
+                                </div>
                             </div>
-
-                            <div class="form-group">
-                                <label>Customer Number:</label>
-                                <input id="txt_custnum" class="form-control input-sm" type="text" disabled ng-model="ordersInfo.txt_custnum">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Order Date:</label>
-                                <input id="txt_orderdate" class="form-control input-sm" type="date" disabled ng-model="ordersInfo.txt_orderdate">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Delivery Date:</label>
-                                <input id="txt_deliverydate" class="form-control input-sm" type="date" title="Day/Month/Year" disabled ng-model="ordersInfo.txt_deliverydate">
-                            </div>
-
-                            <div class="form-group">    
-                                <label>Remarks / Ship to: </label>
-                                <input id="txt_remarks" class="form-control input-sm" type="text" disabled ng-model="ordersInfo.txt_remarks">
+                            <div class="col-md-9">
+                                <div class="table-responsive table-order-height" id="order_table">
+                                    <table id="tbl_orders"  class="table table-responsive table-striped table-condensed table-order" >
+                                        <thead>
+                                            <tr>
+                                                <th>SKU</th>
+                                                <th style="width:120px;">Description</th>
+                                                <th>Quantity</th>
+                                                <th>Price</th>
+                                                <th>Total Price</th>
+                                                <!--<th class="no-sort">Options</th>-->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr sly-repeat="oi in orderItems">
+                                                <td>{{oi.UIProduct}}</td>
+                                                <td>{{oi.PMDescription}}</td>
+                                                <td>{{oi.UIQuantity}}</td>
+                                                <td>₱ {{oi.UIPrice}}</td>
+                                                <td>₱ {{oi.UITPrice}}</td>
+                                                <!--<td><button class="btn btn-default btn-sm " ng-click="delItem(oi,$event)" title="Delete Item" ng-hide="ifEdit"><i class="fa fa-trash" aria-hidden="true"></i></button></td>-->
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-9">
-                            <div class="table-responsive" id="order_table">
-                                <table id="tbl_orders" class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>SKU</th>
-                                            <th>Description</th>
-                                            <th>Quantity</th>
-                                            <th>Price</th>
-                                            <th>Total Price</th>
-                                            <!--<th class="no-sort">Options</th>-->
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr sly-repeat="oi in orderItems">
-                                            <td>{{oi.UIProduct}}</td>
-                                            <td>{{oi.PMDescription}}</td>
-                                            <td>{{oi.UIQuantity}}</td>
-                                            <td>₱ {{oi.UIPrice}}</td>
-                                            <td>₱ {{oi.UITPrice}}</td>
-                                            <!--<td><button class="btn btn-default btn-sm " ng-click="delItem(oi,$event)" title="Delete Item" ng-hide="ifEdit"><i class="fa fa-trash" aria-hidden="true"></i></button></td>-->
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                    </form>
+                </div>
+                <div class="modal-footer" id="modal-footer-orderDetails">
+                    <input type="hidden" id="txt_account" />
+                    <input type="hidden" id="txt_id" />
+                    <input type="hidden" id="txt_status" />
+                    <button class="btn btn-danger btn-sm  pull-left" ng-click="deleteThis(ordersInfo.txt_orderid)" title="Delete this Item?">Delete</button>
+                    <button class="btn btn-primary btn-sm " ng-click="editDetails($event)" title="Edit Items" ng-show="ifEditable">Edit</button>
+                    <input type="submit" class="btn btn-default btn-sm" id="btn_editorder_save_cancel" style="display:none;" data-dismiss="modal" value="Cancel" onclick="HideSaveBtn_order()" />
+                    <input type="submit" class="btn btn-primary btn-sm" id="btn_editorder_save" value="Save" style="display:none;" onclick="kas_saveOrders()" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END MODAL FOR ORDERS DETAIL-->
+    <!-- START MODAL FOR DELETE-->
+    <div id="deleteModal" class="modal fade" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Delete files below?</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="map-orders table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>PO #</th>
+                                    <th>Customer #</th>
+                                    <th>Custoomer Name</th>
+                                    <th>Order date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr sly-repeat="dq in deleteQueue">
+                                    <td>{{dq.PONum}}</td>
+                                    <td>{{dq.CustNum}}</td>
+                                    <td>{{dq.CustName}}</td>
+                                    <td>{{dq.OrderDate}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm " data-dismiss="modal" title="Wag idelete">No</button>
+                    <button class="btn btn-primary btn-sm " ng-click="deleteYes(deleteQueue)" title="Delete Items">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END MODAL FOR DELETE-->
+    <!-- START UPLOAD MODAL-->
+    <div id="reupModal" class="modal fade" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Reuploading PO</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="map-orders table-responsive">
+                        <div style="position:relative;text-align:center;width:100%;height:40px;background:#f0f0f0;">
+                            <div id="progress" style="position:absolute;top:0px;width:0.9%;height:inherit;background:#e5c638;padding-top:2%;">Reading</div>
                         </div>
+                        <hr />
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>PO #</th>
+                                    <th>Response</th>
+                                    <th>Order Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td ng-show="reupRes">{{reupPO.ulponumber}}</td>
+                                    <td>{{reupRes.response}}</td>
+                                    <td ng-show="reupRes">{{reupPO.ulorderdate}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer" id="modal-footer-orderDetails">
-                <input type="hidden" id="txt_account" />
-                <input type="hidden" id="txt_id" />
-                <input type="hidden" id="txt_status" />
-                <button class="btn btn-danger btn-sm  pull-left" ng-click="deleteThis(ordersInfo.txt_orderid)" title="Delete this Item?">Delete</button>
-                <button class="btn btn-primary btn-sm " ng-click="editDetails($event)" title="Edit Items" ng-show="ifEditable">Edit</button>
-                <input type="submit" class="btn btn-default btn-sm" id="btn_editorder_save_cancel" style="display:none;" data-dismiss="modal" value="Cancel" onclick="HideSaveBtn_order()" />
-                <input type="submit" class="btn btn-primary btn-sm" id="btn_editorder_save" value="Save" style="display:none;" onclick="kas_saveOrders()" />
-            </div>
-        </div>
-    </div>
-</div>
-<!-- END MODAL FOR ORDERS DETAIL-->
-
-
-<!-- START MODAL FOR DELETE-->
-<div id="deleteModal" class="modal fade" data-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Delete files below?</h4>
-            </div>
-            <div class="modal-body">
-                <div class="map-orders table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>PO #</th>
-                                <th>Customer #</th>
-                                <th>Custoomer Name</th>
-                                <th>Order date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr sly-repeat="dq in deleteQueue">
-                                <td>{{dq.PONum}}</td>
-                                <td>{{dq.CustNum}}</td>
-                                <td>{{dq.CustName}}</td>
-                                <td>{{dq.OrderDate}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                </div>
+                <div class="modal-footer">
+                    <!--<button class="btn btn-default btn-sm " data-dismiss="modal" title="Wag idelete">No</button>
+                    <button class="btn btn-primary btn-sm " ng-click="deleteYes(deleteQueue)" title="Delete Items">Yes</button>-->
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-default btn-sm " data-dismiss="modal" title="Wag idelete">No</button>
-                <button class="btn btn-primary btn-sm " ng-click="deleteYes(deleteQueue)" title="Delete Items">Yes</button>
-            </div>
         </div>
     </div>
-</div>
-<!-- END MODAL FOR DELETE-->
-
-
-<!-- START UPLOAD MODAL-->
-<div id="reupModal" class="modal fade" data-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Reuploading PO</h4>
-            </div>
-            <div class="modal-body">
-                <div class="map-orders table-responsive">
-                    <div style="position:relative;text-align:center;width:100%;height:40px;background:#f0f0f0;">
-                        <div id="progress" style="position:absolute;top:0px;width:0.9%;height:inherit;background:#e5c638;padding-top:2%;">Reading</div>
-                    </div>
-                    <hr />
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>PO #</th>
-                                <th>Response</th>
-                                <th>Order Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td ng-show="reupRes">{{reupPO.ulponumber}}</td>
-                                <td>{{reupRes.response}}</td>
-                                <td ng-show="reupRes">{{reupPO.ulorderdate}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <!--<button class="btn btn-default btn-sm " data-dismiss="modal" title="Wag idelete">No</button>
-                <button class="btn btn-primary btn-sm " ng-click="deleteYes(deleteQueue)" title="Delete Items">Yes</button>-->
-            </div>
-        </div>
-    </div>
-</div>
-<!-- END UPLOAD MODAL-->
+    <!-- END UPLOAD MODAL-->

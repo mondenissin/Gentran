@@ -1,4 +1,4 @@
-﻿orderModule.controller("orderViewModel", function ($sce, $scope, orderService, $http, $q, $routeParams, $window, $location, viewModelHelper, $timeout) {
+﻿orderModule.controller("orderViewModel", function ($sce, $scope, orderService, $http, $q, $routeParams, $window, $location, viewModelHelper, $timeout, DTOptionsBuilder, DTColumnDefBuilder, filterFilter) {
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.orderService = orderService;
@@ -8,9 +8,15 @@
     }
 
     $scope.refreshOrders = function () {
+        $scope.search = {};
+        $scope.searchBy = "ulponumber";
         $scope.ifEdit = true;
+
         viewModelHelper.apiGet('api/order', null, function (result) {
             console.log(result.data.detail);
+            $scope.pageSize = 5;
+            $scope.entryLimit = 50;
+
             var orders = result.data.detail.filter(x=>x.uiprice = parseInt(x.uiprice).toLocaleString());
             orders.filter(x=> {
                 var data = x.ulid + "," + x.ulstatus;
@@ -21,8 +27,19 @@
                 }
             });
             console.log(orders);
-            $scope.order = orders;
+            $scope.order = result.data.detail;
+
+            $scope.$watch('search[searchBy]', function () {
+                $scope.filterList = filterFilter($scope.order, $scope.search);
+                $scope.noOfPages = Math.ceil($scope.filterList.length / $scope.entryLimit);
+                $scope.currentPage = 1;
+            });
         });
+
+        $scope.dtOptions = DTOptionsBuilder.newOptions();
+        $scope.dtColumnDefs = [
+           DTColumnDefBuilder.newColumnDef('no-sort').notSortable()
+        ];
     }
 
     $scope.showDetails = function (order) {
@@ -52,6 +69,7 @@
 
         $('#orderDetailsModal').modal('show');
     }
+
 
     $scope.reuploadPO = function (order) {
         $('#progress').css('width','0.9%');
@@ -260,9 +278,9 @@
                     $scope.errorPO = [];
                     for (var i = 0, j = eSplit.length;i<j-1;i++){
                         $scope.errorPO[i] = {};
-                        $scope.errorPO[i].errorDet = eSplit[i];
+                        $scope.errorPO[i].errorDet = i + 1 + '. ' + eSplit[i];
                     }
-                    showOverlay();
+                    //showOverlay();
                 } else {
                     $scope.errorPO += result.data.detail;
                 }
@@ -272,13 +290,13 @@
             notif_success("New order","Successful");
         }
 
-        function showOverlay() {
-            var row = $($($($event.target)[0].offsetParent)[0].firstElementChild);
-            row.toggle();
-            $('.overlayBtn').focusout(function () {
-                row.hide();
-            });
-        }
+        //function showOverlay() {
+        //    var row = $($($($event.target)[0].offsetParent)[0].firstElementChild);
+        //    row.toggle();
+        //    $('.overlayBtn').focusout(function () {
+        //        row.hide();
+        //    });
+        //}
     }
 
     var cust = "";
@@ -351,5 +369,16 @@
         }
     }
 
+    $scope.clearSearch = function () {
+        $scope.search = {};
+    }
+
     initialize();
+}).filter('start', function () {
+    return function (input, start) {
+        if (!input || !input.length) { return; }
+
+        start = +start;
+        return input.slice(start);
+    };
 });
