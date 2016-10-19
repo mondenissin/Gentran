@@ -12,6 +12,10 @@
         //$scope.pageHeading = "User Section";
     }
 
+    $scope.dashBoardv1 = function () {
+        viewModelHelper.navigateTo('Admin/Dashboard');
+    }
+
     $scope.userList = function () {
         viewModelHelper.navigateTo('Admin/Users');
     }

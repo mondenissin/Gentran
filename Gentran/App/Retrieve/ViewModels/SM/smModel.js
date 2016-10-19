@@ -170,7 +170,7 @@
                     viewModelHelper.apiPost('api/masteruploader', JSON.stringify(items), function (result) {
                         var mapData = result.data.filecontent;
                         execTime = result.data.execution;
-                        //console.log(mapData);
+                        console.log(result.data.filecontent);
                         console.log(execTime);
                         $('#' + fileName[0].fileID).text("Reading");
                         $('#' + fileName[0].fileID).animate({ width: '100%' }, execTime);

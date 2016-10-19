@@ -65,7 +65,7 @@ namespace Gentran.Controllers.api.Retrieve
                     //FILE TYPE
                     //ifFormatted = true;
                 }
-
+                
                 if (ifFormatted)
                 {
                     string[] temp = values.payload[0].fileName.Split('\\');
@@ -82,14 +82,14 @@ namespace Gentran.Controllers.api.Retrieve
 
                         if (split[4] == "")
                         {
-                            tempData[0] = split[0];
-                            tempData[1] = split[1];
-                            tempData[2] = app.toDate((split[2]));
-                            tempData[3] = app.toDate(split[3]);
-                            tempData[4] = split[7];
-                            tempData[5] = split[8];
-                            tempData[6] = HttpContext.Current.Session["UserId"].ToString();
-                            tempData[7] = "SM";
+                            tempData[0] = split[0]; // Customer Code
+                            tempData[1] = split[1]; // PO Number
+                            tempData[2] = app.toDate((split[2])); // Order date
+                            tempData[3] = app.toDate(split[3]); // Delivery date
+                            tempData[4] = split[7]; // Product Code 
+                            tempData[5] = split[8]; // Quantity
+                            tempData[6] = HttpContext.Current.Session["UserId"].ToString(); // User ID
+                            tempData[7] = "SM"; // Outlet
 
                             row = new Dictionary<string, object>();
                             if (tempCust != tempData[0])

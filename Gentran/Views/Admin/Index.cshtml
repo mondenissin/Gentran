@@ -12,6 +12,7 @@
 @section scripts{
     <script src="~/App/Admin/App.js"></script>
     <script src="~/App/Admin/RootViewModel.js"></script>
+    <script src="~/App/Admin/ViewModels/Dashboard/DashboardModel.js"></script>
     <script src="~/App/Admin/ViewModels/Users/UserListModel.js"></script>
     <script src="~/App/Admin/ViewModels/Prod/ProdListModel.js"></script>
     <script src="~/App/Admin/ViewModels/Cust/CustListModel.js"></script>
@@ -53,7 +54,13 @@
                 <li>
                     <a href="#">
                         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
                     </a>
+                    <ul class="treeview-menu ">
+                        <li><button class="btn btn-link" ng-click="dashBoardv1()"><i class="fa fa-blind"></i>Pre-build v1.0</button></li>
+                    </ul>
                 </li>
                 <li class="treeview">
                     <a href="#">

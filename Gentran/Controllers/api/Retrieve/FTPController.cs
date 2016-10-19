@@ -45,15 +45,15 @@ namespace Gentran.Controllers.api
                 Stream responseStream = response.GetResponseStream();
                 StreamReader reader = new StreamReader(responseStream);
                 StringBuilder strInfo = new StringBuilder();
-                string line = reader.ReadLine().ToString();
-
-                while (line != null)
-                {
+                //string line = reader.ReadLine().ToString();
+                string line = "";
+                
+                while (!string.IsNullOrEmpty((line = reader.ReadLine()))) {
                     if (!(File.Exists(@"C:\inetpub\wwwroot\files\ftp\" + line)))
                     {
                         string inputfilepath = @"C:\inetpub\wwwroot\files\ftp\" + line;
-                        string ftpfullpath = m_ftpSite +"/"+ line;
-                        
+                        string ftpfullpath = m_ftpSite + "/" + line;
+
                         using (WebClient webreq = new WebClient())
                         {
                             webreq.Credentials = new NetworkCredential(m_strUsername, m_strPassword);
@@ -72,37 +72,30 @@ namespace Gentran.Controllers.api
                             response2.Close();
                         }
                     }
-                    line = reader.ReadLine().ToString();
                 }
                 response.Close();
-            }
-            catch(Exception ex){
-                string asd = ex.Message;
-                if (ex.Message != "Object reference not set to an instance of an object.")
+                
+                fileList.Clear();
+                fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp", "*.pdf"));
+                fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp", "*.txt"));
+                fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp", "*.csv"));
+
+                int intCount = 0;
+                intCount = fileList.Count;
+                string[] array = new string[intCount];
+
+                for (int i = 0; i < intCount; i++)
                 {
-                    success = false;
                     row = new Dictionary<string, object>();
-                    row.Add("error", ex.Message);
+                    row.Add("files", fileList[i]);
                     rows.Add(row);
                 }
-                else {
-
-                    fileList.Clear();
-                    fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp", "*.pdf"));
-                    fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp", "*.txt"));
-                    fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp", "*.csv"));
-
-                    int intCount = 0;
-                    intCount = fileList.Count;
-                    string[] array = new string[intCount];
-
-                    for (int i = 0; i < intCount; i++)
-                    {
-                        row = new Dictionary<string, object>();
-                        row.Add("files", fileList[i]);
-                        rows.Add(row);
-                    }
-                }
+            }
+            catch(Exception ex){
+                success = false;
+                row = new Dictionary<string, object>();
+                row.Add("error", ex.Message);
+                rows.Add(row);
             }
 
             return new Response { success = success,detail = rows };
