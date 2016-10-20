@@ -10,7 +10,6 @@
 
     }
 
-
     $scope.refreshCust = function () {
         $scope.search = {};
         $scope.searchBy = "CMCode";

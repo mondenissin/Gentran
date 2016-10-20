@@ -36,7 +36,7 @@ function submitLogin() {
             $('#lblErrorMsg').text('Login Success');
             $('#lblErrorMsg').fadeIn();
             setTimeout(function () {
-                window.location.href = MyApp.rootPath + "Retrieve/Index";
+                window.location.href = MyApp.rootPath + "Retrieve";
             },1000);
         } else {
             console.log("Login Failed");

@@ -13,11 +13,13 @@
             
             if (result.data.success) {
                 $scope.files = result.data.detail.map(function (obj) {
+                    console.log(obj.files);
                     var rObj = {};
                     var split = obj.files.split('\\');
                     var ext = split[split.length - 1].split('.');
                     rObj["files"] = split[split.length - 1];
                     rObj["directory"] = obj.files;
+                    rObj["thumbnail"] = "../Images/thumbnails/"+ ext[0] +".jpg";
                     rObj["extension"] = "../Images/files/" + ext[ext.length - 1] + ".png";
 
                     return rObj;

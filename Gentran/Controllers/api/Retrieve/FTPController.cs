@@ -7,6 +7,9 @@ using System.Web.Http;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using Aspose.Cells;
+using Aspose.Cells.Rendering;
+using System.Drawing;
 
 namespace Gentran.Controllers.api
 {
@@ -89,6 +92,24 @@ namespace Gentran.Controllers.api
                     row = new Dictionary<string, object>();
                     row.Add("files", fileList[i]);
                     rows.Add(row);
+
+                    //FOR THUMBNAILS
+                    String imageDir = "";
+                    String[] aName = fileList[i].Split('\\');
+                    String sName = aName[aName.Length - 1].Replace(" ", "");
+                    sName = sName.Substring(0, sName.IndexOf('.'));
+                    imageDir = @"C:\inetpub\wwwroot\files\ftp\thumbnails\" + sName + ".jpg";
+
+                    Workbook book = new Workbook(fileList[i]);
+                    Worksheet sheet = book.Worksheets[0];
+
+                    ImageOrPrintOptions imgOptions = new ImageOrPrintOptions();
+                    imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Jpeg;
+                    imgOptions.OnePagePerSheet = true;
+
+                    SheetRender sr = new SheetRender(sheet, imgOptions);
+                    Bitmap bitmap = sr.ToImage(0);
+                    bitmap.Save(imageDir);
                 }
             }
             catch(Exception ex){
