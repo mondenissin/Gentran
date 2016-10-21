@@ -141,6 +141,100 @@ commonModule.factory('viewModelHelper', function ($http, $q, $window, $location)
                 }
             });
         }
+
+        self.readAssign = function (gen, type) {
+            var storage = [];
+            var ics = 1;
+            for (var s = 0; s < gen.length; s++) {
+                var th = gen[s].split(',');
+
+                if (th[0] != "" && th[1] != "" && th[2] != "") {
+                    storage[s] = th[0] + "," + th[1] + "," + th[2];
+                }
+            }
+           // console.log(storage);
+            self.SaveAssign(storage, type)
+        }
+
+        self.SaveAssign = function (dstorage, type) {
+            var upitems = [];
+            var chson = 0;
+            var x = 1;
+            loopR();
+            function loopR() {
+                if (dstorage[x] != null) {
+                    var th = dstorage[x].split(',');
+                    upitems[chson] = {};
+
+                    if (type == "cust") {
+                        upitems[chson].cmCode = th[0];
+                        upitems[chson].caCode = th[1];
+                        upitems[chson].acctype = th[2];
+                    } else if (type == "prod") {
+                        upitems[chson].pmcode = th[0];
+                        upitems[chson].pacode = th[1];
+                        upitems[chson].acctype = th[2];
+                    }
+
+                    chson++;
+                    x++;
+                    loopR();
+                }
+            }
+            self.SavingAssignForReal(upitems, type);
+        }
+
+        self.SavingAssignForReal = function (upitems, type) {
+
+            var url = type == "cust" ? "api/cust" : "api/prod";
+
+            var rData = {};
+            rData.operation = 'batch_mapping';
+            rData.payload = _payloadParser(upitems);
+            self.apiPost(url, rData, function (result) {
+                var data = result.data;
+                if (data.success === true) {
+
+                    $('.upload-image').empty();
+                    $('.dropzone').css('display', 'none');
+                    $('.upload-image').css('display', 'block');
+                    $('.progress').append('<div id="load" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"><img src="../Images/master/check-white.png" class="img-check"/><div id="txtProgress" class="progress-bar-txt">Reading 1 of 1</div></div>');
+                    $('.progress').css('display', 'block');
+                    $('.batch-log').css('display', 'block');
+
+                    fileLogo = '<div class="upload-image-icon">';
+                    fileLogo += '<img src="../Images/files/csv.png">';
+                    fileLogo += '</div>';
+                    $('.upload-image').append(fileLogo);
+                    $('.batch-log table tbody tr td').remove();
+
+                    for (var i = 0; i < data.detail.length; i++) {
+                        tr = '<tr>';
+                        tr = tr + '<td>' + data.detail[i].MNC + '</td>';
+                        tr = tr + '<td>' + data.detail[i].CODE + '</td>';
+                        tr = tr + '<td>' + data.detail[i].ACCT + '</td>';
+                        tr = tr + '<td>' + data.detail[i].REMARKS + '</td>';
+                        tr = tr + '</tr>';
+                        $('.batch-log table tbody').append(tr);
+                    }
+                    $(".progress-bar-striped").animate({
+                        width: 100 + "%"
+                    }, 1000, function () {
+                        $('.img-check').css('display', 'block');
+                        $('.progress-bar-txt').text("Read Successful!");
+                        $('.progress-bar.active').css('animation', 'none');
+                        $('input#fuBatch').val('');
+                        $('.notifyjs-metro-info').closest('.notifyjs-wrapper').remove();
+                    });
+                } else {
+                    $('input#fuBatch').val('');
+                    $('.notifyjs-metro-info').closest('.notifyjs-wrapper').remove();
+                    notif_error('Product Mapping', 'An error occured while reading your file. Please refresh your browser then try again.');
+                }
+            });
+        }
+
+
         self.goBack = function () {
             $window.history.back();
         };

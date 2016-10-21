@@ -10,7 +10,6 @@
 
     }
 
-
     $scope.refreshCust = function () {
         $scope.search = {};
         $scope.searchBy = "CMCode";
@@ -436,14 +435,21 @@
     }
 
     $scope.ValidateUserAssignment = function () {
-        var Item = [];
-        $('#ModalTable_UserAssignment tbody tr:visible').each(function (index) {
-            Item[index] = {};
-            Item[index]["umid"] = $(this).find('.tbl-data-umid').text();
-            Item[index]["cmID"] = $('#txt_UAcustID').val();
-            Item[index]["cmCode"] = $('#spn_UAcustCode').text();
-        });
-        $scope.SaveUserAssignment(Item);
+        if ($('#ModalTable_UserAssignment tbody tr:visible').length > 0) {
+            var Item = [];
+            $('#ModalTable_UserAssignment tbody tr:visible').each(function (index) {
+                Item[index] = {};
+                Item[index]["umid"] = $(this).find('.tbl-data-umid').text();
+                Item[index]["cmID"] = $('#txt_UAcustID').val();
+                Item[index]["cmCode"] = $('#spn_UAcustCode').text();
+            });
+            $scope.SaveUserAssignment(Item);
+        } else {
+            notif_info('User to Customer Assignment', 'No changes made.');
+            $('#UserAssignmentModal').modal('hide');
+        }
+
+        
     }
 
     $scope.SaveUserAssignment = function (Item) {
@@ -461,7 +467,7 @@
                     viewModelHelper.saveTransaction(data.detail);
                     $scope.refreshCust();
                 } else {
-                    notif_info('User to Customer Assignmen', 'No changes made.');
+                    notif_info('User to Customer Assignment', 'No changes made.');
                 }
             } else {
                 notif_error('User to Customer Assignment', data.detail)
@@ -471,6 +477,73 @@
 
     // End of Customer to User Assignment -----/>
 
+    //<!-------  Product Batch Customer
+    $scope.showBatchModal = function () {
+
+        $('.upload-image').empty();
+        $('.dropzone').css('display', 'block');
+        $('.upload-image').css('display', 'none');
+        $('.progress-bar').remove();
+        $('.progress').css('display', 'none');
+        $('.batch-log').css('display', 'none');
+        $('.batch-log table tbody tr td').remove();
+
+        $('.batchAssignModal').modal('show');
+    }
+
+    $scope.fileUpload = function (files) {
+        if (files.length == 1) {
+            if (files[0].name.split('.').pop().toLowerCase() == 'csv') {
+                if (files[0].size <= 1048576) {
+                    var formData = new FormData();
+                    formData.append("file", files[0]);
+                    viewModelHelper.apiFileUpload('api/FileUpload', formData, function (result) {
+                        var data = result.data;
+                        if (data.success == true) {
+                            notif_info('Batch Mapping', 'Reading you file...');
+
+                            var Item = {};
+                            Item.fileName = data.detail;
+
+                            $scope.data = {};
+                            $scope.data.operation = 'read_csv';
+                            $scope.data.payload = _payloadParser(Item);
+
+                            viewModelHelper.apiGet('api/FileUpload', $scope.data, function (result) {
+                                var data = result.data;
+                                if (data.success == true) {
+                                    viewModelHelper.readAssign(data.filecontent, 'cust');
+                                }
+                                else {
+                                    notif_error('Batch Mapping', data.detail);
+                                }
+
+                            });
+
+
+                        } else {
+                            notif_error('Batch Mapping', data.detail);
+                        }
+                    });
+                } else {
+                    notif_error('Batch Mapping', 'Maximim file size has been reached! Must be less than 1MB.');
+                }
+            } else {
+                notif_error('Batch Mapping', 'Invalid file type. Must be a CSV file!');
+            }
+        }
+        else if (files.length > 1) {
+            notif_warning('Batch Mapping', 'You must drag one(1) CSV file at a time!');
+        }
+        else {
+            return false;
+        }
+    }
+
+    $scope.ondrop = function (files) {
+        $scope.fileUpload(files);
+    };
+    // End of Product Batch Mapping -------->
     
     $scope.clearSearch = function() {
         $scope.search = {};

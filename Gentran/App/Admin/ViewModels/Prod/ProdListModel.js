@@ -1,4 +1,4 @@
-﻿adminModule.controller("prodViewModel", function ($scope, adminService, $http, $q, $routeParams, $window, $location, $timeout, viewModelHelper, DTOptionsBuilder, DTColumnDefBuilder, $route, filterFilter) {
+﻿adminModule.controller("prodViewModel", function ($scope, adminService, $http, $q, $routeParams, $window, $location, $timeout, viewModelHelper, DTOptionsBuilder, DTColumnDefBuilder, $route, filterFilter, $log) {
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.adminService = adminService;
@@ -257,8 +257,22 @@
     }
     // End of Product Mapping -------->
 
+    //<!-------  Product Batch Mapping
+    $scope.showBatchModal = function () {
+
+        $('.upload-image').empty();
+        $('.dropzone').css('display', 'block');
+        $('.upload-image').css('display', 'none');
+        $('.progress-bar').remove();
+        $('.progress').css('display', 'none');
+        $('.batch-log').css('display', 'none');
+        $('.batch-log table tbody tr td').remove();
+
+        $('.batchAssignModal').modal('show');
+    }
+
     $scope.fileUpload = function (files) {
-        if (files.length > 0) {
+        if (files.length == 1) {
             if (files[0].name.split('.').pop().toLowerCase() == 'csv') {
                 if (files[0].size <= 1048576) {
                     var formData = new FormData();
@@ -266,7 +280,28 @@
                     viewModelHelper.apiFileUpload('api/FileUpload', formData, function (result) {
                         var data = result.data;
                         if (data.success == true) {
-                            notif_success('Batch Mapping', data.detail);
+                            notif_info('Batch Mapping', 'Reading you file...');
+
+                            var Item = {};
+                            Item.fileName = data.detail;
+
+                            $scope.data = {};
+                            $scope.data.operation = 'read_csv';
+                            $scope.data.payload = _payloadParser(Item);
+
+                            viewModelHelper.apiGet('api/FileUpload', $scope.data, function (result) {
+                                var data = result.data;
+                                if (data.success == true) {
+                                    //console.log(data.filecontent);
+                                    viewModelHelper.readAssign(data.filecontent, 'prod');
+                                }
+                                else {
+                                    notif_error('Batch Mapping', data.detail);
+                                }
+
+                            });
+
+
                         } else {
                             notif_error('Batch Mapping', data.detail);
                         }
@@ -277,10 +312,19 @@
             } else {
                 notif_error('Batch Mapping', 'Invalid file type. Must be a CSV file!');
             }
-        } else {
+        }
+        else if (files.length > 1) {
+            notif_warning('Batch Mapping', 'You must drag one(1) CSV file at a time!');
+        }
+        else {
             return false;
         }
     }
+
+    $scope.ondrop = function (files) {
+        $scope.fileUpload(files);
+    };
+    // End of Product Batch Mapping -------->
 
     $scope.clearSearch = function () {
         $scope.search = {};

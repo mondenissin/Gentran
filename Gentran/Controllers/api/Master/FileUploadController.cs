@@ -19,8 +19,33 @@ namespace Gentran.Controllers.api.Master
         {
         }
 
-        public void Get(string id)
+        public object Get([FromUri] string value)
         {
+            Data values = JsonConvert.DeserializeObject<Data>(value);
+            string[] text = { };
+            bool success = false;
+            string response = "";
+            try {
+                string filepath;
+                filepath = values.payload[0].fileName;
+                if (values.operation == "read_csv") {
+                    text = File.ReadAllLines(filepath);
+                    success = true;
+                    if (File.Exists(filepath))
+                    {
+                        File.Delete(filepath);
+                    }
+                }
+                 
+
+            }
+            catch (Exception ex) {
+                response = ex.Message;
+                success = false;
+            }
+            
+             
+            return new Response { success = success, filecontent = text, detail = response };
         }
         public object Post()
         {
@@ -39,19 +64,21 @@ namespace Gentran.Controllers.api.Master
 
                 string fileName = DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString() + DateTime.Now.Millisecond.ToString() + Path.GetExtension(file.FileName).ToLower();
 
+                string filePath = path + fileName;
+
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
                 }
 
-                if (File.Exists(path))
+                if (File.Exists(filePath))
                 {
-                    File.Delete(path);
+                    File.Delete(filePath);
                 }
 
-                file.SaveAs(path + fileName);
+                file.SaveAs(filePath);
 
-                response = fileName;
+                response = filePath;
                 success = true;
             }
             catch (Exception ex)

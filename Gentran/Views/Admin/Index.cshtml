@@ -22,6 +22,8 @@
 
     <script src="~/Scripts/bootstrap-js/bootstrap-select.min.js"></script>
     <script src="~/Scripts/js/admin/users.js"></script> @*MNS20161011*@
+   
+<script src="~/Scripts/angular/src/ng-fileDrop.min.js"></script>
 }
 
 @section header_menu {
@@ -80,9 +82,11 @@
 }
 
 <!-- Body -->
-<section class="content-body">
-    <div class="page-table" style="overflow-x: scroll;">
-        <div data-ng-view>
+<section class="content-body container-fluid">
+    <div class="row">
+        <div class="page-table col-md-12" style="overflow-x: auto;">
+            <div data-ng-view>
+            </div>
         </div>
     </div>
 </section>
