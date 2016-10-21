@@ -19,7 +19,7 @@
                     var ext = split[split.length - 1].split('.');
                     rObj["files"] = split[split.length - 1];
                     rObj["directory"] = obj.files;
-                    rObj["thumbnail"] = "../Images/thumbnails/"+ ext[0] +".jpg";
+                    rObj["thumbnail"] = "../Images/thumbnails/" + ext[0].replace(" ", "") + ".jpg";
                     rObj["extension"] = "../Images/files/" + ext[ext.length - 1] + ".png";
 
                     return rObj;
@@ -160,6 +160,7 @@
                 $('#mapModal').modal('show');
                 var i = 0, count = listFile.length;
                 var execTime;
+
                 function LaodFile() {
                     var fileName = [];
                     var elemName = [];

@@ -65,7 +65,7 @@ namespace Gentran.Controllers.api.Retrieve
                     //FILE TYPE
                     //ifFormatted = true;
                 }
-                
+                /*
                 if (ifFormatted)
                 {
                     string[] temp = values.payload[0].fileName.Split('\\');
@@ -117,7 +117,7 @@ namespace Gentran.Controllers.api.Retrieve
                 }
                 else {
                     data[0] = "File not formatted!";
-                }
+                }*/
                 #region Version2_Linq
 
                 /*SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);

@@ -15,6 +15,7 @@
     <script src="~/App/Admin/App.js"></script>
     <script src="~/App/Admin/RootViewModel.js"></script>
     <script src="~/App/Admin/ViewModels/Dashboard/DashboardModel.js"></script>
+    <script src="~/App/Admin/ViewModels/Reports/TransactionModel.js"></script>
     <script src="~/App/Admin/ViewModels/Users/UserListModel.js"></script>
     <script src="~/App/Admin/ViewModels/Prod/ProdListModel.js"></script>
     <script src="~/App/Admin/ViewModels/Cust/CustListModel.js"></script>
@@ -71,7 +72,13 @@
                 <li>
                     <a href="#">
                         <i class="fa fa-bar-chart"></i> <span>Reports</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
                     </a>
+                    <ul class="treeview-menu ">
+                        <li><button class="btn btn-link" ng-click="reportTranslog()"><i class="fa fa-users"></i>Transactions</button></li>
+                    </ul>
                 </li>
             </ul>
     </section>

@@ -40,6 +40,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Cells">
+      <HintPath>..\..\..\THUMBNAIL DLL'S\net4.0\Aspose.Cells.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -130,8 +133,11 @@
     <Compile Include="Controllers\api\Admin\CustController.cs" />
     <Compile Include="Controllers\api\Admin\LogsController.cs" />
     <Compile Include="Controllers\api\Admin\ProdController.cs" />
+    <Compile Include="Controllers\api\Admin\ReportsController.cs" />
     <Compile Include="Controllers\api\Admin\UserListController.cs" />
     <Compile Include="Controllers\api\Login\LoginController.cs" />
+    <Compile Include="Controllers\api\Master\FileUploadController.cs" />
+    <Compile Include="Controllers\api\Master\MasterController.cs" />
     <Compile Include="Controllers\api\Master\TransactionsController.cs" />
     <Compile Include="Controllers\api\Order\DeleteOrderController.cs" />
     <Compile Include="Controllers\api\Order\OrderController.cs" />
@@ -155,12 +161,17 @@
     <Content Include="App\Admin\App.js" />
     <Content Include="App\Admin\RootViewModel.js" />
     <Content Include="App\Admin\ViewModels\Cust\CustListModel.js" />
+    <Content Include="App\Admin\ViewModels\Dashboard\DashboardModel.js" />
     <Content Include="App\Admin\ViewModels\Prod\ProdListModel.js" />
+    <Content Include="App\Admin\ViewModels\Reports\TransactionModel.js" />
     <Content Include="App\Admin\ViewModels\TransLog\TransLogListModel.js" />
     <Content Include="App\Admin\ViewModels\Users\UserListModel.js" />
     <Content Include="App\Admin\Views\Cust\CustList.html" />
+    <Content Include="App\Admin\Views\Dashboard\Dashboard.html" />
     <Content Include="App\Admin\Views\Prod\ProdList.html" />
+    <Content Include="App\Admin\Views\Reports\Transaction.html" />
     <Content Include="App\Admin\Views\TransLog\TransLogList.html" />
+    <Content Include="App\Admin\Views\Users\UserCards.html" />
     <Content Include="App\Admin\Views\Users\UserList.html" />
     <Content Include="App\App.js" />
     <Content Include="App\Monitoring\App.js" />
@@ -276,6 +287,7 @@
     <Content Include="Images\master\check-white.png" />
     <Content Include="Images\master\check.png" />
     <Content Include="Images\master\cork-board.png" />
+    <Content Include="Images\master\default.png" />
     <Content Include="Images\master\delete.png" />
     <Content Include="Images\master\download.ico" />
     <Content Include="Images\master\download.png" />
@@ -1155,6 +1167,10 @@
     <Content Include="Scripts\js\login\login.js" />
     <Content Include="Scripts\js\master\master_ajax.js" />
     <Content Include="Scripts\js\master\master_main.js" />
+    <Content Include="Scripts\notification\notifications.js" />
+    <Content Include="Scripts\notification\notify-metro.js" />
+    <Content Include="Scripts\notification\notify.min.js" />
+    <Content Include="Scripts\notification\waves.js" />
     <Content Include="Scripts\plugins\raphael-min.js" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
@@ -1163,7 +1179,6 @@
     <Content Include="Views\Order\Index.cshtml" />
     <Content Include="Views\Retrieve\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Web.config">
@@ -1185,6 +1200,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\css\order\" />
     <Folder Include="Controllers\api\Monitoring\" />
+    <Folder Include="Images\thumbnails\" />
     <Folder Include="Scripts\angular\i18n\ngLocale\" />
   </ItemGroup>
   <ItemGroup>

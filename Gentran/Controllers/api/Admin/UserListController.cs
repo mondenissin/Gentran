@@ -180,7 +180,6 @@ namespace Gentran.Controllers.api
         // PUT api/userlis/5
         public object Put([FromBody]Data values)
         {
-
             string activity = "";
 
             DateTime now = new DateTime();

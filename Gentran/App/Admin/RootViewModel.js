@@ -12,6 +12,10 @@
         //$scope.pageHeading = "User Section";
     }
 
+    $scope.reportTranslog = function () {
+        viewModelHelper.navigateTo('Admin/reports/translog');
+    }
+
     $scope.dashBoardv1 = function () {
         viewModelHelper.navigateTo('Admin/Dashboard');
     }

@@ -115,6 +115,10 @@ public class Value
 
     public string changes { get; set; }
 
+    public string dateFrom { get; set; }
+    
+    public string dateTo { get; set; }
+
     //------ERROR LOG------//
 
     public string errorResult { get; set; }
@@ -256,6 +260,7 @@ public class Response
     public string payloadvalue { get; set; }
     public long execution { get; set; }
     public string notiftext { get; set; }
+    public object reports { get; set; }
 }
 public class Transaction
 {

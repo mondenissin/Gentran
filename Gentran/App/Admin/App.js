@@ -8,6 +8,7 @@
     $routeProvider.when(_root + 'Admin/TransactionLogs', { templateUrl: _root + 'App/Admin/Views/TransLog/TransLogList.html', controller: 'translogViewModel' });
     $routeProvider.when(_root + 'Admin/Connections', { templateUrl: _root + 'App/Admin/Views/Connections/ConnectionList.html', controller: 'connectionViewModel' });
     $routeProvider.when(_root + 'Admin/Dashboard', { templateUrl: _root + 'App/Admin/Views/Dashboard/Dashboard.html', controller: 'dashViewModel' });
+    $routeProvider.when(_root + 'Admin/reports/translog', { templateUrl: _root + 'App/Admin/Views/Reports/Transaction.html', controller: 'reportViewModel' });
     $routeProvider.otherwise({ redirectTo: _root + 'Admin' });
     $locationProvider.html5Mode({
         enabled: true,

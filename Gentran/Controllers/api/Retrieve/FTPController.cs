@@ -98,7 +98,9 @@ namespace Gentran.Controllers.api
                     String[] aName = fileList[i].Split('\\');
                     String sName = aName[aName.Length - 1].Replace(" ", "");
                     sName = sName.Substring(0, sName.IndexOf('.'));
-                    imageDir = @"C:\inetpub\wwwroot\files\ftp\thumbnails\" + sName + ".jpg";
+                    String asd = Directory.GetCurrentDirectory();
+                    
+                    imageDir = @"C:\inetpub\wwwroot\Gentran\Gentran\Images\thumbnails\" + sName + ".jpg";
 
                     Workbook book = new Workbook(fileList[i]);
                     Worksheet sheet = book.Worksheets[0];
