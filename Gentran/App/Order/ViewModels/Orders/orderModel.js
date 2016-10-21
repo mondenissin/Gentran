@@ -27,7 +27,6 @@
                 }
             });
 
-            Promise.all(orders).then(() => console.log('done'));
             console.log(orders);
             $scope.order = result.data.detail;
 
