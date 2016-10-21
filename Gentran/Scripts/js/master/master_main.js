@@ -11,19 +11,17 @@ var host = window.location.origin + '/files/';
 function previewFile() {
     var preview = $('#imgEditProf');
     var imageField = $('#imageBase64');
-    var file = document.querySelector('input[type=file]').files[0];
+    var file = $('input#fuProfPic')[0].files[0];
     var reader = new FileReader();
     reader.addEventListener("load", function () {
-
         if (preview.length <= 0) {
             $('#imgEditProf').remove(); 
             $('.link-user-imgprof').text('');
             $('.link-user-imgprof').css('line-height', '');
             $('.link-user-imgprof').css('background-color', '');
-            $('.link-user-imgprof').append('<img ID="imgEditProf" src="img/loading/load.gif" style="border:none;"/>');
-            $('#imgEditProf').prop('src', reader.result);
+            $('.link-user-imgprof').append('<img ID="imgEditProf" src="'+ reader.result +'" style="border:none;"/>');
         }
-        preview.attr('src', reader.result);
+        preview.prop('src', reader.result);
         imageField.val(reader.result);
     }, false);
 
