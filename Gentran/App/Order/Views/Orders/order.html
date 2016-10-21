@@ -39,17 +39,17 @@
         </thead>
         <tbody>
             <tr ng-repeat="o in filterList | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
-                <td ng-cloak style="text-align: center;"><input id="{{o.ul}}" class="cbxSub" type="checkbox" ng-checked="allOrders" /></td>
+                <td ng-cloak style="text-align: center; width:5%;"><input id="{{o.ul}}" class="cbxSub" type="checkbox" ng-checked="allOrders" /></td>
                 <td ng-cloak class="table-data-ponum">{{ o.ulponumber }}</td>
                 <td ng-cloak class="table-data-ucust">{{ o.ulcustomer }}</td>
-                <td ng-cloak class="table-data-cdesc" style="width:30%;">{{ o.cmdescription}}</td>
-                <td ng-cloak class="table-data-uodate">{{ o.ulorderdate }}</td>
+                <td ng-cloak class="table-data-cdesc"  style="width:30%;">{{ o.cmdescription}}</td>
+                <td ng-cloak class="table-data-uodate" style="width:10%;">{{ o.ulorderdate }}</td>
                 <td ng-cloak class="table-data-uddate">{{ o.uldeliverydate }}</td>
-                <td ng-cloak class="table-data-uudate">{{ o.uluploaddate }}</td>
-                <td ng-cloak class="table-data-cqty">{{ o.countulquantity }}</td>
-                <td ng-cloak class="table-data-sqty">{{ o.sumulquantity }}</td>
-                <td ng-cloak class="table-data-uprice">₱{{o.uiprice }}</td>
-                <td ng-cloak style="position:relative;width:30%;">
+                <td ng-cloak class="table-data-uudate" style="width:10%;">{{ o.uluploaddate }}</td>
+                <td ng-cloak class="table-data-cqty" style="text-align: center; width:10%;">{{ o.countulquantity }}</td>
+                <td ng-cloak class="table-data-sqty" style="text-align: center; width:10%;">{{ o.sumulquantity }}</td>
+                <td ng-cloak class="table-data-uprice" style="text-align: center; width:10%;">₱{{o.uiprice }}</td>
+                <td ng-cloak class="status" style="position:relative;width:5%;">
                     <!--<div class="orderOverlay" hidden>
                         <div class="row">
                             <div class="col-sm-10 col-md-10 col-md-offset-1" style="overflow:auto;">
@@ -88,9 +88,9 @@
                     <!-- END MODAL FOR ERROR OF ORDERS-->
 
                     
-                    <span class="table-data-ustat">{{o.sStatus}}&nbsp;</span><button class="btn btn-default btn-xs option-icon-size overlayBtn" ng-click="getStatus(o,$event)" data-toggle="modal" data-target="#ErrorModal" title="View Details"><i class="fa {{o.uicons}}" aria-hidden="true" style="color: {{ o.uicons == 'fa-check' ? 'green' : 'red';  }} "><span class="label-danger" ng-show="o.eCtr" ng-cloak>{{o.eCtr}}</span></i></button>
+                    <span class="{{o.oClass}} table-data-ustat">{{o.sStatus}}&nbsp;</span><button class="btn btn-default btn-xs option-icon-size overlayBtn" ng-click="getStatus(o,$event)" title="View Details"><i class="fa {{o.uicons}}" aria-hidden="true" style="color: {{ o.uicons == 'fa-check' ? 'green' : 'red';  }} "><span class="label-count" ng-show="o.eCtr" ng-cloak >{{o.eCtr}}</span></i></button>
                 </td><!--<img onclick="errorDetails(\'' + data.detail[i].ulid + '\',\'' + data.detail[i].ulstatus + '\')" title="View Error Details" src="img/master/error.png">-->
-                <td ng-cloak>
+                <td ng-cloak style="text-align: center;width:10%;">
                     <button class="btn btn-default btn-xs option-icon-size" ng-click="showDetails(o)" title="Order Details"><i class="fa fa-info"></i></button>
                     <button class="btn btn-default btn-xs option-icon-size" ng-click="reuploadPO(o)" title="Reupload" ng-show="o.ulstatus == '11' ? true:false"><i class="fa fa-upload"></i></button>
                 </td>

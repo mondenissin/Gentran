@@ -15,16 +15,16 @@
     }
 
 
-.label-danger {
+.label-count {
     position:absolute;
-    top:11px;
-    right:25px;
+    top:3px;
+    right:5px;
     text-align:center;
     font-size:9px;
     padding:2px 3px;
     line-height:.9;
     background-color:#dd4b39 !important;
-    color:red;
+    color:white;
 }
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
@@ -37,7 +37,7 @@
 }
 
 .table>tbody>tr>td {
-    line-height: 50px;
+    /*line-height: 50px;*/
 }
 
 .table-order {
@@ -54,3 +54,12 @@
 table.dataTable thead th.sorting_asc:first-child {
     background:none !important;
 }
+
+table.dataTable thead th, table.dataTable thead td {
+    padding: 5px;
+}
+
+.status {
+    width: 30%;
+}
+

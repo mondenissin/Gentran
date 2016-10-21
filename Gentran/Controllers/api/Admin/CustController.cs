@@ -199,7 +199,92 @@ namespace Gentran.Controllers.api
                             changes = (changes == "") ? "NC" : changes;
                         }
                     }
+                }
+                else if (values.operation == "batch_mapping")
+                {
+                    success = true;
+                    DataTable dt = new DataTable();
+                    List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+                    Dictionary<string, object> row;
 
+                    dt.Columns.Add("MNC", typeof(String));
+                    dt.Columns.Add("CODE", typeof(String));
+                    dt.Columns.Add("ACCT", typeof(String));
+                    dt.Columns.Add("REMARKS", typeof(String));
+
+                    for (int i = 0; i < values.payload.Count; i++)
+                    {
+                        try
+                        {
+                            string id;
+                            sQuery = "select cmid from tblcustomermaster where cmcode = '" + values.payload[i].cmCode + "'";
+                            connection.Open();
+                            SqlCommand selectcmd2 = new SqlCommand(sQuery, connection);
+                            dr2 = selectcmd2.ExecuteReader();
+
+                            if (dr2.HasRows)
+                            {
+                                dr2.Read();
+                                id = dr2["cmid"].ToString();
+
+                                SqlConnection connection3 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
+                                sQuery = "select * from tblcustomerassignment where cacustomer = '" + id + "' and caaccount = '" + values.payload[i].acctype + "'";
+                                connection3.Open();
+                                SqlCommand selectcmd3 = new SqlCommand(sQuery, connection3);
+                                SqlDataReader dr3 = selectcmd3.ExecuteReader();
+                                if (dr3.HasRows)
+                                {
+                                    dt.Rows.Add(new Object[] { values.payload[i].cmCode, values.payload[i].caCode, values.payload[i].acctype, "Duplicated" });
+                                    response += values.payload[0].cmCode;
+                                    connection3.Close();
+                                }
+                                else
+                                {
+                                    connection3.Close();
+                                    sQuery = "select * from tblaccounttype where atid='" + values.payload[i].acctype + "'";
+                                    SqlConnection connection4 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
+                                    connection4.Open();
+                                    SqlCommand selectcmd = new SqlCommand(sQuery, connection4);
+                                    SqlDataReader dr4 = selectcmd.ExecuteReader();
+                                    if (dr4.HasRows)
+                                    {
+                                        connection4.Close();
+                                        sQuery = "insert into tblcustomerassignment select '" + values.payload[i].caCode + "','" + id + "','" + values.payload[i].acctype + "'";
+                                        connection4.Open();
+                                        selectcmd = new SqlCommand(sQuery, connection4);
+                                        selectcmd.ExecuteNonQuery();
+                                        dt.Rows.Add(new Object[] { values.payload[i].cmCode, values.payload[i].caCode, values.payload[i].acctype, "assigned " + id + " a new code : " + values.payload[i].caCode });
+                                        connection4.Close();
+                                    }
+                                    else
+                                    {
+                                        connection4.Close();
+                                        dt.Rows.Add(new Object[] { values.payload[i].cmCode, values.payload[i].caCode, values.payload[i].acctype, "Invalid Account Type" });
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                dt.Rows.Add(new Object[] { values.payload[i].cmCode, values.payload[i].caCode, values.payload[i].acctype, "Invalid Customer Code" });
+                            }
+                            connection.Close();
+                        }
+                        catch (Exception ex)
+                        {
+                            success = false;
+                        }
+                    }
+
+                    foreach (DataRow sDr in dt.Rows)
+                    {
+                        row = new Dictionary<string, object>();
+                        foreach (DataColumn col in dt.Columns)
+                        {
+                            row.Add(col.ColumnName, sDr[col]);
+                        }
+                        rows.Add(row);
+                    }
+                    return new Response { success = success, detail = rows };
                 }
                 else if (values.operation == "update_mapping")
                 {

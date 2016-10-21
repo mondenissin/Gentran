@@ -141,10 +141,7 @@ namespace Gentran.Controllers.api
             SqlDataReader dr;
 
             try
-            {
-
-
-
+            {    
                 if (values.operation == "add_product")
                 {
                     activity = "ADD30";
@@ -198,7 +195,85 @@ namespace Gentran.Controllers.api
                             value = pmcode;
                         }
                     }
-                }
+                }  
+                else if (values.operation == "batch_mapping")
+                {
+                    string id = "";
+                    success = true;
+                    DataTable dt = new DataTable();
+                    List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+                    Dictionary<string, object> row;
+
+                    dt.Columns.Add("MNC", typeof(String));
+                    dt.Columns.Add("CODE", typeof(String));
+                    dt.Columns.Add("ACCT", typeof(String));
+                    dt.Columns.Add("REMARKS", typeof(String));
+
+                    for (int i = 0; i < values.payload.Count; i++)
+                    {
+                        try
+                        {
+                            sQuery = "select pmid from tblproductmaster where pmcode = '" + values.payload[i].pmcode + "'";
+                            connection.Open();
+                            SqlCommand selectcmd2 = new SqlCommand(sQuery, connection);
+                            SqlDataReader dr2 = selectcmd2.ExecuteReader();
+                            if (dr2.HasRows)
+                            {
+                                dr2.Read();
+                                id = dr2["pmid"].ToString();
+                                connection.Close();
+
+                                sQuery = "select * from tblproductassignment where pacode = '" + values.payload[i].pacode + "' and paproduct = '" + id + "' and paaccount = '" + values.payload[i].acctype + "'";
+                                connection.Open();
+                                SqlCommand selectcmd3 = new SqlCommand(sQuery, connection);
+                                SqlDataReader dr3 = selectcmd3.ExecuteReader();
+                                if (dr3.HasRows)
+                                {
+                                    dr3.Read();
+                                    connection.Close();
+                                    dt.Rows.Add(new Object[] { values.payload[i].pmcode, values.payload[i].pacode, values.payload[i].acctype, "Duplicate" });
+                                }
+                                else
+                                {
+                                    sQuery = "delete tblproductassignment where paproduct = '" + id + "' and paaccount = '" + values.payload[i].acctype + "'";
+                                    connection.Open();
+                                    SqlCommand selectcmd = new SqlCommand(sQuery, connection);
+                                    selectcmd.ExecuteNonQuery();
+                                    connection.Close();
+
+                                    sQuery = "insert into tblproductassignment values ('" + values.payload[i].pacode + "','" + id + "','" + values.payload[i].acctype + "')";
+                                    connection.Open();
+                                    selectcmd = new SqlCommand(sQuery, connection);
+                                    selectcmd.ExecuteNonQuery();
+                                    connection.Close();
+                                    dt.Rows.Add(new Object[] { values.payload[i].pmcode, values.payload[i].pacode, values.payload[i].acctype, "assigned " + values.payload[i].paproduct + " a new code : " + values.payload[i].pacode });
+                                }
+                            }
+                            else
+                            {
+                                connection.Close();
+                                dt.Rows.Add(new Object[] { values.payload[i].pmcode, values.payload[i].pacode, values.payload[i].acctype, "Product Code not found" });
+                            }
+                            success = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            connection.Close();
+                            success = false;
+                        }
+                    }
+
+                    foreach (DataRow sDr in dt.Rows)
+                    {
+                        row = new Dictionary<string, object>();
+                        foreach (DataColumn col in dt.Columns)
+                        {
+                            row.Add(col.ColumnName, sDr[col]);
+                        }
+                        rows.Add(row);
+                    }
+                    return new Response { success = success, detail = rows };
+                } 
                 else if (values.operation == "update_mapping")
                 {
 
