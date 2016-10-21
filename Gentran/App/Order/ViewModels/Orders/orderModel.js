@@ -287,6 +287,8 @@
                     $scope.errorPO += result.data.detail;
                 }
             });
+
+            $('#ErrorModal').modal('show');
         }
         else {
             notif_success("New order","Successful");
