@@ -83,6 +83,7 @@ namespace Gentran.Controllers.api.Order
                 {
                     string icon = "";
                     string sStat = "";
+                    string oClass = "";
                     int eCtr = 0;
                     row = new Dictionary<object, object>();
                     foreach (DataColumn col in dt.Columns)
@@ -90,19 +91,23 @@ namespace Gentran.Controllers.api.Order
                         if (col.ColumnName == "ulstatus" && dr[col].ToString() == "11") {
                             sStat = "Read Failed";
                             icon = "fa-exclamation-circle";
+                            oClass = "label label-danger";
                         } else if (col.ColumnName == "ulstatus" && dr[col].ToString() == "20") {
                             sStat = "New";
                             icon = "fa-check";
+                            oClass = "label label-success";
                         }
                         else if(col.ColumnName == "ulstatus"){
                             sStat = "New";
                             icon = "fa-check";
+                            oClass = "label label-success";
                         }
                         row.Add(col.ColumnName, dr[col].ToString());
                     }
                     row.Add("sStatus", sStat);
                     row.Add("uicons", icon);
                     row.Add("eCtr", eCtr);
+                    row.Add("oClass", oClass);
                     rows.Add(row);
                 }
                 
