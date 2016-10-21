@@ -206,7 +206,9 @@ button.btn.btn-link i, button.btn.btn-link span {
 }
 
 /* ======================================== EDIT USER MODAL ========================================== */
-
+img {
+object-fit: cover!important;
+}
 .link-user-imgprof
 {
     width:120px;
@@ -591,7 +593,7 @@ div[dropzone] {
     cursor: pointer;
 }
 
-/* ======================================== END OF MODAL TABLE ========================================== */
+/* ======================================== PPAGINATION ========================================== */
 
 .paginate_button {
     padding: 2px!important;
@@ -651,7 +653,7 @@ div[dropzone] {
     color: #21b6dc;
 }
 
-/*  */
+/* ======================================== Users-Cards ========================================== */
 div.item {
     padding-left: 5px;
     padding-right: 5px;
@@ -718,8 +720,6 @@ div.item {
     color: red;
 }
 
-
-
 .card-view-imgprof
 {
     width:164px;
@@ -776,16 +776,23 @@ div.item {
 
 .user-panel>.image>img {
     height: auto;
+    object-fit: cover;
+    overflow: hidden;
+}
+.sidebar-mini .img-circle {
+    height: 45px!important;
+}
+.sidebar-mini.sidebar-collapse .img-circle {  
+    height: 30px!important;
 }
 .navbar-nav>.user-menu>.dropdown-menu>li.user-header {
     height: auto;
 }
+.navbar-nav>.user-menu>.dropdown-menu>li.user-header>img {
+    height: 90px!important;
+}
 
-
-
-/*
- *  STYLE 4
- */
+/* ======================================= Scrollbars ============================================= */
 
 *::-webkit-scrollbar-track
 {
