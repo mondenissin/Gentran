@@ -74,26 +74,52 @@ namespace Gentran.Controllers.api.Admin
             bool success = true;
             string response = "Successful";
             String sQuery = "";
+            String reportAct = "",reportType = "";
             DateTime now = new DateTime();
             now = DateTime.Now;
             
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
             try
             {
-                if (values.operation == "all")
-                {
-                    sQuery = "select top 100 TLId,TLRemarks,TLValue,Left(TLDate,12) as TLDate,TADescription,UMUsername from tbltransactionlog left join tblTransactionActivity on taid = tlactivity left join tblusermaster on umid = tluser order by tlid desc";
-                    response = "By all";
+                if (values.reportName == "purchase") {
+                    reportType = "PO Report";
+                    reportAct = "REP20";
+                    if (values.operation == "all")
+                    {
+                        sQuery = "select top 100 a.ulponumber,b.cmdescription,a.ulorderdate,(case a.ulstatus when '20' then 'New' else 'Failed' end) as ulstatus, c.umusername from tbluploadlog a left join tblcustomermaster b on a.ulcustomer = b.cmid left join tblusermaster c on c.umid = a.uluser order by a.ulorderdate desc";
+                        response = "By all";
+                    }
+                    else if (values.operation == "by_user")
+                    {
+                        sQuery = "select a.ulponumber,b.cmdescription,a.ulorderdate,(case a.ulstatus when '20' then 'New' else 'Failed' end) as ulstatus, c.umusername from tbluploadlog a left join tblcustomermaster b on a.ulcustomer = b.cmid left join tblusermaster c on c.umid = a.uluser where a.uluser = '" + values.payload[0].ULUser + "' and a.ulorderdate between '" + values.payload[0].dateFrom + "' and '" + values.payload[0].dateTo + "' order by a.ulorderdate desc";
+                        response = "By user";
+                    }
+                    else
+                    {
+                        sQuery = "select a.ulponumber,b.cmdescription,a.ulorderdate,(case a.ulstatus when '20' then 'New' else 'Failed' end) as ulstatus, c.umusername from tbluploadlog a left join tblcustomermaster b on a.ulcustomer = b.cmid left join tblusermaster c on c.umid = a.uluser where a.ulorderdate between '" + values.payload[0].dateFrom + "' and '" + values.payload[0].dateTo + "' order by a.ulorderdate desc";
+                        response = "By normal";
+                    }
                 }
-                else if (values.operation == "by_user")
-                {
-                    sQuery = "select TLId,TLRemarks,TLValue,Left(TLDate,12) as TLDate,TADescription,UMUsername from tbltransactionlog left join tblTransactionActivity on taid = tlactivity left join tblusermaster on umid = tluser where tluser = '" + values.payload[0].ULUser + "' and tldate between '" + values.payload[0].dateFrom + "' and '" + values.payload[0].dateTo + "'order by tlid desc";
-                    response = "By user";
+                else if (values.reportName == "transaction"){
+                    reportType = "Transation Report";
+                    reportAct = "REP10";
+                    if (values.operation == "all")
+                    {
+                        sQuery = "select top 100 TLId,TLRemarks,TLValue,Left(TLDate,12) as TLDate,TADescription,UMUsername from tbltransactionlog left join tblTransactionActivity on taid = tlactivity left join tblusermaster on umid = tluser order by tlid desc";
+                        response = "By all";
+                    }
+                    else if (values.operation == "by_user")
+                    {
+                        sQuery = "select TLId,TLRemarks,TLValue,Left(TLDate,12) as TLDate,TADescription,UMUsername from tbltransactionlog left join tblTransactionActivity on taid = tlactivity left join tblusermaster on umid = tluser where tluser = '" + values.payload[0].ULUser + "' and tldate between '" + values.payload[0].dateFrom + "' and '" + values.payload[0].dateTo + "'order by tlid desc";
+                        response = "By user";
+                    }
+                    else
+                    {
+                        sQuery = "select TLId,TLRemarks,TLValue,Left(TLDate,12) as TLDate,TADescription,UMUsername from tbltransactionlog left join tblTransactionActivity on taid = tlactivity left join tblusermaster on umid = tluser where tldate between '" + values.payload[0].dateFrom + "' and '" + values.payload[0].dateTo + "' order by tlid desc";
+                        response = "By normal";
+                    }
                 }
-                else {
-                    sQuery = "select TLId,TLRemarks,TLValue,Left(TLDate,12) as TLDate,TADescription,UMUsername from tbltransactionlog left join tblTransactionActivity on taid = tlactivity left join tblusermaster on umid = tluser where tldate between '"+values.payload[0].dateFrom+"' and '"+values.payload[0].dateTo+"' order by tlid desc";
-                    response = "By normal";
-                }
+                
                 connection.Open();
                 SqlCommand cmd = new SqlCommand(sQuery, connection);
                 List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
@@ -119,7 +145,7 @@ namespace Gentran.Controllers.api.Admin
 
                 string newpaypload = JsonConvert.SerializeObject(values.payload, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
-                trows.Add(new Transaction { activity = "REP10", date = now, remarks = response, user = userID, type = "ADM", value = "Transaction Reports", changes = "", payloadvalue = newpaypload, customernumber = "", ponumber = "" });
+                trows.Add(new Transaction { activity = reportAct, date = now, remarks = response, user = userID, type = "ADM", value = reportType, changes = "", payloadvalue = newpaypload, customernumber = "", ponumber = "" });
                 return new Response { success = success, reports = rows, detail = trows, notiftext = response };
             }
             catch (Exception ex)        

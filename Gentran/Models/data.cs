@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 //---------INPUTS------------//
 public class Data
 {
+    public string reportName { get; set; }
     public string operation { get; set; }
     public List<Value> payload { get; set; }
     public List<Value> customer { get; set; }

@@ -1,0 +1,133 @@
+﻿
+<hr />
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 clearfix">
+            <div class="box box-info">
+                <div class="box-header">
+                    <i class="fa fa-file-text"></i> 
+                    <h3 class="box-title">Report Master</h3><hr />
+                    <!--<div class="pull-right box-tools">
+                        <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="Remove">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>-->
+                    <div class="row form-group product-chooser">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <div class="product-chooser-item selected">
+                                <i class="fa fa-windows col-xs-4 col-sm-4 col-md-4 col-lg-12" style="font-size:2.5em;"></i>
+                                <div class="col-xs-8 col-sm-8 col-md-12 col-lg-12">
+                                    <span class="title" title="purchase">PO</span>
+                                    <input type="radio" checked="checked">
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <div class="product-chooser-item">
+                                <i class="fa fa-users col-xs-4 col-sm-4 col-md-4 col-lg-12" style="font-size:2.5em;"></i>
+                                <div class="col-xs-8 col-sm-8 col-md-12 col-lg-12">
+                                    <span class="title" title="transaction">Trans.</span>
+                                    <input type="radio">
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-inline">
+                                    <label>Generate by User</label>
+                                    <input class="checkbox" type="checkbox" ng-model="byUser" ng-disabled="All" />
+                                   <select id="selected_user" class="form-control" ng-disabled="!byUser || All" ng-model="User">
+                                        <option sly-repeat="tl in transactions" value="{{tl.umid}}" ng-selected="{{tl[0].umfirstname}}">{{tl.umfirstname + " " + tl.umlastname }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pull-left">
+                                <label>From:</label>
+                                <input class="form-control input-sm" type="date" ng-model="dateFrom" ng-disabled="All" />
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pull-right">
+                                <label>To:</label>
+                                <input class="form-control input-sm" type="date" ng-model="dateTo" ng-disabled="All" />
+                            </div>
+                        </div>
+                        <div class="box-footer clearfix">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pull-right">
+                                    <input class="checkbox pull-left" type="checkbox" ng-model="All" /><span>All</span>
+                                    <button class="btn btn-default btn-sm pull-right" title="Transaction Report" ng-click="generateReport()">Generate</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-hide="hideReport" class="col-xs-12 col-sm-12 col-md-12 col-lg-9 clearfix" >
+            <div class="box box-info">
+                <div class="box-header">
+                    <h3 class="box-title">Generated report</h3>
+                    <button class="btn btn-default btn-sm pull-right" title="Print Report" ng-click="printReport('printableReport')">Print Report</button>
+                </div>
+                <div id="printableReport" class="box-body" style="height:400px;overflow-x:hidden;">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <table id="transaction" dt-column-defs="dtColumnDefs" dt-options="dtOptions" class="table table-bordered bordered table-striped table-condensed datatable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Username</th>
+                                            <th>Date</th>
+                                            <th>Description</th>
+                                            <th>Value</th>
+                                            <th>Remarks</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="tr in reportGenerated">
+                                            <td ng-cloak> {{tr.TLId}} </td>
+                                            <td ng-cloak> {{tr.UMUsername}} </td>
+                                            <td ng-cloak> {{tr.TLDate}} </td>
+                                            <td ng-cloak> {{tr.TADescription}} </td>
+                                            <td ng-cloak> {{tr.TLValue}} </td>
+                                            <td ng-cloak> {{tr.TLRemarks}} </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table hidden id="purchase" dt-column-defs="dtColumnDefs" dt-options="dtOptions" class="table table-bordered bordered table-striped table-condensed datatable">
+                                    <thead>
+                                        <tr>
+                                            <th>PO #</th>
+                                            <th>Customer</th>
+                                            <th>Order Date</th>
+                                            <th>Status</th>
+                                            <th>User</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="tp in reportGenerated">
+                                            <td ng-cloak> {{tp.ulponumber}} </td>
+                                            <td ng-cloak> {{tp.cmdescription}} </td>
+                                            <td ng-cloak> {{tp.ulorderdate}} </td>
+                                            <td ng-cloak> {{tp.ulstatus}} </td>
+                                            <td ng-cloak> {{tp.umusername}} </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

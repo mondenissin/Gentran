@@ -9,13 +9,14 @@
 <link href="~/Content/ngDialog.css" rel="stylesheet" /> 
 
 <link href="~/Content/bootstrap/bootstrap-select.css" rel="stylesheet" />    
+<link href="~/Content/css/admin/reports/reports.css" rel="stylesheet" />    
 }
 
 @section scripts{
     <script src="~/App/Admin/App.js"></script>
     <script src="~/App/Admin/RootViewModel.js"></script>
     <script src="~/App/Admin/ViewModels/Dashboard/DashboardModel.js"></script>
-    <script src="~/App/Admin/ViewModels/Reports/TransactionModel.js"></script>
+    <script src="~/App/Admin/ViewModels/Reports/MasterReportModel.js"></script>
     <script src="~/App/Admin/ViewModels/Users/UserListModel.js"></script>
     <script src="~/App/Admin/ViewModels/Prod/ProdListModel.js"></script>
     <script src="~/App/Admin/ViewModels/Cust/CustListModel.js"></script>
@@ -23,8 +24,7 @@
 
     <script src="~/Scripts/bootstrap-js/bootstrap-select.min.js"></script>
     <script src="~/Scripts/js/admin/users.js"></script> @*MNS20161011*@
-   
-<script src="~/Scripts/angular/src/ng-fileDrop.min.js"></script>
+    <script src="~/Scripts/angular/src/ng-fileDrop.min.js"></script >
 }
 
 @section header_menu {
@@ -79,7 +79,7 @@
                         </span>
                     </a>
                     <ul class="treeview-menu ">
-                        <li><button class="btn btn-link" ng-click="reportTranslog()"><i class="fa fa-users"></i>Transactions</button></li>
+                        <li><button class="btn btn-link" ng-click="reportTranslog()"><i class="fa fa-file-text"></i>Reports Master</button></li>
                     </ul>
                 </li>
             </ul>

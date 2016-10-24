@@ -79,7 +79,7 @@
                 printWindow.close();
             }, 500);
         }
-        else {
+        else if (temp2 == "pdf") {
             console.log(host + 'ftp/' + data.files);
             var strContent = "<html><head>";
             strContent = strContent + "<title>Invoice Printing</title>";
@@ -87,6 +87,19 @@
             strContent = strContent + "<div class=\"print-wrapper\">";
             strContent = strContent + "<object data='" + host + 'ftp/' + data.files + "' type='application/pdf' width='100%' height='100%'>";
             strContent = strContent + "alt : <a href='" + host + 'ftp/' + data.files + "'>Your browser is not supported. Please click here to download.</a>";
+            strContent = strContent + "</object>";
+            strContent = strContent + "</div>";
+            strContent = strContent + "</body>";
+            strContent = strContent + "</html>";
+            printWindow = window.open('', '', 'left=' + left + ',top=' + top + ',width=' + w + ',height=' + h + ',status=0');
+            printWindow.document.write(strContent);
+        } else {
+            console.log(host + 'ftp/' + data.files);
+            var strContent = "<html><head>";
+            strContent = strContent + "<title>Invoice Printing</title>";
+            strContent = strContent + "</head><body>";
+            strContent = strContent + "<div class=\"print-wrapper\">";
+            strContent = strContent + "NOTE : <a href='" + host + 'ftp/' + data.files + "'>Excel/CSV file not supported to view content. Please click here to download.</a>";
             strContent = strContent + "</object>";
             strContent = strContent + "</div>";
             strContent = strContent + "</body>";
@@ -144,12 +157,12 @@
 
                 listElem[ctr] = {};
                 listElem[ctr].element = $(this.parentElement);
-
+                console.log($(this.nextElementSibling.children));
                 listFile[ctr].outlet = "SM";
-                listFile[ctr].fileName = this.nextElementSibling.children[0].children[2].textContent;
-                listFile[ctr].fileLogo = this.nextElementSibling.children[0].children[0].outerHTML;
-                listFile[ctr].name = this.nextElementSibling.children[0].children[1].textContent;
-                listFile[ctr].fileID = this.nextElementSibling.children[0].children[1].textContent.replace(/[. ]/g, '');
+                listFile[ctr].fileName = this.nextElementSibling.children[1].children[2].textContent;
+                listFile[ctr].fileLogo = this.nextElementSibling.children[1].children[0].outerHTML;
+                listFile[ctr].name = this.nextElementSibling.children[1].children[1].textContent;
+                listFile[ctr].fileID = this.nextElementSibling.children[1].children[1].textContent.replace(/[. ]/g, '');
 
                 ctr++; 
             }

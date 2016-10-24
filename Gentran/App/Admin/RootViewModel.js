@@ -13,7 +13,7 @@
     }
 
     $scope.reportTranslog = function () {
-        viewModelHelper.navigateTo('Admin/reports/translog');
+        viewModelHelper.navigateTo('Admin/reports');
     }
 
     $scope.dashBoardv1 = function () {
