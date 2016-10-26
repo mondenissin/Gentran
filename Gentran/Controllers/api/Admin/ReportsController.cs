@@ -59,7 +59,7 @@ namespace Gentran.Controllers.api.Admin
 
         // GET api/reports/5
         public string Get(int id)
-        {
+        {   
             return "value";
         }
 
@@ -86,17 +86,17 @@ namespace Gentran.Controllers.api.Admin
                     reportAct = "REP20";
                     if (values.operation == "all")
                     {
-                        sQuery = "select top 100 a.ulponumber,b.cmdescription,a.ulorderdate,(case a.ulstatus when '20' then 'New' else 'Failed' end) as ulstatus, c.umusername from tbluploadlog a left join tblcustomermaster b on a.ulcustomer = b.cmid left join tblusermaster c on c.umid = a.uluser order by a.ulorderdate desc";
+                        sQuery = "select top 100 a.ulponumber,b.cmdescription,left(a.ulorderdate,12) as ulorderdate,(case a.ulstatus when '20' then 'New' else 'Failed' end) as ulstatus, c.umusername from tbluploadlog a left join tblcustomermaster b on a.ulcustomer = b.cmid left join tblusermaster c on c.umid = a.uluser order by a.ulorderdate desc";
                         response = "By all";
                     }
                     else if (values.operation == "by_user")
                     {
-                        sQuery = "select a.ulponumber,b.cmdescription,a.ulorderdate,(case a.ulstatus when '20' then 'New' else 'Failed' end) as ulstatus, c.umusername from tbluploadlog a left join tblcustomermaster b on a.ulcustomer = b.cmid left join tblusermaster c on c.umid = a.uluser where a.uluser = '" + values.payload[0].ULUser + "' and a.ulorderdate between '" + values.payload[0].dateFrom + "' and '" + values.payload[0].dateTo + "' order by a.ulorderdate desc";
+                        sQuery = "select a.ulponumber,b.cmdescription,left(a.ulorderdate,12) as ulorderdate,(case a.ulstatus when '20' then 'New' else 'Failed' end) as ulstatus, c.umusername from tbluploadlog a left join tblcustomermaster b on a.ulcustomer = b.cmid left join tblusermaster c on c.umid = a.uluser where a.uluser = '" + values.payload[0].ULUser + "' and a.ulorderdate between '" + values.payload[0].dateFrom + "' and '" + values.payload[0].dateTo + "' order by a.ulorderdate desc";
                         response = "By user";
                     }
                     else
                     {
-                        sQuery = "select a.ulponumber,b.cmdescription,a.ulorderdate,(case a.ulstatus when '20' then 'New' else 'Failed' end) as ulstatus, c.umusername from tbluploadlog a left join tblcustomermaster b on a.ulcustomer = b.cmid left join tblusermaster c on c.umid = a.uluser where a.ulorderdate between '" + values.payload[0].dateFrom + "' and '" + values.payload[0].dateTo + "' order by a.ulorderdate desc";
+                        sQuery = "select a.ulponumber,b.cmdescription,left(a.ulorderdate,12) as ulorderdate,(case a.ulstatus when '20' then 'New' else 'Failed' end) as ulstatus, c.umusername from tbluploadlog a left join tblcustomermaster b on a.ulcustomer = b.cmid left join tblusermaster c on c.umid = a.uluser where a.ulorderdate between '" + values.payload[0].dateFrom + "' and '" + values.payload[0].dateTo + "' order by a.ulorderdate desc";
                         response = "By normal";
                     }
                 }

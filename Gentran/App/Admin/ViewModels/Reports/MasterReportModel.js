@@ -28,16 +28,6 @@
     }
 
     $scope.generateReport = function () {
-        console.log(reportType);
-        $scope.hideReport = false;
-
-        if (reportType == "purchase") {
-            $('#' + reportType).show(true);
-            $('#transaction').hide();
-        } else if (reportType == "transaction") {
-            $('#' + reportType).show(true);
-            $('#purchase').hide();
-        }
         
         var ope = "";
         var Item = {};
@@ -62,6 +52,16 @@
         $scope.dataReport.reportName = reportType;
         $scope.dataReport.operation = ope;
         $scope.dataReport.payload = _payloadParser(Item);
+
+        $scope.hideReport = false;
+
+        if (reportType == "purchase") {
+            $('#' + reportType).show(true);
+            $('#transaction').hide();
+        } else if (reportType == "transaction") {
+            $('#' + reportType).show(true);
+            $('#purchase').hide();
+        }
 
         viewModelHelper.apiPut('api/reports', $scope.dataReport, function (result) {
 

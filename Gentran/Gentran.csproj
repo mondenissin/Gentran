@@ -149,6 +149,7 @@
     <Compile Include="Controllers\mvc\MonitoringController.cs" />
     <Compile Include="Controllers\mvc\OrderController.cs" />
     <Compile Include="Controllers\mvc\RetrieveController.cs" />
+    <Compile Include="Controllers\mvc\SharedController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -163,13 +164,13 @@
     <Content Include="App\Admin\ViewModels\Cust\CustListModel.js" />
     <Content Include="App\Admin\ViewModels\Dashboard\DashboardModel.js" />
     <Content Include="App\Admin\ViewModels\Prod\ProdListModel.js" />
-    <Content Include="App\Admin\ViewModels\Reports\TransactionModel.js" />
+    <Content Include="App\Admin\ViewModels\Reports\MasterReportModel.js" />
     <Content Include="App\Admin\ViewModels\TransLog\TransLogListModel.js" />
     <Content Include="App\Admin\ViewModels\Users\UserListModel.js" />
     <Content Include="App\Admin\Views\Cust\CustList.html" />
     <Content Include="App\Admin\Views\Dashboard\Dashboard.html" />
     <Content Include="App\Admin\Views\Prod\ProdList.html" />
-    <Content Include="App\Admin\Views\Reports\Transaction.html" />
+    <Content Include="App\Admin\Views\Reports\MasterReport.html" />
     <Content Include="App\Admin\Views\TransLog\TransLogList.html" />
     <Content Include="App\Admin\Views\Users\UserCards.html" />
     <Content Include="App\Admin\Views\Users\UserList.html" />
@@ -206,7 +207,10 @@
     <Content Include="Content\ionicons\ionicons.min.css" />
     <Content Include="Content\jquery\fixedHeader.bootstrap.css" />
     <Content Include="Content\jquery\jquery.dataTables.min.css" />
+    <Content Include="Content\morris\morris.css" />
     <Content Include="Content\ngDialog.css" />
+    <Content Include="Content\notification\notification.css" />
+    <Content Include="Content\notification\waves-effect.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\skins\_all-skins.css" />
     <Content Include="Content\skins\_all-skins.min.css" />
@@ -282,6 +286,7 @@
     <Content Include="Images\files\xlsm.png" />
     <Content Include="Images\files\xlsx.png" />
     <Content Include="Images\FTP.png" />
+    <Content Include="Images\logoTrans.png" />
     <Content Include="Images\master\add.png" />
     <Content Include="Images\master\assign.png" />
     <Content Include="Images\master\check-white.png" />
@@ -326,9 +331,10 @@
     <Content Include="Images\sort_both.png" />
     <Content Include="Images\sort_desc.png" />
     <Content Include="Images\sort_desc_disabled.png" />
+    <Content Include="Images\thumbnails\VMITEST.jpg" />
+    <Content Include="Images\thumbnails\VMITEST2.jpg" />
     <Content Include="Images\user3-128x128.jpg" />
     <Content Include="Images\view.png" />
-    <Content Include="Images\VINCE.jpg" />
     <Content Include="Scripts\angular\angular-animate.js" />
     <Content Include="Scripts\angular\angular-animate.min.js" />
     <Content Include="Scripts\angular\angular-aria.js" />
@@ -1190,6 +1196,7 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <Content Include="Views\Shared\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App\Admin\ViewModels\Connections\" />
@@ -1200,7 +1207,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\css\order\" />
     <Folder Include="Controllers\api\Monitoring\" />
-    <Folder Include="Images\thumbnails\" />
     <Folder Include="Scripts\angular\i18n\ngLocale\" />
   </ItemGroup>
   <ItemGroup>
@@ -1220,7 +1226,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Images\Thumbs.db" />
     <Content Include="Scripts\angular\angular-animate.min.js.map" />
     <Content Include="Scripts\angular\angular-aria.min.js.map" />
     <Content Include="Scripts\angular\angular-cookies.min.js.map" />

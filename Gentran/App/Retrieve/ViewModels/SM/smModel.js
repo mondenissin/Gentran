@@ -1,35 +1,54 @@
-﻿retrieveModule.controller("smViewModel", function ($sce,$scope, retrieveService, $http, $q, $routeParams, $window, $location, viewModelHelper, $timeout) {
+﻿retrieveModule.controller("smViewModel", function ($sce, $scope, retrieveService, $http, $q, $routeParams, $window, $location, viewModelHelper, $timeout, DTOptionsBuilder, DTColumnDefBuilder, $route, filterFilter) {
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.retrieveService = retrieveService;
     $scope.trustAsHtml = $sce.trustAsHtml;
+
     var initialize = function () {
         $scope.refreshSM();
     }
 
     $scope.refreshSM = function () {
-        
+        $scope.search = {};
+        $scope.searchBy = "files";
+
         viewModelHelper.apiGet('api/ftp/sm', null, function (result) {
-            
+            $scope.pageSize = 5;
+            $scope.entryLimit = 50;
+            $scope.entryLimitPO = 12;
+
             if (result.data.success) {
                 $scope.files = result.data.detail.map(function (obj) {
-                    console.log(obj.files);
                     var rObj = {};
                     var split = obj.files.split('\\');
                     var ext = split[split.length - 1].split('.');
                     rObj["files"] = split[split.length - 1];
                     rObj["directory"] = obj.files;
-                    rObj["thumbnail"] = "../Images/thumbnails/" + ext[0].replace(" ", "") + ".jpg";
+                    rObj["thumbnail"] = "../Images/thumbnails/" + ext[0].replace(/[" "]/g, "") + ".jpg";
                     rObj["extension"] = "../Images/files/" + ext[ext.length - 1] + ".png";
-
+                    
                     return rObj;
                 });
+                $scope.filesList = $scope.files;
 
+                $scope.$watch('search[searchBy]', function () {
+                    $scope.files = filterFilter($scope.filesList, $scope.search);
+
+                    $scope.noOfPages = Math.ceil($scope.files.length / $scope.entryLimit);
+                    $scope.noOfPagesPO = Math.ceil($scope.files.length / $scope.entryLimitPO);
+
+                    $scope.currentPage = 1;
+                });
                 console.log($scope.files);
             } else {
                 console.log(result.data.detail[0].error);
             }
         });
+
+        $scope.dtOptions = DTOptionsBuilder.newOptions();
+        $scope.dtColumnDefs = [
+           DTColumnDefBuilder.newColumnDef('no-sort').notSortable()
+        ];
     }
 
     $scope.loadHover = function () {

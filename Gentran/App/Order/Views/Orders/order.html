@@ -71,13 +71,12 @@
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                     <h4 class="modal-title"><i class="fa fa-exclamation-circle" style="color:red;"></i> Error Details for PO #: <b style="color:red;">{{ o.ulponumber }}</b></h4>
                                 </div>
-                                <div class="modal-body" style="overflow-y:scroll; height:426px; overflow:hidden">
+                                <div class="modal-body" style="overflow-y:scroll; height:426px; overflow:auto">
                                     <table class="table table-striped">
                                         <tr sly-repeat="err in errorPO" >
                                             <td>{{err.errorDet}}</td>
                                         </tr>
                                     </table>
-                                        
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default btn-sm pull-right" data-dismiss="modal">Close</button>

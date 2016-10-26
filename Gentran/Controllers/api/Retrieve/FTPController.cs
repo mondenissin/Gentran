@@ -104,7 +104,8 @@ namespace Gentran.Controllers.api
 
                     Workbook book = new Workbook(fileList[i]);
                     Worksheet sheet = book.Worksheets[0];
-
+                    sheet.PageSetup.PrintArea = "A1:J10";
+                    
                     ImageOrPrintOptions imgOptions = new ImageOrPrintOptions();
                     imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Jpeg;
                     imgOptions.OnePagePerSheet = true;

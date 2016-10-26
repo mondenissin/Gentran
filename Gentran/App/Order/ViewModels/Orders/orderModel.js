@@ -21,7 +21,7 @@
             orders.filter(x=> {
                 var data = x.ulid + "," + x.ulstatus;
                 if (x.ulstatus < 20) {
-                    viewModelHelper.apiGet('api/ordererrors/' + data, null, function (result) {
+                    viewModelHelper.apiGet('api/ordererrors/' + data, null, function (result) { 
                         x.eCtr = result.data.detail.length;
                     });
                 }

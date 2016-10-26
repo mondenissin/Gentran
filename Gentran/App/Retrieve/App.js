@@ -1,4 +1,4 @@
-﻿var retrieveModule = angular.module('retrieve', ['common','sly'])
+﻿var retrieveModule = angular.module('retrieve', ['common', 'sly', 'datatables', 'sly', 'ui.bootstrap'])
     .config(function ($routeProvider, $locationProvider) {
         var _root = getRoot();
         $routeProvider.when(_root + 'Retrieve/SM', { templateUrl: _root + 'App/Retrieve/Views/SM/sm.html', controller: 'smViewModel' });
@@ -9,6 +9,16 @@
             requireBase: false
         });
     });
+
+
+retrieveModule.run(function (DTDefaultOptions) {
+    // Display 50 items per page by default
+    DTDefaultOptions.setDisplayLength(-1);
+    var cDom = "<'row dt-info'<'col-sm-5'><'col-sm-7'>>" +
+            "<'row'<'col-sm-12 page-table'tr>>" +
+            "<'row'<'col-sm-5'><'col-sm-7'>>";
+    DTDefaultOptions.setOption('dom', cDom);
+});
 
 retrieveModule.factory('retrieveService', function ($rootScope, $http, $q, $location, viewModelHelper) { return MyApp.retrieveService($rootScope, $http, $q, $location, viewModelHelper); });
 
