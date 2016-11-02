@@ -73,7 +73,8 @@
 
 
     $scope.reuploadPO = function (order) {
-        $('#progress').css('width','0.9%');
+        $('.progress-bar').css('width', '0.9%');
+        $('.progress-bar').text("Reading");
         $scope.reupRes = null;
         $scope.reupPO = order;
         var items = {};
@@ -93,11 +94,12 @@
 
             $('#reupMdal').modal('show');
 
-            $('#progress').animate({ width: '100%' }, execTime);
+            $('.progress-bar').animate({ width: '100%' }, execTime);
             
             setTimeout(function () {
                 $scope.reupRes = result.data.detail.filter(x=>x.ponumber == order.ulponumber)[0];
-                $('#progress').text("Reupload Completed!");
+                $('.progress-bar').text("Reupload Completed!");
+                $('#progress-bar').removeClass("active");
                 viewModelHelper.saveTransaction(result.data.detail);
 
                 $scope.refreshOrders();

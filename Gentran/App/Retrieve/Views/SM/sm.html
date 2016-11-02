@@ -65,7 +65,11 @@
                             <tr ng-repeat="uF in uploadedFile">
                                 <td ng-bind-html="trustAsHtml(uF.fileLogo)"></td>
                                 <td>{{uF.name}}</td>
-                                <td><div id="{{uF.fileID}}" style="text-align:center;width:0.9%;height:20px;background:#e5c638;"> Waiting</div></td>
+                                <td>
+                                    <div class="progress progress-striped active" style="height:20px;">
+                                        <div class="progress-bar progress-bar-success" id="{{uF.fileID}}" style="text-align:center;width:0.9%;height:20px;"> Waiting</div>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

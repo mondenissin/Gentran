@@ -215,8 +215,10 @@
                             viewModelHelper.saveTransaction(result.data.detail);
 
                             $('#' + fileName[0].fileID).text("Read Successful");
+                            $('.progress-striped').removeClass("active");
 
                             $(elemName[0].element).remove();
+                            console.log(elemName[0].element);
                             //$scope.refreshSM();
                         }, execTime);
                     });
