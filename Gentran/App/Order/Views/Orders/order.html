@@ -266,20 +266,20 @@
                 </div>
                 <div class="modal-body">
                     <div class="map-orders table-responsive">
-                        <div style="position:relative;text-align:center;width:100%;height:40px;background:#f0f0f0;">
-                            <div id="progress" style="position:absolute;top:0px;width:0.9%;height:inherit;background:#e5c638;padding-top:2%;">Reading</div>
+                        <div class="progress progress-striped active" id="progress-bar" style="position:relative;text-align:center;width:100%;height:40px;background:#f0f0f0;">
+                            <div class="progress-bar progress-bar-success" id="progress" style="position:absolute;top:0px;width:0.9%;height:inherit;padding-top:2%;"></div>
                         </div>
                         <hr />
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>PO #</th>
+                                    <th style="width:10%;">PO #</th>
                                     <th>Response</th>
-                                    <th>Order Date</th>
+                                    <th style="width:10%;">Order Date</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr style="font-size: 12px; text-align:center;">
                                     <td ng-show="reupRes">{{reupPO.ulponumber}}</td>
                                     <td>{{reupRes.response}}</td>
                                     <td ng-show="reupRes">{{reupPO.ulorderdate}}</td>
