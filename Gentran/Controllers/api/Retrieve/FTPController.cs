@@ -15,6 +15,7 @@ namespace Gentran.Controllers.api
 {
     public class FTPController : ApiController
     {
+        AppSettings app = new AppSettings();
         string m_ftpSite, m_strUsername, m_strPassword = "";
         // GET api/ftp
         public Object Get(string id)
@@ -35,13 +36,16 @@ namespace Gentran.Controllers.api
                     m_ftpSite = System.Configuration.ConfigurationManager.AppSettings["s8ftpsite"];
                     m_strUsername = System.Configuration.ConfigurationManager.AppSettings["s8username"];
                     m_strPassword = System.Configuration.ConfigurationManager.AppSettings["s8password"];
-
+                } else if (acct == "ncc") {
+                    m_ftpSite = System.Configuration.ConfigurationManager.AppSettings["nccftpsite"];
+                    m_strUsername = System.Configuration.ConfigurationManager.AppSettings["nccusername"];
+                    m_strPassword = System.Configuration.ConfigurationManager.AppSettings["nccpassword"];
                 }
 
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(m_ftpSite);
                 request.Method = WebRequestMethods.Ftp.ListDirectory;
 
-                request.Credentials = new NetworkCredential(m_strUsername, m_strPassword);
+                request.Credentials = new NetworkCredential(m_strUsername, app.Decrypt(m_strPassword));
 
                 FtpWebResponse response = (FtpWebResponse)request.GetResponse();
 
@@ -59,7 +63,7 @@ namespace Gentran.Controllers.api
 
                         using (WebClient webreq = new WebClient())
                         {
-                            webreq.Credentials = new NetworkCredential(m_strUsername, m_strPassword);
+                            webreq.Credentials = new NetworkCredential(m_strUsername, app.Decrypt(m_strPassword));
                             byte[] fileData = webreq.DownloadData(ftpfullpath);
 
                             using (FileStream file = File.Create(inputfilepath))
@@ -68,11 +72,13 @@ namespace Gentran.Controllers.api
                                 file.Close();
                             }
 
-                            FtpWebRequest request2 = (FtpWebRequest)WebRequest.Create(ftpfullpath);
-                            request2.Method = WebRequestMethods.Ftp.DeleteFile;
-                            FtpWebResponse response2 = (FtpWebResponse)request2.GetResponse();
-                            string asd = response2.StatusDescription;
-                            response2.Close();
+                            if (acct != "ncc") {
+                                FtpWebRequest request2 = (FtpWebRequest)WebRequest.Create(ftpfullpath);
+                                request2.Method = WebRequestMethods.Ftp.DeleteFile;
+                                FtpWebResponse response2 = (FtpWebResponse)request2.GetResponse();
+                                string asd = response2.StatusDescription;
+                                response2.Close();
+                            }    
                         }
                     }
                 }
@@ -86,6 +92,8 @@ namespace Gentran.Controllers.api
                     fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\sm", "*.csv"));
                 } else if (acct == "s8") {
                     fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\s8", "*.xml"));
+                } else if (acct == "ncc") {
+                    fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\ncc", "*.xml"));
                 }
 
                 int intCount = 0;

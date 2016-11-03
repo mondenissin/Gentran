@@ -186,8 +186,10 @@
     <Content Include="App\Retrieve\App.js" />
     <Content Include="App\Retrieve\RootViewModel.js" />
     <Content Include="App\Retrieve\ViewModels\SM\smModel.js" />
+    <Content Include="App\Retrieve\ViewModels\NCC\nccModel.js" />
     <Content Include="App\Retrieve\ViewModels\Super8\superModel.js" />
     <Content Include="App\Retrieve\Views\SM\sm.html" />
+    <Content Include="App\Retrieve\Views\NCC\ncc.html" />
     <Content Include="App\Retrieve\Views\Super8\super.html" />
     <Content Include="Content\AdminLTE.css" />
     <Content Include="Content\AdminLTE.min.css" />
@@ -285,6 +287,7 @@
     <Content Include="Images\files\xls.png" />
     <Content Include="Images\files\xlsm.png" />
     <Content Include="Images\files\xlsx.png" />
+    <Content Include="Images\files\xml.png" />
     <Content Include="Images\FTP.png" />
     <Content Include="Images\logoTrans.png" />
     <Content Include="Images\master\add.png" />
@@ -1202,8 +1205,6 @@
     <Folder Include="App\Admin\ViewModels\Connections\" />
     <Folder Include="App\Admin\Views\Connections\" />
     <Folder Include="App\Home\" />
-    <Folder Include="App\Retrieve\ViewModels\FTP\" />
-    <Folder Include="App\Retrieve\Views\FTP\" />
     <Folder Include="App_Data\" />
     <Folder Include="Content\css\order\" />
     <Folder Include="Controllers\api\Monitoring\" />

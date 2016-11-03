@@ -17,45 +17,65 @@ public class AppSettings
 
     public string Encrypt(string clearText)
     {
-        string EncryptionKey = "abc123";
-        byte[] clearBytes = Encoding.Unicode.GetBytes(clearText);
-        using (Aes encryptor = Aes.Create())
+        if (clearText == "" || clearText == " ") {
+            return "";
+        }
+        try
         {
-            Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
-            encryptor.Key = pdb.GetBytes(32);
-            encryptor.IV = pdb.GetBytes(16);
-            using (MemoryStream ms = new MemoryStream())
+            string EncryptionKey = "abc123";
+            byte[] clearBytes = Encoding.Unicode.GetBytes(clearText);
+            using (Aes encryptor = Aes.Create())
             {
-                using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
+                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+                encryptor.Key = pdb.GetBytes(32);
+                encryptor.IV = pdb.GetBytes(16);
+                using (MemoryStream ms = new MemoryStream())
                 {
-                    cs.Write(clearBytes, 0, clearBytes.Length);
-                    cs.Dispose();
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(clearBytes, 0, clearBytes.Length);
+                        cs.Dispose();
+                    }
+                    clearText = Convert.ToBase64String(ms.ToArray());
                 }
-                clearText = Convert.ToBase64String(ms.ToArray());
             }
         }
+        catch {
+            clearText = "";
+        }
+        
         return clearText;
     }
     public string Decrypt(string cipherText)
     {
-        string EncryptionKey = "abc123";
-        cipherText = cipherText.Replace(" ", "+");
-        byte[] cipherBytes = Convert.FromBase64String(cipherText);
-        using (Aes encryptor = Aes.Create())
+        if (cipherText == "" || cipherText == " "){
+            return "";
+        }
+        try
         {
-            Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
-            encryptor.Key = pdb.GetBytes(32);
-            encryptor.IV = pdb.GetBytes(16);
-            using (MemoryStream ms = new MemoryStream())
+            string EncryptionKey = "abc123";
+            cipherText = cipherText.Replace(" ", "+");
+            byte[] cipherBytes = Convert.FromBase64String(cipherText);
+            using (Aes encryptor = Aes.Create())
             {
-                using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
+                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+                encryptor.Key = pdb.GetBytes(32);
+                encryptor.IV = pdb.GetBytes(16);
+                using (MemoryStream ms = new MemoryStream())
                 {
-                    cs.Write(cipherBytes, 0, cipherBytes.Length);
-                    cs.Dispose();
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(cipherBytes, 0, cipherBytes.Length);
+                        cs.Dispose();
+                    }
+                    cipherText = Encoding.Unicode.GetString(ms.ToArray());
                 }
-                cipherText = Encoding.Unicode.GetString(ms.ToArray());
             }
         }
+        catch {
+            cipherText = "";
+        }
+        
         return cipherText;
     }
 

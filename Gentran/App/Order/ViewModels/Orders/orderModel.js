@@ -45,30 +45,35 @@
 
     $scope.showDetails = function (order) {
         $scope.flags.shownFromList = true;
-        
-        if (order.ulstatus == "20") {
-            $scope.ifEditable = true;
+        console.log(order);
+        if (order.uiprice == "NaN" || order.uiprice == 0) {
+            notif_warning('Order Details','Lack of Product Mapping');
         } else {
-            $scope.ifEditable = false;
+
+            if (order.ulstatus == "20") {
+                $scope.ifEditable = true;
+            } else {
+                $scope.ifEditable = false;
+            }
+            var orderDetails = [];
+            orderDetails[0] = {};
+            orderDetails.txt_ponum = order.ulponumber;
+            orderDetails.txt_custnum = order.ulcustomer;
+            orderDetails.txt_orderdate = new Date(order.ulorderdate);
+            orderDetails.txt_deliverydate = new Date(order.uldeliverydate);
+            orderDetails.txt_remarks = order.ulremarks;
+            orderDetails.txt_status = order.ulstatus;
+            orderDetails.txt_orderid = order.ulid;
+            $scope.ordersInfo = orderDetails;
+
+            viewModelHelper.apiGet('api/order/' + order.ulid, null, function (result) {
+                console.log(result.data.detail);
+                $scope.orderItems = result.data.detail.filter(x=>x.UITPrice = parseInt(x.UITPrice).toLocaleString());
+                $scope.orderItems = result.data.detail.filter(x=>x.UIPrice = parseInt(x.UIPrice).toLocaleString());
+            });
+
+            $('#orderDetailsModal').modal('show');
         }
-        var orderDetails = [];
-        orderDetails[0] = {};
-        orderDetails.txt_ponum = order.ulponumber;
-        orderDetails.txt_custnum = order.ulcustomer;
-        orderDetails.txt_orderdate = new Date(order.ulorderdate);
-        orderDetails.txt_deliverydate = new Date(order.uldeliverydate);
-        orderDetails.txt_remarks = order.ulremarks;
-        orderDetails.txt_status = order.ulstatus;
-        orderDetails.txt_orderid = order.ulid;
-        $scope.ordersInfo = orderDetails;
-
-        viewModelHelper.apiGet('api/order/' + order.ulid, null, function (result) {
-            console.log(result.data.detail);
-            $scope.orderItems = result.data.detail.filter(x=>x.UITPrice = parseInt(x.UITPrice).toLocaleString());
-            $scope.orderItems = result.data.detail.filter(x=>x.UIPrice = parseInt(x.UIPrice).toLocaleString());
-        });
-
-        $('#orderDetailsModal').modal('show');
     }
 
 
@@ -117,7 +122,8 @@
 
         $('.cbxSub').each(function () {
             if (this.checked == true) {
-                var status = $(this).closest('tr').find('.table-data-ustat').text();
+                var status = $(this).closest('tr').find('.table-data-ustat').text().trim();
+
                 if (status == "Read Failed") {
                     ifNew = false;
                 } else{

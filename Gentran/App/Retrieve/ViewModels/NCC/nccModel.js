@@ -1,4 +1,4 @@
-﻿retrieveModule.controller("superViewModel", function ($sce,$scope, retrieveService, $http, $q, $routeParams, $window, $location, viewModelHelper, $timeout, DTOptionsBuilder, DTColumnDefBuilder, $route, filterFilter) {
+﻿retrieveModule.controller("nccViewModel", function ($sce,$scope, retrieveService, $http, $q, $routeParams, $window, $location, viewModelHelper, $timeout, DTOptionsBuilder, DTColumnDefBuilder, $route, filterFilter) {
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.retrieveService = retrieveService;
@@ -13,7 +13,7 @@
         $scope.search = {};
         $scope.searchBy = "files";
 
-        viewModelHelper.apiGet('api/ftp/s8', null, function (result) {
+        viewModelHelper.apiGet('api/ftp/ncc', null, function (result) {
             $scope.pageSize = 5;
             $scope.entryLimit = 50;
             $scope.entryLimitPO = 12;
@@ -66,7 +66,7 @@
 
         var split = data.directory.split('\\');
 
-        downloadURI(host + "ftp/s8/" + split[split.length - 1], split[split.length - 1]);
+        downloadURI(host + "ftp/ncc/" + split[split.length - 1], split[split.length - 1]);
         function downloadURI(uri, name) {
             var link = document.createElement("a");
             link.download = name;
@@ -93,14 +93,14 @@
         var top = ((height / 2) - (h / 2)) + screentop;
 
         if (temp2 == "txt") {
-            printWindow = window.open(host + 'ftp/s8/' + data.files + '', '', 'left=' + left + ',top=' + top + ',width=' + w + ',height=' + h + ',status=0');
+            printWindow = window.open(host + 'ftp/ncc/' + data.files + '', '', 'left=' + left + ',top=' + top + ',width=' + w + ',height=' + h + ',status=0');
             setTimeout(function () {
                 printWindow.print();
                 printWindow.close();
             }, 500);
         }
         else {
-            window.open(host + 'ftp/s8/' + data.files, "Test", "width="+w+",height="+h+",scrollbars=1,resizable=1");
+            window.open(host + 'ftp/ncc/' + data.files, "Test", "width="+w+",height="+h+",scrollbars=1,resizable=1");
         }
     }
 
@@ -152,7 +152,7 @@
                 listElem[ctr] = {};
                 listElem[ctr].element = $(this.parentElement);
                 console.log($(this.nextElementSibling.children));
-                listFile[ctr].outlet = "S8";
+                listFile[ctr].outlet = "NCC";
                 listFile[ctr].fileName = this.nextElementSibling.children[1].children[2].textContent;
                 listFile[ctr].fileLogo = this.nextElementSibling.children[1].children[0].outerHTML;
                 console.log(this.nextElementSibling.children[1].children[0]);

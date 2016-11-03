@@ -46,7 +46,7 @@ namespace Gentran.Controllers.api.Retrieve
             //string response = "";
             var time = System.Diagnostics.Stopwatch.StartNew();
 
-            List<Dictionary<object, object>> s8Object = new List<Dictionary<object, object>>();
+            List<Dictionary<object, object>> xmlObject = new List<Dictionary<object, object>>();
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
 
@@ -56,6 +56,8 @@ namespace Gentran.Controllers.api.Retrieve
             string[] data = { };
             string[] tempData = new string[8];
             string[] colName = { "CustNo", "PONum", "oDate", "dDate", "ProdCode", "qty", "uUser", "uAcct" };
+            string cust = "", ponum = "", podate = "", deldate = "", qty = "", barcode = "";
+            //cust,ponum,podate,deldate,blank,blank,blank,prod,qty,userid,outlet
 
             try
             {
@@ -67,17 +69,19 @@ namespace Gentran.Controllers.api.Retrieve
                 }
                 else if (values.payload[0].outlet == "S8")
                 {
-                    s8Object = appSet.xml(values.payload[0].fileName);
+                    xmlObject = appSet.xml(values.payload[0].fileName);
 
                     int arrayCtr = 0;
-                    var obj = from ctr in s8Object select ctr;
-                    var objValues = obj.ToList();
-                    var objList = obj.ToList().Where(x => x.ContainsKey("Barcode") || x.ContainsKey("Quantity"));
-                    string cust = "", ponum = "", podate = "", deldate = "", prod = "", qty = "", userid = "", outlet = "", barcode = "";
-
-                    datactr = objList.Where(x=>x.ContainsKey("Barcode")).Count();
+                    var obj = from ctr in xmlObject select ctr;
+                    var objValues = obj.ToList().Where(x => x.ContainsKey("DestinationCode")
+                        || x.ContainsKey("PONumber")
+                        || x.ContainsKey("PODate")
+                        || x.ContainsKey("DeliveryDate")
+                        || x.ContainsKey("Barcode")
+                        || x.ContainsKey("Quantity")
+                    );
+                    datactr = obj.ToList().Where(x => x.ContainsKey("Barcode")).Count();
                     data = new string[datactr];
-                    //cust,ponum,podate,deldate,blank,blank,blank,prod,qty,userid,outlet
                     
                     foreach (var listKey in objValues)
                     {
@@ -90,28 +94,73 @@ namespace Gentran.Controllers.api.Retrieve
                         }
                         if (listKey.Keys.ElementAt(0).ToString() == "PODate")
                         {
-                            podate = listKey["PODate"].ToString().Substring(4) + listKey["PODate"].ToString().Substring(2,2);
+                            podate = listKey["PODate"].ToString().Substring(4) + listKey["PODate"].ToString().Substring(2, 2);
                         }
                         if (listKey.Keys.ElementAt(0).ToString() == "DeliveryDate")
                         {
                             deldate = listKey["DeliveryDate"].ToString().Substring(4) + listKey["DeliveryDate"].ToString().Substring(2, 2);
                         }
-                    }
-
-                    foreach (var key in objList) {
-                        if (key.Keys.ElementAt(0).ToString() == "Barcode") {
-                            barcode = key["Barcode"].ToString(); 
+                        if (listKey.Keys.ElementAt(0).ToString() == "Barcode") {
+                            barcode = listKey["Barcode"].ToString();
                         }
-                        if (key.Keys.ElementAt(0).ToString() == "Quantity") {
-                            data[arrayCtr] = cust + "," + ponum + "," + podate + "," + deldate + "," + "," + "," + "," + barcode + "," + key["Quantity"].ToString();
+                        if (listKey.Keys.ElementAt(0).ToString() == "Quantity" && barcode != "")
+                        {
+                            data[arrayCtr] = cust + "," + ponum + "," + podate.Replace(" ", "") + "," + deldate.Replace(" ", "") + "," + "," + "," + "," + barcode + "," + listKey["Quantity"].ToString();
                             arrayCtr++;
                         }
                     }
-                    //FILE TYPE
-                    //ifFormatted = true;
-                }
+                    
+                    ifFormatted = true;
+                } else if (values.payload[0].outlet == "NCC") {
 
-                /*if (ifFormatted)
+                    xmlObject = appSet.xml(values.payload[0].fileName);
+
+                    int arrayCtr = 0;
+                    var obj = from ctr in xmlObject select ctr;
+                    var objValues = obj.ToList().Where(x => x.ContainsKey("deliver_to")
+                        || x.ContainsKey("po_number")
+                        || x.ContainsKey("podate")
+                        || x.ContainsKey("delvdate")
+                        || x.ContainsKey("upc")
+                        || x.ContainsKey("order_qty")
+                    );
+                    datactr = obj.ToList().Where(x => x.ContainsKey("sku")).Count();
+                    data = new string[datactr];
+
+                    foreach (var listKey in objValues)
+                    {
+                        if (listKey.Keys.ElementAt(0).ToString() == "deliver_to")
+                        {
+                            string[] custSplit = listKey["deliver_to"].ToString().Split('-');
+                            cust = custSplit[1] +"-"+custSplit[0];
+                        }
+                        if (listKey.Keys.ElementAt(0).ToString() == "po_number")
+                        {
+                            ponum = listKey["po_number"].ToString();
+                        }
+                        if (listKey.Keys.ElementAt(0).ToString() == "podate")
+                        {
+                            podate = listKey["podate"].ToString().Replace('/',' ');
+                        }
+                        if (listKey.Keys.ElementAt(0).ToString() == "delvdate")
+                        {
+                            deldate = listKey["delvdate"].ToString().Replace('/', ' ');
+                        }
+                        if (listKey.Keys.ElementAt(0).ToString() == "order_qty")
+                        {
+                            qty = listKey["order_qty"].ToString().Substring(0, listKey["order_qty"].ToString().IndexOf('.'));
+                        }
+                        if (listKey.Keys.ElementAt(0).ToString() == "upc" && qty != "")
+                        {
+                            data[arrayCtr] = cust + "," + ponum + "," + podate.Replace(" ","") + "," + deldate.Replace(" ", "") + "," + "," + "," + "," + listKey["upc"].ToString() + "," + qty;
+                            arrayCtr++;
+                        }
+                    }
+
+                    ifFormatted = true;
+                }
+                
+                if (ifFormatted)
                 {
                     string[] temp = values.payload[0].fileName.Split('\\');
                     absoluteName = temp[temp.Length - 1];
@@ -134,7 +183,7 @@ namespace Gentran.Controllers.api.Retrieve
                             tempData[4] = split[7]; // Product Code 
                             tempData[5] = split[8]; // Quantity
                             tempData[6] = HttpContext.Current.Session["UserId"].ToString(); // User ID
-                            tempData[7] = "SM"; // Outlet
+                            tempData[7] = values.payload[0].outlet; // Outlet
 
                             row = new Dictionary<string, object>();
                             if (tempCust != tempData[0])
@@ -162,7 +211,7 @@ namespace Gentran.Controllers.api.Retrieve
                 }
                 else {
                     data[0] = "File not formatted!";
-                }*/
+                }
                 #region Version2_Linq
 
                 /*SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);

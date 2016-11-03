@@ -65,7 +65,7 @@
 
         var split = data.directory.split('\\');
 
-        downloadURI(host + "ftp/" + split[split.length - 1], split[split.length - 1]);
+        downloadURI(host + "ftp/sm/" + split[split.length - 1], split[split.length - 1]);
         function downloadURI(uri, name) {
             var link = document.createElement("a");
             link.download = name;
@@ -92,20 +92,19 @@
         var top = ((height / 2) - (h / 2)) + screentop;
 
         if (temp2 == "txt") {
-            printWindow = window.open(host + 'ftp/' + data.files + '', '', 'left=' + left + ',top=' + top + ',width=' + w + ',height=' + h + ',status=0');
+            printWindow = window.open(host + 'ftp/sm/' + data.files + '', '', 'left=' + left + ',top=' + top + ',width=' + w + ',height=' + h + ',status=0');
             setTimeout(function () {
                 printWindow.print();
                 printWindow.close();
             }, 500);
         }
         else if (temp2 == "pdf") {
-            console.log(host + 'ftp/' + data.files);
             var strContent = "<html><head>";
             strContent = strContent + "<title>Invoice Printing</title>";
             strContent = strContent + "</head><body>";
             strContent = strContent + "<div class=\"print-wrapper\">";
-            strContent = strContent + "<object data='" + host + 'ftp/' + data.files + "' type='application/pdf' width='100%' height='100%'>";
-            strContent = strContent + "alt : <a href='" + host + 'ftp/' + data.files + "'>Your browser is not supported. Please click here to download.</a>";
+            strContent = strContent + "<object data='" + host + 'ftp/sm/' + data.files + "' type='application/pdf' width='100%' height='100%'>";
+            strContent = strContent + "alt : <a href='" + host + 'ftp/sm/' + data.files + "'>Your browser is not supported. Please click here to download.</a>";
             strContent = strContent + "</object>";
             strContent = strContent + "</div>";
             strContent = strContent + "</body>";
@@ -113,12 +112,11 @@
             printWindow = window.open('', '', 'left=' + left + ',top=' + top + ',width=' + w + ',height=' + h + ',status=0');
             printWindow.document.write(strContent);
         } else {
-            console.log(host + 'ftp/' + data.files);
             var strContent = "<html><head>";
             strContent = strContent + "<title>Invoice Printing</title>";
             strContent = strContent + "</head><body>";
             strContent = strContent + "<div class=\"print-wrapper\">";
-            strContent = strContent + "NOTE : <a href='" + host + 'ftp/' + data.files + "'>Excel/CSV file not supported to view content. Please click here to download.</a>";
+            strContent = strContent + "NOTE : <a href='" + host + 'ftp/sm/' + data.files + "'>Excel/CSV file not supported to view content. Please click here to download.</a>";
             strContent = strContent + "</object>";
             strContent = strContent + "</div>";
             strContent = strContent + "</body>";

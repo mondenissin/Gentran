@@ -16,5 +16,9 @@
     $scope.superFile = function () {
         viewModelHelper.navigateTo('Retrieve/Super8');
     }
+
+    $scope.nccFile = function () {
+        viewModelHelper.navigateTo('Retrieve/NCC');
+    }
     initialize();
 });

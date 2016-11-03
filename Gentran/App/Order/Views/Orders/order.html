@@ -46,9 +46,9 @@
                 <td ng-cloak class="table-data-uodate" style="width:10%;">{{ o.ulorderdate }}</td>
                 <td ng-cloak class="table-data-uddate">{{ o.uldeliverydate }}</td>
                 <td ng-cloak class="table-data-uudate" style="width:10%;">{{ o.uluploaddate }}</td>
-                <td ng-cloak class="table-data-cqty" style="text-align: center; width:10%;">{{ o.countulquantity }}</td>
-                <td ng-cloak class="table-data-sqty" style="text-align: center; width:10%;">{{ o.sumulquantity }}</td>
-                <td ng-cloak class="table-data-uprice" style="text-align: center; width:10%;">₱{{o.uiprice }}</td>
+                <td ng-cloak class="table-data-cqty" style="text-align: center; width:10%;">{{ o.countulquantity == "" ? '0' : o.countulquantity}}</td>
+                <td ng-cloak class="table-data-sqty" style="text-align: center; width:10%;">{{ o.sumulquantity == "" ? '0' : o.sumulquantity }}</td>
+                <td ng-cloak class="table-data-uprice" style="text-align: center; width:10%;">₱{{o.uiprice == "NaN" ? '0' : o.uiprice }}</td>
                 <td ng-cloak class="status" style="position:relative;width:5%;">
                     <!--<div class="orderOverlay" hidden>
                         <div class="row">
