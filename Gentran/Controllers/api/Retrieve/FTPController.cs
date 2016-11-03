@@ -52,9 +52,9 @@ namespace Gentran.Controllers.api
                 string line = "";
                 
                 while (!string.IsNullOrEmpty((line = reader.ReadLine()))) {
-                    if (!(File.Exists(@"C:\inetpub\wwwroot\files\ftp\" + line)))
+                    if (!(File.Exists(@"C:\inetpub\wwwroot\files\ftp\" + acct +@"\"+ line)))
                     {
-                        string inputfilepath = @"C:\inetpub\wwwroot\files\ftp\" + line;
+                        string inputfilepath = @"C:\inetpub\wwwroot\files\ftp\" + acct + @"\" + line;
                         string ftpfullpath = m_ftpSite + "/" + line;
 
                         using (WebClient webreq = new WebClient())
@@ -79,9 +79,14 @@ namespace Gentran.Controllers.api
                 response.Close();
                 
                 fileList.Clear();
-                fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp", "*.pdf"));
-                fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp", "*.txt"));
-                fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp", "*.csv"));
+
+                if (acct == "sm") {
+                    fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\sm", "*.pdf"));
+                    fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\sm", "*.txt"));
+                    fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\sm", "*.csv"));
+                } else if (acct == "s8") {
+                    fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\s8", "*.xml"));
+                }
 
                 int intCount = 0;
                 intCount = fileList.Count;
@@ -93,26 +98,29 @@ namespace Gentran.Controllers.api
                     row.Add("files", fileList[i]);
                     rows.Add(row);
 
-                    //FOR THUMBNAILS
-                    String imageDir = "";
-                    String[] aName = fileList[i].Split('\\');
-                    String sName = aName[aName.Length - 1].Replace(" ", "");
-                    sName = sName.Substring(0, sName.IndexOf('.'));
-                    String asd = Directory.GetCurrentDirectory();
-                    
-                    imageDir = @"C:\inetpub\wwwroot\Gentran\Gentran\Images\thumbnails\" + sName + ".jpg";
+                    if (acct == "sm")
+                    {
+                        //FOR THUMBNAILS
+                        String imageDir = "";
+                        String[] aName = fileList[i].Split('\\');
+                        String sName = aName[aName.Length - 1].Replace(" ", "");
+                        sName = sName.Substring(0, sName.IndexOf('.'));
+                        String asd = Directory.GetCurrentDirectory();
 
-                    Workbook book = new Workbook(fileList[i]);
-                    Worksheet sheet = book.Worksheets[0];
-                    sheet.PageSetup.PrintArea = "A1:J10";
-                    
-                    ImageOrPrintOptions imgOptions = new ImageOrPrintOptions();
-                    imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Jpeg;
-                    imgOptions.OnePagePerSheet = true;
+                        imageDir = @"C:\inetpub\wwwroot\Gentran\Gentran\Images\thumbnails\" + sName + ".jpg";
 
-                    SheetRender sr = new SheetRender(sheet, imgOptions);
-                    Bitmap bitmap = sr.ToImage(0);
-                    bitmap.Save(imageDir);
+                        Workbook book = new Workbook(fileList[i]);
+                        Worksheet sheet = book.Worksheets[0];
+                        sheet.PageSetup.PrintArea = "A1:J10";
+
+                        ImageOrPrintOptions imgOptions = new ImageOrPrintOptions();
+                        imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Jpeg;
+                        imgOptions.OnePagePerSheet = true;
+
+                        SheetRender sr = new SheetRender(sheet, imgOptions);
+                        Bitmap bitmap = sr.ToImage(0);
+                        bitmap.Save(imageDir);
+                    }
                 }
             }
             catch(Exception ex){

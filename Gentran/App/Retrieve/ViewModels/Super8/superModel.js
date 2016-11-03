@@ -1,7 +1,8 @@
-﻿retrieveModule.controller("superViewModel", function ($scope, retrieveService, $http, $q, $routeParams, $window, $location, viewModelHelper, $timeout) {
+﻿retrieveModule.controller("superViewModel", function ($sce,$scope, retrieveService, $http, $q, $routeParams, $window, $location, viewModelHelper, $timeout, DTOptionsBuilder, DTColumnDefBuilder, $route, filterFilter) {
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.retrieveService = retrieveService;
+    $scope.trustAsHtml = $sce.trustAsHtml;
 
     var initialize = function () {
         $scope.refreshS8();
@@ -9,8 +10,14 @@
 
     $scope.refreshS8 = function () {
 
+        $scope.search = {};
+        $scope.searchBy = "files";
+
         viewModelHelper.apiGet('api/ftp/s8', null, function (result) {
-            
+            $scope.pageSize = 5;
+            $scope.entryLimit = 50;
+            $scope.entryLimitPO = 12;
+
             if (result.data.success) {
                 $scope.files = result.data.detail.map(function (obj) {
                     var rObj = {};
@@ -23,11 +30,26 @@
                     return rObj;
                 });
 
+                $scope.filesList = $scope.files;
+
+                $scope.$watch('search[searchBy]', function () {
+                    $scope.files = filterFilter($scope.filesList, $scope.search);
+
+                    $scope.noOfPages = Math.ceil($scope.files.length / $scope.entryLimit);
+                    $scope.noOfPagesPO = Math.ceil($scope.files.length / $scope.entryLimitPO);
+
+                    $scope.currentPage = 1;
+                });
                 console.log($scope.files);
             } else {
                 console.log(result.data.detail[0].error);
             }
         });
+
+        $scope.dtOptions = DTOptionsBuilder.newOptions();
+        $scope.dtColumnDefs = [
+           DTColumnDefBuilder.newColumnDef('no-sort').notSortable()
+        ];
     }
 
     $scope.loadHover = function () {
@@ -117,6 +139,91 @@
             $('.po-files').css('background', 'transparent');
         }
     }
+    function convertHTML(tag) {
+
+        return $sce.trustAsHtml(tag);
+    }
+
+    $scope.getSelected = function () {
+        var chk = false;
+        var ctr = 0;
+        var listFile = [];
+        var listElem = [];
+
+        $('.po-cbx').each(function () {
+
+            if (this.checked == true) {
+
+                chk = true;
+
+                //$(this.parentElement).remove();
+                //this.checked = false;
+
+                listFile[ctr] = {};
+
+                listElem[ctr] = {};
+                listElem[ctr].element = $(this.parentElement);
+                console.log($(this.nextElementSibling.children));
+                listFile[ctr].outlet = "S8";
+                listFile[ctr].fileName = this.nextElementSibling.children[1].children[2].textContent;
+                listFile[ctr].fileLogo = this.nextElementSibling.children[1].children[0].outerHTML;
+                console.log(this.nextElementSibling.children[1].children[0]);
+                listFile[ctr].name = this.nextElementSibling.children[1].children[1].textContent;
+                listFile[ctr].fileID = this.nextElementSibling.children[1].children[1].textContent.replace(/[. ]/g, '');
+
+                ctr++;
+            }
+        }).promise().done(function () {
+            $scope.uploadedFile = listFile;
+
+            if (chk) {
+                $('#mapModal').modal('show');
+                var i = 0, count = listFile.length;
+                var execTime;
+
+                function LaodFile() {
+                    var fileName = [];
+                    var elemName = [];
+                    var items = {};
+
+                    elemName[0] = listElem[i];
+                    fileName[0] = listFile[i];
+                    items.payload = fileName;
+
+                    viewModelHelper.apiPost('api/masteruploader', JSON.stringify(items), function (result) {
+                        var mapData = result.data.filecontent;
+                        execTime = result.data.execution;
+                        console.log(result.data.filecontent);
+                        console.log(execTime);
+                        console.log(result.data.detail);
+                        $('#' + fileName[0].fileID).text("Reading");
+                        $('#' + fileName[0].fileID).animate({ width: '100%' }, execTime);
+
+                        setTimeout(function () {
+
+                            viewModelHelper.saveTransaction(result.data.detail);
+
+                            $('#' + fileName[0].fileID).text("Read Successful");
+
+                            $(elemName[0].element).remove();
+                            //$scope.refreshSM();
+                        }, execTime);
+                    });
+
+                    i++;
+                    if (i < count) {
+                        setTimeout(LaodFile, 1000);
+                    }
+                }
+                setTimeout(function () {
+                    LaodFile();
+                }, execTime);
+            } else {
+                notif_warning('File Reader', 'Please select file to read');
+            }
+        });
+    }
+
 
     initialize();
 });

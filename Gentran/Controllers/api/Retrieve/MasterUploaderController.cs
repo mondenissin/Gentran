@@ -14,6 +14,7 @@ namespace Gentran.Controllers.api.Retrieve
 {
     public class MasterUploaderController : ApiController
     {
+        AppSettings appSet = new AppSettings();
         List<Transaction> trows = new List<Transaction>();
         string userID = HttpContext.Current.Session["UserId"].ToString();
         Boolean success = true;
@@ -45,9 +46,11 @@ namespace Gentran.Controllers.api.Retrieve
             //string response = "";
             var time = System.Diagnostics.Stopwatch.StartNew();
 
+            List<Dictionary<object, object>> s8Object = new List<Dictionary<object, object>>();
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
 
+            int datactr = 0;
             bool ifFormatted = false;
             string tempCust = "";
             string[] data = { };
@@ -58,15 +61,57 @@ namespace Gentran.Controllers.api.Retrieve
             {
                 if (values.payload[0].outlet == "SM")
                 {
-                    data = csv(values.payload[0].fileName);
+                    data = appSet.csv(values.payload[0].fileName);
+                    datactr = data.Length;
                     ifFormatted = true;
                 }
-                else if (values.payload[0].outlet == "S8") {
+                else if (values.payload[0].outlet == "S8")
+                {
+                    s8Object = appSet.xml(values.payload[0].fileName);
+
+                    int arrayCtr = 0;
+                    var obj = from ctr in s8Object select ctr;
+                    var objValues = obj.ToList();
+                    var objList = obj.ToList().Where(x => x.ContainsKey("Barcode") || x.ContainsKey("Quantity"));
+                    string cust = "", ponum = "", podate = "", deldate = "", prod = "", qty = "", userid = "", outlet = "", barcode = "";
+
+                    datactr = objList.Where(x=>x.ContainsKey("Barcode")).Count();
+                    data = new string[datactr];
+                    //cust,ponum,podate,deldate,blank,blank,blank,prod,qty,userid,outlet
+                    
+                    foreach (var listKey in objValues)
+                    {
+                        if (listKey.Keys.ElementAt(0).ToString() == "DestinationCode") {
+                            cust = listKey["DestinationCode"].ToString();
+                        }
+                        if (listKey.Keys.ElementAt(0).ToString() == "PONumber")
+                        {
+                            ponum = listKey["PONumber"].ToString();
+                        }
+                        if (listKey.Keys.ElementAt(0).ToString() == "PODate")
+                        {
+                            podate = listKey["PODate"].ToString().Substring(4) + listKey["PODate"].ToString().Substring(2,2);
+                        }
+                        if (listKey.Keys.ElementAt(0).ToString() == "DeliveryDate")
+                        {
+                            deldate = listKey["DeliveryDate"].ToString().Substring(4) + listKey["DeliveryDate"].ToString().Substring(2, 2);
+                        }
+                    }
+
+                    foreach (var key in objList) {
+                        if (key.Keys.ElementAt(0).ToString() == "Barcode") {
+                            barcode = key["Barcode"].ToString(); 
+                        }
+                        if (key.Keys.ElementAt(0).ToString() == "Quantity") {
+                            data[arrayCtr] = cust + "," + ponum + "," + podate + "," + deldate + "," + "," + "," + "," + barcode + "," + key["Quantity"].ToString();
+                            arrayCtr++;
+                        }
+                    }
                     //FILE TYPE
                     //ifFormatted = true;
                 }
-                
-                if (ifFormatted)
+
+                /*if (ifFormatted)
                 {
                     string[] temp = values.payload[0].fileName.Split('\\');
                     absoluteName = temp[temp.Length - 1];
@@ -74,7 +119,7 @@ namespace Gentran.Controllers.api.Retrieve
 
                     File.Move(values.payload[0].fileName, @"C:\inetpub\wwwroot\files\Gentran\queued\" + absoluteName);
 
-                    for (int x = 0, y = data.Length; x < y; x++)
+                    for (int x = 0, y = datactr; x < y; x++)
                     {
                         //string[] split = tempdata[x].Split(',').Where(a => !String.IsNullOrEmpty(a)).ToArray();
                         string[] split = data[x].Split(',');
@@ -107,7 +152,7 @@ namespace Gentran.Controllers.api.Retrieve
                             }
                             rows.Add(row);
 
-                            if (x == data.Length - 1)
+                            if (x == datactr - 1)
                             {
                                 ifMult = false;
                                 SaveData(rows);
@@ -117,7 +162,7 @@ namespace Gentran.Controllers.api.Retrieve
                 }
                 else {
                     data[0] = "File not formatted!";
-                }
+                }*/
                 #region Version2_Linq
 
                 /*SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
@@ -153,7 +198,7 @@ namespace Gentran.Controllers.api.Retrieve
 
                 //success = true;
                 #endregion
-                
+
             }
             catch (Exception ex)
             {
@@ -177,7 +222,7 @@ namespace Gentran.Controllers.api.Retrieve
         {
         }
 
-        private string[] csv(string fileName) {
+        /*private string[] csv(string fileName) {
 
 
             string[] readed = { };
@@ -186,7 +231,7 @@ namespace Gentran.Controllers.api.Retrieve
             readed = File.ReadAllLines(filepath);
 
             return readed;
-        }
+        }*/
 
 
         private void SaveData(List<Dictionary<string, object>> data) {

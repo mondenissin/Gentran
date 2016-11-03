@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Text;
 using System.IO;
+using System.Xml;
 
 public class AppSettings
 {
@@ -99,4 +100,38 @@ public class AppSettings
         return readed;
     }
 
+    public List<Dictionary<object, object>> xml(string fileName) {
+        Boolean success = false;
+        string element = "";
+        List<Dictionary<object, object>> rows = new List<Dictionary<object, object>>();
+        Dictionary<object, object> row;
+
+        try
+        {
+            XmlTextReader reader = new XmlTextReader(fileName);
+            while (reader.Read())
+            {
+                switch (reader.NodeType)
+                {
+                    case XmlNodeType.Element:
+                        element = reader.Name;
+                        break;
+                    case XmlNodeType.Text:
+                        row = new Dictionary<object, object>();
+                        row.Add(element, reader.Value);
+                        rows.Add(row);
+                        break;
+                }
+            }
+            reader.Close();
+
+            success = true;
+        }
+        catch (Exception ex)
+        {
+            success = false;
+        }
+
+        return rows;
+    }
 }
