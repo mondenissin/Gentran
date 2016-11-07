@@ -24,7 +24,8 @@
                     var ext = split[split.length - 1].split('.');
                     rObj["files"] = split[split.length - 1];
                     rObj["directory"] = obj.files;
-                    rObj["thumbnail"] = "../Images/thumbnails/" + ext[0].replace(/[" "]/g, "") + ".jpg";
+                    rObj["thumbnail"] = "../Images/thumbnails/excel.PNG";
+                    //rObj["thumbnail"] = "../Images/thumbnails/" + ext[0].replace(/[" "]/g, "") + ".jpg";
                     rObj["extension"] = "../Images/files/" + ext[ext.length - 1] + ".png";
                     
                     return rObj;
@@ -39,6 +40,8 @@
 
                     $scope.currentPage = 1;
                 });
+
+                viewModelHelper.saveTransaction(result.data.transactionDetail);
                 console.log($scope.files);
             } else {
                 console.log(result.data.detail[0].error);
@@ -79,51 +82,10 @@
         var temponame = data.directory;
         var temp1 = temponame.split('.');
         var temp2 = temp1[(temp1.length - 1)];
+        var fileLoc = "";
+        fileLoc = "ftp/sm/";
 
-        var screenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
-        var screentop = window.screenTop != undefined ? window.screenTop : screen.top;
-
-        width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
-        height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
-
-        var w = '1100';
-        var h = '600';
-        var left = ((width / 2) - (w / 2)) + screenLeft;
-        var top = ((height / 2) - (h / 2)) + screentop;
-
-        if (temp2 == "txt") {
-            printWindow = window.open(host + 'ftp/sm/' + data.files + '', '', 'left=' + left + ',top=' + top + ',width=' + w + ',height=' + h + ',status=0');
-            setTimeout(function () {
-                printWindow.print();
-                printWindow.close();
-            }, 500);
-        }
-        else if (temp2 == "pdf") {
-            var strContent = "<html><head>";
-            strContent = strContent + "<title>Invoice Printing</title>";
-            strContent = strContent + "</head><body>";
-            strContent = strContent + "<div class=\"print-wrapper\">";
-            strContent = strContent + "<object data='" + host + 'ftp/sm/' + data.files + "' type='application/pdf' width='100%' height='100%'>";
-            strContent = strContent + "alt : <a href='" + host + 'ftp/sm/' + data.files + "'>Your browser is not supported. Please click here to download.</a>";
-            strContent = strContent + "</object>";
-            strContent = strContent + "</div>";
-            strContent = strContent + "</body>";
-            strContent = strContent + "</html>";
-            printWindow = window.open('', '', 'left=' + left + ',top=' + top + ',width=' + w + ',height=' + h + ',status=0');
-            printWindow.document.write(strContent);
-        } else {
-            var strContent = "<html><head>";
-            strContent = strContent + "<title>Invoice Printing</title>";
-            strContent = strContent + "</head><body>";
-            strContent = strContent + "<div class=\"print-wrapper\">";
-            strContent = strContent + "NOTE : <a href='" + host + 'ftp/sm/' + data.files + "'>Excel/CSV file not supported to view content. Please click here to download.</a>";
-            strContent = strContent + "</object>";
-            strContent = strContent + "</div>";
-            strContent = strContent + "</body>";
-            strContent = strContent + "</html>";
-            printWindow = window.open('', '', 'left=' + left + ',top=' + top + ',width=' + w + ',height=' + h + ',status=0');
-            printWindow.document.write(strContent);
-        }
+        viewModelHelper.fileViewer(temp2, data.files, fileLoc);
     }
 
 

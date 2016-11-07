@@ -10,17 +10,22 @@ using System.Text;
 using Aspose.Cells;
 using Aspose.Cells.Rendering;
 using System.Drawing;
+using System.Web;
 
 namespace Gentran.Controllers.api
 {
     public class FTPController : ApiController
     {
-        AppSettings app = new AppSettings();
+        private AppSettings app = new AppSettings();
+        private List<Transaction> trows = new List<Transaction>();
+        private DateTime rDate = DateTime.Now;
+        private string userID = HttpContext.Current.Session["UserId"].ToString();
         string m_ftpSite, m_strUsername, m_strPassword = "";
         // GET api/ftp
         public Object Get(string id)
         {
             string acct = id;
+            int notifCtr = 0;
             bool success = true;
             List<string> fileList = new List<string>();
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
@@ -28,15 +33,15 @@ namespace Gentran.Controllers.api
 
             try
             {
-                if (acct == "sm") {
+                if (acct == "sm" || acct == "c_sm") {
                     m_ftpSite = System.Configuration.ConfigurationManager.AppSettings["smftpsite"];
                     m_strUsername = System.Configuration.ConfigurationManager.AppSettings["smusername"];
                     m_strPassword = System.Configuration.ConfigurationManager.AppSettings["smpassword"];
-                } else if (acct == "s8") {
+                } else if (acct == "s8" || acct == "c_s8") {
                     m_ftpSite = System.Configuration.ConfigurationManager.AppSettings["s8ftpsite"];
                     m_strUsername = System.Configuration.ConfigurationManager.AppSettings["s8username"];
                     m_strPassword = System.Configuration.ConfigurationManager.AppSettings["s8password"];
-                } else if (acct == "ncc") {
+                } else if (acct == "ncc" || acct == "c_ncc") {
                     m_ftpSite = System.Configuration.ConfigurationManager.AppSettings["nccftpsite"];
                     m_strUsername = System.Configuration.ConfigurationManager.AppSettings["nccusername"];
                     m_strPassword = System.Configuration.ConfigurationManager.AppSettings["nccpassword"];
@@ -51,6 +56,7 @@ namespace Gentran.Controllers.api
 
                 Stream responseStream = response.GetResponseStream();
                 StreamReader reader = new StreamReader(responseStream);
+
                 StringBuilder strInfo = new StringBuilder();
                 //string line = reader.ReadLine().ToString();
                 string line = "";
@@ -58,76 +64,93 @@ namespace Gentran.Controllers.api
                 while (!string.IsNullOrEmpty((line = reader.ReadLine()))) {
                     if (!(File.Exists(@"C:\inetpub\wwwroot\files\ftp\" + acct +@"\"+ line)))
                     {
-                        string inputfilepath = @"C:\inetpub\wwwroot\files\ftp\" + acct + @"\" + line;
-                        string ftpfullpath = m_ftpSite + "/" + line;
-
-                        using (WebClient webreq = new WebClient())
+                        if (acct == "c_sm" || acct == "c_s8" || acct == "c_ncc")
                         {
-                            webreq.Credentials = new NetworkCredential(m_strUsername, app.Decrypt(m_strPassword));
-                            byte[] fileData = webreq.DownloadData(ftpfullpath);
+                            notifCtr++;
+                        }
+                        else{
+                            string inputfilepath = @"C:\inetpub\wwwroot\files\ftp\" + acct + @"\" + line;
+                            string ftpfullpath = m_ftpSite + "/" + line;
 
-                            using (FileStream file = File.Create(inputfilepath))
+                            using (WebClient webreq = new WebClient())
                             {
-                                file.Write(fileData, 0, fileData.Length);
-                                file.Close();
-                            }
+                                webreq.Credentials = new NetworkCredential(m_strUsername, app.Decrypt(m_strPassword));
+                                byte[] fileData = webreq.DownloadData(ftpfullpath);
 
-                            if (acct != "ncc") {
-                                FtpWebRequest request2 = (FtpWebRequest)WebRequest.Create(ftpfullpath);
-                                request2.Method = WebRequestMethods.Ftp.DeleteFile;
-                                FtpWebResponse response2 = (FtpWebResponse)request2.GetResponse();
-                                string asd = response2.StatusDescription;
-                                response2.Close();
-                            }    
+                                using (FileStream file = File.Create(inputfilepath))
+                                {
+                                    file.Write(fileData, 0, fileData.Length);
+                                    file.Close();
+                                }
+
+                                if (acct != "ncc")
+                                {
+                                    FtpWebRequest request2 = (FtpWebRequest)WebRequest.Create(ftpfullpath);
+                                    request2.Method = WebRequestMethods.Ftp.DeleteFile;
+                                    FtpWebResponse response2 = (FtpWebResponse)request2.GetResponse();
+                                    string asd = response2.StatusDescription;
+                                    response2.Close();
+                                }
+                            }
+                            trows.Add(new Transaction { response = "File Retrieved", activity = "RET10", date = rDate, remarks = line, user = userID, type = "ADM", value = "Successfully Retrieved", changes = "", payloadvalue = "", customernumber = "", ponumber = "" });
                         }
                     }
                 }
                 response.Close();
                 
                 fileList.Clear();
-
-                if (acct == "sm") {
-                    fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\sm", "*.pdf"));
-                    fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\sm", "*.txt"));
-                    fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\sm", "*.csv"));
-                } else if (acct == "s8") {
-                    fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\s8", "*.xml"));
-                } else if (acct == "ncc") {
-                    fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\ncc", "*.xml"));
-                }
-
-                int intCount = 0;
-                intCount = fileList.Count;
-                string[] array = new string[intCount];
-
-                for (int i = 0; i < intCount; i++)
+                if (acct == "c_sm" || acct == "c_s8" || acct == "c_ncc")
                 {
-                    row = new Dictionary<string, object>();
-                    row.Add("files", fileList[i]);
-                    rows.Add(row);
-
+                }
+                else {
                     if (acct == "sm")
                     {
-                        //FOR THUMBNAILS
-                        String imageDir = "";
-                        String[] aName = fileList[i].Split('\\');
-                        String sName = aName[aName.Length - 1].Replace(" ", "");
-                        sName = sName.Substring(0, sName.IndexOf('.'));
-                        String asd = Directory.GetCurrentDirectory();
+                        fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\sm", "*.pdf"));
+                        fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\sm", "*.txt"));
+                        fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\sm", "*.csv"));
+                    }
+                    else if (acct == "s8")
+                    {
+                        fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\s8", "*.xml"));
+                    }
+                    else if (acct == "ncc")
+                    {
+                        fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\ncc", "*.xml"));
+                    }
 
-                        imageDir = @"C:\inetpub\wwwroot\Gentran\Gentran\Images\thumbnails\" + sName + ".jpg";
+                    int intCount = 0;
+                    intCount = fileList.Count;
+                    string[] array = new string[intCount];
 
-                        Workbook book = new Workbook(fileList[i]);
-                        Worksheet sheet = book.Worksheets[0];
-                        sheet.PageSetup.PrintArea = "A1:J10";
+                    for (int i = 0; i < intCount; i++)
+                    {
+                        row = new Dictionary<string, object>();
+                        row.Add("files", fileList[i]);
+                        rows.Add(row);
 
-                        ImageOrPrintOptions imgOptions = new ImageOrPrintOptions();
-                        imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Jpeg;
-                        imgOptions.OnePagePerSheet = true;
+                        /*if (acct == "sm")
+                        {
+                            //FOR THUMBNAILS
+                            String imageDir = "";
+                            String[] aName = fileList[i].Split('\\');
+                            String sName = aName[aName.Length - 1].Replace(" ", "");
+                            sName = sName.Substring(0, sName.IndexOf('.'));
+                            String asd = Directory.GetCurrentDirectory();
 
-                        SheetRender sr = new SheetRender(sheet, imgOptions);
-                        Bitmap bitmap = sr.ToImage(0);
-                        bitmap.Save(imageDir);
+                            imageDir = @"C:\inetpub\wwwroot\Gentran\Gentran\Images\thumbnails\" + sName + ".jpg";
+
+                            Workbook book = new Workbook(fileList[i]);
+                            Worksheet sheet = book.Worksheets[0];
+                            sheet.PageSetup.PrintArea = "A1:J10";
+
+                            ImageOrPrintOptions imgOptions = new ImageOrPrintOptions();
+                            imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Jpeg;
+                            imgOptions.OnePagePerSheet = true;
+
+                            SheetRender sr = new SheetRender(sheet, imgOptions);
+                            Bitmap bitmap = sr.ToImage(0);
+                            bitmap.Save(imageDir);
+                        }*/
                     }
                 }
             }
@@ -138,7 +161,7 @@ namespace Gentran.Controllers.api
                 rows.Add(row);
             }
 
-            return new Response { success = success,detail = rows };
+            return new Response { success = success,detail = rows, transactionDetail = trows, notiftext = notifCtr.ToString() };
         }
 
         // GET api/ftp/5

@@ -25,6 +25,7 @@
                     var ext = split[split.length - 1].split('.');
                     rObj["files"] = split[split.length - 1];
                     rObj["directory"] = obj.files;
+                    rObj["thumbnail"] = "../Images/thumbnails/xml.PNG";
                     rObj["extension"] = "../Images/files/" + ext[ext.length - 1] + ".png";
 
                     return rObj;
@@ -40,6 +41,8 @@
 
                     $scope.currentPage = 1;
                 });
+
+                viewModelHelper.saveTransaction(result.data.transactionDetail);
                 console.log($scope.files);
             } else {
                 console.log(result.data.detail[0].error);
@@ -80,28 +83,10 @@
         var temponame = data.directory;
         var temp1 = temponame.split('.');
         var temp2 = temp1[(temp1.length - 1)];
+        var fileLoc = "";
+        fileLoc = "ftp/s8/";
 
-        var screenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
-        var screentop = window.screenTop != undefined ? window.screenTop : screen.top;
-
-        width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
-        height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
-
-        var w = '1100';
-        var h = '600';
-        var left = ((width / 2) - (w / 2)) + screenLeft;
-        var top = ((height / 2) - (h / 2)) + screentop;
-
-        if (temp2 == "txt") {
-            printWindow = window.open(host + 'ftp/s8/' + data.files + '', '', 'left=' + left + ',top=' + top + ',width=' + w + ',height=' + h + ',status=0');
-            setTimeout(function () {
-                printWindow.print();
-                printWindow.close();
-            }, 500);
-        }
-        else {
-            window.open(host + 'ftp/s8/' + data.files, "Test", "width="+w+",height="+h+",scrollbars=1,resizable=1");
-        }
+        viewModelHelper.fileViewer(temp2, data.files, fileLoc);
     }
 
 

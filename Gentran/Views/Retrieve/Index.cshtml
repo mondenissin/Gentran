@@ -83,9 +83,9 @@
                     <div id="FTP" class="tab-pane fade ">
                         <ul class="sidebar-menu">
                             <li><h3 class="breadcrumb"><b>O</b>utlets</h3></li>
-                            <li class="treeview"><button class="btn btn-link-ret" ng-click="smFile()"><i class="fa fa-user"></i> SM</button></li>
-                            <li class="treeview"><button class="btn btn-link-ret" ng-click="superFile()"><i class="fa fa-user"></i> Super 8</button></li>
-                            <li class="treeview"><button class="btn btn-link-ret" ng-click="nccFile()"><i class="fa fa-user"></i> NCC</button></li>
+                            <li class="treeview"><button class="btn btn-link-ret" ng-click="POfile.SM=0;smFile()"><i class="fa fa-user"></i> SM</button><span class="label-count" ng-show= "POfile.SM" ng-cloak>{{POfile.SM}}</span></li>
+                            <li class="treeview"><button class="btn btn-link-ret" ng-click="POfile.S8=0;superFile()"><i class="fa fa-user"></i> Super 8</button><span class="label-count" ng-show= "POfile.S8" ng-cloak>{{POfile.S8}}</span></li>
+                            <li class="treeview"><button class="btn btn-link-ret" ng-click="POfile.NCC=0;nccFile()"><i class="fa fa-user"></i> NCC</button><span class="label-count" ng-show= "POfile.NCC" ng-cloak>{{POfile.NCC}}</span></li>
                         </ul>
                     </div>
                     <div id="E-Comm" class="tab-pane fade">
