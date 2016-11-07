@@ -21,10 +21,8 @@
                 </div>
             </div>
 
-            <button class="btn btn-default btn-xs icon-size" ng-click="" title=""><i class="fa fa-paper-plane"></i></button>
-            <button class="btn btn-default btn-xs icon-size" ng-click="" title=""><i class="fa fa-trash-o"></i></button>
-
-            <table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-responsive table-bordered bordered table-striped table-condensed datatable">
+            
+            <table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-responsive table-bordered bordered table-striped table-condensed datatable table-font" >
                 <thead>
                     <tr>
                         <th class="no-sort" id="no-sort">
@@ -32,30 +30,36 @@
                         </th>
                         <th>PO #</th>
                         <th>Customer #</th>
-                        <th>Customer Name</th>
+                        <!--<th>Customer Name</th>-->
                         <th>Order Date</th>
                         <th>Delivery Date</th>
+                        <th>Retrieve Date</th>
                         <th>Upload Date</th>
+                        <th>Submitted Date</th>
+                        <!--<th>Reader</th>-->
+                        <th>Submitted By</th>
                         <th>Total SKU</th>
-                        <th>Total Quantity</th>
-                        <th>Total Amount</th>
-                        <th>Status</th>
-                        <th class="no-sort">Options</th>
+                        <th>Total Qty</th>
+                        <th style="width:10%;">Total Amount</th>
+                        <th class="no-sort" style="width:30%;">Options</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="m in filterList | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
                         <td ng-cloak style="text-align: center;"><input id="" class="cbxSub" type="checkbox" ng-checked="" /></td>
-                        <td ng-cloak class="table-data-ponum"></td>
-                        <td ng-cloak class="table-data-ucust"></td>
-                        <td ng-cloak class="table-data-cdesc" style="width:30%;"></td>
-                        <td ng-cloak class="table-data-uodate"></td>
-                        <td ng-cloak class="table-data-uddate"></td>
-                        <td ng-cloak class="table-data-uudate"></td>
-                        <td ng-cloak class="table-data-cqty"></td>
-                        <td ng-cloak class="table-data-sqty"></td>
-                        <td ng-cloak class="table-data-uprice"></td>
-                        <td ng-cloak style="position:relative;width:30%;"></td><!--<img onclick="errorDetails(\'' + data.detail[i].ulid + '\',\'' + data.detail[i].ulstatus + '\')" title="View Error Details" src="img/master/error.png">-->
+                        <td ng-cloak class="table-data-ponum">{{m.TLId}}</td>
+                        <td ng-cloak class="table-data-ucust"{{m.TLId}}></td>
+                        <!--<td ng-cloak class="table-data-cdesc" style="width:30%;"></td>-->
+                        <td ng-cloak class="table-data-uodate">{{m.TLId}}</td>
+                        <td ng-cloak class="table-data-uddate">{{m.TLId}}</td>
+                        <td ng-cloak class="table-data-uudate">{{m.TLId}}</td>
+                        <td ng-cloak class="table-data-cqty">{{m.TLId}}</td>
+                        <td ng-cloak class="table-data-sqty">{{m.TLId}}</td>
+                        <!--<td ng-cloak class="table-data-uprice">{{m.TLId}}</td>-->
+                        <td ng-cloak class="table-data-uprice">{{m.TLId}}</td>
+                        <td ng-cloak class="table-data-uprice">{{m.TLId}}</td>
+                        <td ng-cloak class="table-data-uprice">{{m.TLId}}</td>
+                        <td ng-cloak style="position:relative;width:30%;">{{m.TLId}}</td><!--<img onclick="errorDetails(\'' + data.detail[i].ulid + '\',\'' + data.detail[i].ulstatus + '\')" title="View Error Details" src="img/master/error.png">-->
                         <td ng-cloak>
                             <!--<button class="btn btn-default btn-xs option-icon-size" ng-click="showDetails(o)" title="Order Details"><i class="fa fa-info"></i></button>
                         <button class="btn btn-default btn-xs option-icon-size" ng-click="reuploadPO(o)" title="Reupload" ng-show="o.ulstatus == '11' ? true:false"><i class="fa fa-upload"></i></button>-->

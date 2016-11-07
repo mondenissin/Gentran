@@ -8,21 +8,21 @@
     }
 
     $scope.refreshCust = function () {
-    //    $scope.search = {};
-    //    $scope.searchBy = "CMCode";
+        $scope.search = {};
+        $scope.searchBy = "TLId";
 
-    //    viewModelHelper.apiGet('api/cust', null, function (result) {
-    //            $scope.pageSize = 5;
-     //           $scope.entryLimit = 50;
+        viewModelHelper.apiGet('api/monitor', null, function (result) {
+                $scope.pageSize = 5;
+                $scope.entryLimit = 50;
 
-    //          $scope.monitor = result.data.detail;
-
-                //$scope.$watch('search[searchBy]', function () {
-                //    $scope.filterList = filterFilter($scope.monitor, $scope.search);
-                //    $scope.noOfPages = Math.ceil($scope.filterList.length / $scope.entryLimit);
-                //    $scope.currentPage = 1;
-                //});
-    //    });
+              $scope.monitor = result.data.detail;
+              console.log(result.data.detail);
+                $scope.$watch('search[searchBy]', function () {
+                    $scope.filterList = filterFilter($scope.monitor, $scope.search);
+                    $scope.noOfPages = Math.ceil($scope.filterList.length / $scope.entryLimit);
+                    $scope.currentPage = 1;
+                });
+        });
 
         $scope.dtOptions = DTOptionsBuilder.newOptions();
         $scope.dtColumnDefs = [

@@ -9,19 +9,10 @@
         //$scope.pageHeading = "User Section";
     }
 
-    //$scope.monitoringList = function () {
-    //    viewModelHelper.navigateTo('Monitoring/POMonitoring');
-    //}
+    $scope.monitoringList = function () {
+        viewModelHelper.navigateTo('Monitoring/POMonitoring');
+    }
 
-    //$scope.showOrder = function () {
-
-    //    if (orderService.orderId == undefined) {
-    //        alert("Enter PO Number");
-    //    } else {
-    //        console.log(orderService.orderId);
-    //        console.log($scope.order);
-    //    }
-    //}
 
     initialize();
 });
