@@ -15,7 +15,7 @@
                 <div class="form-inline">
                     <input type="text" ng-model="search[searchBy]" placeholder="Search" class="form-control" />
                     <select ng-model="searchBy" class="form-control">
-                        <option value="files" selected>PO Number</option>
+                        <option value="files" selected>PO File</option>
                     </select>
                 </div>
             </div>
@@ -27,7 +27,8 @@
             <div class="po-files-h" sly-repeat="f in files" ng-init="$last ? loadHover() : angular.noop()">
                 <input class="po-cbx" ng-click="$event = $event" ng-change="selectFile($event)" type="checkbox" ng-model="check" ng-checked="all" />
                 <div class="po-files">
-                    <img ng-src="{{f.thumbnail}}" Content-type="image/jpeg" style="width:180px;position:absolute;top:-5px;left:0px;" />
+                    <!--<img ng-src="" Content-type="image/jpeg" style="width:180px;position:absolute;top:-5px;left:0px;" />-->
+                    <img ng-src="{{f.thumbnail}}" Content-type="image/jpeg" style="width:180px;position:absolute;top:-5px;left:0px;" ng-cloak/>
                     <div class="po-files-hover">
                         <img ng-src="{{f.extension}}" class="po-files-ico pull-left" />
                         <span class="lbl-po-files">{{f.files}}</span>

@@ -203,6 +203,9 @@
     <Content Include="Content\bootstrap\build.css" />
     <Content Include="Content\bootstrap\dataTables.bootstrap.min.css" />
     <Content Include="Content\bootstrap\flat-ui.css" />
+    <Content Include="Content\css\admin\reports\reports.css" />
+    <Content Include="Content\css\monitor\monitor.css" />
+    <Content Include="Content\css\order\order.css" />
     <Content Include="Content\css\retrieve\retrieve.css" />
     <Content Include="Content\font-awesome\font-awesome-animation.css" />
     <Content Include="Content\font-awesome\font-awesome.min.css" />
@@ -334,8 +337,8 @@
     <Content Include="Images\sort_both.png" />
     <Content Include="Images\sort_desc.png" />
     <Content Include="Images\sort_desc_disabled.png" />
-    <Content Include="Images\thumbnails\VMITEST.jpg" />
-    <Content Include="Images\thumbnails\VMITEST2.jpg" />
+    <Content Include="Images\thumbnails\excel.PNG" />
+    <Content Include="Images\thumbnails\xml.PNG" />
     <Content Include="Images\user3-128x128.jpg" />
     <Content Include="Images\view.png" />
     <Content Include="Scripts\angular\angular-animate.js" />
@@ -1172,10 +1175,18 @@
     <Content Include="Scripts\jquery\knockout-2.1.0.js" />
     <Content Include="Scripts\jquery\modernizr-2.5.3.js" />
     <None Include="Scripts\jquery\_references.js" />
+    <Content Include="Scripts\js\admin\users.js" />
     <Content Include="Scripts\js\app.min.js" />
     <Content Include="Scripts\js\login\login.js" />
     <Content Include="Scripts\js\master\master_ajax.js" />
     <Content Include="Scripts\js\master\master_main.js" />
+    <Content Include="Scripts\js\morris\morris.js" />
+    <Content Include="Scripts\js\morris\morris.min.js" />
+    <Content Include="Scripts\js\scalyr\core.js" />
+    <Content Include="Scripts\js\scalyr\gatedScope.js" />
+    <Content Include="Scripts\js\scalyr\scalyr.js" />
+    <Content Include="Scripts\js\scalyr\slyEvaluate.js" />
+    <Content Include="Scripts\js\scalyr\slyRepeat.js" />
     <Content Include="Scripts\notification\notifications.js" />
     <Content Include="Scripts\notification\notify-metro.js" />
     <Content Include="Scripts\notification\notify.min.js" />
@@ -1206,7 +1217,6 @@
     <Folder Include="App\Admin\Views\Connections\" />
     <Folder Include="App\Home\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Content\css\order\" />
     <Folder Include="Controllers\api\Monitoring\" />
     <Folder Include="Scripts\angular\i18n\ngLocale\" />
   </ItemGroup>

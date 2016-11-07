@@ -42,7 +42,20 @@
            DTColumnDefBuilder.newColumnDef('no-sort').notSortable()
         ];
     }
-
+    
+    $scope.showFile = function(data){
+        console.log(data.ulstatus);
+        console.log(data.ulfilename);
+    
+        var temponame = data.ulfilename;
+        var temp1 = temponame.split('.');
+        var temp2 = temp1[(temp1.length - 1)];
+        var fileLoc = "";
+        
+        fileLoc = data.ulstatus == '11' ? 'Gentran/failed/' : 'Gentran/successful/';
+        
+        viewModelHelper.fileViewer(temp2, data.ulfilename, fileLoc);
+    }
     $scope.showDetails = function (order) {
         $scope.flags.shownFromList = true;
         console.log(order);
