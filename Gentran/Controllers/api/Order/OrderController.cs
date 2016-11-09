@@ -28,26 +28,28 @@ namespace Gentran.Controllers.api.Order
                 String selectStr = "";
                
                 selectStr = @"SELECT DISTINCT
-                            ul.ulid,
+                            ul.ulfile,
                             ul.ulponumber,
                             cm.cmcode as ulcustomer,
                             cm.cmdescription, 
                             LEFT(ul.ulorderdate,12) AS ulorderdate,
                             LEFT(ul.uldeliverydate,12) AS uldeliverydate,
-                            ul.uluploaddate as sortupload,
-                            LEFT(ul.uluploaddate,12) AS uluploaddate,
+                            ur.rfreaddate as sortupload,
+                            LEFT(ur.rfreaddate,12) AS uluploaddate,
                             ui.sumulquantity,
                             ui.countulquantity,
                             ul.ulstatus,
                             ul.ulremarks,
-                            ul.ulfilename,
+                            ur.rffilename,
                             ui.uiprice,
-                            ul.ulaccount
+                            ur.rfaccount
                             FROM tblUploadLog ul
                             LEFT JOIN (SELECT * from tblCustomerMaster ) cm
                             ON ul.ulcustomer = cm.cmid 
                             LEFT JOIN tblUserAssignment ua 
                             ON ul.ulcustomer = ua.uacustomer 
+                            LEFT JOIN tblRawFile ur
+                            ON ur.RFId = ul.ULFile
                             LEFT JOIN
                             (SELECT
                             uiprice = SUM(uiquantity * ppprice),
@@ -55,22 +57,24 @@ namespace Gentran.Controllers.api.Order
                             countulquantity = COUNT(uiquantity),
                             uiid
                             FROM tblUploadItems
-                            left join tbluploadlog
-                            on ulid = uiid
+                            left join tblrawfile
+                            on RFId = uiid
+                            left join tblUploadLog
+                            on ULFile = RFId
                             left join tblCustomerMaster
                             on cmid = ulcustomer
                             LEFT JOIN tblProductPricing
                             on ppproduct = uiproduct and pparea = cmarea
                             WHERE uistatus NOT IN ('3','0')
                             group by uiid ) ui 
-                            ON ul.ulid = ui.uiid 
-                            WHERE ua.uauser = '" + userID + @"'
+                            ON ul.ULFile = ui.uiid 
+                            WHERE ua.uauser = '17002'
                             AND uatype = 'KAS' 
                             AND ulstatus !=0  
                             AND ulstatus !=10 
                             AND ulstatus <=20 
-                            AND ULUploadDate > DATEADD(day, -15, GETDATE())
-                            ORDER BY sortupload desc"; //MNS20160820
+                            AND ur.RFReadDate > DATEADD(day, -15, GETDATE())
+                            ORDER BY sortupload desc"; //Nov. 8, 2016
                 
 
                 SqlDataAdapter dataadapter = new SqlDataAdapter(selectStr, connection);
@@ -134,34 +138,37 @@ namespace Gentran.Controllers.api.Order
             bool success = true;
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
             String sQuery = @"select
-                                ULAccount,
-                                ULFilename,
-                                UIStatus,
-                                ULRemarks,
-                                ULStatus,
-                                ULPONumber,
-                                ULUser, 
-                                left(ulorderdate,12) as ULOrderDate,
-                                left(uldeliverydate,12) as ULDeliveryDate,
-                                uiquantity as UIQuantity,
-                                cmcode as ULCustomer,
-                                pmcode as UIProduct,
-                                pmdescription as PMDescription,
-                                ppprice  as UIPrice,
-                                (ppprice * uiquantity) as UITPrice
-                                from
-                                tbluploadlog
-                                left join tbluploaditems
-                                on tbluploadlog.ULId = tbluploaditems.uiid
-                                left join tblcustomermaster
-                                on cmid = ulcustomer
-                                left join tblproductmaster
-                                on pmid = uiproduct
-                                left join tblproductpricing
-                                on ppproduct = uiproduct and pparea = cmarea
-                                where
-                                ULId ='" + id + @"'
-                                and uiquantity != 0";
+                            rfaccount,
+                            rffilename,
+                            UIStatus,
+                            ULRemarks,
+                            ULStatus,
+                            ULPONumber,
+                            RFReadUser, 
+                            left(ulorderdate,12) as ULOrderDate,
+                            left(uldeliverydate,12) as ULDeliveryDate,
+                            uiquantity as UIQuantity,
+                            cmcode as ULCustomer,
+                            pmcode as UIProduct,
+                            pmdescription as PMDescription,
+                            ppprice  as UIPrice,
+                            (ppprice * uiquantity) as UITPrice
+                            from
+                            tbluploadlog
+                            left join tbluploaditems
+                            on tbluploadlog.ULFile = tbluploaditems.uiid
+                            left join tblRawFile
+                            on RFId = ULFile
+                            left join tblcustomermaster
+                            on cmid = ulcustomer
+                            left join tblproductmaster
+                            on pmid = uiproduct
+                            left join tblproductpricing
+                            on ppproduct = uiproduct and pparea = cmarea
+                            where
+                            ULFile ='"+id+@"'
+                            and uiquantity != 0";
+
             SqlCommand cmd = new SqlCommand(sQuery, connection);
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
@@ -207,9 +214,9 @@ namespace Gentran.Controllers.api.Order
         {
             bool success = true;
             string response = "Successful";
+            string CustomerNumber = "";
             string error = "";
             String status = "", sQuery = string.Empty;
-            String CustomerNumber = "";
             DateTime now = new DateTime();
             now = DateTime.Now;
 
@@ -236,26 +243,25 @@ namespace Gentran.Controllers.api.Order
                     connection.Close();
                     if (CustomerNumber == "0")
                     {
+
                         success = false;
                         response = "Please enter a Customer Code!";
                     }
                     else
                     {
-                        if (values.payload[0].ULId == CustomerNumber + values.payload[0].ponumber)
-                        {
-                            String updateULId = "update tbluploadlog set ULStatus = '" + status + "',ULId = '" + CustomerNumber + values.payload[0].ponumber + "', ulcustomer = '" + CustomerNumber + "', ULDeliveryDate = '" + values.payload[0].DeliveryDate + "', ulremarks = '" + values.payload[0].remarks + "' where ULId = '" + values.payload[0].ULId + "'";
-                            //GMC String updateULId = "update tbluploadlog set ULPONumber = '" + values.payload[0].ULPONumber + "',ULStatus = '" + status + "',ULId = '" + CustomerNumber + values.payload[0].ULPONumber + "', ulcustomer = '" + CustomerNumber + "', ULDeliveryDate = '" + values.payload[0].ULDeliveryDate + "', ulremarks = '" + values.payload[0].ULRemarks + "' where ULId = '" + values.payload[0].ULId + "'";
+                        String updateULId = "update tbluploadlog set ULStatus = '" + status + "', ulcustomer = '" + CustomerNumber + "', ULDeliveryDate = '" + values.payload[0].DeliveryDate + "', ulremarks = '" + values.payload[0].remarks + "' where ulfile = '" + values.payload[0].rawID + "'";
+                        //GMC String updateULId = "update tbluploadlog set ULPONumber = '" + values.payload[0].ULPONumber + "',ULStatus = '" + status + "',ULId = '" + CustomerNumber + values.payload[0].ULPONumber + "', ulcustomer = '" + CustomerNumber + "', ULDeliveryDate = '" + values.payload[0].ULDeliveryDate + "', ulremarks = '" + values.payload[0].ULRemarks + "' where ULId = '" + values.payload[0].ULId + "'";
 
-                            connection.Open();
-                            SqlCommand updateCmdULId = new SqlCommand(updateULId, connection);
-                            updateCmdULId.ExecuteNonQuery();
-                            connection.Close();
+                        connection.Open();
+                        SqlCommand updateCmdULId = new SqlCommand(updateULId, connection);
+                        updateCmdULId.ExecuteNonQuery();
+                        connection.Close();
 
-                            string newpaypload = JsonConvert.SerializeObject(values.payload, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                        string newpaypload = JsonConvert.SerializeObject(values.payload, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
-                            rows.Add(new Transaction { activity = "EDI20", date = now, remarks = values.payload[0].changes, user = userID, type = "ADM", value = "PO ID:" + CustomerNumber + values.payload[0].ponumber, changes = "", payloadvalue = newpaypload, customernumber = "", ponumber = "" });
-                            return new Response { success = success, detail = rows, notiftext = response };
-                        }
+                        rows.Add(new Transaction { activity = "EDI20", date = now, remarks = values.payload[0].changes, user = userID, type = "ADM", value = "PO ID:" + values.payload[0].rawID, changes = "", payloadvalue = newpaypload, customernumber = "", ponumber = "" });
+                        return new Response { success = success, detail = rows, notiftext = response };
+                        
                     }
                 }
                 else
@@ -264,42 +270,6 @@ namespace Gentran.Controllers.api.Order
                     success = false;
                     response = "Invalid Customer Code!";
                 }
-
-                /*if (success == true)
-                {
-                    String Product = "";
-                    String Products = "";
-
-                    for (int i = 0; i < values.payload.Count; i++)
-                    {
-                        String selectPMId = "select * from tblproductmaster where pmcode = '" + values.payload[i].UIProduct + "'";
-                        connection.Open();
-                        SqlCommand selectCmdPMId = new SqlCommand(selectPMId, connection);
-                        SqlDataReader drPMId = selectCmdPMId.ExecuteReader();
-
-                        if (drPMId.HasRows)
-                        {
-                            drPMId.Read();
-                            Product = drPMId["PMId"].ToString();
-                            connection.Close();
-                        }
-                        else
-                        {
-                            connection.Close();
-                            success = false;
-                            response = "Invalid Product Code " + values.payload[i].UIProduct;
-                        }
-
-                        if (i == 0)
-                        {
-                            Products = Product;
-                        }
-                        else
-                        {
-                            Products = Products + "," + Product;
-                        }
-                    }
-                }*/
             }
             catch (Exception ex)
             {

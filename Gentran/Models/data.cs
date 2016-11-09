@@ -185,6 +185,8 @@ public class Value
 
     public string outlet { get; set; }
 
+    public string rawID { get; set; }
+
     //-------type---------//
 
 
@@ -262,6 +264,7 @@ public class Response
     public long execution { get; set; }
     public string notiftext { get; set; }
     public object reports { get; set; }
+    public object transactionDetail { get; set; }
 }
 public class Transaction
 {

@@ -87,8 +87,8 @@ namespace Gentran.Controllers.api
 
                         foreach (string s in changesArray)
                         {
-                            String strTransaction = "insert into tblTransactionLog select '" + TLId + "','" + values[i].type + "','" + values[i].activity + "','" + values[i].value + "','" + values[i].remarks.Replace("'", "''") + " [" + s + "]','" + values[i].date + "','" + values[i].user + "'";
-                            SqlCommand cmdTransaction = new SqlCommand(strTransaction, connection);
+                            String strTransaction = "insert into tblTransactionLog select '" + (TLId + i) + "','" + values[i].type + "','" + values[i].activity + "','" + values[i].value + "','" + values[i].remarks.Replace("'", "''") + " [" + s + "]','" + values[i].date + "','" + values[i].user + "'";
+                            SqlCommand cmdTransaction = new SqlCommand(strTransaction, connection); 
                             connection.Open();
                             cmdTransaction.ExecuteNonQuery();
                             connection.Close();
@@ -98,7 +98,7 @@ namespace Gentran.Controllers.api
                     {
                         if (values[i].changes != "NC") //MNS 06252016 Save if has changes
                         {
-                            String strTransaction = "insert into tblTransactionLog select '" + TLId + "','" + values[i].type + "','" + values[i].activity + "','" + values[i].value + "','" + values[i].remarks.Replace("'", "''") + "','" + values[i].date + "','" + values[i].user + "'";
+                            String strTransaction = "insert into tblTransactionLog select '" + (TLId + i) + "','" + values[i].type + "','" + values[i].activity + "','" + values[i].value + "','" + values[i].remarks.Replace("'", "''") + "','" + values[i].date + "','" + values[i].user + "'";
                             SqlCommand cmdTransaction = new SqlCommand(strTransaction, connection);
                             connection.Open();
                             cmdTransaction.ExecuteNonQuery();

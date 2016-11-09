@@ -234,6 +234,55 @@ commonModule.factory('viewModelHelper', function ($http, $q, $window, $location)
             });
         }
 
+        self.fileViewer = function (format, file, directory) {
+
+            var screenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
+            var screentop = window.screenTop != undefined ? window.screenTop : screen.top;
+
+            width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+            height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+            var w = '1100';
+            var h = '600';
+            var left = ((width / 2) - (w / 2)) + screenLeft;
+            var top = ((height / 2) - (h / 2)) + screentop;
+
+            if (format == "txt") {
+                printWindow = window.open(host + 'ftp/sm/' + file + '', '', 'left=' + left + ',top=' + top + ',width=' + w + ',height=' + h + ',status=0');
+                setTimeout(function () {
+                    printWindow.print();
+                    printWindow.close();
+                }, 500);
+            }
+            else if (format == "pdf") {
+                var strContent = "<html><head>";
+                strContent = strContent + "<title>Invoice Printing</title>";
+                strContent = strContent + "</head><body>";
+                strContent = strContent + "<div class=\"print-wrapper\">";
+                strContent = strContent + "<object data='" + host + directory + file + "' type='application/pdf' width='100%' height='100%'>";
+                strContent = strContent + "alt : <a href='" + host + directory + file + "'>Your browser is not supported. Please click here to download.</a>";
+                strContent = strContent + "</object>";
+                strContent = strContent + "</div>";
+                strContent = strContent + "</body>";
+                strContent = strContent + "</html>";
+                printWindow = window.open('', '', 'left=' + left + ',top=' + top + ',width=' + w + ',height=' + h + ',status=0');
+                printWindow.document.write(strContent);
+            } else if (format == "xml") {
+                window.open(host + directory + file, "Test", "width=" + w + ",height=" + h + ",scrollbars=1,resizable=1");
+            } else {
+                var strContent = "<html><head>";
+                strContent = strContent + "<title>Invoice Printing</title>";
+                strContent = strContent + "</head><body>";
+                strContent = strContent + "<div class=\"print-wrapper\">";
+                strContent = strContent + "NOTE : <a href='" + host + directory + file + "'>Excel/CSV file not supported to view content. Please click here to download.</a>";
+                strContent = strContent + "</object>";
+                strContent = strContent + "</div>";
+                strContent = strContent + "</body>";
+                strContent = strContent + "</html>";
+                printWindow = window.open('', '', 'left=' + left + ',top=' + top + ',width=' + w + ',height=' + h + ',status=0');
+                printWindow.document.write(strContent);
+            }
+        };
 
         self.goBack = function () {
             $window.history.back();

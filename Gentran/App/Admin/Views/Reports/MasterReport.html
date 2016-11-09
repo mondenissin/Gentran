@@ -1,69 +1,91 @@
 ﻿
-<hr />
 <div class="container-fluid">
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 clearfix">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 clearfix">
             <div class="box box-info">
                 <div class="box-header">
                     <i class="fa fa-file-text"></i> 
                     <h3 class="box-title">Report Master</h3><hr />
-                    <!--<div class="pull-right box-tools">
-                        <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="Remove">
-                            <i class="fa fa-times"></i>
-                        </button>
-                    </div>-->
-                    <div class="row form-group product-chooser">
-                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-12">
-                            <div class="product-chooser-item selected">
-                                <i class="fa fa-windows col-xs-4 col-sm-4 col-md-4 col-lg-10" style="font-size:2.5em;"></i>
-                                <div class="col-xs-8 col-sm-8 col-md-12 col-lg-12">
-                                    <span class="title" title="purchase">PO</span>
-                                    <input type="radio" checked="checked">
-                                </div>
-                                <div class="clear"></div>
-                            </div>
-                        </div>
 
-                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-12">
-                            <div class="product-chooser-item">
-                                <i class="fa fa-users col-xs-4 col-sm-4 col-md-4 col-lg-10" style="font-size:2.5em;"></i>
-                                <div class="col-xs-8 col-sm-8 col-md-12 col-lg-12">
-                                    <span class="title" title="transaction">Trans.</span>
-                                    <input type="radio">
-                                </div>
-                                <div class="clear"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="box-body">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <div class="form-inline">
-                                    <label>Generate by User</label>
-                                    <input class="checkbox" type="checkbox" ng-model="byUser" ng-disabled="All" />
-                                   <select id="selected_user" class="form-control" ng-disabled="!byUser || All" ng-model="User">
-                                        <option sly-repeat="tl in transactions" value="{{tl.umid}}" ng-selected="{{tl[0].umfirstname}}">{{tl.umfirstname + " " + tl.umlastname }}</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pull-left">
-                                <label>From:</label>
-                                <input class="form-control input-sm" type="date" ng-model="dateFrom" ng-disabled="All" />
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pull-right">
-                                <label>To:</label>
-                                <input class="form-control input-sm" type="date" ng-model="dateTo" ng-disabled="All" />
-                            </div>
-                        </div>
-                        <div class="box-footer clearfix">
+                    <ul class="nav nav-tabs" role="tablist" id="nav-tab">
+                        <li role="presentation" class="active"><a href="/#purchase-rep" aria-controls="purchase-rep" role="tab" data-toggle="tab" ng-click="ReportType = 'purchase'"><span class="title" title="purchase">Purchase</span></a></li>
+                        <li role="presentation"><a href="/#product-rep" aria-controls="product-rep" role="tab" data-toggle="tab" ng-click="ReportType = 'product'"><span class="title" title="purchase">Product</span></a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="purchase-rep">
+                            <hr />
                             <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pull-right">
-                                    <input class="checkbox pull-left" type="checkbox" ng-model="All" /><span>All</span>
-                                    <button class="btn btn-default btn-sm pull-right" title="Transaction Report" ng-click="generateReport()">Generate</button>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 pull-right">
+                                    <div class="form-inline">
+                                        <label>Generate by User : </label>
+                                        <input class="checkbox" type="checkbox" ng-model="byUser" ng-disabled="All" />
+                                        <select id="selected_user" class="form-control" ng-disabled="!byUser || All" ng-model="User">
+                                            <option sly-repeat="tl in transactions" value="{{tl.umid}}" ng-selected="{{tl[0].umfirstname}}">{{tl.umfirstname + " " + tl.umlastname }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 pull-left">
+                                    <div class="form-inline">
+                                        <label>Report Type : </label>
+                                        <select ng-model="reportMaster" class="form-control"">
+                                            <option value="latepo" selected>Late PO's</option>
+                                            <option value="latesubpo">Late Submission PO's</option>
+                                            <option value="uploadpo">Uploaded PO's</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 pull-left">
+                                    <label>From:</label>
+                                    <input class="form-control input-sm" type="date" ng-model="dateFrom" ng-disabled="All" />
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 pull-right">
+                                    <label>To:</label>
+                                    <input class="form-control input-sm" type="date" ng-model="dateTo" ng-disabled="All" />
+                                </div>
+                            </div>
+                            <br />
+                            <div class="box-footer clearfix">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pull-right">
+                                        <input class="checkbox pull-left" type="checkbox" ng-model="All" /><span>All</span>
+                                        <button class="btn btn-default btn-sm pull-right" title="Transaction Report" ng-click="generateReport()">Generate</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="product-rep">
+                            <hr />
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="form-inline">
+                                        <label>Generate by User</label>
+                                        <input class="checkbox" type="checkbox" ng-model="byUser" ng-disabled="All" />
+                                        <select id="selected_user" class="form-control" ng-disabled="!byUser || All" ng-model="User">
+                                            <option sly-repeat="tl in transactions" value="{{tl.umid}}" ng-selected="{{tl[0].umfirstname}}">{{tl.umfirstname + " " + tl.umlastname }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 pull-left">
+                                    <label>From:</label>
+                                    <input class="form-control input-sm" type="date" ng-model="dateFrom" ng-disabled="All" />
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 pull-right">
+                                    <label>To:</label>
+                                    <input class="form-control input-sm" type="date" ng-model="dateTo" ng-disabled="All" />
+                                </div>
+                            </div>
+                            <div class="box-footer clearfix">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pull-right">
+                                        <input class="checkbox pull-left" type="checkbox" ng-model="All" /><span>All</span>
+                                        <button class="btn btn-default btn-sm pull-right" title="Transaction Report" ng-click="generateReport()">Generate</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -71,17 +93,72 @@
                 </div>
             </div>
         </div>
-        <div ng-hide="hideReport" class="col-xs-12 col-sm-12 col-md-12 col-lg-9 clearfix" >
-            <div class="box box-info">
-                <div class="box-header">
-                    <h3 class="box-title">Generated report</h3>
-                    <button class="btn btn-default btn-sm pull-right" title="Print Report" ng-click="printReport('printableReport')">Print Report</button>
-                </div>
+    </div>
+</div>
+
+<!-- START MODAL FOR GENERATED REPORTS PURCHASE-->
+
+<div id="generatedModalPurc" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog" style="width:80% !important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="box-title"><i class="fa fa-file-text"></i> Generated report</h4>
+            </div>
+            <div class="modal-body">
                 <div id="printableReport" class="box-body" style="height:400px;overflow-x:hidden;">
                     <div class="form-group">
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <table id="transaction" dt-column-defs="dtColumnDefs" dt-options="dtOptions" class="table table-bordered bordered table-striped table-condensed datatable">
+                                <table id="purchase" dt-column-defs="dtColumnDefs" dt-options="dtOptions" class="table table-bordered bordered table-striped table-condensed datatable">
+                                    <thead>
+                                        <tr>
+                                            <th>PO #</th>
+                                            <th>Customer</th>
+                                            <th>Order Date</th>
+                                            <th>Status</th>
+                                            <th>User</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="tp in reportGenerated">
+                                            <td ng-cloak> {{tp.ulponumber}} </td>
+                                            <td ng-cloak> {{tp.cmdescription}} </td>
+                                            <td ng-cloak> {{tp.ulorderdate}} </td>
+                                            <td ng-cloak> {{tp.ulstatus}} </td>
+                                            <td ng-cloak> {{tp.umusername}} </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default btn-sm pull-right" title="Print Report" ng-click="printReport('printableReport')">Print Report</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- END MODAL FOR GENERATED REPORTS PURCHASE-->
+
+<!-- START MODAL FOR GENERATED REPORTS PRODUCT-->
+
+<div id="generatedModalProd" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog" style="width:80% !important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="box-title"><i class="fa fa-file-text"></i> Generated report</h4>
+            </div>
+            <div class="modal-body">
+                <div id="printableReport" class="box-body" style="height:400px;overflow-x:hidden;">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <table id="product" dt-column-defs="dtColumnDefs" dt-options="dtOptions" class="table table-bordered bordered table-striped table-condensed datatable">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
@@ -103,31 +180,23 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <table hidden id="purchase" dt-column-defs="dtColumnDefs" dt-options="dtOptions" class="table table-bordered bordered table-striped table-condensed datatable">
-                                    <thead>
-                                        <tr>
-                                            <th>PO #</th>
-                                            <th>Customer</th>
-                                            <th>Order Date</th>
-                                            <th>Status</th>
-                                            <th>User</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr sly-repeat="tp in reportGenerated">
-                                            <td ng-cloak> {{tp.ulponumber}} </td>
-                                            <td ng-cloak> {{tp.cmdescription}} </td>
-                                            <td ng-cloak> {{tp.ulorderdate}} </td>
-                                            <td ng-cloak> {{tp.ulstatus}} </td>
-                                            <td ng-cloak> {{tp.umusername}} </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button class="btn btn-default btn-sm pull-right" title="Print Report" ng-click="printReport('printableReport')">Print Report</button>
+            </div>
         </div>
     </div>
 </div>
+
+<!-- END MODAL FOR GENERATED REPORTS PRODUCT-->
+
+<script type="text/javascript">
+    $('#nav-tab a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    })
+</script>

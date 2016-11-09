@@ -24,7 +24,9 @@
                     var ext = split[split.length - 1].split('.');
                     rObj["files"] = split[split.length - 1];
                     rObj["directory"] = obj.files;
-                    rObj["thumbnail"] = "../Images/thumbnails/" + ext[0].replace(/[" "]/g, "") + ".jpg";
+                    rObj["thumbnail"] = "../Images/thumbnails/excel.PNG";
+                    rObj["rawID"] = split[split.length - 1].split('-')[0];
+                    //rObj["thumbnail"] = "../Images/thumbnails/" + ext[0].replace(/[" "]/g, "") + ".jpg";
                     rObj["extension"] = "../Images/files/" + ext[ext.length - 1] + ".png";
                     
                     return rObj;
@@ -39,6 +41,8 @@
 
                     $scope.currentPage = 1;
                 });
+
+                viewModelHelper.saveTransaction(result.data.transactionDetail);
                 console.log($scope.files);
             } else {
                 console.log(result.data.detail[0].error);
@@ -79,51 +83,10 @@
         var temponame = data.directory;
         var temp1 = temponame.split('.');
         var temp2 = temp1[(temp1.length - 1)];
+        var fileLoc = "";
+        fileLoc = "ftp/sm/";
 
-        var screenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
-        var screentop = window.screenTop != undefined ? window.screenTop : screen.top;
-
-        width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
-        height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
-
-        var w = '1100';
-        var h = '600';
-        var left = ((width / 2) - (w / 2)) + screenLeft;
-        var top = ((height / 2) - (h / 2)) + screentop;
-
-        if (temp2 == "txt") {
-            printWindow = window.open(host + 'ftp/sm/' + data.files + '', '', 'left=' + left + ',top=' + top + ',width=' + w + ',height=' + h + ',status=0');
-            setTimeout(function () {
-                printWindow.print();
-                printWindow.close();
-            }, 500);
-        }
-        else if (temp2 == "pdf") {
-            var strContent = "<html><head>";
-            strContent = strContent + "<title>Invoice Printing</title>";
-            strContent = strContent + "</head><body>";
-            strContent = strContent + "<div class=\"print-wrapper\">";
-            strContent = strContent + "<object data='" + host + 'ftp/sm/' + data.files + "' type='application/pdf' width='100%' height='100%'>";
-            strContent = strContent + "alt : <a href='" + host + 'ftp/sm/' + data.files + "'>Your browser is not supported. Please click here to download.</a>";
-            strContent = strContent + "</object>";
-            strContent = strContent + "</div>";
-            strContent = strContent + "</body>";
-            strContent = strContent + "</html>";
-            printWindow = window.open('', '', 'left=' + left + ',top=' + top + ',width=' + w + ',height=' + h + ',status=0');
-            printWindow.document.write(strContent);
-        } else {
-            var strContent = "<html><head>";
-            strContent = strContent + "<title>Invoice Printing</title>";
-            strContent = strContent + "</head><body>";
-            strContent = strContent + "<div class=\"print-wrapper\">";
-            strContent = strContent + "NOTE : <a href='" + host + 'ftp/sm/' + data.files + "'>Excel/CSV file not supported to view content. Please click here to download.</a>";
-            strContent = strContent + "</object>";
-            strContent = strContent + "</div>";
-            strContent = strContent + "</body>";
-            strContent = strContent + "</html>";
-            printWindow = window.open('', '', 'left=' + left + ',top=' + top + ',width=' + w + ',height=' + h + ',status=0');
-            printWindow.document.write(strContent);
-        }
+        viewModelHelper.fileViewer(temp2, data.files, fileLoc);
     }
 
 
@@ -177,10 +140,11 @@
                 console.log($(this.nextElementSibling.children));
                 listFile[ctr].outlet = "SM";
                 listFile[ctr].fileName = this.nextElementSibling.children[1].children[2].textContent;
+                listFile[ctr].rawID = this.nextElementSibling.children[1].children[3].textContent;
                 listFile[ctr].fileLogo = this.nextElementSibling.children[1].children[0].outerHTML;
                 listFile[ctr].name = this.nextElementSibling.children[1].children[1].textContent;
                 listFile[ctr].fileID = this.nextElementSibling.children[1].children[1].textContent.replace(/[. ]/g, '');
-
+                console.log(listFile[ctr]);
                 ctr++; 
             }
         }).promise().done(function () {
@@ -212,7 +176,12 @@
 
                             viewModelHelper.saveTransaction(result.data.detail);
 
-                            $('#' + fileName[0].fileID).text("Read Successful");
+                            if (result.data.success == true) {
+                                $('#' + fileName[0].fileID).text("Read Successful");
+                            } else {
+                                $('#' + fileName[0].fileID).text("With error");
+                            }
+
                             $('.progress-striped').removeClass("active");
 
                             $(elemName[0].element).remove();

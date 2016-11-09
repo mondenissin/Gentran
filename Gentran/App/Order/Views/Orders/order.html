@@ -24,6 +24,7 @@
                 <th class="no-sort" id="no-sort">
                     <input id="cbxMain" class="styled cbxMain" type="checkbox" ng-model="allOrders" />
                 </th>
+                <th hidden>RawID</th>
                 <th>PO #</th>
                 <th>Customer #</th>
                 <th>Customer Name</th>
@@ -38,8 +39,9 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="o in filterList | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
+            <tr sly-repeat="o in filterList | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
                 <td ng-cloak style="text-align: center; width:5%;"><input id="{{o.ul}}" class="cbxSub" type="checkbox" ng-checked="allOrders" /></td>
+                <td ng-cloak class="table-data-ulfile" hidden>{{ o.ulfile }}</td>
                 <td ng-cloak class="table-data-ponum">{{ o.ulponumber }}</td>
                 <td ng-cloak class="table-data-ucust">{{ o.ulcustomer }}</td>
                 <td ng-cloak class="table-data-cdesc"  style="width:30%;">{{ o.cmdescription}}</td>
@@ -90,6 +92,7 @@
                     <span class="{{o.oClass}} table-data-ustat">{{o.sStatus}}&nbsp;</span><button class="btn btn-default btn-xs option-icon-size overlayBtn" ng-click="getStatus(o,$event)" title="View Details"><i class="fa {{o.uicons}}" aria-hidden="true" style="color: {{ o.uicons == 'fa-check' ? 'green' : 'red';  }} "><span class="label-count" ng-show="o.eCtr" ng-cloak >{{o.eCtr}}</span></i></button>
                 </td><!--<img onclick="errorDetails(\'' + data.detail[i].ulid + '\',\'' + data.detail[i].ulstatus + '\')" title="View Error Details" src="img/master/error.png">-->
                 <td ng-cloak style="text-align: center;width:10%;">
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="showFile(o)" title="View File"><i class="fa fa-file"></i></button>
                     <button class="btn btn-default btn-xs option-icon-size" ng-click="showDetails(o)" title="Order Details"><i class="fa fa-info"></i></button>
                     <button class="btn btn-default btn-xs option-icon-size" ng-click="reuploadPO(o)" title="Reupload" ng-show="o.ulstatus == '11' ? true:false"><i class="fa fa-upload"></i></button>
                 </td>
@@ -279,10 +282,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr style="font-size: 12px; text-align:center;">
-                                    <td ng-show="reupRes">{{reupPO.ulponumber}}</td>
-                                    <td>{{reupRes.response}}</td>
-                                    <td ng-show="reupRes">{{reupPO.ulorderdate}}</td>
+                                <tr sly-repeat="er in reupRes" style="font-size: 12px; text-align:center;">
+                                    <td ng-show="er">{{reupPO.ulponumber}}</td>
+                                    <td ng-show="er">{{er.ELType + ": " + er.ELDetail}}</td>
+                                    <td ng-show="er">{{reupPO.ulorderdate}}</td>
                                 </tr>
                             </tbody>
                         </table>

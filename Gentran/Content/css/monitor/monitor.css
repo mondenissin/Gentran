@@ -6,3 +6,35 @@
 table.dataTable thead th.sorting_asc:first-child {
     background:none !important;
 }
+
+.table-font {
+    font-size: 12px;
+}
+
+.table.dataTable thead th {
+    padding: 5px 18px;
+}
+
+
+.table.dataTable thead .no-sort {
+    padding: 5px 13px;
+    line-height: 20px;
+}
+
+/*.table.dataTable tbody td  {
+    
+    line-height: 20px;
+    padding: 2px;
+}*/
+
+.table > tbody > tr > td {
+    vertical-align:inherit;
+}
+
+.page-table table td {
+    padding: 5px 10px !important;
+}
+
+.page-table table:not(.modal-table) td input {
+    margin-top: 20%;
+}
