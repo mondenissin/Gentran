@@ -100,7 +100,7 @@ namespace Gentran.Controllers.api.Admin
                         response = "By normal";
                     }
                 }
-                else if (values.reportName == "transaction"){
+                else if (values.reportName == "product"){
                     reportType = "Transation Report";
                     reportAct = "REP10";
                     if (values.operation == "all")

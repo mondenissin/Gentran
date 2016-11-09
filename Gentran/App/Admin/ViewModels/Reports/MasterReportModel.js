@@ -2,33 +2,33 @@
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.adminService = adminService;
-    var reportType = "purchase";
+    $scope.ReportType = "purchase";
+    $scope.reportMaster = "";
 
     var initialize = function () {
         $scope.hideReport = true;
         $scope.refreshReport();
-        $scope.dateFrom = new Date();
         $scope.dateTo = new Date();
+
+        //1 WEEK DATE GAP
+        $scope.dateFrom = new Date(Date.parse(($scope.dateTo.getMonth()+1) + "/" + $scope.dateTo.getDate() + "/" + $scope.dateTo.getFullYear()));
+        $scope.dateFrom.setDate(+$scope.dateTo.getDate() - 7)
     }
 
     $scope.refreshReport = function () {
         viewModelHelper.apiGet('api/reports', null, function (result) {
             $scope.transactions = result.data.detail;
         });
-
-        $(function () {
-            $('.product-chooser').not('.disabled').find('.product-chooser-item').on('click', function () {
-                reportType = $($(this).find('span')[0])[0].title;
-                $(this).parent().parent().find('.product-chooser-item').removeClass('selected');
-                $(this).addClass('selected');
-                $(this).find('input[type="radio"]').prop("checked", true);
-
-            });
-        });
     }
 
     $scope.generateReport = function () {
-        
+        console.log($scope.reportMaster);
+
+        if ($scope.reportMaster == "") {
+            notif_warning('Information!', 'Select Report Type');
+            return;
+        }
+
         var ope = "";
         var Item = {};
         Item.dateFrom = ($scope.dateFrom.getMonth() + 1) + "/" + $scope.dateFrom.getDate() + "/" + $scope.dateFrom.getFullYear();
@@ -49,22 +49,21 @@
         }
 
         $scope.dataReport = {};
-        $scope.dataReport.reportName = reportType;
+        $scope.dataReport.reportName = $scope.ReportType;
         $scope.dataReport.operation = ope;
         $scope.dataReport.payload = _payloadParser(Item);
 
         $scope.hideReport = false;
 
-        if (reportType == "purchase") {
-            $('#' + reportType).show(true);
-            $('#transaction').hide();
-        } else if (reportType == "transaction") {
-            $('#' + reportType).show(true);
-            $('#purchase').hide();
+        if ($scope.ReportType == "purchase") {
+            $('#generatedModalPurc').modal('show');
+        } else if ($scope.ReportType == "product") {
+            $('#generatedModalProd').modal('show');
         }
-
+        console.log($scope.dataReport);
         viewModelHelper.apiPut('api/reports', $scope.dataReport, function (result) {
 
+            console.log(result.data.reports);
             if (result.data.success == true) {
                 $scope.reportGenerated = result.data.reports;
                 viewModelHelper.saveTransaction(result.data.detail);
@@ -88,6 +87,7 @@
             notif_warning('Warning!','No data to be print');
         } else {
             var dataContent = document.getElementById(content).innerHTML;
+            console.log(dataContent);
             var mywindow = window.open('', 'Transaction Report', 'height=' + window.screen.availHeight + ',width=' + window.screen.availWidth + '');
             mywindow.document.write('<html><head><title>Transaction Report</title>');
             mywindow.document.write('</head><body >');

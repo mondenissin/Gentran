@@ -19,7 +19,7 @@
 
             var orders = result.data.detail.filter(x=>x.uiprice = parseInt(x.uiprice).toLocaleString());
             orders.filter(x=> {
-                var data = x.ulid + "," + x.ulstatus;
+                var data = x.ulfile;
                 if (x.ulstatus < 20) {
                     viewModelHelper.apiGet('api/ordererrors/' + data, null, function (result) { 
                         x.eCtr = result.data.detail.length;
@@ -45,16 +45,16 @@
     
     $scope.showFile = function(data){
         console.log(data.ulstatus);
-        console.log(data.ulfilename);
+        console.log(data.rffilename);
     
-        var temponame = data.ulfilename;
+        var temponame = data.rffilename;
         var temp1 = temponame.split('.');
         var temp2 = temp1[(temp1.length - 1)];
         var fileLoc = "";
         
         fileLoc = data.ulstatus == '11' ? 'Gentran/failed/' : 'Gentran/successful/';
         
-        viewModelHelper.fileViewer(temp2, data.ulfilename, fileLoc);
+        viewModelHelper.fileViewer(temp2, data.rffilename, fileLoc);
     }
     $scope.showDetails = function (order) {
         $scope.flags.shownFromList = true;
@@ -76,10 +76,10 @@
             orderDetails.txt_deliverydate = new Date(order.uldeliverydate);
             orderDetails.txt_remarks = order.ulremarks;
             orderDetails.txt_status = order.ulstatus;
-            orderDetails.txt_orderid = order.ulid;
+            orderDetails.txt_orderid = order.ulfile;
             $scope.ordersInfo = orderDetails;
 
-            viewModelHelper.apiGet('api/order/' + order.ulid, null, function (result) {
+            viewModelHelper.apiGet('api/order/' + order.ulfile, null, function (result) {
                 console.log(result.data.detail);
                 $scope.orderItems = result.data.detail.filter(x=>x.UITPrice = parseInt(x.UITPrice).toLocaleString());
                 $scope.orderItems = result.data.detail.filter(x=>x.UIPrice = parseInt(x.UIPrice).toLocaleString());
@@ -98,8 +98,9 @@
         var items = {};
         var obj = [];
         obj[0] = {};
-        obj[0].fileName = "C:\\inetpub\\wwwroot\\files\\Gentran\\failed\\" + order.ulfilename;
-        obj[0].outlet = order.ulaccount;
+        obj[0].fileName = "C:\\inetpub\\wwwroot\\files\\Gentran\\failed\\" + order.rffilename;
+        obj[0].outlet = order.rfaccount;
+        obj[0].rawID = order.ulfile;
         items.payload = obj;
 
         $('#reupModal').modal('show');
@@ -112,17 +113,23 @@
 
             $('#reupMdal').modal('show');
 
-            $('.progress-bar').animate({ width: '100%' }, execTime);
-            
-            setTimeout(function () {
-                $scope.reupRes = result.data.detail.filter(x=>x.ponumber == order.ulponumber)[0];
-                $('.progress-bar').text("Reupload Completed!");
-                $('#progress-bar').removeClass("active");
-                viewModelHelper.saveTransaction(result.data.detail);
+            console.log(order);
+            viewModelHelper.apiGet('api/ordererrors/' + order.ulfile, null, function (resultError) {
+                console.log(resultError.data.detail);
+                $('.progress-bar').animate({ width: '100%' }, execTime);
 
-                $scope.refreshOrders();
-            }, execTime);
-            
+                setTimeout(function () {
+
+                    $scope.reupRes = resultError.data.detail;
+                    console.log($scope.reupRes);
+
+                    $('.progress-bar').text("Reupload Completed!");
+                    $('#progress-bar').removeClass("active");
+                    viewModelHelper.saveTransaction(result.data.detail);
+
+                    $scope.refreshOrders();
+                }, execTime);
+            });
         });
     }
 
@@ -143,7 +150,8 @@
                     selected = true;
 
                     listOrder[ctr] = {};
-
+                    
+                    listOrder[ctr].RawID = $(this).closest('tr').find('.table-data-ulfile').text();
                     listOrder[ctr].PONum = $(this).closest('tr').find('.table-data-ponum').text();
                     listOrder[ctr].CustNum = $(this).closest('tr').find('.table-data-ucust').text();
                     listOrder[ctr].CustName = $(this).closest('tr').find('.table-data-cdesc').text();
@@ -180,6 +188,7 @@
             if (this.checked == true) {
                 selected = true;
                 listDel[ctr] = {};
+                listDel[ctr].RawID = $(this).closest('tr').find('.table-data-ulfile').text();
                 listDel[ctr].PONum = $(this).closest('tr').find('.table-data-ponum').text();
                 listDel[ctr].CustNum = $(this).closest('tr').find('.table-data-ucust').text();
                 listDel[ctr].CustName = $(this).closest('tr').find('.table-data-cdesc').text();
@@ -207,6 +216,7 @@
             listDelete[x] = {};
             listDelete[x].ponumber = toDelete[x].PONum;
             listDelete[x].customernumber = toDelete[x].CustNum;
+            listDelete[x].rawID = toDelete[x].RawID;
         }
         items.payload = listDelete;
         viewModelHelper.apiPost('api/deleteorder', items, function (result) {
@@ -232,7 +242,7 @@
 
         var id = {};
         var items = {};
-        id.ULId = deleteID;
+        id.rawID = deleteID;
         items.payload = _payloadParser(id);
 
         viewModelHelper.apiPut('api/deleteorder', items, function (result) {
@@ -258,7 +268,7 @@
     }*/
     
     $scope.getStatus = function (id, $event) {
-        var datas = id.ulid + "," + id.ulstatus;
+        var datas = id.ulfile
         $scope.errorPO = "";
         if(parseInt(id.ulstatus) < 20){
             viewModelHelper.apiGet('api/ordererrors/' + datas, null, function (result) {
@@ -362,8 +372,8 @@
                 Item.DeliveryDate = (newDelDate.getMonth() + 1) + "/" + newDelDate.getDate() + "/" + newDelDate.getFullYear();
                 Item.remarks = newRemarks;
                 Item.ponumber = $scope.ordersInfo.txt_ponum;
-                Item.ulstatus = $scope.ordersInfo.txt_status;;
-                Item.ULId = $scope.ordersInfo.txt_orderid;
+                Item.ulstatus = $scope.ordersInfo.txt_status;
+                Item.rawID = $scope.ordersInfo.txt_orderid;
                 Item.changes = changes;
 
                 $scope.data = {};

@@ -24,6 +24,7 @@
                 <th class="no-sort" id="no-sort">
                     <input id="cbxMain" class="styled cbxMain" type="checkbox" ng-model="allOrders" />
                 </th>
+                <th hidden>RawID</th>
                 <th>PO #</th>
                 <th>Customer #</th>
                 <th>Customer Name</th>
@@ -40,6 +41,7 @@
         <tbody>
             <tr sly-repeat="o in filterList | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
                 <td ng-cloak style="text-align: center; width:5%;"><input id="{{o.ul}}" class="cbxSub" type="checkbox" ng-checked="allOrders" /></td>
+                <td ng-cloak class="table-data-ulfile" hidden>{{ o.ulfile }}</td>
                 <td ng-cloak class="table-data-ponum">{{ o.ulponumber }}</td>
                 <td ng-cloak class="table-data-ucust">{{ o.ulcustomer }}</td>
                 <td ng-cloak class="table-data-cdesc"  style="width:30%;">{{ o.cmdescription}}</td>
@@ -280,10 +282,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr style="font-size: 12px; text-align:center;">
-                                    <td ng-show="reupRes">{{reupPO.ulponumber}}</td>
-                                    <td>{{reupRes.response}}</td>
-                                    <td ng-show="reupRes">{{reupPO.ulorderdate}}</td>
+                                <tr sly-repeat="er in reupRes" style="font-size: 12px; text-align:center;">
+                                    <td ng-show="er">{{reupPO.ulponumber}}</td>
+                                    <td ng-show="er">{{er.ELType + ": " + er.ELDetail}}</td>
+                                    <td ng-show="er">{{reupPO.ulorderdate}}</td>
                                 </tr>
                             </tbody>
                         </table>

@@ -11,6 +11,7 @@ using Aspose.Cells;
 using Aspose.Cells.Rendering;
 using System.Drawing;
 using System.Web;
+using System.Data.SqlClient;
 
 namespace Gentran.Controllers.api
 {
@@ -19,6 +20,9 @@ namespace Gentran.Controllers.api
         private AppSettings app = new AppSettings();
         private List<Transaction> trows = new List<Transaction>();
         private DateTime rDate = DateTime.Now;
+        private SqlCommand cmd;
+        private string sQuery = "";
+        private SqlConnection conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
         private string userID = HttpContext.Current.Session["UserId"].ToString();
         string m_ftpSite, m_strUsername, m_strPassword = "";
         // GET api/ftp
@@ -27,6 +31,7 @@ namespace Gentran.Controllers.api
             string acct = id;
             int notifCtr = 0;
             bool success = true;
+            
             List<string> fileList = new List<string>();
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
@@ -69,7 +74,34 @@ namespace Gentran.Controllers.api
                             notifCtr++;
                         }
                         else{
-                            string inputfilepath = @"C:\inetpub\wwwroot\files\ftp\" + acct + @"\" + line;
+
+                            sQuery = "SELECT MAX(RFId) AS RFId FROM tblRawFile";
+                            cmd = new SqlCommand(sQuery, conn);
+                            conn.Open();
+                            SqlDataReader drRFId = cmd.ExecuteReader();
+                            int RFId = 0;
+
+                            if (drRFId.HasRows)
+                            {
+                                drRFId.Read();
+                                if (drRFId["RFId"].ToString() == "null" || drRFId["RFId"].ToString() == "NULL" || drRFId["RFId"].ToString() == "")
+                                {
+                                    RFId = 1;
+                                }
+                                else
+                                {
+                                    RFId = Convert.ToInt32(drRFId["RFId"]) + 1;
+                                }
+                                conn.Close();
+                            }
+
+                            sQuery = "insert into tblRawFile values('" + RFId + "','" + RFId + "-" +line + "','','" + rDate + "','','','','','0','" + acct.ToUpper() + "')";
+                            cmd = new SqlCommand(sQuery, conn);
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+
+                            string inputfilepath = @"C:\inetpub\wwwroot\files\ftp\" + acct + @"\" + RFId+"-"+line;
                             string ftpfullpath = m_ftpSite + "/" + line;
 
                             using (WebClient webreq = new WebClient())
@@ -92,6 +124,7 @@ namespace Gentran.Controllers.api
                                     response2.Close();
                                 }
                             }
+                            
                             trows.Add(new Transaction { response = "File Retrieved", activity = "RET10", date = rDate, remarks = line, user = userID, type = "ADM", value = "Successfully Retrieved", changes = "", payloadvalue = "", customernumber = "", ponumber = "" });
                         }
                     }

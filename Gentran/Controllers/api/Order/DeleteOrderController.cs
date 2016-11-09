@@ -30,49 +30,30 @@ namespace Gentran.Controllers.api.Order
         public object Post([FromBody]Data values)
         {
             bool success = true;
-            string response = "";
-            string POid = "";
+            string response = "",responseList = "";
             DateTime now = new DateTime();
             now = DateTime.Now;
 
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
             try
             {
-                for (int x = 0,y = values.payload.Count; x<y; x++) {
-
-                    String sQuery = "select CMId from tblcustomermaster where cmcode = '"+values.payload[x].customernumber+"'";
-                    connection.Open();
-                    SqlCommand cCmd = new SqlCommand(sQuery, connection);
-                    SqlDataReader dr = cCmd.ExecuteReader();
-
-                    if (dr.HasRows) {
-                        dr.Read();
-                        POid = dr[0].ToString() + values.payload[x].ponumber;
-                        connection.Close();
-
-                        sQuery = "update tbluploadlog set ulstatus = '0' where ulid = '" + POid + "'";
-                        connection.Open();
-                        cCmd = new SqlCommand(sQuery, connection);
-                        cCmd.ExecuteNonQuery();
-                        connection.Close();
-
-                        sQuery = "update tbluploaditems set uistatus = '0' where uiid = '" + POid + "'";
-                        connection.Open();
-                        cCmd = new SqlCommand(sQuery, connection);
-                        cCmd.ExecuteNonQuery();
-                        connection.Close();
-
-                        response += "- " + values.payload[x].ponumber;
-                    }
-                    else {
-                        success = false;
-                        response = "Customer Not Found!";
-                    }
-                }
                 string newpaypload = JsonConvert.SerializeObject(values.payload, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
-                rows.Add(new Transaction { activity = "DEL20", date = now, remarks = "PO # "+response , user = userID, type = "ADM", value = "PO ID:" + POid, changes = "", payloadvalue = newpaypload, customernumber = "", ponumber = "" });
-                return new Response { success = success, detail = rows, notiftext = response };
+                for (int x = 0,y = values.payload.Count; x<y; x++) {
+
+                    String sQuery = "update tbluploadlog set ulstatus = '0' where ulfile = '" + values.payload[x].rawID + "'";
+                    connection.Open();
+                    SqlCommand cCmd = new SqlCommand(sQuery, connection);
+                    cCmd.ExecuteNonQuery();
+                    connection.Close();
+
+                    response = "- " + values.payload[x].ponumber;
+                    responseList += "- " + values.payload[x].ponumber;
+
+                    rows.Add(new Transaction { activity = "DEL20", date = now, remarks = "PO # " + response, user = userID, type = "ADM", value = "PO ID:" + values.payload[x].rawID, changes = "", payloadvalue = newpaypload, customernumber = "", ponumber = "" });
+                }
+                
+                return new Response { success = success, detail = rows, notiftext = responseList };
             }
             catch (Exception ex)
             {
@@ -97,23 +78,23 @@ namespace Gentran.Controllers.api.Order
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
             try
             {
-                sQuery = "update tbluploadlog set ulstatus = '0' where ulid = '" + values.payload[0].ULId + "'";
+                sQuery = "update tbluploadlog set ulstatus = '0' where ulfile = '" + values.payload[0].rawID + "'";
                 connection.Open();
                 cCmd = new SqlCommand(sQuery, connection);
                 cCmd.ExecuteNonQuery();
                 connection.Close();
 
-                sQuery = "update tbluploaditems set uistatus = '0' where uiid = '" + values.payload[0].ULId + "'";
+                sQuery = "update tbluploaditems set uistatus = '0' where uiid = '" + values.payload[0].rawID + "'";
                 connection.Open();
                 cCmd = new SqlCommand(sQuery, connection);
                 cCmd.ExecuteNonQuery();
                 connection.Close();
 
-                response = "PO ID : " + values.payload[0].ULId;
+                response = "PO ID : " + values.payload[0].rawID;
 
                 string newpaypload = JsonConvert.SerializeObject(values.payload, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
-                rows.Add(new Transaction { activity = "DEL20", date = now, remarks = response, user = userID, type = "ADM", value = "PO ID:" + values.payload[0].ULId, changes = "", payloadvalue = newpaypload, customernumber = "", ponumber = "" });
+                rows.Add(new Transaction { activity = "DEL20", date = now, remarks = response, user = userID, type = "ADM", value = "PO ID:" + values.payload[0].rawID, changes = "", payloadvalue = newpaypload, customernumber = "", ponumber = "" });
                 return new Response { success = success, detail = rows ,notiftext = response };
             }
             catch (Exception ex)

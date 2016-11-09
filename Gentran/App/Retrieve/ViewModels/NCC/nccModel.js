@@ -25,6 +25,7 @@
                     var ext = split[split.length - 1].split('.');
                     rObj["files"] = split[split.length - 1];
                     rObj["directory"] = obj.files;
+                    rObj["rawID"] = split[split.length - 1].split('-')[0];
                     rObj["thumbnail"] = "../Images/thumbnails/xml.PNG";
                     rObj["extension"] = "../Images/files/" + ext[ext.length - 1] + ".png";
 
@@ -79,7 +80,7 @@
     }
 
     $scope.showFile = function (data) {
-
+        console.log(data.rawID);
         var temponame = data.directory;
         var temp1 = temponame.split('.');
         var temp2 = temp1[(temp1.length - 1)];
@@ -101,7 +102,7 @@
             $($($event.target)[0].nextElementSibling).css('background', 'transparent');
         }*/
     }
-
+        
     $scope.selectFileAll = function () {
         
         if (this.all == true) {
@@ -136,14 +137,13 @@
 
                 listElem[ctr] = {};
                 listElem[ctr].element = $(this.parentElement);
-                console.log($(this.nextElementSibling.children));
                 listFile[ctr].outlet = "NCC";
                 listFile[ctr].fileName = this.nextElementSibling.children[1].children[2].textContent;
+                listFile[ctr].rawID = this.nextElementSibling.children[1].children[3].textContent;
                 listFile[ctr].fileLogo = this.nextElementSibling.children[1].children[0].outerHTML;
-                console.log(this.nextElementSibling.children[1].children[0]);
                 listFile[ctr].name = this.nextElementSibling.children[1].children[1].textContent;
                 listFile[ctr].fileID = this.nextElementSibling.children[1].children[1].textContent.replace(/[. ]/g, '');
-
+                
                 ctr++;
             }
         }).promise().done(function () {
@@ -164,11 +164,13 @@
                     items.payload = fileName;
 
                     viewModelHelper.apiPost('api/masteruploader', JSON.stringify(items), function (result) {
+
+                        console.log(result.data.success);
                         var mapData = result.data.filecontent;
                         execTime = result.data.execution;
                         console.log(result.data.filecontent);
-                        console.log(execTime);
                         console.log(result.data.detail);
+
                         $('#' + fileName[0].fileID).text("Reading");
                         $('#' + fileName[0].fileID).animate({ width: '100%' }, execTime);
 
@@ -176,7 +178,11 @@
 
                             viewModelHelper.saveTransaction(result.data.detail);
 
-                            $('#' + fileName[0].fileID).text("Read Successful");
+                            if (result.data.success == true) {
+                                $('#' + fileName[0].fileID).text("Read Successful");
+                            } else {
+                                $('#' + fileName[0].fileID).text("With error");
+                            }
 
                             $(elemName[0].element).remove();
                             //$scope.refreshSM();

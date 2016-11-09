@@ -25,6 +25,7 @@
                     var ext = split[split.length - 1].split('.');
                     rObj["files"] = split[split.length - 1];
                     rObj["directory"] = obj.files;
+                    rObj["rawID"] = split[split.length - 1].split('-')[0];
                     rObj["thumbnail"] = "../Images/thumbnails/xml.PNG";
                     rObj["extension"] = "../Images/files/" + ext[ext.length - 1] + ".png";
 
@@ -139,11 +140,11 @@
                 console.log($(this.nextElementSibling.children));
                 listFile[ctr].outlet = "S8";
                 listFile[ctr].fileName = this.nextElementSibling.children[1].children[2].textContent;
+                listFile[ctr].rawID = this.nextElementSibling.children[1].children[3].textContent;
                 listFile[ctr].fileLogo = this.nextElementSibling.children[1].children[0].outerHTML;
-                console.log(this.nextElementSibling.children[1].children[0]);
                 listFile[ctr].name = this.nextElementSibling.children[1].children[1].textContent;
                 listFile[ctr].fileID = this.nextElementSibling.children[1].children[1].textContent.replace(/[. ]/g, '');
-
+                
                 ctr++;
             }
         }).promise().done(function () {
@@ -176,7 +177,11 @@
 
                             viewModelHelper.saveTransaction(result.data.detail);
 
-                            $('#' + fileName[0].fileID).text("Read Successful");
+                            if (result.data.success == true) {
+                                $('#' + fileName[0].fileID).text("Read Successful");
+                            } else {
+                                $('#' + fileName[0].fileID).text("With error");
+                            }
 
                             $(elemName[0].element).remove();
                             //$scope.refreshSM();

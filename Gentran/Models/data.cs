@@ -185,6 +185,8 @@ public class Value
 
     public string outlet { get; set; }
 
+    public string rawID { get; set; }
+
     //-------type---------//
 
 
