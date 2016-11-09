@@ -4,64 +4,13 @@
 <div class="container-fluid">
     <div class="row">
         <div class="searchable-container">
-            <!--<!-- FIRST ROW FIRST ITEM
-            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 clearfix">
-                <div class="info-block block-info clearfix">
-                    <div class="row card-header">
-                        <div class="col-md-8">
-                            <span class="span-uname">First</span>
-                        </div>
-                        <div class="col-md-4 header-options">
-
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div class="pull-left" style="width:100px;min-height:50px;margin-right:22px;text-align:center !important;">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- FIRST ROW SECOND ITEM
-            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 clearfix">
-                <div class="info-block block-info clearfix">
-                    <div class="row card-header">
-                        <div class="col-md-8">
-                            <span class="span-uname">Second</span>
-                        </div>
-                        <div class="col-md-4 header-options">
-
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div class="pull-left" style="width:100px;min-height:50px;margin-right:22px;text-align:center !important;">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- FIRST ROW THIRD ITEM
-            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 clearfix">
-                <div class="info-block block-info clearfix">
-                    <div class="row card-header">
-                        <div class="col-md-8">
-                            <span class="span-uname">Third</span>
-                        </div>
-                        <div class="col-md-4 header-options">
-
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div class="pull-left" style="width:100px;min-height:50px;margin-right:22px;text-align:center !important;">
-                        </div>
-                    </div>
-                </div>
-            </div>-->
             <div class="row">
                 <div class="col-lg-3 col-xs-6">
                     <!-- small box -->
                     <div class="small-box bg-aqua">
                         <div class="inner">
-                            <h3>150</h3>
-                            <p>New Orders</p>
+                            <h3>{{ totalOrders }}</h3>
+                            <p>Orders</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
@@ -74,8 +23,8 @@
                     <!-- small box -->
                     <div class="small-box bg-green">
                         <div class="inner">
-                            <h3>53<sup style="font-size: 20px">%</sup></h3>
-                            <p>Bounce Rate</p>
+                            <h3>{{ totalSKUs }}</h3>
+                            <p>Total SKUs</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
@@ -88,8 +37,8 @@
                     <!-- small box -->
                     <div class="small-box bg-yellow">
                         <div class="inner">
-                            <h3>44</h3>
-                            <p>User Registrations</p>
+                            <h3>{{ totalCustomers }}</h3>
+                            <p>Customers</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-person-add"></i>
@@ -102,8 +51,8 @@
                     <!-- small box -->
                     <div class="small-box bg-red">
                         <div class="inner">
-                            <h3>65</h3>
-                            <p>Unique Visitors</p>
+                            <h4>P {{ totalIncome }}</h4>
+                            <p>Income</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-pie-graph"></i>
@@ -116,26 +65,29 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
-            <section class="col-lg-7">
-                <!-- Custom tabs (Charts with tabs)-->
-                <div class="nav-tabs-custom">
-                    <!-- Tabs within a box -->
-                    <ul class="nav nav-tabs pull-right">
-                        <li class="tab-menu active"><a data-target="#revenue-chart" data-toggle="tab">Area</a></li>
-                        <li class="tab-menu"><a data-target="#sales-chart" data-toggle="tab">Donut</a></li>
-                        <li class="pull-left header"><i class="fa fa-inbox"></i> Sales</li>
-                    </ul>
-                    <div class="tab-content no-padding">
-                        <!-- Morris chart - Sales -->
-                        <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;"></div>
-                        <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;"></div>
-                    </div>
+        <div class="col-md-8 chart-container">
+            <div class="box box-info">
+                <div class="box-header">
+                    <i class="fa fa-people"></i>
+                    <h3 class="box-title">Sales</h3>
                 </div>
-                <!-- /.nav-tabs-custom -->
-            </section>
+                <div class="box-body">
+                    <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;"></div>
+                </div>
+            </div>
         </div>
-    </div>
+        <div class="col-md-4 chart-container">
+            <div class="box box-info">
+                <div class="box-header">
+                    <i class="fa fa-envelope"></i>
+                    <h3 class="box-title">Email Us</h3>
+                </div>
+                <div class="box-body">
+                    <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+     </div>
 
             <div class="row">
                 <!-- SECOND ROW MESSAGE -->
@@ -180,32 +132,61 @@
                     </div>
                 </div>
             </div>
-    </div>
+        </div>
 <script>
     $(document).ready(function () {
+
         $(".tab-menu").css("cursor", "pointer");
-       var area = new Morris.Area({
+
+        // line chart
+        Morris.Line({
             element: 'revenue-chart',
-            resize: true,
-            data: [
-              { y: '2011 Q1', item1: 2666, item2: 2666 },
-              { y: '2011 Q2', item1: 2778, item2: 2294 },
-              { y: '2011 Q3', item1: 4912, item2: 1969 },
-              { y: '2011 Q4', item1: 3767, item2: 3597 },
-              { y: '2012 Q1', item1: 6810, item2: 1914 },
-              { y: '2012 Q2', item1: 5670, item2: 4293 },
-              { y: '2012 Q3', item1: 4820, item2: 3795 },
-              { y: '2012 Q4', item1: 15073, item2: 5967 },
-              { y: '2013 Q1', item1: 10687, item2: 4460 },
-              { y: '2013 Q2', item1: 8432, item2: 5713 }
+            data:  [
+                 { "elapsed": "Sep W1", "value": 8 },
+                 { "elapsed": "Sep W2", "value": 34 },
+                 { "elapsed": "Sep W3", "value": 53 },
+                 { "elapsed": "Sep W4", "value": 12 },
+                 { "elapsed": "Oct W1", "value": 13 },
+                 { "elapsed": "Oct W2", "value": 22 },
+                 { "elapsed": "Oct W3", "value": 5 },
+                 { "elapsed": "Oct W4", "value": 26 },
+                 { "elapsed": "Nov W1", "value": 12 },
+                 { "elapsed": "Nov W2", "value": 19 }
             ],
-            xkey: 'y',
-            ykeys: ['item1', 'item2'],
-            labels: ['Item 1', 'Item 2'],
-            lineColors: ['#a0d0e0', '#3c8dbc'],
-            hideHover: 'auto'
-            });
-            //Donut Chart
+            xkey: 'elapsed',
+            ykeys: ['value'],
+            labels: ['Orders'],
+            lineColors: ['#868BB8'],
+            parseTime: false,
+            lineWidth: 1,
+            resize: true
+        });
+
+       // //DualLine Chart
+       //var area = new Morris.Area({
+       //     element: 'revenue-chart',
+       //     resize: true,
+       //     data: [
+       //       { month: '2016-09', l: 'W1', item1: 2666 },
+       //       { month: '2016-09', l: 'W2', item1: 2778 },
+       //       { month: '2016-09', l: 'W3', item1: 4912 },
+       //       { month: '2016-09', l: 'W4', item1: 3767 },
+       //       { month: '2016-10', l: 'W1', item1: 6810 },
+       //       { month: '2016-10', l: 'W2', item1: 5670 },
+       //       { month: '2016-10', l: 'W3', item1: 4820 },
+       //       { month: '2016-10', l: 'W4', item1: 15073 },
+       //       { month: '2016-11', l: 'W1', item1: 10687 },
+       //       { month: '2016-11', l: 'W2', item1: 8432 }
+       //     ],
+       //     xkey: 'l',
+       //     xLabel: 'l  ',
+       //     ykeys: ['item1'],
+       //     labels: ['Order'],
+       //     lineColors: ['#a0d0e0'],
+       //     hideHover: 'auto'
+       //});
+
+        //Donut Chart
         var donut = new Morris.Donut({
             element: 'sales-chart',
             resize: true,

@@ -23,7 +23,7 @@ namespace Gentran.Controllers.api
         {
             bool success = true;
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
-            String sQuery = "select * from tblproductmaster left join tblProductStatus on PMStatus = PSId";
+            String sQuery = "select PMId, PMCode, PMDescription, PMBarcode, PSDescription, PCDescription as PMCategory from tblproductmaster left join tblProductStatus on PMStatus = PSId left join tblProductCategory on PMCategory = PCId";
             SqlCommand cmd = new SqlCommand(sQuery, connection);
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
@@ -80,7 +80,7 @@ namespace Gentran.Controllers.api
             }
             else
             {
-                sQuery = "select * from tblproductmaster left join tblProductStatus on PMStatus = PSId";
+                sQuery = "select PMId, PMCode, PMDescription, PMBarcode, PMStatus, PMCategory from tblproductmaster left join tblProductStatus on PMStatus = PSId";
             }
 
             SqlCommand cmd = new SqlCommand(sQuery, connection);

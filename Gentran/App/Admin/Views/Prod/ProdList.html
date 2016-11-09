@@ -19,8 +19,9 @@
                 <tr>
                     <th>ID</th>
                     <th>Product Code</th>
-                    <th>Product Description</th>
-                    <th>Product Barcode</th>
+                    <th>Description</th>
+                    <th>Barcode</th>
+                    <th>Category</th>
                     <th>Status</th>
                     <th class="no-sort">Options</th>
                 </tr>
@@ -38,6 +39,9 @@
                     </td>
                     <td class="table-data-pbcode" ng-cloak>
                         {{p.PMBarcode}}
+                    </td>
+                    <td class="table-data-pcat" ng-cloak>
+                        {{p.PMCategory}}
                     </td>
                     <td class="table-data-pstatus" ng-cloak>
                         {{p.PSDescription}}

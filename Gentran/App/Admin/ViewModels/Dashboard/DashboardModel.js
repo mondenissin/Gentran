@@ -3,6 +3,11 @@
     $scope.viewModelHelper = viewModelHelper;
     $scope.adminService = adminService;
 
+    $scope.totalOrders = 9999;
+    $scope.totalSKUs = 9999;
+    $scope.totalCustomers = 9999;
+    $scope.totalIncome = $scope.totalCustomers.toLocaleString();
+
     var initialize = function () {
         $scope.refreshDash();
     }
