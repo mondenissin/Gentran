@@ -20,6 +20,7 @@ namespace Gentran.Controllers.api.Order
         // GET api/ordererrors/5
         public object Get(string id)
         {
+            string[] data = id.Split(',');
             Boolean success = true;
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
@@ -27,9 +28,9 @@ namespace Gentran.Controllers.api.Order
             {
                 DataTable dt = new DataTable();
                 SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
-                if (Convert.ToInt32(id) < 20)
+                if (Convert.ToInt32(data[1]) < 20)
                 {
-                    String selectStr = "select ELId,(select ETDescription from tblerrortype where ETId = ELType) as ELType,ELDetail from tblErrorLog where eltype < '200' and  elid = '" + id + "' group by elid,eltype,eldetail";
+                    String selectStr = "select ELId,(select ETDescription from tblerrortype where ETId = ELType) as ELType,ELDetail from tblErrorLog where eltype < '200' and  elid = '" + data[0] + "' group by elid,eltype,eldetail";
                     SqlDataAdapter dataadapter = new SqlDataAdapter(selectStr, connection);
                     connection.Open();
                     dataadapter.Fill(dt);
@@ -47,7 +48,7 @@ namespace Gentran.Controllers.api.Order
                 }
                 else
                 {
-                    String selectStr = "select ELId,(select ETDescription from tblerrortype where ETId = ELType) as ELType,ELDetail from tblErrorLog where eltype > '200' and elid = '" + id + "' group by elid,eltype,eldetail";
+                    String selectStr = "select ELId,(select ETDescription from tblerrortype where ETId = ELType) as ELType,ELDetail from tblErrorLog where eltype > '200' and elid = '" + data[0] + "' group by elid,eltype,eldetail";
                     SqlDataAdapter dataadapter = new SqlDataAdapter(selectStr, connection);
                     connection.Open();
                     dataadapter.Fill(dt);

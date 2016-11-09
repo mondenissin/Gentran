@@ -19,7 +19,7 @@
 
             var orders = result.data.detail.filter(x=>x.uiprice = parseInt(x.uiprice).toLocaleString());
             orders.filter(x=> {
-                var data = x.ulfile;
+                var data = x.ulfile+','+x.ulstatus;
                 if (x.ulstatus < 20) {
                     viewModelHelper.apiGet('api/ordererrors/' + data, null, function (result) { 
                         x.eCtr = result.data.detail.length;
@@ -114,7 +114,7 @@
             $('#reupMdal').modal('show');
 
             console.log(order);
-            viewModelHelper.apiGet('api/ordererrors/' + order.ulfile, null, function (resultError) {
+            viewModelHelper.apiGet('api/ordererrors/' + order.ulfile+','+order.ulstatus, null, function (resultError) {
                 console.log(resultError.data.detail);
                 $('.progress-bar').animate({ width: '100%' }, execTime);
 
@@ -268,7 +268,7 @@
     }*/
     
     $scope.getStatus = function (id, $event) {
-        var datas = id.ulfile
+        var datas = id.ulfile + ',' + id.ulstatus;
         $scope.errorPO = "";
         if(parseInt(id.ulstatus) < 20){
             viewModelHelper.apiGet('api/ordererrors/' + datas, null, function (result) {
