@@ -367,7 +367,7 @@ namespace Gentran.Controllers.api
                     }
                     else
                     {
-                        sQuery = "select distinct PAAccount, atdescription, PACode, PMCode from tblProductAssignment left join tblProductMaster on PMId = PAProduct left join tblAccount on atid = PAAccount where PAProduct='" + pmid + "'";
+                        sQuery = "select distinct PAAccount, atdescription, PACode, PMCode from tblProductAssignment left join tblProductMaster on PMId = PAProduct left join tblAccountType on atid = PAAccount where PAProduct='" + pmid + "'";
                     }
 
                     connection.Open();
