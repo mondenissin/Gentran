@@ -15,7 +15,7 @@ namespace Gentran.Controllers.api
         {
             bool success = true;
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
-            String sQuery = "select top 100 TLId,TLRemarks,TLValue,Left(TLDate,12) as TLDate,TADescription,UMUsername from tbltransactionlog left join tblTransactionActivity on taid = tlactivity left join tblusermaster on umid = tluser order by tlid desc";
+            String sQuery = "select * from tbluploadlog left join tbluploaditems on uiid = ulid";
             SqlCommand cmd = new SqlCommand(sQuery, connection);
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;

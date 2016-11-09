@@ -47,22 +47,22 @@
                 <tbody>
                     <tr ng-repeat="m in filterList | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
                         <td ng-cloak style="text-align: center;"><input id="" class="cbxSub" type="checkbox" ng-checked="" /></td>
-                        <td ng-cloak class="table-data-ponum">{{m.TLId}}</td>
-                        <td ng-cloak class="table-data-ucust"{{m.TLId}}></td>
+                        <td ng-cloak class="table-data-ponum">{{m.ULPONumber}}</td>
+                        <td ng-cloak class="table-data-ucust"{{m.ULCustomer}}></td>
                         <!--<td ng-cloak class="table-data-cdesc" style="width:30%;"></td>-->
-                        <td ng-cloak class="table-data-uodate">{{m.TLId}}</td>
-                        <td ng-cloak class="table-data-uddate">{{m.TLId}}</td>
-                        <td ng-cloak class="table-data-uudate">{{m.TLId}}</td>
-                        <td ng-cloak class="table-data-cqty">{{m.TLId}}</td>
-                        <td ng-cloak class="table-data-sqty">{{m.TLId}}</td>
-                        <!--<td ng-cloak class="table-data-uprice">{{m.TLId}}</td>-->
-                        <td ng-cloak class="table-data-uprice">{{m.TLId}}</td>
-                        <td ng-cloak class="table-data-uprice">{{m.TLId}}</td>
-                        <td ng-cloak class="table-data-uprice">{{m.TLId}}</td>
-                        <td ng-cloak style="position:relative;width:30%;">{{m.TLId}}</td><!--<img onclick="errorDetails(\'' + data.detail[i].ulid + '\',\'' + data.detail[i].ulstatus + '\')" title="View Error Details" src="img/master/error.png">-->
+                        <td ng-cloak class="table-data-uodate">{{m.ULOrderDate}}</td>
+                        <td ng-cloak class="table-data-uddate">{{m.ULOrderDate}}</td>
+                        <td ng-cloak class="table-data-uudate">{{m.ULDeliveryDate}}</td>
+                        <td ng-cloak class="table-data-cqty">{{m.ULUploadDate}}</td>
+                        <td ng-cloak class="table-data-sqty">{{m.ULUploadDate}}</td>
+                        <!--<td ng-cloak class="table-data-uprice">{{m.ULUploadDate}}</td>-->
+                        <td ng-cloak class="table-data-uprice">{{m.ULUser}}</td>
+                        <td ng-cloak class="table-data-uprice">{{m.ULPONumber}}</td>
+                        <td ng-cloak class="table-data-uprice">{{m.ULPONumber}}</td>
+                        <td ng-cloak style="position:relative;width:30%;">{{m.ULPONumber}}</td><!--<img onclick="errorDetails(\'' + data.detail[i].ulid + '\',\'' + data.detail[i].ulstatus + '\')" title="View Error Details" src="img/master/error.png">-->
                         <td ng-cloak>
-                            <!--<button class="btn btn-default btn-xs option-icon-size" ng-click="showDetails(o)" title="Order Details"><i class="fa fa-info"></i></button>
-                        <button class="btn btn-default btn-xs option-icon-size" ng-click="reuploadPO(o)" title="Reupload" ng-show="o.ulstatus == '11' ? true:false"><i class="fa fa-upload"></i></button>-->
+                           <button class="btn btn-default btn-xs option-icon-size" ng-click="showDetails(m)" title="PO Details"><i class="fa fa-info"></i></button>
+                        <button class="btn btn-default btn-xs option-icon-size" ng-click="reuploadPO(o)" title="Reupload" ><i class="fa fa-upload"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -128,3 +128,73 @@
         </div>
     </div>
 </div>
+
+
+<!------- VIEW COMPLETE DETAILS MODAL ------->
+<div id="ViewPODetailsModal" class="modal fade" role="dialog">
+    <div class="modal-dialog ">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" ><i class="fa fa-user"></i> Details for PO Number # <b><span id="txt_ponum"></span></b></h4>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Customer #: </td>
+                        <td id="txt_custnum"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Customer Name: </td>
+                        <td id="txt_custname"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Order Date: </td>
+                        <td id="txt_orderdate"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Delivery Date: </td>
+                        <td id="txt_deliverydate"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Retrieve Date: </td>
+                        <td id="txt_retrievedate"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Upload Date: </td>
+                        <td id="txt_uploaddate"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Submitted Date: </td>
+                        <td id="txt_submitteddate"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Reader: </td>
+                        <td id="txt_reader"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Submitted By: </td>
+                        <td id="txt_submittedby"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Total SKU: </td>
+                        <td id="txt_sku"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Total Quantity: </td>
+                        <td id="txt_qty"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Total Amount: </td>
+                        <td id="txt_amount"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!------- END OF VIEW COMPLETE DETAILS MODAL ------->
