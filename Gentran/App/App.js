@@ -60,6 +60,28 @@ commonModule.factory('viewModelHelper', function ($http, $q, $window, $location)
                 });
         };
 
+        self.apiDownloadXML = function (uri, data, success, failure) {
+            self.modelIsValid = true;
+            $http.get(MyApp.rootPath + uri, {
+                'params': { 'value': data }, headers: { 'Content-Type': 'application/json' }
+            }
+                )
+                .then(function (result) {
+                    success(result);
+                }, function (result) {
+                    if (failure !== null) {
+                        failure(result);
+                    }
+                    else {
+                        var errorMessage = result.status + ':' + result.statusText;
+                        if (result.data !== null && result.data.Message !== null)
+                            errorMessage += ' - ' + result.data.Message;
+                        self.modelErrors = [errorMessage];
+                        self.modelIsValid = false;
+                    }
+                });
+        };
+
         self.apiFileUpload = function (uri, data, success, failure) {
             self.modelIsValid = true;
             $http.post(MyApp.rootPath + uri, data, {

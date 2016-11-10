@@ -11,6 +11,7 @@ public class Data
     public string operation { get; set; }
     public List<Value> payload { get; set; }
     public List<Value> customer { get; set; }
+    public List<Value> downloadfile { get; set; }
 }
 public class Value
 {

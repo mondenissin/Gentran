@@ -1,6 +1,24 @@
-﻿<h3>Dashboard</h3>
+﻿<div class="breadcrumb">
+    <div class="form-inline">
+        <div class="pull-right">
+            <label>Filter by:</label>
+            <select class="form-control ddl_area">
+                <option selected value="-1">All Area</option>
+                <option>Luzon</option>
+                <option>Visayas</option>
+                <option>Mindanao</option>
+            </select>
+            <select class="form-control ddl_chain">
+                <option selected value="-1">All Chains</option>
+                <option ng-repeat="acc in accounts" value="{{acc.ATId}}">{{acc.ATDescription}}</option>
+            </select>
+            <input type="text" ng-model-options="{debounce: {'default': 100, 'blur': 0}}" class="form-control txt_daterange" readonly placeholder="Date End" ng-disabled="range" />
+            <button class="btn btn-primary btn-sm" ng-click="setFilter()"><i class="fa fa-search"></i></button>
+        </div>
+    </div>
+</div>
 
-
+<h3>Dashboard </h3><h5>{{ filterText }}</h5>
 <div class="container-fluid">
     <div class="row">
         <div class="searchable-container">
@@ -13,9 +31,9 @@
                             <p>Orders</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-bag"></i>
+                            <i class="ion ion-ios-cart"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                      <!--  <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>-->
                     </div>
                 </div>
                 <!-- ./col -->
@@ -24,12 +42,12 @@
                     <div class="small-box bg-green">
                         <div class="inner">
                             <h3>{{ totalSKUs }}</h3>
-                            <p>Total SKUs</p>
+                            <p>Total SKU</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
+                            <i class="ion ion-ios-pie"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                      <!--  <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>-->
                     </div>
                 </div>
                 <!-- ./col -->
@@ -37,13 +55,13 @@
                     <!-- small box -->
                     <div class="small-box bg-yellow">
                         <div class="inner">
-                            <h3>{{ totalCustomers }}</h3>
-                            <p>Customers</p>
+                            <h3>{{ totalQuantity }}</h3>
+                            <p>Total SKU Quantity</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-person-add"></i>
+                            <i class="ion ion-speedometer"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                     <!--   <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>-->
                     </div>
                 </div>
                 <!-- ./col -->
@@ -51,13 +69,13 @@
                     <!-- small box -->
                     <div class="small-box bg-red">
                         <div class="inner">
-                            <h4>P {{ totalIncome }}</h4>
+                            <h3>P {{ totalIncome }}</h3>
                             <p>Income</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-pie-graph"></i>
+                            <i class="ion ion-arrow-graph-up-right"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                      <!--  <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>-->
                     </div>
                 </div>
                 <!-- ./col -->
@@ -69,7 +87,7 @@
             <div class="box box-info">
                 <div class="box-header">
                     <i class="fa fa-people"></i>
-                    <h3 class="box-title">Sales</h3>
+                    <h3 class="box-title"><i class="ion ios-cash-outline"></i> Sales</h3>
                 </div>
                 <div class="box-body">
                     <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;"></div>
@@ -138,53 +156,6 @@
 
         $(".tab-menu").css("cursor", "pointer");
 
-        // line chart
-        Morris.Line({
-            element: 'revenue-chart',
-            data:  [
-                 { "elapsed": "Sep W1", "value": 8 },
-                 { "elapsed": "Sep W2", "value": 34 },
-                 { "elapsed": "Sep W3", "value": 53 },
-                 { "elapsed": "Sep W4", "value": 12 },
-                 { "elapsed": "Oct W1", "value": 13 },
-                 { "elapsed": "Oct W2", "value": 22 },
-                 { "elapsed": "Oct W3", "value": 5 },
-                 { "elapsed": "Oct W4", "value": 26 },
-                 { "elapsed": "Nov W1", "value": 12 },
-                 { "elapsed": "Nov W2", "value": 19 }
-            ],
-            xkey: 'elapsed',
-            ykeys: ['value'],
-            labels: ['Orders'],
-            lineColors: ['#868BB8'],
-            parseTime: false,
-            lineWidth: 1,
-            resize: true
-        });
-
-       // //DualLine Chart
-       //var area = new Morris.Area({
-       //     element: 'revenue-chart',
-       //     resize: true,
-       //     data: [
-       //       { month: '2016-09', l: 'W1', item1: 2666 },
-       //       { month: '2016-09', l: 'W2', item1: 2778 },
-       //       { month: '2016-09', l: 'W3', item1: 4912 },
-       //       { month: '2016-09', l: 'W4', item1: 3767 },
-       //       { month: '2016-10', l: 'W1', item1: 6810 },
-       //       { month: '2016-10', l: 'W2', item1: 5670 },
-       //       { month: '2016-10', l: 'W3', item1: 4820 },
-       //       { month: '2016-10', l: 'W4', item1: 15073 },
-       //       { month: '2016-11', l: 'W1', item1: 10687 },
-       //       { month: '2016-11', l: 'W2', item1: 8432 }
-       //     ],
-       //     xkey: 'l',
-       //     xLabel: 'l  ',
-       //     ykeys: ['item1'],
-       //     labels: ['Order'],
-       //     lineColors: ['#a0d0e0'],
-       //     hideHover: 'auto'
-       //});
 
         //Donut Chart
         var donut = new Morris.Donut({
@@ -192,12 +163,36 @@
             resize: true,
             colors: ["#3c8dbc", "#f56954", "#00a65a"],
             data: [
-              { label: "Download Sales", value: 12 },
-              { label: "In-Store Sales", value: 30 },
-              { label: "Mail-Order Sales", value: 20 }
+              { label: "Download Sales", value: 5 },
+              { label: "In-Store Sales", value: 35 },
+              { label: "Mail-Order Sales", value: 10 }
             ],
             hideHover: 'auto'
         });
 
+        var start = moment().subtract(29, 'days');
+        var end = moment();
+
+        function cb(start, end) {
+            $('.txt_daterange').val(start.format('YYYY/MM/DD') + '-' + end.format('YYYY/MM/DD'));
+        }
+
+        $('.txt_daterange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(7, 'days'), moment().subtract(1, 'days')],
+                //'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                'This Year': [moment().startOf('year'), moment().endOf('year')],
+                'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
+            }
+        }, cb);
+
+        cb(start, end);
     });
+
     </script>

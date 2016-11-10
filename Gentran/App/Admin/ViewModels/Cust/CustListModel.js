@@ -7,7 +7,6 @@
         $scope.refreshCust();
         $scope.getAccounts();
         $scope.accountSelections = "";
-
     }
 
     $scope.refreshCust = function () {
