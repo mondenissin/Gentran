@@ -62,7 +62,7 @@
                         <td ng-cloak style="position:relative;width:30%;">{{m.ULPONumber}}</td><!--<img onclick="errorDetails(\'' + data.detail[i].ulid + '\',\'' + data.detail[i].ulstatus + '\')" title="View Error Details" src="img/master/error.png">-->
                         <td ng-cloak>
                            <button class="btn btn-default btn-xs option-icon-size" ng-click="showDetails(m)" title="PO Details"><i class="fa fa-info"></i></button>
-                        <button class="btn btn-default btn-xs option-icon-size" ng-click="reuploadPO(o)" title="Reupload" ><i class="fa fa-upload"></i></button>
+                        <button class="btn btn-default btn-xs option-icon-size" ng-click="GenerateXml(m)" title="Download File" ><i class="fa fa-download"></i></button>
                         </td>
                     </tr>
                 </tbody>
