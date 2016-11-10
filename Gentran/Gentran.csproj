@@ -131,6 +131,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\api\Admin\CustController.cs" />
+    <Compile Include="Controllers\api\Admin\DashController.cs" />
     <Compile Include="Controllers\api\Admin\LogsController.cs" />
     <Compile Include="Controllers\api\Admin\ProdController.cs" />
     <Compile Include="Controllers\api\Admin\ReportsController.cs" />
@@ -208,6 +209,7 @@
     <Content Include="Content\css\monitor\monitor.css" />
     <Content Include="Content\css\order\order.css" />
     <Content Include="Content\css\retrieve\retrieve.css" />
+    <Content Include="Content\daterangepicker.css" />
     <Content Include="Content\font-awesome\font-awesome-animation.css" />
     <Content Include="Content\font-awesome\font-awesome.min.css" />
     <Content Include="Content\ionicons\ionicons.min.css" />
@@ -1192,6 +1194,8 @@
     <Content Include="Scripts\notification\notify-metro.js" />
     <Content Include="Scripts\notification\notify.min.js" />
     <Content Include="Scripts\notification\waves.js" />
+    <Content Include="Scripts\plugins\daterangepicker.js" />
+    <Content Include="Scripts\plugins\moment.min.js" />
     <Content Include="Scripts\plugins\raphael-min.js" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
