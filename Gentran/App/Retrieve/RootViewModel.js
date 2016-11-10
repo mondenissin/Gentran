@@ -11,7 +11,7 @@
 
         setInterval(function () {
             $scope.$apply(function () {
-                //$scope.autoRetrieve();
+                $scope.autoRetrieve();
             });
         }, 60000);
 

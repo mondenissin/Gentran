@@ -115,10 +115,16 @@ public class Value
     public bool isMultiple { get; set; }
 
     public string changes { get; set; }
-
+    // ------ REPORTS ---------//
     public string dateFrom { get; set; }
     
     public string dateTo { get; set; }
+
+    public string reportType { get; set; }
+
+    public string reportDate { get; set; }
+
+    public string prodcategory { get; set; }
 
     //------ERROR LOG------//
 

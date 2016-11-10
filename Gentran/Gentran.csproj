@@ -139,6 +139,7 @@
     <Compile Include="Controllers\api\Master\FileUploadController.cs" />
     <Compile Include="Controllers\api\Master\MasterController.cs" />
     <Compile Include="Controllers\api\Master\TransactionsController.cs" />
+    <Compile Include="Controllers\api\Monitoring\MonitorController.cs" />
     <Compile Include="Controllers\api\Order\DeleteOrderController.cs" />
     <Compile Include="Controllers\api\Order\OrderController.cs" />
     <Compile Include="Controllers\api\Order\OrderErrorsController.cs" />
@@ -1217,7 +1218,6 @@
     <Folder Include="App\Admin\Views\Connections\" />
     <Folder Include="App\Home\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\api\Monitoring\" />
     <Folder Include="Scripts\angular\i18n\ngLocale\" />
   </ItemGroup>
   <ItemGroup>

@@ -502,7 +502,7 @@ namespace Gentran.Controllers.api.Retrieve
                     updateCmd.ExecuteNonQuery();
                     connection.Close();
 
-                    update = "update tblRawFile set RFFilename = '" + rawID + uPONum + "." + fileExtension + "', RFReadDate = '"+ uDate + "' where RFId = '" + rawID + "'";
+                    update = "update tblRawFile set RFFilename = '" + rawID + uPONum + "." + fileExtension + "',RFReadUser = '"+ userID + "', RFReadDate = '"+ uDate + "' where RFId = '" + rawID + "'";
                     connection.Open();
                     updateCmd = new SqlCommand(update, connection);
                     updateCmd.ExecuteNonQuery();
