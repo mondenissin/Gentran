@@ -9,7 +9,7 @@
 
     $scope.refreshCust = function () {
         $scope.search = {};
-        $scope.searchBy = "TLId";
+        $scope.searchBy = "ULPONumber";
 
         viewModelHelper.apiGet('api/monitor', null, function (result) {
                 $scope.pageSize = 5;
@@ -32,19 +32,19 @@
 
     $scope.showDetails = function (monitoring) {
        // $scope.ResetEditFields();
-        $('#txt_ponum').text(monitoring.ULPONumber);
+        $('#txt_ponum').text(monitoring.ULPONumber == '' ? 'N/A' : monitoring.ULPONumber);
         $('#txt_custnum').text(monitoring.ULCustomer != 0 ? monitoring.ULCustomer : 'No Customer');
-        $('#txt_custname').text(monitoring.ULCustomer);
-        $('#txt_orderdate').text(monitoring.ULOrderDate);
-        $('#txt_deliverydate').text(monitoring.ULDeliveryDate);
-        $('#txt_retrievedate').text(monitoring.ULUploadDate);
-        $('#txt_uploaddate').text(monitoring.ULUploadDate);
-        $('#txt_submitteddate').text(monitoring.ULUploadDate);
-        $('#txt_reader').text(monitoring.ULUser);
-        $('#txt_submittedby').text(monitoring.ULUser);
-        $('#txt_sku').text(monitoring.UIOrigQuantity);
-        $('#txt_qty').text(monitoring.UIQuantity);
-        $('#txt_amount').text(monitoring.UIPrice);
+        $('#txt_custname').text(monitoring.CMDescription == '' ? 'N/A' : monitoring.CMDescription);
+        $('#txt_orderdate').text(monitoring.ULOrderDate == '' ? 'N/A' : monitoring.ULOrderDate);
+        $('#txt_deliverydate').text(monitoring.ULDeliveryDate == '' ? 'N/A' : monitoring.ULDeliveryDate);
+        $('#txt_retrievedate').text(monitoring.RFRetrieveDate);
+        $('#txt_readdate').text(monitoring.RFReadDate == '' ? 'N/A' : monitoring.RFReadDate);
+        $('#txt_submitteddate').text(monitoring.RFSubmitDate == '' ? 'N/A' : monitoring.RFSubmitDate);
+        $('#txt_reader').text(monitoring.RFReadUser == '' ? 'N/A' : monitoring.RFReadUser);
+        $('#txt_submittedby').text(monitoring.RFSubmitUser == '' ? 'N/A' : monitoring.RFSubmitUser);
+        $('#txt_sku').text(monitoring.UIOrigQuantity == '' ? 'N/A' : monitoring.UIOrigQuantity);
+        $('#txt_qty').text(monitoring.UIQuantity == '' ? 'N/A' : monitoring.UIQuantity);
+        $('#txt_amount').text(monitoring.UIPrice == '' ? 'N/A' : monitoring.UIPrice);
 
         $('#ViewPODetailsModal').modal('show');
     }

@@ -5,7 +5,11 @@
 @section styles{
     <link rel="stylesheet" href="~/Content/css/retrieve/retrieve.css" />
 }
-
+<style>    
+    .pagination {
+        margin: 0px 5px !important;            
+    }
+</style>
 @section scripts{
     <script src="~/App/Retrieve/App.js"></script>
     <script src="~/App/Retrieve/RootViewModel.js"></script>
@@ -72,14 +76,8 @@
     <div class="breadcrumb page-top-header"><b>@ViewData["Title"]</b></div>
     <div data-ng-app="retrieve" data-ng-controller="rootViewModel">
 
-        <ul class="nav nav-tabs skin-blue">
-            <li><a data-toggle="tab" href="/#FTP"><b>FTP Server</b></a></li>
-            <!--<li><a data-toggle="tab" href="/#API"><b>Web Service</b></a></li>-->
-        </ul>
         <div class="row">
             <div class="col-md-2">
-                <div class="tab-content">
-                    <div id="FTP" class="tab-pane fade ">
                         <ul class="sidebar-menu">
                             <li><h3 class="breadcrumb"><b>O</b>utlets</h3></li>
                             <li class="treeview"><button class="btn btn-link-ret" ng-click="POfile.SM=0;smFile()"><i class="fa fa-user"></i> SM</button><span class="label-count" ng-show= "POfile.SM" ng-cloak>{{POfile.SM}}</span></li>
@@ -93,8 +91,6 @@
                             <li class="treeview"><button class="btn btn-link-ret" ng-click="smFile()"><i class="fa fa-user"></i> SM</button></li>
                         </ul>
                     </div>-->
-                </div>
-            </div>
             <div class="col-md-10">
                 <div ng-view>
 
