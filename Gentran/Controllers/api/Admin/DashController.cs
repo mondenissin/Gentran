@@ -133,15 +133,15 @@ namespace Gentran.Controllers.api
                         uiid
                         FROM tblUploadItems
                         left join tbluploadlog
-                        on ulfile = uiid
+                        on ulid = uiid
                         left join tblCustomerMaster
                         on cmid = ulcustomer
                         LEFT JOIN tblProductPricing
                         on ppproduct = uiproduct and pparea = cmarea
                         WHERE uistatus NOT IN ('3','0')
                         group by uiid ) ui 
-                        ON ul.ulfile = ui.uiid  
-                        ) UL on ul.ULFile = RFId
+                        ON ul.ulid = ui.uiid  
+                        ) UL on ul.ulfile = RFId
                         where  RFRetrieveDate BETWEEN '" + values.payload[0].dateFrom + @"' AND '" + values.payload[0].dateTo + @"'
                          group by RFRetrieveDate
                         ) TB group by RFRetrieveDate";
@@ -177,14 +177,14 @@ namespace Gentran.Controllers.api
                         uiid
                         FROM tblUploadItems
                         left join tbluploadlog
-                        on ulfile = uiid
+                        on ulid = uiid
                         left join tblCustomerMaster
                         on cmid = ulcustomer
                         LEFT JOIN tblProductPricing
                         on ppproduct = uiproduct and pparea = cmarea
                         WHERE uistatus NOT IN ('3','0')
                         group by uiid ) ui 
-                        ON ul.ulfile = ui.uiid  
+                        ON ul.ulid = ui.uiid  
                         ) UL on ul.ULFile = RFId
                         group by RFRetrieveDate
                         ) TB group by RFRetrieveDate";

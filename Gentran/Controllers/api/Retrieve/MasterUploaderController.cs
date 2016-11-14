@@ -333,13 +333,13 @@ namespace Gentran.Controllers.api.Retrieve
                             NoCustomer = true;
                         }
 
-                        //uID = uCust + uPONum;
+                        uID = uCust + uPONum;
                         
                         //GET ORDER HEADER-------------------------------------------------------------------->
 
                         //<!CHECK ORDER HEADER-----------------------------------------------------------------
 
-                        String selectULId = "SELECT * FROM tblUploadLog WHERE ULPONumber = '" + uPONum + "' AND ULFile = '" + rawID + "'";
+                        String selectULId = "SELECT * FROM tblUploadLog WHERE ULPONumber = '" + uPONum + "' AND ULFile = '" + rawID + "' AND ulid = '"+ uID + "'";
                         connection.Open();
                         SqlCommand cmdULId = new SqlCommand(selectULId, connection);
                         SqlDataReader drULId = cmdULId.ExecuteReader();
@@ -351,8 +351,14 @@ namespace Gentran.Controllers.api.Retrieve
                             {
                                 drULId.Close();
 
-                                String deleteULId = "DELETE FROM tblUploadLog WHERE ULPONumber = '" + uPONum + "' AND ULFile = '" + rawID + "'";
+                                String deleteULId = "DELETE FROM tblUploadLog WHERE ULPONumber = '" + uPONum + "' AND ULFile = '" + rawID + "' AND ulid = '" + uID + "'";
                                 SqlCommand deleteCmdULId = new SqlCommand(deleteULId, connection);
+                                deleteCmdULId.ExecuteNonQuery();
+                                connection.Close();
+
+                                deleteULId = "DELETE FROM tblerrorLog WHERE elid = '" + uID + "'";
+                                deleteCmdULId = new SqlCommand(deleteULId, connection);
+                                connection.Open();
                                 deleteCmdULId.ExecuteNonQuery();
                                 connection.Close();
                             }
@@ -374,7 +380,7 @@ namespace Gentran.Controllers.api.Retrieve
                         //<!INSERT ORDER HEADER----------------------------------------------------------------
                         if (validPO == true)
                         {
-                            String insertULId = "INSERT INTO tblUploadLog select '" + rawID + "','" + uPONum + "','" + uCust + "','" + uODate + "','" + uDDate + "','10','" + uRemarks + "'";
+                            String insertULId = "INSERT INTO tblUploadLog select '" + uID + "','" + rawID + "','" + uPONum + "','" + uCust + "','" + uODate + "','" + uDDate + "','10','" + uRemarks + "'";
                             //String insertULId = "INSERT INTO tblUploadLog SELECT '" + uID + "','" + uPONum + "','" + uCust + "','" + uODate + "','" + uDDate + "','" + uDate + "','','" + uUser + "','10','" + uRemarks + "','" + uAcct + "'";
                             connection.Open();
                             SqlCommand insertCmdULId = new SqlCommand(insertULId, connection);
@@ -387,7 +393,7 @@ namespace Gentran.Controllers.api.Retrieve
 
                             if (NoCustomer == true)
                             {
-                                String insertELId = "insert into tblErrorLog select '" + rawID + "','101','" + uCust + "'";
+                                String insertELId = "insert into tblErrorLog select '" + uID + "','101','" + uCust + "'";
                                 connection.Open();
                                 SqlCommand cmdELIdInsert = new SqlCommand(insertELId, connection);
                                 cmdELIdInsert.ExecuteNonQuery();
@@ -416,7 +422,7 @@ namespace Gentran.Controllers.api.Retrieve
                                 uProd = drUIProduct["PAProduct"].ToString();
                                 connection.Close();
 
-                                String selectUIId = "select * from tblUploadItems where uiid = '" + rawID + "' and uiproduct = '" + uProd + "'";
+                                String selectUIId = "select * from tblUploadItems where uiid = '" + uID + "' and uiproduct = '" + uProd + "'";
                                 connection.Open();
                                 SqlCommand cmdUIId = new SqlCommand(selectUIId, connection);
                                 SqlDataReader drUIId = cmdUIId.ExecuteReader();
@@ -427,7 +433,7 @@ namespace Gentran.Controllers.api.Retrieve
                                     success = false;
                                     response = "Duplicate SKU " + uProd + " with " + uQty + " quantity ordered!";
 
-                                    String insertELId = "insert into tblErrorLog select '" + rawID + "','103','" + response + "'";
+                                    String insertELId = "insert into tblErrorLog select '" + uID + "','103','" + response + "'";
                                     connection.Open();
                                     SqlCommand cmdELIdInsert = new SqlCommand(insertELId, connection);
                                     cmdELIdInsert.ExecuteNonQuery();
@@ -439,7 +445,7 @@ namespace Gentran.Controllers.api.Retrieve
                                     
                                     if (uQty != "0")
                                     {
-                                        String insertUIId = "insert into tblUploadItems select '" + rawID + "','" + uProd + "','" + uQty + "','" + uQty + "','" + uPrice + "','1'";
+                                        String insertUIId = "insert into tblUploadItems select '" + uID + "','" + uProd + "','" + uQty + "','" + uQty + "','" + uPrice + "','1'";
                                         connection.Open();
                                         SqlCommand cmdUIIdInsert = new SqlCommand(insertUIId, connection);
                                         cmdUIIdInsert.ExecuteNonQuery();
@@ -454,7 +460,7 @@ namespace Gentran.Controllers.api.Retrieve
                                 success = false;
                                 response = "Invalid Store Product: " + data[x]["ProdCode"].ToString();
 
-                                String insertELId = "insert into tblErrorLog select '" + rawID + "','102','" + data[x]["ProdCode"].ToString() + "'";
+                                String insertELId = "insert into tblErrorLog select '" + uID + "','102','" + data[x]["ProdCode"].ToString() + "'";
                                 connection.Open();
                                 SqlCommand cmdELIdInsert = new SqlCommand(insertELId, connection);
                                 cmdELIdInsert.ExecuteNonQuery();
@@ -496,85 +502,49 @@ namespace Gentran.Controllers.api.Retrieve
                     }
 
                     //String update = "update tblUploadLog set ulstatus = '" + ULStatus + "',ulfilename = '" + rawID + "." + fileExtension + "' where ULFIle = '" + rawID + "';";
-                    String update = "update tblUploadLog set ulstatus = '" + ULStatus + "' where ULFIle = '" + rawID + "';";
+                    String update = "update tblUploadLog set ulstatus = '" + ULStatus + "' where ULFIle = '" + rawID + "' and ulponumber = '"+ uPONum + "' and ulid = '"+ uID + "';";
                     connection.Open();
                     SqlCommand updateCmd = new SqlCommand(update, connection);
                     updateCmd.ExecuteNonQuery();
                     connection.Close();
 
-                    update = "update tblRawFile set RFFilename = '" + rawID + uPONum + "." + fileExtension + "',RFReadUser = '"+ userID + "', RFReadDate = '"+ uDate + "' where RFId = '" + rawID + "'";
-                    connection.Open();
-                    updateCmd = new SqlCommand(update, connection);
-                    updateCmd.ExecuteNonQuery();
-                    connection.Close();
+                    if (!ifMult) {
+                        update = "update tblRawFile set RFFilename = '" + uID + "." + fileExtension + "',RFReadUser = '" + userID + "', RFReadDate = '" + uDate + "' where RFId = '" + rawID + "'";
+                        connection.Open();
+                        updateCmd = new SqlCommand(update, connection);
+                        updateCmd.ExecuteNonQuery();
+                        connection.Close();
 
-                    /*string[] fileName = filePath.Split('.');
-                    string newFileName = fileName[1] == "xls" || fileName[1] == "xlsx" || fileName[1] == "xlsm" ? newFileName = fileName[0] + ".csv" : newFileName = values.payload[0].ULFileName;
+                        String source = @"C:\inetpub\wwwroot\files\Gentran\queued\" + absoluteName;
 
-                    if (fileName[1] == "xls" || fileName[1] == "xlsx" || fileName[1] == "xlsm")
-                    {
-                        String csvSource = "";
-                        if (!values.payload[0].ReUpload)
-                            csvSource = @"C:\inetpub\wwwroot\files\pos\scheduled\" + newFileName;
-                        else
-                            csvSource = @"C:\inetpub\wwwroot\files\pos\failed\" + newFileName;
+                        String destination = @"C:\inetpub\wwwroot\files\Gentran\" + destinationFolder + @"\" + uID + "." + fileExtension;
 
-                        if (File.Exists(csvSource))
-                        {
-                            File.Delete(csvSource);
-                        }
-                    }*/
-                    //DTO
-                    //if (!values.payload[0].ReUpload)
-                    //{
-                    String source = @"C:\inetpub\wwwroot\files\Gentran\queued\" + absoluteName;
-
-                    String destination = @"C:\inetpub\wwwroot\files\Gentran\" + destinationFolder + @"\" + rawID + uPONum +"." + fileExtension;
-
-                    String failed = @"C:\inetpub\wwwroot\files\Gentran\failed\" + rawID + uPONum + "." + fileExtension;
-
-                    if (destinationFolder == "successful")
-                    {
-                        if (File.Exists(failed))
-                        {
-                            File.Delete(failed);
-                        }
-                    }
-
-                    if (File.Exists(destination))
-                    {
-                        File.Delete(destination);
-                    }
-
-                    if (ifMult)
-                        File.Copy(source, destination);
-                    else
-                        File.Move(source, destination);
-
-
-                    string newpaypload = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                    trows.Add(new Transaction { response = response, activity = "UPL20", date = uDate, remarks = uPONum, user = userID, type = "ADM", value = "PO ID:" + rawID, changes = "", payloadvalue = newpaypload, customernumber = uCust, ponumber = uPONum });
-
-                    /*}
-                    else
-                    {
-                        String source = @"C:\inetpub\wwwroot\files\pos\failed\" + values.payload[0].ULFileName;
-
-                        String destination = @"C:\inetpub\wwwroot\files\pos\" + destinationFolder + @"\" + ULId + "." + fileExtension;
+                        String failed = @"C:\inetpub\wwwroot\files\Gentran\failed\" + uID + "." + fileExtension;
 
                         if (destinationFolder == "successful")
                         {
-                            if (File.Exists(source))
+                            if (File.Exists(failed))
                             {
-                                if (File.Exists(destination))
-                                {
-                                    File.Delete(destination);
-                                }
+                                File.Delete(failed);
                             }
                         }
 
+                        if (File.Exists(destination))
+                        {
+                            File.Delete(destination);
+                        }
+
                         File.Move(source, destination);
-                    }*/
+                        /*
+                        if (ifMult)
+                            File.Copy(source, destination);
+                        else
+                            File.Move(source, destination);
+                        */
+                    }
+                    string newpaypload = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                    trows.Add(new Transaction { response = response, activity = "UPL20", date = uDate, remarks = uPONum, user = userID, type = "ADM", value = "PO ID:" + uID, changes = "", payloadvalue = newpaypload, customernumber = uCust, ponumber = uPONum });
+                    
                 }
                 catch (Exception ex)
                 {

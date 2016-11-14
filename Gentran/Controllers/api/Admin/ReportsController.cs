@@ -100,8 +100,8 @@ namespace Gentran.Controllers.api.Admin
                                 left join tblcustomermaster b on a.ulcustomer = b.cmid 
                                 left join tblusermaster c on c.umid = r.RFSubmitUser 
                                 left join (SELECT SUM(uiquantity * ppprice) as uiprice, SUM(uiquantity) as sumulquantity,COUNT(uiquantity) as countulquantity,uiid FROM tblUploadItems 
-                                left join tblrawfile on RFId = uiid left join tblUploadLog on ULFile = RFId left join tblCustomerMaster on cmid = ulcustomer
-                                left join tblProductPricing on ppproduct = uiproduct and pparea = cmarea WHERE uistatus NOT IN ('3','0') group by uiid ) ui on a.ULFile = ui.UIId  ";
+                                left join tblUploadLog on ULId = UIId left join tblrawfile on RFId = ULFile left join tblCustomerMaster on cmid = ulcustomer
+                                left join tblProductPricing on ppproduct = uiproduct and pparea = cmarea WHERE uistatus NOT IN ('3','0') group by uiid ) ui on a.ULId = ui.UIId ";
 
                         if (values.payload[0].reportType == "latepo"){
                             sQuery += "where CAST(r.RFReadDate as time) > CAST('12:00' as time) ";
@@ -119,7 +119,7 @@ namespace Gentran.Controllers.api.Admin
                     }
                     else if (values.operation == "by_user")
                     {
-                        sQuery = @"select a.ulponumber,a.ulcustomer,left(a.ulorderdate,12) as ulorderdate,
+                        sQuery = @"select top 100 a.ulponumber,a.ulcustomer,left(a.ulorderdate,12) as ulorderdate,
                                 left(a.ULDeliveryDate,12) as uldeliverydate,left(r.RFRetrieveDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFRetrieveDate as time),100) as ulretrievedate,
                                 left(r.RFReadDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFReadDate as time),100) as ulreaddate,
                                 (case CAST(r.RFSubmitDate as time) when CAST('00:00' as time) then 'Not yet Submitted' else left(r.RFSubmitDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFSubmitDate as time),100) end) as ulsubmitdate,
@@ -129,8 +129,8 @@ namespace Gentran.Controllers.api.Admin
                                 left join tblcustomermaster b on a.ulcustomer = b.cmid 
                                 left join tblusermaster c on c.umid = r.RFSubmitUser 
                                 left join (SELECT SUM(uiquantity * ppprice) as uiprice, SUM(uiquantity) as sumulquantity,COUNT(uiquantity) as countulquantity,uiid FROM tblUploadItems 
-                                left join tblrawfile on RFId = uiid left join tblUploadLog on ULFile = RFId left join tblCustomerMaster on cmid = ulcustomer
-                                left join tblProductPricing on ppproduct = uiproduct and pparea = cmarea WHERE uistatus NOT IN ('3','0') group by uiid ) ui on a.ULFile = ui.UIId 
+                                left join tblUploadLog on ULId = UIId left join tblrawfile on RFId = ULFile left join tblCustomerMaster on cmid = ulcustomer
+                                left join tblProductPricing on ppproduct = uiproduct and pparea = cmarea WHERE uistatus NOT IN ('3','0') group by uiid ) ui on a.ULId = ui.UIId  
                                 where r.RFReadUser = '" + values.payload[0].ULUser + "' and "+ dateFilter + " between '" + values.payload[0].dateFrom + "' and '" + values.payload[0].dateTo + "' ";
 
                         if (values.payload[0].reportType == "latepo") {
@@ -149,7 +149,7 @@ namespace Gentran.Controllers.api.Admin
                     }
                     else
                     {
-                        sQuery = @"select a.ulponumber,a.ulcustomer,left(a.ulorderdate,12) as ulorderdate,
+                        sQuery = @"select top 100 a.ulponumber,a.ulcustomer,left(a.ulorderdate,12) as ulorderdate,
                                 left(a.ULDeliveryDate,12) as uldeliverydate,left(r.RFRetrieveDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFRetrieveDate as time),100) as ulretrievedate,
                                 left(r.RFReadDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFReadDate as time),100) as ulreaddate,
                                 (case CAST(r.RFSubmitDate as time) when CAST('00:00' as time) then 'Not yet Submitted' else left(r.RFSubmitDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFSubmitDate as time),100) end) as ulsubmitdate,
@@ -159,8 +159,8 @@ namespace Gentran.Controllers.api.Admin
                                 left join tblcustomermaster b on a.ulcustomer = b.cmid 
                                 left join tblusermaster c on c.umid = r.RFSubmitUser 
                                 left join (SELECT SUM(uiquantity * ppprice) as uiprice, SUM(uiquantity) as sumulquantity,COUNT(uiquantity) as countulquantity,uiid FROM tblUploadItems 
-                                left join tblrawfile on RFId = uiid left join tblUploadLog on ULFile = RFId left join tblCustomerMaster on cmid = ulcustomer
-                                left join tblProductPricing on ppproduct = uiproduct and pparea = cmarea WHERE uistatus NOT IN ('3','0') group by uiid ) ui on a.ULFile = ui.UIId 
+                                left join tblUploadLog on ULId = UIId left join tblrawfile on RFId = ULFile left join tblCustomerMaster on cmid = ulcustomer
+                                left join tblProductPricing on ppproduct = uiproduct and pparea = cmarea WHERE uistatus NOT IN ('3','0') group by uiid ) ui on a.ULId = ui.UIId  
                                 where " + dateFilter + " between '" + values.payload[0].dateFrom + "' and '" + values.payload[0].dateTo + "' ";
 
                         if (values.payload[0].reportType == "latepo"){
@@ -188,7 +188,7 @@ namespace Gentran.Controllers.api.Admin
                     {
                         sQuery = @"select top 100 a.ulponumber,a.ulorderdate,uiproduct as pmid,uiquantity,pmcode,pmdescription,(select pcdescription from tblproductcategory where pcid = pmcategory ) as pmcategory,
                                 (case pmstatus when '1' then 'Active' else 'Inactive' end) as pmstatus,ppprice,amdescription from tbluploaditems left join
-                                tbluploadlog a on uiid = a.ulfile left join tblproductmaster on uiproduct = pmid left join tblProductPricing
+                                tbluploadlog a on uiid = a.ulid left join tblproductmaster on uiproduct = pmid left join tblProductPricing
                                 on PPProduct = PMId left join tblAreaMaster on AMId = PPArea where PPPrice > 0 ";
 
                         if (values.payload[0].reportType == "queuedsku"){
@@ -205,7 +205,7 @@ namespace Gentran.Controllers.api.Admin
                     {
                         sQuery = @"select a.ulponumber,a.ulorderdate,uiproduct as pmid,uiquantity,pmcode,pmdescription,(select pcdescription from tblproductcategory where pcid = pmcategory ) as pmcategory,
                                 (case pmstatus when '1' then 'Active' else 'Inactive' end) as pmstatus,ppprice,amdescription from tbluploaditems left join
-                                tbluploadlog a on uiid = a.ulfile left join tblproductmaster on uiproduct = pmid left join tblProductPricing
+                                tbluploadlog a on uiid = a.ulid left join tblproductmaster on uiproduct = pmid left join tblProductPricing
                                 on PPProduct = PMId left join tblAreaMaster on AMId = PPArea where PPPrice > 0 and PMCategory = '" + values.payload[0].prodcategory+"' and "+dateFilter+ @"
                                 between '" + values.payload[0].dateFrom + "' and '" + values.payload[0].dateTo + "' ";
 
@@ -222,7 +222,7 @@ namespace Gentran.Controllers.api.Admin
                     {
                         sQuery = @"select a.ulponumber,a.ulorderdate,uiproduct as pmid,uiquantity,pmcode,pmdescription,(select pcdescription from tblproductcategory where pcid = pmcategory ) as pmcategory,
                                 (case pmstatus when '1' then 'Active' else 'Inactive' end) as pmstatus,ppprice,amdescription from tbluploaditems left join
-                                tbluploadlog a on uiid = a.ulfile left join tblproductmaster on uiproduct = pmid left join tblProductPricing
+                                tbluploadlog a on uiid = a.ulid left join tblproductmaster on uiproduct = pmid left join tblProductPricing
                                 on PPProduct = PMId left join tblAreaMaster on AMId = PPArea where PPPrice > 0 and " + dateFilter + @"
                                 between '" + values.payload[0].dateFrom + "' and '" + values.payload[0].dateTo + "' ";
 

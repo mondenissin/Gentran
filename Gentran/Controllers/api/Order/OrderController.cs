@@ -28,7 +28,8 @@ namespace Gentran.Controllers.api.Order
                 String selectStr = "";
                
                 selectStr = @"SELECT DISTINCT
-                            ul.ulfile,
+                            ur.rfid,
+                            ul.ulid,
                             ul.ulponumber,
                             cm.cmcode as ulcustomer,
                             cm.cmdescription, 
@@ -57,17 +58,15 @@ namespace Gentran.Controllers.api.Order
                             countulquantity = COUNT(uiquantity),
                             uiid
                             FROM tblUploadItems
-                            left join tblrawfile
-                            on RFId = uiid
                             left join tblUploadLog
-                            on ULFile = RFId
+                            on ulid = uiid
                             left join tblCustomerMaster
                             on cmid = ulcustomer
                             LEFT JOIN tblProductPricing
                             on ppproduct = uiproduct and pparea = cmarea
                             WHERE uistatus NOT IN ('3','0')
                             group by uiid ) ui 
-                            ON ul.ULFile = ui.uiid 
+                            ON ul.ulid = ui.uiid 
                             WHERE ua.uauser = '17002'
                             AND uatype = 'KAS' 
                             AND ulstatus !=0  
@@ -156,7 +155,7 @@ namespace Gentran.Controllers.api.Order
                             from
                             tbluploadlog
                             left join tbluploaditems
-                            on tbluploadlog.ULFile = tbluploaditems.uiid
+                            on tbluploadlog.ulid = tbluploaditems.uiid
                             left join tblRawFile
                             on RFId = ULFile
                             left join tblcustomermaster
@@ -166,7 +165,7 @@ namespace Gentran.Controllers.api.Order
                             left join tblproductpricing
                             on ppproduct = uiproduct and pparea = cmarea
                             where
-                            ULFile ='"+id+@"'
+                            ulid ='"+id+@"'
                             and uiquantity != 0";
 
             SqlCommand cmd = new SqlCommand(sQuery, connection);
@@ -249,7 +248,7 @@ namespace Gentran.Controllers.api.Order
                     }
                     else
                     {
-                        String updateULId = "update tbluploadlog set ULStatus = '" + status + "', ulcustomer = '" + CustomerNumber + "', ULDeliveryDate = '" + values.payload[0].DeliveryDate + "', ulremarks = '" + values.payload[0].remarks + "' where ulfile = '" + values.payload[0].rawID + "'";
+                        String updateULId = "update tbluploadlog set ULStatus = '" + status + "', ulcustomer = '" + CustomerNumber + "', ULDeliveryDate = '" + values.payload[0].DeliveryDate + "', ulremarks = '" + values.payload[0].remarks + "' where ulid = '" + values.payload[0].ULId + "'";
                         //GMC String updateULId = "update tbluploadlog set ULPONumber = '" + values.payload[0].ULPONumber + "',ULStatus = '" + status + "',ULId = '" + CustomerNumber + values.payload[0].ULPONumber + "', ulcustomer = '" + CustomerNumber + "', ULDeliveryDate = '" + values.payload[0].ULDeliveryDate + "', ulremarks = '" + values.payload[0].ULRemarks + "' where ULId = '" + values.payload[0].ULId + "'";
 
                         connection.Open();
@@ -259,7 +258,7 @@ namespace Gentran.Controllers.api.Order
 
                         string newpaypload = JsonConvert.SerializeObject(values.payload, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
-                        rows.Add(new Transaction { activity = "EDI20", date = now, remarks = values.payload[0].changes, user = userID, type = "ADM", value = "PO ID:" + values.payload[0].rawID, changes = "", payloadvalue = newpaypload, customernumber = "", ponumber = "" });
+                        rows.Add(new Transaction { activity = "EDI20", date = now, remarks = values.payload[0].changes, user = userID, type = "ADM", value = "PO ID:" + values.payload[0].ULId, changes = "", payloadvalue = newpaypload, customernumber = "", ponumber = "" });
                         return new Response { success = success, detail = rows, notiftext = response };
                         
                     }

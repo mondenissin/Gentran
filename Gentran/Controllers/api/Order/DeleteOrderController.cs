@@ -41,7 +41,7 @@ namespace Gentran.Controllers.api.Order
 
                 for (int x = 0,y = values.payload.Count; x<y; x++) {
 
-                    String sQuery = "update tbluploadlog set ulstatus = '0' where ulfile = '" + values.payload[x].rawID + "'";
+                    String sQuery = "update tbluploadlog set ulstatus = '0' where ulid = '" + values.payload[x].ULId + "'";
                     connection.Open();
                     SqlCommand cCmd = new SqlCommand(sQuery, connection);
                     cCmd.ExecuteNonQuery();
@@ -78,13 +78,13 @@ namespace Gentran.Controllers.api.Order
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
             try
             {
-                sQuery = "update tbluploadlog set ulstatus = '0' where ulfile = '" + values.payload[0].rawID + "'";
+                sQuery = "update tbluploadlog set ulstatus = '0' where ulid = '" + values.payload[0].ULId + "'";
                 connection.Open();
                 cCmd = new SqlCommand(sQuery, connection);
                 cCmd.ExecuteNonQuery();
                 connection.Close();
 
-                sQuery = "update tbluploaditems set uistatus = '0' where uiid = '" + values.payload[0].rawID + "'";
+                sQuery = "update tbluploaditems set uistatus = '0' where uiid = '" + values.payload[0].ULId + "'";
                 connection.Open();
                 cCmd = new SqlCommand(sQuery, connection);
                 cCmd.ExecuteNonQuery();

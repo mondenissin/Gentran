@@ -41,7 +41,7 @@
         <tbody>
             <tr sly-repeat="o in filterList | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
                 <td ng-cloak style="text-align: center; width:5%;"><input id="{{o.ul}}" class="cbxSub" type="checkbox" ng-checked="allOrders" /></td>
-                <td ng-cloak class="table-data-ulfile" hidden>{{ o.ulfile }}</td>
+                <td ng-cloak class="table-data-ulid" hidden>{{ o.ulid }}</td>
                 <td ng-cloak class="table-data-ponum">{{ o.ulponumber }}</td>
                 <td ng-cloak class="table-data-ucust">{{ o.ulcustomer }}</td>
                 <td ng-cloak class="table-data-cdesc"  style="width:30%;">{{ o.cmdescription}}</td>
