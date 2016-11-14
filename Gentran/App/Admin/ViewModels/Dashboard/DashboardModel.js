@@ -13,6 +13,7 @@
     //========
 
     var initialize = function () {
+        $scope.getArea();
         $scope.getAccounts();
 
         $scope.Items = null;
@@ -20,11 +21,20 @@
         $scope.refreshDash($scope.Items);
     }
 
+
+    $scope.getArea = function () {
+        $scope.data = {};
+        $scope.data.operation = 'get_area';
+        viewModelHelper.apiGet('api/cust', $scope.data, function (result) {
+            $scope.areaMaster = result.data.detail;
+        });
+    }
+
     $scope.getAccounts = function () {
         $scope.data = {};
         $scope.data.operation = 'get_accounts';
         viewModelHelper.apiGet('api/cust', $scope.data, function (result) {
-            $scope.accounts = result.data.detail;
+            $scope.accountMaster = result.data.detail;
         });
     }
 
@@ -40,6 +50,8 @@
                     amount += data.detail[i].ULTotalAmount;
                 }
                 callback(data);
+            } else {
+                $scope.area.setData([]);
             }
 
             $scope.totalOrders = orders;
@@ -48,13 +60,13 @@
             $scope.totalIncome = amount.toLocaleString();
         });
     }
-
+    var ti;
     $scope.setFilter = function () {
         var filterArea = $('.ddl_area').val();
         var filterChain = $('.ddl_chain').val();
         var filterDate = $('.txt_daterange').val().split('-');
 
-        var operation = filterArea != '-1' && filterChain != '-1' ? "filter_dashboard_by_all" ? filterArea != '-1' : "filter_dashboard_by_area" : filterChain != '-1' ? "filter_dashboard_by_chain" : "filter_dashboard_date";
+        var operation = filterArea != '-1' && filterChain != '-1' ? "filter_dashboard_by_all" : filterArea != '-1' ? "filter_dashboard_by_area" : filterChain != '-1' ? "filter_dashboard_by_chain" : "filter_dashboard_date";
 
         var dFrom = filterDate[0].split('/');
         var dTo = filterDate[1].split('/');
@@ -65,23 +77,34 @@
 
         Item.dateFrom = sFrom + ' 00:00:00.000';
         Item.dateTo = sTo + ' 23:59:59.999';
+        Item.cmArea = filterArea;
+        Item.acctype = filterChain;
 
         $scope.Items = {};
-        $scope.Items.operation = "filter_dashboard_date";
+        $scope.Items.operation = operation;
         $scope.Items.payload = _payloadParser(Item);
 
         $scope.filterText = sFrom == sTo ? 'Filter: ' + sTo : 'Filter: ' + sFrom + '  to ' + sTo;
 
-        $scope.refreshData($scope.Items, function (data) {
-            var areaData = [];
-            for (var i = 0; i < data.detail.length; i++) {
-                areaData[i] = {};
-                areaData[i].label = data.detail[i].RFRetrieveDate;
-                areaData[i].orders = data.detail[i].ULTotalOrders;
-                areaData[i].amount = data.detail[i].ULTotalAmount;
-            }
-            $scope.area.setData(areaData);
-        });
+        function load() {
+            $scope.refreshData($scope.Items, function (data) {
+                var areaData = [];
+                for (var i = 0; i < data.detail.length; i++) {
+                    areaData[i] = {};
+                    areaData[i].label = data.detail[i].RFRetrieveDate;
+                    areaData[i].orders = data.detail[i].ULTotalOrders;
+                    areaData[i].amount = data.detail[i].ULTotalAmount;
+                }
+                $scope.area.setData(areaData);
+            });
+        }
+
+        load();
+        clearInterval(ti);
+
+        ti = setInterval(function () {
+            load();
+        }, 60000*5);
     }
 
     $scope.refreshDash = function (Items) {
@@ -119,7 +142,7 @@
             areaData[i].orders = data[i].ULTotalOrders;
             areaData[i].amount = data[i].ULTotalAmount;
         }
-        $scope.area = new Morris.Area({
+        $scope.area = new Morris.Bar({
             element: 'revenue-chart',
             resize: true,
             data: areaData,
@@ -130,8 +153,9 @@
             xLabelFormat: function (x) { var w = x.label.split('/'); return w[1] + '/' + w[2] + '/' + w[0]; },
             labels: ['Amount'],
             lineColors: ['#a0d0e0'],
-            behaveLikeLine: true,
+           // behaveLikeLine: true,
             hideHover: 'auto',
+
             smooth: false //No Curve
         });
     }

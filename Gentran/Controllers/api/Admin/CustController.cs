@@ -74,6 +74,10 @@ namespace Gentran.Controllers.api
             {
                 sQuery = "select ATDescription,ATId from tblaccounttype order by ATDescription asc";
             }
+            else if (values.operation == "get_area")
+            {
+                sQuery = "select AMId,AMDescription from tblAreaMaster order by AMId asc";
+            }
             else if (values.operation == "get_mapping")
             {
                 sQuery = "select ATDescription,CAAccount,CACode,CACustomer from tblcustomerassignment left join tblaccounttype on CAAccount = ATId where CACustomer = '" + values.payload[0].cmID + "' order by ATDescription asc";

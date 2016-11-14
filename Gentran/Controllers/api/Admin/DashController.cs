@@ -56,7 +56,9 @@ namespace Gentran.Controllers.api
                         ON ul.ulfile = ui.uiid  
                         ) UL on ul.ULFile = RFId
                         group by RFRetrieveDate
-                        ) TB group by RFRetrieveDate";
+                        ) TB
+						WHERE ULTotalQuantity > 0
+						group by RFRetrieveDate";
             SqlCommand cmd = new SqlCommand(sQuery, connection);
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
@@ -144,7 +146,154 @@ namespace Gentran.Controllers.api
                         ) UL on ul.ulfile = RFId
                         where  RFRetrieveDate BETWEEN '" + values.payload[0].dateFrom + @"' AND '" + values.payload[0].dateTo + @"'
                          group by RFRetrieveDate
-                        ) TB group by RFRetrieveDate";
+                        ) TB
+						WHERE ULTotalQuantity > 0
+						group by RFRetrieveDate";
+            }
+            else if (values.operation == "filter_dashboard_by_chain")
+            {
+                sQuery = @"select distinct  RFRetrieveDate,
+                        SUM(ULTotalQuantity) as ULTotalQuantity,
+                        SUM(ULTotalSKUs) as  ULTotalSKUs,
+                        SUM(ULTotalAmount) as  ULTotalAmount,
+                        SUM(ULTotalOrders) as  ULTotalOrders
+                        from (
+                        select CONVERT(VARCHAR(10), RFRetrieveDate, 111) as RFRetrieveDate,
+                        SUM(sumulquantity) as ULTotalQuantity,
+                        SUM(countulquantity) as ULTotalSKUs,
+                        SUM(uiprice) as ULTotalAmount, count(*) as ULTotalOrders 
+                        from tblRawFile left join
+                        (SELECT DISTINCT
+                        ul.ULFile,
+                        ui.sumulquantity,
+                        ui.countulquantity,
+                        ul.ulstatus,
+                        ui.uiprice 
+                        FROM tblUploadLog ul
+                        LEFT JOIN tblCustomerMaster
+                        ON ul.ulcustomer = cmid 
+                        LEFT JOIN tblUserAssignment ua 
+                        ON ul.ulcustomer = ua.uacustomer 
+                        LEFT JOIN
+                        (SELECT
+                        uiprice = SUM(uiquantity * ppprice),
+                        sumulquantity = SUM(uiquantity),
+                        countulquantity = COUNT(uiquantity),
+                        uiid
+                        FROM tblUploadItems
+                        left join tbluploadlog
+                        on ulfile = uiid
+                        left join tblCustomerMaster
+                        on cmid = ulcustomer
+                        LEFT JOIN tblProductPricing
+                        on ppproduct = uiproduct and pparea = cmarea
+                        WHERE uistatus NOT IN ('3','0')
+                        and ULCustomer in (SELECT Distinct(CACustomer) from tblCustomerAssignment where CAAccount = '" + values.payload[0].acctype + @"')
+                        group by uiid ) ui 
+                        ON ul.ulfile = ui.uiid  
+                        ) UL on ul.ULFile = RFId
+                        where RFRetrieveDate BETWEEN '" + values.payload[0].dateFrom + @"' AND '" + values.payload[0].dateTo + @"'
+                         group by RFRetrieveDate
+                        ) TB
+						WHERE ULTotalQuantity > 0
+						group by RFRetrieveDate";
+            }
+            else if (values.operation == "filter_dashboard_by_area")
+            {
+                sQuery = @"select distinct  RFRetrieveDate,
+                        SUM(ULTotalQuantity) as ULTotalQuantity,
+                        SUM(ULTotalSKUs) as  ULTotalSKUs,
+                        SUM(ULTotalAmount) as  ULTotalAmount,
+                        SUM(ULTotalOrders) as  ULTotalOrders
+                        from (
+                        select CONVERT(VARCHAR(10), RFRetrieveDate, 111) as RFRetrieveDate,
+                        SUM(sumulquantity) as ULTotalQuantity,
+                        SUM(countulquantity) as ULTotalSKUs,
+                        SUM(uiprice) as ULTotalAmount, count(*) as ULTotalOrders 
+                        from tblRawFile left join
+                        (SELECT DISTINCT
+                        ul.ULFile,
+                        ui.sumulquantity,
+                        ui.countulquantity,
+                        ul.ulstatus,
+                        ui.uiprice 
+                        FROM tblUploadLog ul
+                        LEFT JOIN tblCustomerMaster
+                        ON ul.ulcustomer = cmid 
+                        LEFT JOIN tblUserAssignment ua 
+                        ON ul.ulcustomer = ua.uacustomer 
+                        LEFT JOIN
+                        (SELECT
+                        uiprice = SUM(uiquantity * ppprice),
+                        sumulquantity = SUM(uiquantity),
+                        countulquantity = COUNT(uiquantity),
+                        uiid
+                        FROM tblUploadItems
+                        left join tbluploadlog
+                        on ulfile = uiid
+                        left join tblCustomerMaster
+                        on cmid = ulcustomer
+                        LEFT JOIN tblProductPricing
+                        on ppproduct = uiproduct and pparea = cmarea
+                        WHERE uistatus NOT IN ('3','0')                     
+                        and CMArea = '" + values.payload[0].cmArea + @"'
+                        group by uiid ) ui 
+                        ON ul.ulfile = ui.uiid  
+                        ) UL on ul.ULFile = RFId
+                        where RFRetrieveDate BETWEEN '" + values.payload[0].dateFrom + @"' AND '" + values.payload[0].dateTo + @"'
+                         group by RFRetrieveDate
+                        ) TB
+						WHERE ULTotalQuantity > 0
+						group by RFRetrieveDate";
+            }
+            else if (values.operation == "filter_dashboard_by_all")
+            {
+                sQuery = @"select distinct  RFRetrieveDate,
+                        SUM(ULTotalQuantity) as ULTotalQuantity,
+                        SUM(ULTotalSKUs) as  ULTotalSKUs,
+                        SUM(ULTotalAmount) as  ULTotalAmount,
+                        SUM(ULTotalOrders) as  ULTotalOrders
+                        from (
+                        select CONVERT(VARCHAR(10), RFRetrieveDate, 111) as RFRetrieveDate,
+                        SUM(sumulquantity) as ULTotalQuantity,
+                        SUM(countulquantity) as ULTotalSKUs,
+                        SUM(uiprice) as ULTotalAmount, count(*) as ULTotalOrders 
+                        from tblRawFile left join
+                        (SELECT DISTINCT
+                        ul.ULFile,
+                        ui.sumulquantity,
+                        ui.countulquantity,
+                        ul.ulstatus,
+                        ui.uiprice 
+                        FROM tblUploadLog ul
+                        LEFT JOIN tblCustomerMaster
+                        ON ul.ulcustomer = cmid 
+                        LEFT JOIN tblUserAssignment ua 
+                        ON ul.ulcustomer = ua.uacustomer 
+                        LEFT JOIN
+                        (SELECT
+                        uiprice = SUM(uiquantity * ppprice),
+                        sumulquantity = SUM(uiquantity),
+                        countulquantity = COUNT(uiquantity),
+                        uiid
+                        FROM tblUploadItems
+                        left join tbluploadlog
+                        on ulfile = uiid
+                        left join tblCustomerMaster
+                        on cmid = ulcustomer
+                        LEFT JOIN tblProductPricing
+                        on ppproduct = uiproduct and pparea = cmarea
+                        WHERE uistatus NOT IN ('3','0') 
+                        and ULCustomer in (SELECT Distinct(CACustomer) from tblCustomerAssignment where CAAccount = '" + values.payload[0].acctype + @"')
+                        and CMArea = '" + values.payload[0].cmArea + @"'
+                        group by uiid ) ui 
+                        ON ul.ulfile = ui.uiid  
+                        ) UL on ul.ULFile = RFId
+                        where RFRetrieveDate BETWEEN '" + values.payload[0].dateFrom + @"' AND '" + values.payload[0].dateTo + @"'
+                         group by RFRetrieveDate
+                        ) TB
+						WHERE ULTotalQuantity > 0
+						group by RFRetrieveDate";
             }
             else {
                 sQuery = @"select distinct  RFRetrieveDate,
@@ -187,7 +336,9 @@ namespace Gentran.Controllers.api
                         ON ul.ulid = ui.uiid  
                         ) UL on ul.ULFile = RFId
                         group by RFRetrieveDate
-                        ) TB group by RFRetrieveDate";
+                        ) TB
+						WHERE ULTotalQuantity > 0
+						group by RFRetrieveDate";
             }
 
             SqlCommand cmd = new SqlCommand(sQuery, connection);

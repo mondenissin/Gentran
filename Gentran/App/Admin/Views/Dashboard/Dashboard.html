@@ -4,13 +4,11 @@
             <label>Filter by:</label>
             <select class="form-control ddl_area">
                 <option selected value="-1">All Area</option>
-                <option>Luzon</option>
-                <option>Visayas</option>
-                <option>Mindanao</option>
+                <option ng-repeat="am in areaMaster" value="{{am.AMId}}">{{am.AMDescription}}</option>
             </select>
             <select class="form-control ddl_chain">
                 <option selected value="-1">All Chains</option>
-                <option ng-repeat="acc in accounts" value="{{acc.ATId}}">{{acc.ATDescription}}</option>
+                <option ng-repeat="acc in accountMaster" value="{{acc.ATId}}">{{acc.ATDescription}}</option>
             </select>
             <input type="text" ng-model-options="{debounce: {'default': 100, 'blur': 0}}" class="form-control txt_daterange" readonly placeholder="Date End" ng-disabled="range" />
             <button class="btn btn-primary btn-sm" ng-click="setFilter()"><i class="fa fa-search"></i></button>
