@@ -38,3 +38,7 @@ table.dataTable thead th.sorting_asc:first-child {
 .page-table table:not(.modal-table) td input {
     margin-top: 20%;
 }
+
+.center {
+    text-align: center !important;
+}

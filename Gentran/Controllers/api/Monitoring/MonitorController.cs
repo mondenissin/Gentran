@@ -20,7 +20,26 @@ namespace Gentran.Controllers.api
         {
             bool success = true;
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
-            String sQuery = "select * from tbluploadlog left join tbluploaditems on uiid = ulid";
+            String sQuery = @"select 
+                                RFId,
+                                RFFilename,
+                                ULPONumber,
+                                ULCustomer,
+                                CMDescription,
+                                left(ULOrderDate,12) as ULOrderDate,
+                                left(ULDeliveryDate,12) as ULDeliveryDate,
+                                left(RFRetrieveDate,12) + '- ' + CONVERT (varchar(15),CAST(RFRetrieveDate as time),100) as RFRetrieveDate,
+                                left(RFReadDate,12) + '- ' + CONVERT (varchar(15),CAST(RFReadDate as time),100) as RFReadDate,
+                                left(RFSubmitDate,12) + '- ' + CONVERT (varchar(15),CAST(RFSubmitDate as time),100) as RFSubmitDate,
+                                RFReadUser,
+                                RFSubmitUser,
+                                RFAccount,
+                                RFStatus
+                            from tblrawfile 
+                            left join tbluploadlog 
+                                on ulfile = rfid
+                            left join tblcustomermaster
+                                on cmid = ulcustomer";
             SqlCommand cmd = new SqlCommand(sQuery, connection);
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
@@ -63,7 +82,7 @@ namespace Gentran.Controllers.api
 
             bool success = true;
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
-            String sQuery = "select * from tbluploadlog left join tbluploaditems on uiid = ulid  ";
+            String sQuery = "select * from tblrawfile left join tbluploadlog on ulfile = rfid where ulponumber = " + values.payload[0].ULPONumber + " ";
             SqlCommand cmd = new SqlCommand(sQuery, connection);
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
