@@ -63,3 +63,28 @@ table.dataTable thead th, table.dataTable thead td {
     width: 30%;
 }
 
+
+
+.table-font {
+    font-size: 12px;
+}
+
+.table.dataTable thead th {
+    padding: 5px 18px;
+}
+
+
+.table.dataTable thead .no-sort {
+    padding: 5px 13px;
+    line-height: 20px;
+}
+.page-table table td {
+    padding: 5px 10px !important;
+}
+
+.page-table table:not(.modal-table) td input {
+    margin-top: 10%;
+}
+.center {
+    text-align: center !important;
+}

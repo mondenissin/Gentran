@@ -4,47 +4,77 @@
     $scope.monitoringService = monitoringService;
 
     var initialize = function () {
-        $scope.refreshCust();
+        $scope.refreshMonitor();
+        $scope.refreshTransact();
     }
 
-    $scope.refreshCust = function () {
-        $scope.search = {};
-        $scope.searchBy = "ULPONumber";
+    $scope.refreshMonitor = function () {
+
+        $scope.searchPO = {};
+        $scope.searchByPO = "ULPONumber";
 
         viewModelHelper.apiGet('api/monitor', null, function (result) {
-                $scope.pageSize = 5;
-                $scope.entryLimit = 50;
+            $scope.pageSize = 5;
+            $scope.entryLimit = 50;
 
-                $scope.monitor = result.data.detail;
-                console.log(result.data.detail);
-                $scope.$watch('search[searchBy]', function () {
-                    $scope.filterList = filterFilter($scope.monitor, $scope.search);
-                    $scope.noOfPages = Math.ceil($scope.filterList.length / $scope.entryLimit);
-                    $scope.currentPage = 1;
-                });
+            $scope.monitor = result.data.detail;
+            console.log(result.data.detail);
+            $scope.$watch('searchPO[searchByPO]', function () {
+                $scope.filterMonitor = filterFilter($scope.monitor, $scope.searchPO);
+                $scope.noOfPages = Math.ceil($scope.filterMonitor.length / $scope.entryLimit);
+                $scope.currentPage = 1;
+            });
         });
 
-        $scope.dtOptions = DTOptionsBuilder.newOptions();
+        $scope.dtOptions = DTOptionsBuilder.newOptions().withOption('order', [2, 'desc']);
         $scope.dtColumnDefs = [
+           DTColumnDefBuilder.newColumnDef('no-sort').notSortable()
+        ];
+    }
+
+    $scope.refreshTransact = function () {
+
+        $scope.searchTransaction = {};
+        $scope.searchByTransaction = "TLId";
+
+        $scope.data = {};
+        $scope.data.operation = 'transaction';
+        
+        viewModelHelper.apiGet('api/monitor', $scope.data, function (result) {
+            $scope.pageSize = 5;
+            $scope.entryLimit = 50;
+
+            $scope.transact = result.data.detail;
+            console.log(result.data.detail);
+            $scope.$watch('searchTransaction[searchByTransaction]', function () {
+                $scope.filterTransaction = filterFilter($scope.transact, $scope.searchTransaction);
+                $scope.noOfPages = Math.ceil($scope.filterTransaction.length / $scope.entryLimit);
+                $scope.currentPage = 1;
+            });
+        });
+
+        $scope.dtOptionsTrans = DTOptionsBuilder.newOptions().withOption('order', [1, 'desc']);
+        $scope.dtColumnDefsTrans = [
            DTColumnDefBuilder.newColumnDef('no-sort').notSortable()
         ];
     }
 
     $scope.showDetails = function (monitoring) {
        // $scope.ResetEditFields();
-        $('#txt_ponum').text(monitoring.ULPONumber == '' ? 'N/A' : monitoring.ULPONumber);
-        $('#txt_custnum').text(monitoring.ULCustomer != 0 ? monitoring.ULCustomer : 'No Customer');
-        $('#txt_custname').text(monitoring.CMDescription == '' ? 'N/A' : monitoring.CMDescription);
-        $('#txt_orderdate').text(monitoring.ULOrderDate == '' ? 'N/A' : monitoring.ULOrderDate);
-        $('#txt_deliverydate').text(monitoring.ULDeliveryDate == '' ? 'N/A' : monitoring.ULDeliveryDate);
+        $('#txt_ponum').text(monitoring.ULPONumber == null || monitoring.ULPONumber == '' ? 'N/A' : monitoring.ULPONumber);
+        $('#txt_custnum').text(monitoring.ULCustomer == null || monitoring.ULCustomer == '' ? 'N/A' : monitoring.ULCustomer);
+        $('#txt_custname').text(monitoring.CMDescription == null || monitoring.CMDescription == '' ? 'N/A' : monitoring.CMDescription);
+        $('#txt_orderdate').text(monitoring.ULOrderDate == null || monitoring.ULOrderDate == '' ? 'N/A' : monitoring.ULOrderDate);
+        $('#txt_deliverydate').text(monitoring.ULDeliveryDate == null || monitoring.ULDeliveryDate == '' ? 'N/A' : monitoring.ULDeliveryDate);
         $('#txt_retrievedate').text(monitoring.RFRetrieveDate);
-        $('#txt_readdate').text(monitoring.RFReadDate == '' ? 'N/A' : monitoring.RFReadDate);
-        $('#txt_submitteddate').text(monitoring.RFSubmitDate == '' ? 'N/A' : monitoring.RFSubmitDate);
-        $('#txt_reader').text(monitoring.RFReadUser == '' ? 'N/A' : monitoring.RFReadUser);
-        $('#txt_submittedby').text(monitoring.RFSubmitUser == '' ? 'N/A' : monitoring.RFSubmitUser);
-        $('#txt_sku').text(monitoring.UIOrigQuantity == '' ? 'N/A' : monitoring.UIOrigQuantity);
-        $('#txt_qty').text(monitoring.UIQuantity == '' ? 'N/A' : monitoring.UIQuantity);
-        $('#txt_amount').text(monitoring.UIPrice == '' ? 'N/A' : monitoring.UIPrice);
+        $('#txt_readdate').text(monitoring.RFReadDate == null || monitoring.RFReadDate == '' ? 'N/A' : monitoring.RFReadDate);
+        $('#txt_submitteddate').text(monitoring.RFSubmitDate == null || monitoring.RFSubmitDate == '' ? 'N/A' : monitoring.RFSubmitDate);
+        $('#txt_reader').text(monitoring.RFReadUser == null || monitoring.RFReadUser == '' ? 'N/A' : monitoring.RFReadUser);
+        $('#txt_submittedby').text(monitoring.RFSubmitUser == null || monitoring.RFSubmitUser == '' ? 'N/A' : monitoring.RFSubmitUser);
+        $('#txt_sku').text(monitoring.UIOrigQuantity == null || monitoring.UIOrigQuantity == '' ? 'N/A' : monitoring.UIOrigQuantity);
+        $('#txt_qty').text(monitoring.UIQuantity == null || monitoring.UIQuantity == '' ? 'N/A' : monitoring.UIQuantity);
+        $('#txt_amount').text(monitoring.UIPrice == null || monitoring.UIPrice == '' ? 'N/A' : monitoring.UIPrice);
+        $('#txt_account').text(monitoring.RFAccount == null || monitoring.RFAccount == '' ? 'N/A' : monitoring.RFAccount);
 
         $('#ViewPODetailsModal').modal('show');
     }
@@ -58,8 +88,7 @@
         $scope.data.payload = _payloadParser(Item);
         
         viewModelHelper.apiDownloadXML('api/monitor', $scope.data, function (result) {
-            $scope.DownloadXml(result.data.detail[0].ULPONumber, '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?><Order><header><sender>NCCC Supermarket</sender><company_name>NCCC SUPERMARKET</company_name><company_address>Sta. Ana-Gempesaw Ext. Street. Davao City 8000</company_address><company_phone>Tel #: (082) 227-3449/(082) 227-3450</company_phone><message_name>PURCHASE ORDER</message_name></header><podetails><po_number>5033245</po_number><back_orderno>00</back_orderno><podate>10/24/16</podate><delvdatewc>10/27/2016</delvdatewc><vendor>248281-MONDE NISSIN CORPORATION</vendor><postatus>RELEASED</postatus><dept>102-DRY FOOD 2-</dept><buyer>KATHYRYN P. MAGADA</buyer><terms>NET 30</terms><lastmoddate>10/24/16</lastmoddate></podetails><delivery_details><deliver_to>12027-CHOICEMART LANANG DAMOSA</deliver_to><delv_dest_add1>.</delv_dest_add1><delv_dest_add2>DAMOSA</delv_dest_add2><delv_dest_add3>LANANG. DAVAO CITY</delv_dest_add3><delvdate>10/27/16</delvdate><canceldate>11/27/16</canceldate><hdr_remarks1>CN 3%</hdr_remarks1></delivery_details><lineitem_details><lineitem><item_no>1</item_no><order_qty>1.00</order_qty><sku>010494063</sku><vend_partno>82122078</vend_partno><upc>8886467100062</upc><itemdesc><![CDATA[PRINGLES SLT&SEAWD 110G]]></itemdesc><buy_uom>C12</buy_uom><sell_uom>PCS</sell_uom><disc_cost>723.60</disc_cost><unit_cost>723.60</unit_cost><amount>723.60</amount></lineitem><lineitem><item_no>2</item_no><order_qty>1.00</order_qty><sku>010736409</sku><vend_partno>PSO114822</vend_partno><upc>8886467100260</upc><itemdesc>PRINGLES ORIG PCKT CAN 47G</itemdesc><buy_uom>C12</buy_uom><sell_uom>PCS</sell_uom><disc_cost>304.08</disc_cost><unit_cost>304.08</unit_cost><amount>304.08</amount></lineitem><lineitem><item_no>3</item_no><order_qty>1.00</order_qty><sku>011125683</sku><upc>8886467105197</upc><itemdesc><![CDATA[PRINGLES TRTLA SRCRM&ONN110G]]></itemdesc><buy_uom>C12</buy_uom><sell_uom>PCS</sell_uom><disc_cost>746.04</disc_cost><unit_cost>746.04</unit_cost><amount>746.04</amount></lineitem><lineitem><item_no>4</item_no><order_qty>1.00</order_qty><sku>011126078</sku><upc>8886467105814</upc><itemdesc>PRINGLES CHSE PCKT CAN 42G</itemdesc><buy_uom>C12</buy_uom><sell_uom>PCS</sell_uom><disc_cost>304.08</disc_cost><unit_cost>304.08</unit_cost><amount>304.08</amount></lineitem><lineitem><item_no>5</item_no><order_qty>1.00</order_qty><sku>011144979</sku><upc>8886467103643</upc><itemdesc><![CDATA[PRINGLES SR CRM&ONN PCH 40G]]></itemdesc><buy_uom>C60</buy_uom><sell_uom>PCS</sell_uom><disc_cost>1335.00</disc_cost><unit_cost>1335.00</unit_cost><amount>1335.00</amount></lineitem></lineitem_details><total_amount><totqty>5.00</totqty><grosstot>3047.13</grosstot><nettot>3412.80</nettot></total_amount><trailer><preparedby>Saguira Datu</preparedby><po_remarks1>1. BRING PO AND SALES DOCUMENT UPON DELIVERY.</po_remarks1><po_remarks2>2. DELIVER BEFORE EXPIRATION OF THIS PO.</po_remarks2><po_remarks3>3. CLAIM BAD ORDERS/RETURNS UPON DELIVER (LOCAL).</po_remarks3><po_remarks4>4. CLAIM BAD ORDERS/RETURNS UPON ADVISE (MANILA).</po_remarks4><timestamps>10/24/2016  7:09:33pm</timestamps></trailer></Order>');
-           
+            $scope.DownloadXml(result.data.detail[0].ULPONumber, '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?><Order><header><sender>NCCC Supermarket</sender><company_name>NCCC SUPERMARKET</company_name><company_address>Sta. Ana-Gempesaw Ext. Street. Davao City 8000</company_address><company_phone>Tel #: (082) 227-3449/(082) 227-3450</company_phone><message_name>PURCHASE ORDER</message_name></header><podetails><po_number>5033245</po_number><back_orderno>00</back_orderno><podate>10/24/16</podate><delvdatewc>10/27/2016</delvdatewc><vendor>248281-MONDE NISSIN CORPORATION</vendor><postatus>RELEASED</postatus><dept>102-DRY FOOD 2-</dept><buyer>KATHYRYN P. MAGADA</buyer><terms>NET 30</terms><lastmoddate>10/24/16</lastmoddate></podetails><delivery_details><deliver_to>12027-CHOICEMART LANANG DAMOSA</deliver_to><delv_dest_add1>.</delv_dest_add1><delv_dest_add2>DAMOSA</delv_dest_add2><delv_dest_add3>LANANG. DAVAO CITY</delv_dest_add3><delvdate>10/27/16</delvdate><canceldate>11/27/16</canceldate><hdr_remarks1>CN 3%</hdr_remarks1></delivery_details><lineitem_details><lineitem><item_no>1</item_no><order_qty>1.00</order_qty><sku>010494063</sku><vend_partno>82122078</vend_partno><upc>8886467100062</upc><itemdesc><![CDATA[PRINGLES SLT&SEAWD 110G]]></itemdesc><buy_uom>C12</buy_uom><sell_uom>PCS</sell_uom><disc_cost>723.60</disc_cost><unit_cost>723.60</unit_cost><amount>723.60</amount></lineitem><lineitem><item_no>2</item_no><order_qty>1.00</order_qty><sku>010736409</sku><vend_partno>PSO114822</vend_partno><upc>8886467100260</upc><itemdesc>PRINGLES ORIG PCKT CAN 47G</itemdesc><buy_uom>C12</buy_uom><sell_uom>PCS</sell_uom><disc_cost>304.08</disc_cost><unit_cost>304.08</unit_cost><amount>304.08</amount></lineitem><lineitem><item_no>3</item_no><order_qty>1.00</order_qty><sku>011125683</sku><upc>8886467105197</upc><itemdesc><![CDATA[PRINGLES TRTLA SRCRM&ONN110G]]></itemdesc><buy_uom>C12</buy_uom><sell_uom>PCS</sell_uom><disc_cost>746.04</disc_cost><unit_cost>746.04</unit_cost><amount>746.04</amount></lineitem><lineitem><item_no>4</item_no><order_qty>1.00</order_qty><sku>011126078</sku><upc>8886467105814</upc><itemdesc>PRINGLES CHSE PCKT CAN 42G</itemdesc><buy_uom>C12</buy_uom><sell_uom>PCS</sell_uom><disc_cost>304.08</disc_cost><unit_cost>304.08</unit_cost><amount>304.08</amount></lineitem><lineitem><item_no>5</item_no><order_qty>1.00</order_qty><sku>011144979</sku><upc>8886467103643</upc><itemdesc><![CDATA[PRINGLES SR CRM&ONN PCH 40G]]></itemdesc><buy_uom>C60</buy_uom><sell_uom>PCS</sell_uom><disc_cost>1335.00</disc_cost><unit_cost>1335.00</unit_cost><amount>1335.00</amount></lineitem></lineitem_details><total_amount><totqty>5.00</totqty><grosstot>3047.13</grosstot><nettot>3412.80</nettot></total_amount><trailer><preparedby>Saguira Datu</preparedby><po_remarks1>1. BRING PO AND SALES DOCUMENT UPON DELIVERY.</po_remarks1><po_remarks2>2. DELIVER BEFORE EXPIRATION OF THIS PO.</po_remarks2><po_remarks3>3. CLAIM BAD ORDERS/RETURNS UPON DELIVER (LOCAL).</po_remarks3><po_remarks4>4. CLAIM BAD ORDERS/RETURNS UPON ADVISE (MANILA).</po_remarks4><timestamps>10/24/2016  7:09:33pm</timestamps></trailer></Order>');           
         });
     };
 
