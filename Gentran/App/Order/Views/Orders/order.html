@@ -92,8 +92,9 @@
                     <span class="{{o.oClass}} table-data-ustat">{{o.sStatus}}&nbsp;</span><button class="btn btn-default btn-xs option-icon-size overlayBtn" ng-click="getStatus(o,$event)" title="View Details"><i class="fa {{o.uicons}}" aria-hidden="true" style="color: {{ o.uicons == 'fa-check' ? 'green' : 'red';  }} "><span class="label-count" ng-show="o.eCtr" ng-cloak >{{o.eCtr}}</span></i></button>
                 </td><!--<img onclick="errorDetails(\'' + data.detail[i].ulid + '\',\'' + data.detail[i].ulstatus + '\')" title="View Error Details" src="img/master/error.png">-->
                 <td ng-cloak style="text-align: center;width:20%;">
-                    <button class="btn btn-default btn-xs option-icon-size" ng-click="showFile(o)" title="View File"><i class="fa fa-file"></i></button>
+                    <!--<button class="btn btn-default btn-xs option-icon-size" ng-click="showFile(o)" title="View File"><i class="fa fa-file"></i></button>-->
                     <button class="btn btn-default btn-xs option-icon-size" ng-click="showDetails(o)" title="Order Details"><i class="fa fa-info"></i></button>
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="downloadFile(o)" title="Download File"><i class="fa fa-file"></i></button>
                     <button class="btn btn-default btn-xs option-icon-size" ng-click="reuploadPO(o)" title="Reupload" ng-show="o.ulstatus == '11' ? true:false"><i class="fa fa-upload"></i></button>
                 </td>
             </tr>

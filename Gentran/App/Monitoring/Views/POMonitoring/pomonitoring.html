@@ -54,7 +54,7 @@
                         <td ng-cloak class="table-data-rsuser center">{{m.RFAccount}}</td>
                         <td ng-cloak>
                            <button class="btn btn-default btn-xs option-icon-size" ng-click="showDetails(m)" title="PO Details"><i class="fa fa-info"></i></button>
-                        <button class="btn btn-default btn-xs option-icon-size" ng-click="GenerateXml(m)" title="Download File" ><i class="fa fa-download"></i></button>
+                            <button class="btn btn-default btn-xs option-icon-size" ng-click="downloadFile(m)" title="Download File" ><i class="fa fa-download"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -84,6 +84,7 @@
                         <th style="width: 15%;">Description</th>
                         <th>Value</th>
                         <th style="width: 65%;">Remarks</th>
+                        <th ng-hide="UserAccess != 'DEV'">Download</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -93,6 +94,9 @@
                         <td ng-cloak class="table-data-tldesc center" >{{t.TADescription}}</td>
                         <td ng-cloak class="table-data-tlvalue center">{{t.TLValue}}</td>
                         <td ng-cloak class="table-data-tlremarks center">{{t.TLRemarks}}</td>
+                        <td ng-cloak class="table-data-tloption center" ng-hide="UserAccess != 'DEV'">
+                            <button class="btn btn-default btn-xs option-icon-size" ng-click="downloadJSON(t)" title="Download JSON"><i class="fa fa-file"></i></button>
+                        </td>
                     </tr>
                 </tbody>
             </table>

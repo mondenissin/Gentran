@@ -24,10 +24,16 @@ namespace Gentran.Controllers.api.Master
         // GET api/download/5
         public string Get(string id)
         {
+            string[] data = id.Split(',');
             string response = "Sucess";
             string fileExt = "";
 
-            sQuery = "select * from tblrawfile where rfid='" + id + "'";
+            if (data[1] == "order") {
+                sQuery = "select rffilename,rfcontent from tblrawfile where rfid='" + data[0] + "'";
+            } else if (data[1] == "trans") {
+                sQuery = "select (case TLId when null then '' else CONVERT(varchar(100),TLId)+'.json' end) as tlfilename,tljson from tbltransactionlog where tlid='" + data[0] + "'";
+            }
+
             cmd = new SqlCommand(sQuery, connection);
             connection.Open();
             SqlDataReader dr = cmd.ExecuteReader();
@@ -36,12 +42,12 @@ namespace Gentran.Controllers.api.Master
             {
                 dr.Read();
                 string tempContentType = "";
-                string tempF = dr["rffilename"].ToString();
+                string tempF = dr[0].ToString();
                 string[] temp = tempF.ToString().Split('.');
                 fileExt = temp[temp.Length - 1].ToString();
-                byte[] fileByte = dr["rfcontent"] as byte[];
+                byte[] fileByte = dr[1] as byte[];
 
-                tempContentType = fileExt == "xml" ? "application/xml" : "application/vnd.ms-excel";
+                tempContentType = fileExt == "xml" ? "application/xml" : fileExt == "json" ? "application/json" : "application/vnd.ms-excel";
 
                 HttpContext.Current.Response.Clear();
                 HttpContext.Current.Response.Buffer = true;

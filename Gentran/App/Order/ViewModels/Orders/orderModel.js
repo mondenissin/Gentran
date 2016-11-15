@@ -52,7 +52,7 @@
     }
 
     $scope.downloadFile = function (data) {
-        window.location.href = viewModelHelper.getRootPath() + "api/download/"+data.rfid;
+        window.location.href = viewModelHelper.getRootPath() + "api/download/"+data.rfid+',order';
     };
     /*================================ FOR VIEWING OF FILE
     $scope.showFile = function(data){
