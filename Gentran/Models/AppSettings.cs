@@ -110,13 +110,17 @@ public class AppSettings
         return date;
     }
     
-    public string[] csv(string fileName)
+    public string[] csv(byte[] fileByte)
     {
-        string[] readed = { };
-        string filepath;
-        filepath = fileName;
-        readed = File.ReadAllLines(filepath);
+        var stream = new StreamReader(new MemoryStream(fileByte));
+        string data = "";
 
+        List<string> dataList = new List<string>();
+        while ((data = stream.ReadLine()) != null ) {
+            dataList.Add(data.ToString());
+        }
+
+        string[] readed = dataList.ToArray();
         return readed;
     }
 
@@ -128,7 +132,7 @@ public class AppSettings
 
         try
         {
-            XmlTextReader reader = new XmlTextReader(fileName);
+            XmlTextReader reader = new XmlTextReader(new StringReader(fileName));
             while (reader.Read())
             {
                 switch (reader.NodeType)

@@ -68,7 +68,7 @@
         <br />
         <div class="navbar" id="navbar">
             <ul class="nav navbar-nav">
-                <li><input class="po-cbx-all" type="checkbox" ng-model="all" ng-change="selectFileAll()" ng-show="files" /></li>
+                <li><input class="po-cbx-all" type="checkbox" ng-model="allU" ng-change="selectFileAll()" ng-show="files" /></li>
                 <li><button class="btn btn-default btn-sm" ng-click="getSelected()" ng-show="files">Read files</button></li>
             </ul>
 
@@ -100,7 +100,7 @@
             <div class="row">
                 <div class="col-md-12 searchable-container">
                     <div class="po-files-h" sly-repeat="f in files" ng-init="$last ? loadHover() : angular.noop()">
-                        <input class="po-cbx" ng-click="$event = $event" ng-change="selectFile($event)" type="checkbox" ng-model="check" ng-checked="all" />
+                        <input class="po-cbx" ng-click="$event = $event" ng-change="selectFile($event)" type="checkbox" ng-model="check" ng-checked="allU" />
                         <div class="po-files">
                             <!--<img ng-src="" Content-type="image/jpeg" style="width:180px;position:absolute;top:-5px;left:0px;" />-->
                             <img ng-src="{{f.thumbnail}}" Content-type="image/jpeg" style="width:180px;position:absolute;top:-5px;left:0px;" ng-cloak />

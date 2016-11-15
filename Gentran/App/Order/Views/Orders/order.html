@@ -18,7 +18,7 @@
   
     <pagination data-boundary-links="true" data-num-pages="noOfPages" data-current-page="currentPage" max-size="pageSize" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
     
-    <table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-responsive table-bordered bordered table-striped table-condensed datatable">
+    <table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-responsive table-bordered bordered table-striped table-condensed datatable table-font">
         <thead>
             <tr>
                 <th class="no-sort" id="no-sort">
@@ -30,7 +30,7 @@
                 <th>Customer Name</th>
                 <th>Order Date</th>
                 <th>Delivery Date</th>
-                <th>Upload Date</th>
+                <th>Read Date</th>
                 <th>Total SKU</th>
                 <th>Total Quantity</th>
                 <th>Total Amount</th>
@@ -41,16 +41,16 @@
         <tbody>
             <tr sly-repeat="o in filterList | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
                 <td ng-cloak style="text-align: center; width:5%;"><input id="{{o.ul}}" class="cbxSub" type="checkbox" ng-checked="allOrders" /></td>
-                <td ng-cloak class="table-data-ulid" hidden>{{ o.ulid }}</td>
-                <td ng-cloak class="table-data-ponum">{{ o.ulponumber }}</td>
-                <td ng-cloak class="table-data-ucust">{{ o.ulcustomer }}</td>
-                <td ng-cloak class="table-data-cdesc"  style="width:30%;">{{ o.cmdescription}}</td>
-                <td ng-cloak class="table-data-uodate" style="width:10%;">{{ o.ulorderdate }}</td>
-                <td ng-cloak class="table-data-uddate">{{ o.uldeliverydate }}</td>
-                <td ng-cloak class="table-data-uudate" style="width:10%;">{{ o.uluploaddate }}</td>
-                <td ng-cloak class="table-data-cqty" style="text-align: center; width:10%;">{{ o.countulquantity == "" ? '0' : o.countulquantity}}</td>
-                <td ng-cloak class="table-data-sqty" style="text-align: center; width:10%;">{{ o.sumulquantity == "" ? '0' : o.sumulquantity }}</td>
-                <td ng-cloak class="table-data-uprice" style="text-align: center; width:10%;">₱{{o.uiprice == "NaN" ? '0' : o.uiprice }}</td>
+                <td ng-cloak class="table-data-ulid center" hidden>{{ o.ulid }}</td>
+                <td ng-cloak class="table-data-ponum center" style="width:10%;">{{ o.ulponumber }}</td>
+                <td ng-cloak class="table-data-ucust center">{{ o.ulcustomer }}</td>
+                <td ng-cloak class="table-data-cdesc center"  style="width:30%;">{{ o.cmdescription}}</td>
+                <td ng-cloak class="table-data-uodate center" style="width:10%;">{{ o.ulorderdate }}</td>
+                <td ng-cloak class="table-data-uddate center">{{ o.uldeliverydate }}</td>
+                <td ng-cloak class="table-data-uudate center" style="width:15%;">{{ o.ulreaddate }}</td>
+                <td ng-cloak class="table-data-cqty center" style="width:5%;">{{ o.countulquantity == "" ? '0' : o.countulquantity}}</td>
+                <td ng-cloak class="table-data-sqty center" style="width:5%;">{{ o.sumulquantity == "" ? '0' : o.sumulquantity }}</td>
+                <td ng-cloak class="table-data-uprice center" style="width:5%;">₱{{o.uiprice == "NaN" ? '0' : o.uiprice }}</td>
                 <td ng-cloak class="status" style="position:relative;width:5%;">
                     <!--<div class="orderOverlay" hidden>
                         <div class="row">
@@ -91,9 +91,10 @@
                     
                     <span class="{{o.oClass}} table-data-ustat">{{o.sStatus}}&nbsp;</span><button class="btn btn-default btn-xs option-icon-size overlayBtn" ng-click="getStatus(o,$event)" title="View Details"><i class="fa {{o.uicons}}" aria-hidden="true" style="color: {{ o.uicons == 'fa-check' ? 'green' : 'red';  }} "><span class="label-count" ng-show="o.eCtr" ng-cloak >{{o.eCtr}}</span></i></button>
                 </td><!--<img onclick="errorDetails(\'' + data.detail[i].ulid + '\',\'' + data.detail[i].ulstatus + '\')" title="View Error Details" src="img/master/error.png">-->
-                <td ng-cloak style="text-align: center;width:10%;">
-                    <button class="btn btn-default btn-xs option-icon-size" ng-click="showFile(o)" title="View File"><i class="fa fa-file"></i></button>
+                <td ng-cloak style="text-align: center;width:20%;">
+                    <!--<button class="btn btn-default btn-xs option-icon-size" ng-click="showFile(o)" title="View File"><i class="fa fa-file"></i></button>-->
                     <button class="btn btn-default btn-xs option-icon-size" ng-click="showDetails(o)" title="Order Details"><i class="fa fa-info"></i></button>
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="downloadFile(o)" title="Download File"><i class="fa fa-file"></i></button>
                     <button class="btn btn-default btn-xs option-icon-size" ng-click="reuploadPO(o)" title="Reupload" ng-show="o.ulstatus == '11' ? true:false"><i class="fa fa-upload"></i></button>
                 </td>
             </tr>

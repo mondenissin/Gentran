@@ -137,6 +137,7 @@
     <Compile Include="Controllers\api\Admin\ReportsController.cs" />
     <Compile Include="Controllers\api\Admin\UserListController.cs" />
     <Compile Include="Controllers\api\Login\LoginController.cs" />
+    <Compile Include="Controllers\api\Master\DownloadController.cs" />
     <Compile Include="Controllers\api\Master\FileUploadController.cs" />
     <Compile Include="Controllers\api\Master\MasterController.cs" />
     <Compile Include="Controllers\api\Master\TransactionsController.cs" />

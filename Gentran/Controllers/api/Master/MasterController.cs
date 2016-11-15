@@ -14,8 +14,23 @@ namespace Gentran.Controllers.api.Master
 {
     public class MasterController : ApiController
     {
-        public void Get()
+        public string Get()
         {
+            string access = "";
+            string sQuery = "";
+            SqlCommand cmd;
+            SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
+
+            try {
+                sQuery = "select umtype from tblusermaster where umid = '" + HttpContext.Current.Session["UserId"].ToString() + "' ";
+                cmd = new SqlCommand(sQuery, connection);
+                connection.Open();
+                access = cmd.ExecuteScalar().ToString();
+                connection.Close();
+            } catch (Exception e) {
+                access = "ERR";
+            }
+            return access;
         }
 
         public object Get([FromUri] string value)

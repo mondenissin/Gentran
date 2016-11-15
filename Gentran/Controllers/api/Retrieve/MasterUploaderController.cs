@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Web;
 using System.Web.Http;
 
@@ -14,6 +15,7 @@ namespace Gentran.Controllers.api.Retrieve
 {
     public class MasterUploaderController : ApiController
     {
+        SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
         AppSettings appSet = new AppSettings();
         List<Transaction> trows = new List<Transaction>();
         string userID = HttpContext.Current.Session["UserId"].ToString();
@@ -22,7 +24,7 @@ namespace Gentran.Controllers.api.Retrieve
         private AppSettings app = new AppSettings();
         private string filePath = "", absoluteName = "";
         private Boolean ifMult = false;
-        // GET api/masteruploader
+        // GET api/masteruploade
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
@@ -46,13 +48,16 @@ namespace Gentran.Controllers.api.Retrieve
             //string response = "";
             var time = System.Diagnostics.Stopwatch.StartNew();
 
+            //string xmlString = System.Text.UTF8Encoding.UTF8.GetString(bytes);
+            //XmlTextReader reader = new XmlTextReader(new StringReader(xmlString));
+
             List<Dictionary<object, object>> xmlObject = new List<Dictionary<object, object>>();
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
 
             int datactr = 0;
             bool ifFormatted = false;
-            string tempCust = "";
+            string tempCust = "", xmlString = "";
             string[] data = { };
             string[] tempData = new string[9];
             string[] colName = { "CustNo", "PONum", "oDate", "dDate", "ProdCode", "qty", "uUser", "uAcct" , "rawID" };
@@ -61,15 +66,25 @@ namespace Gentran.Controllers.api.Retrieve
 
             try
             {
+                String sQuery = "select rfcontent from tblrawfile where rfid = '"+values.payload[0].rawID+"' and rfaccount = '"+values.payload[0].outlet+"'";
+                SqlCommand byteCmd = new SqlCommand(sQuery, connection);
+                connection.Open();
+
+                byte[] fileByte = byteCmd.ExecuteScalar() as byte[];
+                //data = appSet.csv(fileByte);
+                connection.Close();
+
+                
                 if (values.payload[0].outlet == "SM")
                 {
-                    data = appSet.csv(values.payload[0].fileName);
+                    data = appSet.csv(fileByte);
                     datactr = data.Length;
                     ifFormatted = true;
                 }
                 else if (values.payload[0].outlet == "S8")
                 {
-                    xmlObject = appSet.xml(values.payload[0].fileName);
+                    xmlString = System.Text.UTF8Encoding.UTF8.GetString(fileByte);
+                    xmlObject = appSet.xml(xmlString);
 
                     int arrayCtr = 0;
                     var obj = from ctr in xmlObject select ctr;
@@ -113,7 +128,8 @@ namespace Gentran.Controllers.api.Retrieve
                     ifFormatted = true;
                 } else if (values.payload[0].outlet == "NCC") {
 
-                    xmlObject = appSet.xml(values.payload[0].fileName);
+                    xmlString = System.Text.UTF8Encoding.UTF8.GetString(fileByte);
+                    xmlObject = appSet.xml(xmlString);
 
                     int arrayCtr = 0;
                     var obj = from ctr in xmlObject select ctr;
@@ -162,7 +178,7 @@ namespace Gentran.Controllers.api.Retrieve
                 
                 if (ifFormatted)
                 {
-                    string[] temp = values.payload[0].fileName.Split('\\');
+                    /*string[] temp = values.payload[0].fileName.Split('\\');
                     absoluteName = temp[temp.Length - 1];
                     filePath = values.payload[0].fileName;
 
@@ -170,6 +186,7 @@ namespace Gentran.Controllers.api.Retrieve
                         File.Delete(@"C:\inetpub\wwwroot\files\Gentran\queued\" + absoluteName);
                     }
                     File.Move(values.payload[0].fileName, @"C:\inetpub\wwwroot\files\Gentran\queued\" + absoluteName);
+                    */
 
                     for (int x = 0, y = datactr; x < y; x++)
                     {
@@ -288,7 +305,7 @@ namespace Gentran.Controllers.api.Retrieve
 
 
         private void SaveData(List<Dictionary<string, object>> data) {
-            SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
+            
             string uQty = "", uPrice = "", uPONum = "", uAcct = "", uODate = "", uDDate = "", uUser = "",uRemarks = "", uCust = "",uID="",uProd="",rawID = "";
             string response = "Successful";
             Boolean NoCustomer = false;
@@ -509,12 +526,12 @@ namespace Gentran.Controllers.api.Retrieve
                     connection.Close();
 
                     if (!ifMult) {
-                        update = "update tblRawFile set RFFilename = '" + uID + "." + fileExtension + "',RFReadUser = '" + userID + "', RFReadDate = '" + uDate + "' where RFId = '" + rawID + "'";
+                        update = "update tblRawFile set RFstatus = '1', RFReadUser = '" + userID + "', RFReadDate = '" + uDate + "' where RFId = '" + rawID + "'";
                         connection.Open();
                         updateCmd = new SqlCommand(update, connection);
                         updateCmd.ExecuteNonQuery();
                         connection.Close();
-
+                        /*
                         String source = @"C:\inetpub\wwwroot\files\Gentran\queued\" + absoluteName;
 
                         String destination = @"C:\inetpub\wwwroot\files\Gentran\" + destinationFolder + @"\" + uID + "." + fileExtension;
@@ -555,6 +572,7 @@ namespace Gentran.Controllers.api.Retrieve
             }
             else
             {
+                /*
                 try
                 {
                     String source = @"C:\inetpub\wwwroot\files\Gentran\scheduled\" + "";
@@ -570,7 +588,7 @@ namespace Gentran.Controllers.api.Retrieve
                     connection.Close();
                     success = false;
                     response = ex.Message;
-                }
+                }*/
             }
         }
     }

@@ -10,13 +10,18 @@
 <div class="page-table">
     <div class="tab-content">
         <div id="POMonitoring" class="tab-pane active ">
+            <div class="pull-left" style="line-height: 40px;">
+                <div class="form-inline">
+                    <label >N/A = <span style="color:red;">Not Yet Processed</span></label>
+                </div>
+            </div>
             <div class="pull-right">
                 <div class="form-inline">
-                    <select ng-model="searchBy" class="form-control" ng-change="clearSearch()">
+                    <select ng-model="searchByPO" class="form-control" ng-change="clearSearch()">
                         <option value="ULPONumber" selected>PO Number</option>
                         <option value="RFFilename">Filename</option>
                     </select>
-                    <input type="text" ng-model="search[searchBy]" ng-model-options="{debounce: {'default': 100, 'blur': 0}}" class="form-control" placeholder="Search" />
+                    <input type="text" ng-model="searchPO[searchByPO]" ng-model-options="{debounce: {'default': 100, 'blur': 0}}" class="form-control" placeholder="Search" />
                 </div>
             </div><br /><br />
 
@@ -24,109 +29,73 @@
             <table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-responsive table-bordered bordered table-striped table-condensed datatable table-font" >
                 <thead>
                     <tr>
-                        <th class="no-sort" id="no-sort" style="width:5%;">
-                            <input id="cbxMain" class="styled cbxMain" type="checkbox" />
-                        </th>
-                        <th  style="width:30%;">Filename</th>
+                        <th style="width:30%;">Filename</th>
                         <th>PO #</th>
-                        <!--<th>Customer #</th>-->
-                        <!--<th>Customer Name</th>-->
-                        <!--<th>Order Date</th>
-                        <th>Delivery Date</th>-->
                         <th>Retrieve Date</th>
-                        <!--<th>Upload Date</th>-->
                         <th>Read Date</th>
                         <th>Submitted Date</th>
                         <th>Reader</th>
                         <th>Submitted By</th>
                         <th>Status</th>
                         <th>Account</th>
-                        <!--<th>Total SKU</th>
-                        <th>Total Qty</th>
-                        <th style="width:10%;">Total Amount</th>-->
                         <th class="no-sort" style="width:30%;">Options</th>
                     </tr>
                 </thead>
                 <tbody style="text-align:center;">
-                    <tr ng-repeat="m in filterList | start: (currentPage - 1) * entryLimit | limitTo: entryLimit"  >
-                        <td ng-cloak style="text-align: center;"><input id="" class="cbxSub" type="checkbox" ng-checked="" /></td>
+                    <tr ng-repeat="m in filterMonitor | start: (currentPage - 1) * entryLimit | limitTo: entryLimit"  >
                         <td ng-cloak class="table-data-ponum center" >{{m.RFFilename}}</td>
-                        <td ng-cloak class="table-data-ponum center">{{m.ULPONumber == '' ? 'N/A' : m.ULPONumber}}</td>
-                        <!--<td ng-cloak class="table-data-ucust">{{m.ULCustomer}}</td>-->
-                        <!--<td ng-cloak class="table-data-cdesc" style="width:30%;"></td>-->
-                        <!--<td ng-cloak class="table-data-uodate">{{m.ULOrderDate}}</td>
-                        <td ng-cloak class="table-data-uddate">{{m.ULDeliveryDate}}</td>-->
+                        <td ng-cloak class="table-data-ponum center">{{m.ULPONumber == NULL || m.ULPONumber == "" ? 'N/A' : m.ULPONumber}}</td>
                         <td ng-cloak class="table-data-rrtdate center">{{m.RFRetrieveDate}}</td>
                         <td ng-cloak class="table-data-rrddate center">{{m.RFReadDate}}</td>
-                        <td ng-cloak class="table-data-rsdate center">{{m.RFSubmitDate == "" ? "N/A" : m.RFSubmitDate}}</td>
-                        <td ng-cloak class="table-data-rrddate center">{{m.RFReadUser == "" ? "N/A" : m.RFReadUser }}</td>
-                        <!--<td ng-cloak class="table-data-uprice">{{m.ULUploadDate}}</td>-->
-                        <td ng-cloak class="table-data-rsuser center">{{m.RFSubmitUser == "" ? "N/A" : m.RFSubmitUser}}</td>
-                        <td ng-cloak class="table-data-rsuser center">{{m.RFStatus}}</td>
+                        <td ng-cloak class="table-data-rsdate center">{{m.RFSubmitDate == NULL || m.RFSubmitDate == "" ? "N/A" : m.RFSubmitDate}}</td>
+                        <td ng-cloak class="table-data-rrddate center">{{m.RFReadUser == NULL || m.RFReadUser == "" ? "N/A" : m.RFReadUser }}</td>
+                        <td ng-cloak class="table-data-rsuser center">{{m.RFSubmitUser == NULL || m.RFSubmitUser == "" ? "N/A" : m.RFSubmitUser}}</td>
+                        <td ng-cloak class="table-data-rsstatus center">{{m.RFStatus}}</td>
                         <td ng-cloak class="table-data-rsuser center">{{m.RFAccount}}</td>
-                        <!--<td ng-cloak class="table-data-uprice">{{m.ULPONumber}}</td>
-                        <td ng-cloak class="table-data-uprice">{{m.ULPONumber}}</td>
-                        <td ng-cloak style="position:relative;width:30%;">{{m.ULPONumber}}</td>--><!--<img onclick="errorDetails(\'' + data.detail[i].ulid + '\',\'' + data.detail[i].ulstatus + '\')" title="View Error Details" src="img/master/error.png">-->
                         <td ng-cloak>
                            <button class="btn btn-default btn-xs option-icon-size" ng-click="showDetails(m)" title="PO Details"><i class="fa fa-info"></i></button>
-                        <button class="btn btn-default btn-xs option-icon-size" ng-click="GenerateXml(m)" title="Download File" ><i class="fa fa-download"></i></button>
+                            <button class="btn btn-default btn-xs option-icon-size" ng-click="downloadFile(m)" title="Download File" ><i class="fa fa-download"></i></button>
                         </td>
                     </tr>
                 </tbody>
             </table>
             <pagination data-boundary-links="true" data-num-pages="noOfPages" data-current-page="currentPage" max-size="pageSize" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
         </div>
+
         <div id="TransactionLogs" class="tab-pane fade">
 
             <div class="pull-right">
                 <div class="form-inline">
-                    <select ng-model="searchBy" class="form-control" ng-change="clearSearch()">
-                        <option value="ulponumber" selected>PO Number</option>
-                        <option value="ulcustomer">Customer Number</option>
-                        <option value="cmdescription">Customer Name</option>
+                    <select ng-model="searchByTransaction" class="form-control" ng-change="clearSearch()">
+                        <option value="TLId" selected>Transaction ID</option>
+                        <option value="TADescription">Description</option>
+                        <option value="TLValue">PO Number</option>
+                        <option value="TLRemarks">Remarks</option>
                     </select>
-                    <input type="text" ng-model="search[searchBy]" ng-model-options="{debounce: {'default': 100, 'blur': 0}}" class="form-control" placeholder="Search" />
+                    <input type="text" ng-model="searchTransaction[searchByTransaction]" ng-model-options="{debounce: {'default': 100, 'blur': 0}}" class="form-control" placeholder="Search" />
                 </div>
-            </div>
+            </div><br /><br />
 
-            <button class="btn btn-default btn-xs icon-size" ng-click="" title=""><i class="fa fa-paper-plane"></i></button>
-            <button class="btn btn-default btn-xs icon-size" ng-click="" title=""><i class="fa fa-trash-o"></i></button>
-
-            <table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-responsive table-bordered bordered table-striped table-condensed datatable">
+            <table id="PageTable" dt-column-defs="dtColumnDefsTrans" datatable="ng" dt-options="dtOptionsTrans" class="table table-responsive table-bordered bordered table-striped table-condensed datatable table-font">
                 <thead>
                     <tr>
-                        <th class="no-sort" id="no-sort">
-                            <input id="cbxMain" class="styled cbxMain" type="checkbox" />
-                        </th>
-                        <th>PO #</th>
-                        <th>Customer #</th>
-                        <th>Customer Name</th>
-                        <th>Order Date</th>
-                        <th>Delivery Date</th>
-                        <th>Upload Date</th>
-                        <th>Total SKU</th>
-                        <th>Total Quantity</th>
-                        <th>Total Amount</th>
-                        <th>Status</th>
-                        <th class="no-sort">Options</th>
+                        <th style="width: 5%;">Code</th>
+                        <th>Date</th>
+                        <th style="width: 15%;">Description</th>
+                        <th>Value</th>
+                        <th style="width: 65%;">Remarks</th>
+                        <th ng-hide="UserAccess != 'DEV'">Download</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="m in filterList | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
-                        <td ng-cloak style="text-align: center;"><input id="" class="cbxSub" type="checkbox" ng-checked="" /></td>
-                        <td ng-cloak class="table-data-ponum"></td>
-                        <td ng-cloak class="table-data-ucust"></td>
-                        <td ng-cloak class="table-data-cdesc" style="width:30%;"></td>
-                        <td ng-cloak class="table-data-uodate"></td>
-                        <td ng-cloak class="table-data-uddate"></td>
-                        <td ng-cloak class="table-data-uudate"></td>
-                        <td ng-cloak class="table-data-cqty"></td>
-                        <td ng-cloak class="table-data-sqty"></td>
-                        <td ng-cloak class="table-data-uprice"></td>
-                        <td ng-cloak style="position:relative;width:30%;"></td><!--<img onclick="errorDetails(\'' + data.detail[i].ulid + '\',\'' + data.detail[i].ulstatus + '\')" title="View Error Details" src="img/master/error.png">-->
-                        <td ng-cloak>
-                            <!--<button class="btn btn-default btn-xs option-icon-size" ng-click="showDetails(o)" title="Order Details"><i class="fa fa-info"></i></button>
-                    <button class="btn btn-default btn-xs option-icon-size" ng-click="reuploadPO(o)" title="Reupload" ng-show="o.ulstatus == '11' ? true:false"><i class="fa fa-upload"></i></button>-->
+                    <tr ng-repeat="t in filterTransaction | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
+                        <td ng-cloak class="table-data-tlcode center">{{t.TLId}}</td>
+                        <td ng-cloak class="table-data-tldate center">{{t.TLDate}}</td>
+                        <td ng-cloak class="table-data-tldesc center" >{{t.TADescription}}</td>
+                        <td ng-cloak class="table-data-tlvalue center">{{t.TLValue}}</td>
+                        <td ng-cloak class="table-data-tlremarks center">{{t.TLRemarks}}</td>
+                        <td ng-cloak class="table-data-tloption center" ng-hide="UserAccess != 'DEV'">
+                            <button class="btn btn-default btn-xs option-icon-size" ng-click="downloadJSON(t)" title="Download JSON"><i class="fa fa-file"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -195,6 +164,10 @@
                     <tr>
                         <td style="width:150px; font-weight:bold;">Total Amount: </td>
                         <td id="txt_amount"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Account: </td>
+                        <td id="txt_account"></td>
                     </tr>
                 </table>
             </div>

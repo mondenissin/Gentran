@@ -5,6 +5,14 @@
 
     var initialize = function () {
         $scope.refreshOrders();
+        $scope.getAccess();
+    }
+
+    $scope.getAccess = function () {
+        viewModelHelper.apiGet('api/master', null, function (result) {
+            console.log(result);
+            $scope.UserAccess = result.data;
+        });
     }
 
     $scope.refreshOrders = function () {
@@ -37,12 +45,16 @@
             });
         });
 
-        $scope.dtOptions = DTOptionsBuilder.newOptions();
+        $scope.dtOptions = DTOptionsBuilder.newOptions().withOption('order', [7, 'desc']);
         $scope.dtColumnDefs = [
            DTColumnDefBuilder.newColumnDef('no-sort').notSortable()
         ];
     }
-    
+
+    $scope.downloadFile = function (data) {
+        window.location.href = viewModelHelper.getRootPath() + "api/download/"+data.rfid+',order';
+    };
+    /*================================ FOR VIEWING OF FILE
     $scope.showFile = function(data){
         console.log(data.ulstatus);
         console.log(data.rffilename);
@@ -56,6 +68,8 @@
         
         viewModelHelper.fileViewer(temp2, data.rffilename, fileLoc);
     }
+      ================================ FOR VIEWING OF FILE */
+
     $scope.showDetails = function (order) {
         $scope.flags.shownFromList = true;
         console.log(order);
@@ -243,7 +257,7 @@
 
         var id = {};
         var items = {};
-        id.rawID = deleteID;
+        id.ULId = deleteID;
         items.payload = _payloadParser(id);
 
         viewModelHelper.apiPut('api/deleteorder', items, function (result) {

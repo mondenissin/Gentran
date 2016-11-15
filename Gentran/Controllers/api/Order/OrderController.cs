@@ -36,7 +36,7 @@ namespace Gentran.Controllers.api.Order
                             LEFT(ul.ulorderdate,12) AS ulorderdate,
                             LEFT(ul.uldeliverydate,12) AS uldeliverydate,
                             ur.rfreaddate as sortupload,
-                            LEFT(ur.rfreaddate,12) AS uluploaddate,
+                            LEFT(ur.rfreaddate,12) +'- ' + CONVERT(varchar(15), CAST(ur.rfreaddate as time), 100) AS ulreaddate,
                             ui.sumulquantity,
                             ui.countulquantity,
                             ul.ulstatus,
@@ -45,7 +45,7 @@ namespace Gentran.Controllers.api.Order
                             ui.uiprice,
                             ur.rfaccount
                             FROM tblUploadLog ul
-                            LEFT JOIN (SELECT * from tblCustomerMaster ) cm
+                            LEFT JOIN tblCustomerMaster cm
                             ON ul.ulcustomer = cm.cmid 
                             LEFT JOIN tblUserAssignment ua 
                             ON ul.ulcustomer = ua.uacustomer 
@@ -133,7 +133,7 @@ namespace Gentran.Controllers.api.Order
 
         // GET api/order/5
         public object Get(string id)
-        {
+        {            
             bool success = true;
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
             String sQuery = @"select

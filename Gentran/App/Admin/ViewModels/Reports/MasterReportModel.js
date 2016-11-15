@@ -105,12 +105,10 @@
     }
 
     $scope.printReport = function (content) {
-        console.log($scope.reportGenerated);
         if ($scope.reportGenerated == null || $scope.reportGenerated.length == 0) {
             notif_warning('Warning!','No data to be print');
         } else {
             var dataContent = document.getElementById(content).innerHTML;
-            console.log(dataContent);
             var mywindow = window.open('', 'Transaction Report', 'height=' + window.screen.availHeight + ',width=' + window.screen.availWidth + '');
             mywindow.document.write('<html><head><title>Transaction Report</title>');
             mywindow.document.write('</head><body >');
@@ -140,7 +138,6 @@
             strContentHead += "</tr></thead>";
             strContentBody += "<tbody>";
 
-            console.log($('#' + content + ' table tbody tr'));
             $('#' + content + ' table tbody tr').each(function (index, item) {
                 strContentBody += "<tr>";
                 $($($(item)[0])[0].children).each(function (i, it) {
