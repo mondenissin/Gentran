@@ -795,7 +795,81 @@ div.item {
 .navbar-nav>.user-menu>.dropdown-menu>li.user-header>img {
     height: 90px!important;
 }
-/* ======================================= CHARTS ============================================= */
+
+/* ======================================= DASHBOARD ============================================= */
+.span-title {
+    font-family: 'Source Sans Pro',sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: inherit;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    line-height: 35px;
+}
+
+.huge {
+    font-size: 40px;
+}
+
+.huge-income {
+  font-size: 20px;
+  line-height: 55px;  
+}
+
+.panel-green {
+    border-color: #5cb85c;
+}
+
+.panel-green .panel-heading {
+    border-color: #5cb85c;
+    color: #fff;
+    background-color: #5cb85c;
+}
+
+.panel-green a {
+    color: #5cb85c;
+}
+
+.panel-green a:hover {
+    color: #3d8b3d;
+}
+
+.panel-red {
+    border-color: #d9534f;
+}
+
+.panel-red .panel-heading {
+    border-color: #d9534f;
+    color: #fff;
+    background-color: #d9534f;
+}
+
+.panel-red a {
+    color: #d9534f;
+}
+
+.panel-red a:hover {
+    color: #b52b27;
+}
+
+.panel-yellow {
+    border-color: #f0ad4e;
+}
+
+.panel-yellow .panel-heading {
+    border-color: #f0ad4e;
+    color: #fff;
+    background-color: #f0ad4e;
+}
+
+.panel-yellow a {
+    color: #f0ad4e;
+}
+
+.panel-yellow a:hover {
+    color: #df8a13;
+}
+
 .chart-container {
     padding-left: 5px;
     padding-right: 5px;

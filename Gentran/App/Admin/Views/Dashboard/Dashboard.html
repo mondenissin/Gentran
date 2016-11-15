@@ -1,172 +1,191 @@
-﻿<div class="breadcrumb">
-    <div class="form-inline">
-        <div class="pull-right">
-            <label>Filter by:</label>
-            <select class="form-control ddl_area">
-                <option selected value="-1">All Area</option>
-                <option ng-repeat="am in areaMaster" value="{{am.AMId}}">{{am.AMDescription}}</option>
-            </select>
-            <select class="form-control ddl_chain">
-                <option selected value="-1">All Chains</option>
-                <option ng-repeat="acc in accountMaster" value="{{acc.ATId}}">{{acc.ATDescription}}</option>
-            </select>
-            <input type="text" ng-model-options="{debounce: {'default': 100, 'blur': 0}}" class="form-control txt_daterange" readonly placeholder="Date End" ng-disabled="range" />
-            <button class="btn btn-primary btn-sm" ng-click="setFilter()"><i class="fa fa-search"></i></button>
-        </div>
-    </div>
-</div>
-
-<h3>Dashboard </h3><h5>{{ filterText }}</h5>
-<div class="container-fluid">
+﻿<div class="container-fluid">
     <div class="row">
-        <div class="searchable-container">
-            <div class="row">
-                <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-aqua">
-                        <div class="inner">
-                            <h3>{{ totalOrders }}</h3>
-                            <p>Orders</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-ios-cart"></i>
-                        </div>
-                      <!--  <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>-->
+        <div class="col-md-12">
+            <div class="breadcrumb">
+                <div class="form-inline">
+                    <span class="span-title">Dashboard </span>  {{ filterText }}
+                    <div class="pull-right">
+                        <label>Filter by:</label>
+                        <select class="form-control ddl_area">
+                            <option selected value="-1">All Area</option>
+                            <option ng-repeat="am in areaMaster" value="{{am.AMId}}">{{am.AMDescription}}</option>
+                        </select>
+                        <select class="form-control ddl_chain">
+                            <option selected value="-1">All Chains</option>
+                            <option ng-repeat="acc in accountMaster" value="{{acc.ATId}}">{{acc.ATDescription}}</option>
+                        </select>
+                        <input type="text" ng-model-options="{debounce: {'default': 100, 'blur': 0}}" class="form-control txt_daterange" readonly placeholder="Date End" ng-disabled="range" />
+                        <button class="btn btn-primary btn-sm" ng-click="setFilter()"><i class="fa fa-search"></i></button>
                     </div>
                 </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-green">
-                        <div class="inner">
-                            <h3>{{ totalSKUs }}</h3>
-                            <p>Total SKU</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-ios-pie"></i>
-                        </div>
-                      <!--  <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>-->
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-yellow">
-                        <div class="inner">
-                            <h3>{{ totalQuantity }}</h3>
-                            <p>Total SKU Quantity</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-speedometer"></i>
-                        </div>
-                     <!--   <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>-->
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-red">
-                        <div class="inner">
-                            <h3>P {{ totalIncome }}</h3>
-                            <p>Income</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-arrow-graph-up-right"></i>
-                        </div>
-                      <!--  <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>-->
-                    </div>
-                </div>
-                <!-- ./col -->
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-8 chart-container">
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-shopping-cart faa-horizontal animated-hover fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div class="huge">{{ totalOrders }}</div>
+                            <div>New Orders</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <div class="panel-footer">
+                        <span class="pull-left">View details</span>
+                        <span class="pull-right"><i class="fa fa-shopping-cart"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-green">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-pie-chart faa-tada animated-hover fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div class="huge">{{ totalSKUs }}</div>
+                            <div>Total SKU</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <div class="panel-footer">
+                        <span class="pull-left">View details</span>
+                        <span class="pull-right"><i class="fa fa fa-pie-chart"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-yellow">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-calculator faa-wrench animated-hover fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div class="huge">{{ totalQuantity }}</div>
+                            <div>Total SKU Quantity</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <div class="panel-footer">
+                        <span class="pull-left">View details</span>
+                        <span class="pull-right"><i class="fa fa-calculator"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-red">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-line-chart faa-pulse animated-hover fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div class="huge-income">P {{ totalIncome }}</div>
+                            <div>Income</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <div class="panel-footer">
+                        <span class="pull-left">View details</span>
+                        <span class="pull-right"><i class="fa fa-line-chart"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
             <div class="box box-info">
                 <div class="box-header">
                     <i class="fa fa-people"></i>
-                    <h3 class="box-title"><i class="ion ios-cash-outline"></i> Sales</h3>
+                    <h3 class="box-title"><i class="fa fa-bar-chart"></i> Sales</h3>
                 </div>
                 <div class="box-body">
                     <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;"></div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 chart-container">
+        <div class="col-md-4">
             <div class="box box-info">
                 <div class="box-header">
-                    <i class="fa fa-envelope"></i>
-                    <h3 class="box-title">Email Us</h3>
+                    <h3 class="box-title"><i class="fa fa-pie-chart"></i> Products</h3>
                 </div>
                 <div class="box-body">
                     <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;"></div>
                 </div>
             </div>
         </div>
-     </div>
+    </div>
 
-            <div class="row">
-                <!-- SECOND ROW MESSAGE -->
-                <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 clearfix">
-                    <div class="box box-info">
-                        <div class="box-header">
-                            <i class="fa fa-envelope"></i>
-                            <h3 class="box-title">Email Us</h3>
-                            <div class="pull-right box-tools">
-                                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="Remove">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="box-body">
-                            <form action="#" method="post">
-                                <div class="form-group">
-                                    <input type="email" class="form-control" name="emailto" placeholder="Email to:" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="subject" placeholder="Subject" required>
-                                </div>
-
-                                <ul class="email-tools">
-                                    <li><a class="btn btn-default" ng-click="tools('bold',$event);"><i class="fa fa-bold"></i></a></li>
-                                    <li><a class="btn btn-default" ng-click="tools('italic',$event);"><i class="fa fa-italic"></i></a></li>
-                                </ul>
-                                <div id="message-text" class="email-message" contenteditable="true">
-
-
-
-                                    <!--<textarea class="textarea" placeholder="Message" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>-->
-                                </div>
-                                <div class="box-footer clearfix">
-                                    <button type="submit" class="pull-right btn btn-default" id="sendEmail">
-                                        Send
-                                        <i class="fa fa-arrow-circle-right"></i>
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+    <!--<div class="row">
+        <!-- SECOND ROW MESSAGE 
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 clearfix">
+            <div class="box box-info">
+                <div class="box-header">
+                    <i class="fa fa-envelope"></i>
+                    <h3 class="box-title">Email Us</h3>
+                    <div class="pull-right box-tools">
+                        <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="Remove">
+                            <i class="fa fa-times"></i>
+                        </button>
                     </div>
+                </div>
+                <div class="box-body">
+                    <form action="#" method="post">
+                        <div class="form-group">
+                            <input type="email" class="form-control" name="emailto" placeholder="Email to:" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="subject" placeholder="Subject" required>
+                        </div>
+
+                        <ul class="email-tools">
+                            <li><a class="btn btn-default" ng-click="tools('bold',$event);"><i class="fa fa-bold"></i></a></li>
+                            <li><a class="btn btn-default" ng-click="tools('italic',$event);"><i class="fa fa-italic"></i></a></li>
+                        </ul>
+                        <div id="message-text" class="email-message" contenteditable="true">
+
+
+
+                            <!--<textarea class="textarea" placeholder="Message" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                        </div>
+                        <div class="box-footer clearfix">
+                            <button type="submit" class="pull-right btn btn-default" id="sendEmail">
+                                Send
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>-->
+</div>
 <script>
     $(document).ready(function () {
 
         $(".tab-menu").css("cursor", "pointer");
-
-
-        //Donut Chart
-        var donut = new Morris.Donut({
-            element: 'sales-chart',
-            resize: true,
-            colors: ["#3c8dbc", "#f56954", "#00a65a"],
-            data: [
-              { label: "Download Sales", value: 5 },
-              { label: "In-Store Sales", value: 35 },
-              { label: "Mail-Order Sales", value: 10 }
-            ],
-            hideHover: 'auto'
-        });
 
         var start = moment().subtract(29, 'days');
         var end = moment();
@@ -193,4 +212,4 @@
         cb(start, end);
     });
 
-    </script>
+</script>
