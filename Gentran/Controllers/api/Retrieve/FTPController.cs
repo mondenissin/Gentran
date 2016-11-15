@@ -24,7 +24,7 @@ namespace Gentran.Controllers.api
         private string sQuery = "";
         private SqlConnection conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
         private string userID = HttpContext.Current.Session["UserId"].ToString();
-        string m_ftpSite, m_strUsername, m_strPassword = "";
+        string m_ftpSite, m_strUsername, m_strPassword = "",rawAcct = "";
         // GET api/ftp
         public Object Get(string id)
         {
@@ -67,70 +67,94 @@ namespace Gentran.Controllers.api
                 string line = "";
                 
                 while (!string.IsNullOrEmpty((line = reader.ReadLine()))) {
-                    if (!(File.Exists(@"C:\inetpub\wwwroot\files\ftp\" + acct +@"\"+ line)))
+                    if (acct == "c_sm" || acct == "c_s8" || acct == "c_ncc")
                     {
-                        if (acct == "c_sm" || acct == "c_s8" || acct == "c_ncc")
+                        notifCtr++;
+                    }
+                    else{
+
+                        sQuery = "SELECT MAX(RFId) AS RFId FROM tblRawFile"; // TBLRAWFILE
+                        cmd = new SqlCommand(sQuery, conn);
+                        conn.Open();
+                        SqlDataReader drRFId = cmd.ExecuteReader();
+                        int RFId = 0;
+
+                        if (drRFId.HasRows)
                         {
-                            notifCtr++;
-                        }
-                        else{
-
-                            sQuery = "SELECT MAX(RFId) AS RFId FROM tblRawFile";
-                            cmd = new SqlCommand(sQuery, conn);
-                            conn.Open();
-                            SqlDataReader drRFId = cmd.ExecuteReader();
-                            int RFId = 0;
-
-                            if (drRFId.HasRows)
+                            drRFId.Read();
+                            if (drRFId["RFId"].ToString() == "null" || drRFId["RFId"].ToString() == "NULL" || drRFId["RFId"].ToString() == "")
                             {
-                                drRFId.Read();
-                                if (drRFId["RFId"].ToString() == "null" || drRFId["RFId"].ToString() == "NULL" || drRFId["RFId"].ToString() == "")
-                                {
-                                    RFId = 1;
-                                }
-                                else
-                                {
-                                    RFId = Convert.ToInt32(drRFId["RFId"]) + 1;
-                                }
-                                conn.Close();
+                                RFId = 1;
                             }
+                            else
+                            {
+                                RFId = Convert.ToInt32(drRFId["RFId"]) + 1;
+                            }
+                            conn.Close();
+                            drRFId.Close();
+                        }
+                        //string inputfilepath = @"C:\inetpub\wwwroot\files\ftp\" + acct + @"\" + RFId+"-"+line;
+                        string ftpfullpath = m_ftpSite + "/" + line;
 
-                            sQuery = "insert into tblRawFile values('" + RFId + "','" + RFId + "-" +line + "','','" + rDate + "','','','','','0','" + acct.ToUpper() + "')";
+                        using (WebClient webreq = new WebClient())
+                        {
+                            webreq.Credentials = new NetworkCredential(m_strUsername, app.Decrypt(m_strPassword));
+                            byte[] fileData = webreq.DownloadData(ftpfullpath);
+
+                            // TBLRAWFILE
+                            sQuery = "insert into tblRawFile values('" + RFId + "','" + RFId + "-" + line + "',@fileContent,'" + rDate + "','','','','','0','" + acct.ToUpper() + "')";
                             cmd = new SqlCommand(sQuery, conn);
+                            cmd.Parameters.AddWithValue("fileContent",fileData);
                             conn.Open();
                             cmd.ExecuteNonQuery();
                             conn.Close();
-
-                            string inputfilepath = @"C:\inetpub\wwwroot\files\ftp\" + acct + @"\" + RFId+"-"+line;
-                            string ftpfullpath = m_ftpSite + "/" + line;
-
-                            using (WebClient webreq = new WebClient())
+                            /*
+                            using (FileStream file = File.Create(inputfilepath))
                             {
-                                webreq.Credentials = new NetworkCredential(m_strUsername, app.Decrypt(m_strPassword));
-                                byte[] fileData = webreq.DownloadData(ftpfullpath);
-
-                                using (FileStream file = File.Create(inputfilepath))
-                                {
-                                    file.Write(fileData, 0, fileData.Length);
-                                    file.Close();
-                                }
-
-                                if (acct != "ncc")
-                                {
-                                    FtpWebRequest request2 = (FtpWebRequest)WebRequest.Create(ftpfullpath);
-                                    request2.Method = WebRequestMethods.Ftp.DeleteFile;
-                                    FtpWebResponse response2 = (FtpWebResponse)request2.GetResponse();
-                                    string asd = response2.StatusDescription;
-                                    response2.Close();
-                                }
+                                file.Write(fileData, 0, fileData.Length);
+                                file.Close();
+                            }*/
+                                
+                            if (acct != "ncc")
+                            {
+                                FtpWebRequest request2 = (FtpWebRequest)WebRequest.Create(ftpfullpath);
+                                request2.Method = WebRequestMethods.Ftp.DeleteFile;
+                                FtpWebResponse response2 = (FtpWebResponse)request2.GetResponse();
+                                string asd = response2.StatusDescription;
+                                response2.Close();
                             }
-                            
-                            trows.Add(new Transaction { response = "File Retrieved", activity = "RET10", date = rDate, remarks = line, user = userID, type = "ADM", value = "Successfully Retrieved", changes = "", payloadvalue = "", customernumber = "", ponumber = "" });
                         }
+                        trows.Add(new Transaction { response = "File Retrieved", activity = "RET10", date = rDate, remarks = line, user = userID, type = "ADM", value = "Successfully Retrieved", changes = "", payloadvalue = "", customernumber = "", ponumber = "" });
                     }
                 }
                 response.Close();
-                
+
+                rows.Clear();
+                if (acct == "c_sm" || acct == "c_s8" || acct == "c_ncc")
+                {
+                }
+                else {
+
+                    rawAcct = acct == "sm" ? "SM" : acct == "s8" ? "S8" : "NCC";
+
+                    sQuery = "select rffilename from tblrawfile where RFAccount = '" + rawAcct + "' and RFStatus = '0' ";
+                    cmd = new SqlCommand(sQuery, conn);
+                    conn.Open();
+                    SqlDataReader rd = cmd.ExecuteReader();
+
+                    if (rd.HasRows)
+                    {
+                        while (rd.Read())
+                        {
+                            row = new Dictionary<string, object>();
+                            row.Add("files", rd[0].ToString());
+                            rows.Add(row);
+                        }
+                    }
+                    rd.Close();
+                    conn.Close();
+                }
+                /*
                 fileList.Clear();
                 if (acct == "c_sm" || acct == "c_s8" || acct == "c_ncc")
                 {
@@ -138,8 +162,8 @@ namespace Gentran.Controllers.api
                 else {
                     if (acct == "sm")
                     {
-                        fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\sm", "*.pdf"));
-                        fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\sm", "*.txt"));
+                        //fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\sm", "*.pdf"));
+                        //fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\sm", "*.txt"));
                         fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\sm", "*.csv"));
                     }
                     else if (acct == "s8")
@@ -183,11 +207,11 @@ namespace Gentran.Controllers.api
                             SheetRender sr = new SheetRender(sheet, imgOptions);
                             Bitmap bitmap = sr.ToImage(0);
                             bitmap.Save(imageDir);
-                        }*/
+                        }
                     }
-                }
+                }*/
             }
-            catch(Exception ex){
+            catch (Exception ex){
                 success = false;
                 row = new Dictionary<string, object>();
                 row.Add("error", ex.Message);

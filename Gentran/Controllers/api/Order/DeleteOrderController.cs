@@ -50,7 +50,7 @@ namespace Gentran.Controllers.api.Order
                     response = "- " + values.payload[x].ponumber;
                     responseList += "- " + values.payload[x].ponumber;
 
-                    rows.Add(new Transaction { activity = "DEL20", date = now, remarks = "PO # " + response, user = userID, type = "ADM", value = "PO ID:" + values.payload[x].rawID, changes = "", payloadvalue = newpaypload, customernumber = "", ponumber = "" });
+                    rows.Add(new Transaction { activity = "DEL20", date = now, remarks = "PO # " + response, user = userID, type = "ADM", value = "PO ID:" + values.payload[x].ULId, changes = "", payloadvalue = newpaypload, customernumber = "", ponumber = "" });
                 }
                 
                 return new Response { success = success, detail = rows, notiftext = responseList };
@@ -90,11 +90,11 @@ namespace Gentran.Controllers.api.Order
                 cCmd.ExecuteNonQuery();
                 connection.Close();
 
-                response = "PO ID : " + values.payload[0].rawID;
+                response = "PO ID : " + values.payload[0].ULId;
 
                 string newpaypload = JsonConvert.SerializeObject(values.payload, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
-                rows.Add(new Transaction { activity = "DEL20", date = now, remarks = response, user = userID, type = "ADM", value = "PO ID:" + values.payload[0].rawID, changes = "", payloadvalue = newpaypload, customernumber = "", ponumber = "" });
+                rows.Add(new Transaction { activity = "DEL20", date = now, remarks = response, user = userID, type = "ADM", value = "PO ID:" + values.payload[0].ULId, changes = "", payloadvalue = newpaypload, customernumber = "", ponumber = "" });
                 return new Response { success = success, detail = rows ,notiftext = response };
             }
             catch (Exception ex)

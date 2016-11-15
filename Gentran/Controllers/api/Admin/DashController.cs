@@ -182,7 +182,7 @@ namespace Gentran.Controllers.api
                         uiid
                         FROM tblUploadItems
                         left join tbluploadlog
-                        on ulfile = uiid
+                        on ulid = uiid
                         left join tblCustomerMaster
                         on cmid = ulcustomer
                         LEFT JOIN tblProductPricing
@@ -190,7 +190,7 @@ namespace Gentran.Controllers.api
                         WHERE uistatus NOT IN ('3','0')
                         and ULCustomer in (SELECT Distinct(CACustomer) from tblCustomerAssignment where CAAccount = '" + values.payload[0].acctype + @"')
                         group by uiid ) ui 
-                        ON ul.ulfile = ui.uiid  
+                        ON ul.ulid = ui.uiid  
                         ) UL on ul.ULFile = RFId
                         where RFRetrieveDate BETWEEN '" + values.payload[0].dateFrom + @"' AND '" + values.payload[0].dateTo + @"'
                          group by RFRetrieveDate
@@ -230,7 +230,7 @@ namespace Gentran.Controllers.api
                         uiid
                         FROM tblUploadItems
                         left join tbluploadlog
-                        on ulfile = uiid
+                        on ulid = uiid
                         left join tblCustomerMaster
                         on cmid = ulcustomer
                         LEFT JOIN tblProductPricing
@@ -238,7 +238,7 @@ namespace Gentran.Controllers.api
                         WHERE uistatus NOT IN ('3','0')                     
                         and CMArea = '" + values.payload[0].cmArea + @"'
                         group by uiid ) ui 
-                        ON ul.ulfile = ui.uiid  
+                        ON ul.ulid = ui.uiid  
                         ) UL on ul.ULFile = RFId
                         where RFRetrieveDate BETWEEN '" + values.payload[0].dateFrom + @"' AND '" + values.payload[0].dateTo + @"'
                          group by RFRetrieveDate
@@ -278,7 +278,7 @@ namespace Gentran.Controllers.api
                         uiid
                         FROM tblUploadItems
                         left join tbluploadlog
-                        on ulfile = uiid
+                        on ulid = uiid
                         left join tblCustomerMaster
                         on cmid = ulcustomer
                         LEFT JOIN tblProductPricing
@@ -287,7 +287,7 @@ namespace Gentran.Controllers.api
                         and ULCustomer in (SELECT Distinct(CACustomer) from tblCustomerAssignment where CAAccount = '" + values.payload[0].acctype + @"')
                         and CMArea = '" + values.payload[0].cmArea + @"'
                         group by uiid ) ui 
-                        ON ul.ulfile = ui.uiid  
+                        ON ul.ulid = ui.uiid  
                         ) UL on ul.ULFile = RFId
                         where RFRetrieveDate BETWEEN '" + values.payload[0].dateFrom + @"' AND '" + values.payload[0].dateTo + @"'
                          group by RFRetrieveDate

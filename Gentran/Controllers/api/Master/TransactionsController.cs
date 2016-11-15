@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Data.SqlClient;
+using System.Text;
 
 namespace Gentran.Controllers.api
 {
@@ -78,7 +79,15 @@ namespace Gentran.Controllers.api
 
                     values[i].changes = (values[i].changes == null) ? "" : values[i].changes;
                     values[i].payloadvalue = (values[i].payloadvalue == null) ? "" : values[i].payloadvalue;
-
+                    // FOR JSON BYTE
+                    byte[] jsonByte = Encoding.ASCII.GetBytes(values[i].payloadvalue);
+                    /*using (FileStream file = File.Create(@"C:\inetpub\wwwroot\files\ftp\yad.json"))
+                    {
+                        file.Write(array, 0, array.Length);
+                        file.Close();
+                    }
+                    */
+                    // FOR JSON BYTE
                     if (values[i].changes.Contains(",") == true)
                     {
                         changes = values[i].changes.Replace("'", "''").Remove(values[i].changes.LastIndexOf(","));
@@ -87,8 +96,9 @@ namespace Gentran.Controllers.api
 
                         foreach (string s in changesArray)
                         {
-                            String strTransaction = "insert into tblTransactionLog select '" + (TLId + i) + "','" + values[i].type + "','" + values[i].activity + "','" + values[i].value + "','" + values[i].remarks.Replace("'", "''") + " [" + s + "]','" + values[i].date + "','" + values[i].user + "'";
-                            SqlCommand cmdTransaction = new SqlCommand(strTransaction, connection); 
+                            String strTransaction = "insert into tblTransactionLog select '" + (TLId + i) + "','" + values[i].type + "','" + values[i].activity + "','" + values[i].value + "','" + values[i].remarks.Replace("'", "''") + " [" + s + "]','" + values[i].date + "','" + values[i].user + "',@fileByte";
+                            SqlCommand cmdTransaction = new SqlCommand(strTransaction, connection);
+                            cmdTransaction.Parameters.AddWithValue("fileByte", jsonByte);
                             connection.Open();
                             cmdTransaction.ExecuteNonQuery();
                             connection.Close();
@@ -98,8 +108,9 @@ namespace Gentran.Controllers.api
                     {
                         if (values[i].changes != "NC") //MNS 06252016 Save if has changes
                         {
-                            String strTransaction = "insert into tblTransactionLog select '" + (TLId + i) + "','" + values[i].type + "','" + values[i].activity + "','" + values[i].value + "','" + values[i].remarks.Replace("'", "''") + "','" + values[i].date + "','" + values[i].user + "'";
+                            String strTransaction = "insert into tblTransactionLog select '" + (TLId + i) + "','" + values[i].type + "','" + values[i].activity + "','" + values[i].value + "','" + values[i].remarks.Replace("'", "''") + "','" + values[i].date + "','" + values[i].user + "',@fileByte";
                             SqlCommand cmdTransaction = new SqlCommand(strTransaction, connection);
+                            cmdTransaction.Parameters.AddWithValue("fileByte", jsonByte);
                             connection.Open();
                             cmdTransaction.ExecuteNonQuery();
                             connection.Close();
@@ -108,13 +119,13 @@ namespace Gentran.Controllers.api
 
                     detail = "Successful";
 
-                    //================================================================
+                    /*/================================================================
                     string jsonpath = Path.Combine(folderPath, TLId + ".json");
                     StreamWriter testData = new StreamWriter(jsonpath, true);
                     testData.WriteLine(values[i].payloadvalue);
                     testData.Close();
                     testData.Dispose();
-                    //================================================================
+                    //================================================================*/
 
                 }
                 catch (Exception ex)

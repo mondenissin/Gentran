@@ -133,7 +133,7 @@ namespace Gentran.Controllers.api.Order
 
         // GET api/order/5
         public object Get(string id)
-        {
+        {            
             bool success = true;
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
             String sQuery = @"select

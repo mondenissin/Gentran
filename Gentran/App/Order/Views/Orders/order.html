@@ -92,7 +92,8 @@
                     <span class="{{o.oClass}} table-data-ustat">{{o.sStatus}}&nbsp;</span><button class="btn btn-default btn-xs option-icon-size overlayBtn" ng-click="getStatus(o,$event)" title="View Details"><i class="fa {{o.uicons}}" aria-hidden="true" style="color: {{ o.uicons == 'fa-check' ? 'green' : 'red';  }} "><span class="label-count" ng-show="o.eCtr" ng-cloak >{{o.eCtr}}</span></i></button>
                 </td><!--<img onclick="errorDetails(\'' + data.detail[i].ulid + '\',\'' + data.detail[i].ulstatus + '\')" title="View Error Details" src="img/master/error.png">-->
                 <td ng-cloak style="text-align: center;width:10%;">
-                    <button class="btn btn-default btn-xs option-icon-size" ng-click="showFile(o)" title="View File"><i class="fa fa-file"></i></button>
+                    <!--<button class="btn btn-default btn-xs option-icon-size" ng-click="showFile(o)" title="View File"><i class="fa fa-file"></i></button>-->
+                    <button class="btn btn-default btn-xs option-icon-size" ng-click="downloadFile(o)" title="Download File" ng-hide="UserAccess != 'DEV'"><i class="fa fa-file"></i></button>
                     <button class="btn btn-default btn-xs option-icon-size" ng-click="showDetails(o)" title="Order Details"><i class="fa fa-info"></i></button>
                     <button class="btn btn-default btn-xs option-icon-size" ng-click="reuploadPO(o)" title="Reupload" ng-show="o.ulstatus == '11' ? true:false"><i class="fa fa-upload"></i></button>
                 </td>
@@ -213,7 +214,7 @@
                     <input type="hidden" id="txt_id" />
                     <input type="hidden" id="txt_status" />
                     <button class="btn btn-danger btn-sm  pull-left" ng-click="deleteThis(ordersInfo.txt_orderid)" title="Delete this Item?">Delete</button>
-                    <button class="btn btn-primary btn-sm " ng-click="editDetails($event)" title="Edit Items" ng-show="ifEditable">Edit</button>
+                    <!--<button class="btn btn-primary btn-sm " ng-click="editDetails($event)" title="Edit Items" ng-show="ifEditable">Edit</button>-->
                     <input type="submit" class="btn btn-default btn-sm" id="btn_editorder_save_cancel" style="display:none;" data-dismiss="modal" value="Cancel" onclick="HideSaveBtn_order()" />
                     <input type="submit" class="btn btn-primary btn-sm" id="btn_editorder_save" value="Save" style="display:none;" onclick="kas_saveOrders()" />
                 </div>
