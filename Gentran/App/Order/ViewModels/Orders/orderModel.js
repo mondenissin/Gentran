@@ -45,7 +45,7 @@
             });
         });
 
-        $scope.dtOptions = DTOptionsBuilder.newOptions();
+        $scope.dtOptions = DTOptionsBuilder.newOptions().withOption('order', [7, 'desc']);
         $scope.dtColumnDefs = [
            DTColumnDefBuilder.newColumnDef('no-sort').notSortable()
         ];

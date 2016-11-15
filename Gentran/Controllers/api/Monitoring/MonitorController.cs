@@ -10,6 +10,7 @@ using System.Text;
 using System.Web.Mvc;
 using System.Xml.Linq;
 using Newtonsoft.Json;
+using System.Web;
 
 namespace Gentran.Controllers.api
 {
@@ -18,6 +19,7 @@ namespace Gentran.Controllers.api
         // GET api/default1
         public Object Get()
         {
+            
             bool success = true;
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
             String sQuery = @"select 
@@ -39,7 +41,8 @@ namespace Gentran.Controllers.api
                             left join tbluploadlog 
                                 on ulfile = rfid
                             left join tblcustomermaster
-                                on cmid = ulcustomer";
+                                on cmid = ulcustomer
+                            order by RFRetrieveDate desc";
             SqlCommand cmd = new SqlCommand(sQuery, connection);
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
@@ -82,7 +85,26 @@ namespace Gentran.Controllers.api
 
             bool success = true;
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
-            String sQuery = "select * from tblrawfile left join tbluploadlog on ulfile = rfid where ulponumber = " + values.payload[0].ULPONumber + " ";
+            String sQuery = "";
+            if (values.operation != "transaction")
+            {
+                sQuery = "select * from tblrawfile left join tbluploadlog on ulfile = rfid where ulponumber = " + values.payload[0].ULPONumber + " ";
+            }
+            else {
+                sQuery = @"select 
+                                TLId, 
+                                TADescription, 
+                                TLValue, 
+                                TLRemarks, 
+                                left(TLDate,12) +'- ' + CONVERT(varchar(15), CAST(TLDate as time), 100) as TLDate ,
+                                TLUser
+                            from tblTransactionLog
+                            left join tblTransactionActivity
+                                on taid = TLActivity
+                            where TLUser = '17002'
+                            order by TLId desc"; //" + HttpContext.Current.Session["UserId"].ToString() + "
+            }
+
             SqlCommand cmd = new SqlCommand(sQuery, connection);
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
