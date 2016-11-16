@@ -119,7 +119,7 @@ namespace Gentran.Controllers.api.Admin
                     }
                     else if (values.operation == "by_user")
                     {
-                        sQuery = @"select top 100 a.ulponumber,a.ulcustomer,left(a.ulorderdate,12) as ulorderdate,
+                        sQuery = @"select a.ulponumber,a.ulcustomer,left(a.ulorderdate,12) as ulorderdate,
                                 left(a.ULDeliveryDate,12) as uldeliverydate,left(r.RFRetrieveDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFRetrieveDate as time),100) as ulretrievedate,
                                 left(r.RFReadDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFReadDate as time),100) as ulreaddate,
                                 (case CAST(r.RFSubmitDate as time) when CAST('00:00' as time) then 'Not yet Submitted' else left(r.RFSubmitDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFSubmitDate as time),100) end) as ulsubmitdate,
@@ -149,7 +149,7 @@ namespace Gentran.Controllers.api.Admin
                     }
                     else
                     {
-                        sQuery = @"select top 100 a.ulponumber,a.ulcustomer,left(a.ulorderdate,12) as ulorderdate,
+                        sQuery = @"select a.ulponumber,a.ulcustomer,left(a.ulorderdate,12) as ulorderdate,
                                 left(a.ULDeliveryDate,12) as uldeliverydate,left(r.RFRetrieveDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFRetrieveDate as time),100) as ulretrievedate,
                                 left(r.RFReadDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFReadDate as time),100) as ulreaddate,
                                 (case CAST(r.RFSubmitDate as time) when CAST('00:00' as time) then 'Not yet Submitted' else left(r.RFSubmitDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFSubmitDate as time),100) end) as ulsubmitdate,
