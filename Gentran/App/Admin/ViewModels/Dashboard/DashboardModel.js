@@ -17,7 +17,7 @@
         $scope.getAccounts();
 
         $scope.Items = null;
-        $scope.filterText = "(This year)";
+        $scope.filterText = "Date Covered: This Year";
         $scope.refreshDash($scope.Items);
     }
 
@@ -49,9 +49,13 @@
                     tskus += data.detail[i].ULTotalQuantity;
                     amount += data.detail[i].ULTotalAmount;
                 }
+                $('#revenue-chart').find('svg').show();
+                $('#revenue-chart').find('.morris-hover').css({'visibility':''});
                 callback(data);
             } else {
-                $scope.area.setData([]);
+                $('#revenue-chart').find('svg').hide();
+                $('#revenue-chart').find('.morris-hover').css({'visibility':'hidden'});
+                //$scope.area.setData([{label:'No data',order:'0',amount:'0'}]);
             }
 
             $scope.totalOrders = orders;
@@ -67,7 +71,7 @@
             if (data.success == true) {
                 callback(data);
             } else {
-                $scope.donut.setData([]);
+                $scope.donut.setData([{label:'No data',value:0}]);
             }
         });
     }
@@ -92,7 +96,7 @@
         Item.cmArea = filterArea;
         Item.acctype = filterChain;
 
-        $scope.filterText = sFrom == sTo ? 'Filter: ' + sTo : 'Filter: ' + sFrom + '  to ' + sTo;
+        $scope.filterText = sFrom == sTo ? 'Date Covered: ' + sTo : 'Date Covered: ' + sFrom + '  to ' + sTo;
 
         function loadAreaChart() {
             operation = filterArea != '-1' && filterChain != '-1' ? "filter_area_dashboard_by_all" : filterArea != '-1' ? "filter_area_dashboard_by_area" : filterChain != '-1' ? "filter_area_dashboard_by_chain" : "filter_area_dashboard_by_date";
@@ -193,7 +197,7 @@
             parseTime: false,
             ykeys: ['amount'],
             yLabelFormat: function (y) { return 'P ' + y.toString(); },
-            xLabelFormat: function (x) { var w = x.label.split('/'); return w[1] + '/' + w[2] + '/' + w[0]; },
+            xLabelFormat: function (x) { if (!x.label.includes("/")) return "No data"; var w = x.label.split('/'); return w[1] + '/' + w[2] + '/' + w[0]; },
             labels: ['Amount'],
             lineColors: ['#a0d0e0'],
             // behaveLikeLine: true,

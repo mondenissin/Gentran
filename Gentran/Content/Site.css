@@ -875,6 +875,15 @@ div.item {
     padding-right: 5px;
 }
 
+.revenue-chart-span {
+    line-height: 280px;
+    font-size: 40px;
+    text-align: center;
+    display: block;
+    font-weight: bold;
+    color: #707070;
+}
+
 /* ======================================= Scrollbars ============================================= */
 
 *::-webkit-scrollbar-track
