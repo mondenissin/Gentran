@@ -12,6 +12,7 @@ using Aspose.Cells.Rendering;
 using System.Drawing;
 using System.Web;
 using System.Data.SqlClient;
+using Newtonsoft.Json;
 
 namespace Gentran.Controllers.api
 {
@@ -34,6 +35,7 @@ namespace Gentran.Controllers.api
             
             List<string> fileList = new List<string>();
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+            Dictionary<string, string> prow;
             Dictionary<string, object> row;
 
             try
@@ -61,19 +63,14 @@ namespace Gentran.Controllers.api
 
                 Stream responseStream = response.GetResponseStream();
                 StreamReader reader = new StreamReader(responseStream);
-
-                StringBuilder strInfo = new StringBuilder();
-                //string line = reader.ReadLine().ToString();
                 string line = "";
-                
-                while (!string.IsNullOrEmpty((line = reader.ReadLine()))) {
-                    if (acct == "c_sm" || acct == "c_s8" || acct == "c_ncc")
-                    {
-                        notifCtr++;
-                    }
-                    else{
 
-                        sQuery = "SELECT MAX(RFId) AS RFId FROM tblRawFile"; // TBLRAWFILE
+                if (acct == "c_sm" || acct == "c_s8" || acct == "c_ncc"){
+                    notifCtr = reader.ReadToEnd().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).Length; ;
+                }else {
+                    while (!string.IsNullOrEmpty((line = reader.ReadLine())))
+                    {
+                        sQuery = "SELECT MAX(CONVERT(int,RFId)) AS RFId FROM tblRawFile"; // TBLRAWFILE
                         cmd = new SqlCommand(sQuery, conn);
                         conn.Open();
                         SqlDataReader drRFId = cmd.ExecuteReader();
@@ -104,7 +101,7 @@ namespace Gentran.Controllers.api
                             // TBLRAWFILE
                             sQuery = "insert into tblRawFile values('" + RFId + "','" + RFId + "-" + line + "',@fileContent,'" + rDate + "','','','','','0','" + acct.ToUpper() + "')";
                             cmd = new SqlCommand(sQuery, conn);
-                            cmd.Parameters.AddWithValue("fileContent",fileData);
+                            cmd.Parameters.AddWithValue("fileContent", fileData);
                             conn.Open();
                             cmd.ExecuteNonQuery();
                             conn.Close();
@@ -114,27 +111,28 @@ namespace Gentran.Controllers.api
                                 file.Write(fileData, 0, fileData.Length);
                                 file.Close();
                             }*/
-                                
+
                             if (acct != "ncc")
                             {
                                 FtpWebRequest request2 = (FtpWebRequest)WebRequest.Create(ftpfullpath);
                                 request2.Method = WebRequestMethods.Ftp.DeleteFile;
                                 FtpWebResponse response2 = (FtpWebResponse)request2.GetResponse();
-                                string asd = response2.StatusDescription;
                                 response2.Close();
                             }
                         }
-                        trows.Add(new Transaction { response = "File Retrieved", activity = "RET10", date = rDate, remarks = line, user = userID, type = "ADM", value = "Successfully Retrieved", changes = "", payloadvalue = "", customernumber = "", ponumber = "" });
+
+                        prow = new Dictionary<string, string>();
+                        prow.Add("RFId", RFId.ToString());
+                        prow.Add("RFFilename", RFId + "-" + line);
+                        prow.Add("RFRetrieveDate", rDate.ToString());
+
+                        string newpaypload = JsonConvert.SerializeObject(prow, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                        trows.Add(new Transaction { response = "File Retrieved", activity = "RET10", date = rDate, remarks = line, user = userID, type = "ADM", value = "Successfully Retrieved", changes = "", payloadvalue = newpaypload, customernumber = "", ponumber = "" });
+                        prow.Clear();
                     }
-                }
-                response.Close();
-
-                rows.Clear();
-                if (acct == "c_sm" || acct == "c_s8" || acct == "c_ncc")
-                {
-                }
-                else {
-
+                    response.Close();
+                    
+                    rows.Clear();
                     rawAcct = acct == "sm" ? "SM" : acct == "s8" ? "S8" : "NCC";
 
                     sQuery = "select rffilename from tblrawfile where RFAccount = '" + rawAcct + "' and RFStatus = '0' ";
@@ -154,6 +152,7 @@ namespace Gentran.Controllers.api
                     rd.Close();
                     conn.Close();
                 }
+
                 /*
                 fileList.Clear();
                 if (acct == "c_sm" || acct == "c_s8" || acct == "c_ncc")
