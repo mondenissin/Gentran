@@ -16,6 +16,7 @@ namespace Gentran.Controllers.api
         {
             bool success = true;
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
+            string year = DateTime.Now.Year.ToString();
             String sQuery = @"SELECT DISTINCT RFSubmitDate,
                             SUM(ULTotalQuantity) as ULTotalQuantity,
                             SUM(ULTotalSKUs) as  ULTotalSKUs,
@@ -56,6 +57,7 @@ namespace Gentran.Controllers.api
                             ON ul.ulid = ui.uiid  
                             ) UL on ul.ULFile = RFId
                             where RFStatus = 20
+                            AND RFSubmitDate BETWEEN '" + year + @"-01-01 00:00:00.000' AND '" + year + @"-12-31 23:59:59.999'                            
                             group by RFSubmitDate
                             ) TB
                             WHERE ULTotalQuantity > 0
@@ -104,6 +106,18 @@ namespace Gentran.Controllers.api
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
             String sQuery;// = "select top 100 TLId,TLRemarks,TLValue,Left(TLDate,12) as TLDate,TADescription,UMUsername from tbltransactionlog left join tblTransactionActivity on taid = tlactivity left join tblusermaster on umid = tluser order by tlid desc";
 
+            string byWeekPrefix = @"select 
+                                    CONCAT('Week ', DATEPART(wk, RFSubmitDate)) as RFSubmitDate,
+                                    SUM(ULTotalQuantity) as ULTotalQuantity,
+                                    SUM(ULTotalSKUs) as ULTotalSKUs,
+                                    SUM(ULTotalAmount) as ULTotalAmount,
+                                    SUM(ULTotalOrders) as  ULTotalOrders
+                                    from
+                                    (";
+            string byWeekSuffix = @") DSQL
+                                    group by DATEPART(wk, RFSubmitDate),ULTotalOrders
+                                    order by RFSubmitDate";
+
             if (values.operation == "filter_area_dashboard_by_date")
             {
                 sQuery = @"SELECT DISTINCT RFSubmitDate,
@@ -151,6 +165,9 @@ namespace Gentran.Controllers.api
                         ) TB
                         WHERE ULTotalQuantity > 0
                         group by RFSubmitDate";
+                if (values.payload[0].prefix == "Weekly") {
+                    sQuery = byWeekPrefix + sQuery + byWeekSuffix;
+                }
             }
             else if (values.operation == "filter_area_dashboard_by_chain")
             {
@@ -200,6 +217,10 @@ namespace Gentran.Controllers.api
                         ) TB
                         WHERE ULTotalQuantity > 0
                         group by RFSubmitDate";
+                if (values.payload[0].prefix == "Weekly")
+                {
+                    sQuery = byWeekPrefix + sQuery + byWeekSuffix;
+                }
 
             }
             else if (values.operation == "filter_area_dashboard_by_area")
@@ -250,6 +271,10 @@ namespace Gentran.Controllers.api
                         ) TB
                         WHERE ULTotalQuantity > 0
                         group by RFSubmitDate";
+                if (values.payload[0].prefix == "Weekly")
+                {
+                    sQuery = byWeekPrefix + sQuery + byWeekSuffix;
+                }
             }
             else if (values.operation == "filter_area_dashboard_by_all")
             {
@@ -300,6 +325,10 @@ namespace Gentran.Controllers.api
                         ) TB
                         WHERE ULTotalQuantity > 0
                         group by RFSubmitDate";
+                if (values.payload[0].prefix == "Weekly")
+                {
+                    sQuery = byWeekPrefix + sQuery + byWeekSuffix;
+                }
             }
             else if (values.operation == "filter_donut_dashboard_by_default")
             {
@@ -472,6 +501,10 @@ namespace Gentran.Controllers.api
                         ) TB
                         WHERE ULTotalQuantity > 0
                         group by RFSubmitDate";
+                if (values.payload[0].prefix == "Weekly")
+                {
+                    sQuery = byWeekPrefix + sQuery + byWeekSuffix;
+                }
             }
 
             SqlCommand cmd = new SqlCommand(sQuery, connection);
