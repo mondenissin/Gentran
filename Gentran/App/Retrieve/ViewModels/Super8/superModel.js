@@ -54,7 +54,7 @@
                     $scope.currentPage = 1;
                 });
 
-                viewModelHelper.saveTransaction(result.data.transactionDetail);
+                //viewModelHelper.saveTransaction(result.data.transactionDetail);
                 console.log($scope.files);
             } else {
                 console.log(result.data.detail[0].error);
