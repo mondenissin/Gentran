@@ -98,26 +98,42 @@ namespace Gentran.Controllers.api
                             webreq.Credentials = new NetworkCredential(m_strUsername, app.Decrypt(m_strPassword));
                             byte[] fileData = webreq.DownloadData(ftpfullpath);
 
-                            // TBLRAWFILE
-                            sQuery = "insert into tblRawFile values('" + RFId + "','" + RFId + "-" + line + "',@fileContent,'" + rDate + "','','','','','0','" + acct.ToUpper() + "')";
-                            cmd = new SqlCommand(sQuery, conn);
-                            cmd.Parameters.AddWithValue("fileContent", fileData);
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                            conn.Close();
-                            /*
-                            using (FileStream file = File.Create(inputfilepath))
-                            {
-                                file.Write(fileData, 0, fileData.Length);
-                                file.Close();
-                            }*/
+                            try {
+                                // TBLRAWFILE
+                                sQuery = "insert into tblRawFile values('" + RFId + "','" + RFId + "-" + line + "',@fileContent,'" + rDate + "','','','','','0','" + acct.ToUpper() + "')";
+                                cmd = new SqlCommand(sQuery, conn);
+                                cmd.Parameters.AddWithValue("fileContent", fileData);
+                                conn.Open();
+                                cmd.ExecuteNonQuery();
+                                conn.Close();
+                                /*
+                                using (FileStream file = File.Create(inputfilepath))
+                                {
+                                    file.Write(fileData, 0, fileData.Length);
+                                    file.Close();
+                                }*/
+                                if (acct != "ncc")
+                                {
+                                    FtpWebRequest request2 = (FtpWebRequest)WebRequest.Create(ftpfullpath);
+                                    request2.Method = WebRequestMethods.Ftp.DeleteFile;
+                                    FtpWebResponse response2 = (FtpWebResponse)request2.GetResponse();
+                                    response2.Close();
+                                }
+                            } catch(Exception ex) {
+                                string errorfilepath = @"C:\inetpub\wwwroot\files\ftp\error\" + RFId + "-" + line;
 
-                            if (acct != "ncc")
-                            {
-                                FtpWebRequest request2 = (FtpWebRequest)WebRequest.Create(ftpfullpath);
-                                request2.Method = WebRequestMethods.Ftp.DeleteFile;
-                                FtpWebResponse response2 = (FtpWebResponse)request2.GetResponse();
-                                response2.Close();
+                                using (FileStream file = File.Create(errorfilepath))
+                                {
+                                    file.Write(fileData, 0, fileData.Length);
+                                    file.Close();
+                                }
+                                
+                                success = false;
+                                sQuery = "insert into tblErrorLog select '"+RFId+"','204','Error in processing file "+line+"'";
+                                conn.Open();
+                                cmd = new SqlCommand(sQuery, conn);
+                                cmd.ExecuteNonQuery();
+                                conn.Close();
                             }
                         }
 
@@ -135,7 +151,7 @@ namespace Gentran.Controllers.api
                     rows.Clear();
                     rawAcct = acct == "sm" ? "SM" : acct == "s8" ? "S8" : "NCC";
 
-                    sQuery = "select rffilename from tblrawfile where RFAccount = '" + rawAcct + "' and RFStatus = '0' ";
+                    sQuery = "select rffilename,left(RFRetrieveDate,12) + '- ' + CONVERT (varchar(15),CAST(RFRetrieveDate as time),100) as RFRetrieveDate from tblrawfile where RFAccount = '" + rawAcct + "' and RFStatus = '0'";
                     cmd = new SqlCommand(sQuery, conn);
                     conn.Open();
                     SqlDataReader rd = cmd.ExecuteReader();
@@ -146,6 +162,7 @@ namespace Gentran.Controllers.api
                         {
                             row = new Dictionary<string, object>();
                             row.Add("files", rd[0].ToString());
+                            row.Add("retdate",rd[1].ToString());
                             rows.Add(row);
                         }
                     }

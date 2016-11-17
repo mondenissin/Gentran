@@ -280,6 +280,7 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\ionicons.svg" />
     <Content Include="Global.asax" />
     <Content Include="Images\accent.png" />
     <Content Include="Images\API.png" />
@@ -1123,6 +1124,10 @@
     <Content Include="Scripts\angular\i18n\angular-locale_zh.js" />
     <Content Include="Scripts\angular\i18n\angular-locale_zu-za.js" />
     <Content Include="Scripts\angular\i18n\angular-locale_zu.js" />
+    <Content Include="fonts\ionicons.eot" />
+    <Content Include="fonts\ionicons.ttf" />
+    <Content Include="fonts\ionicons.woff" />
+    <None Include="Properties\PublishProfiles\Gentran.pubxml" />
     <None Include="Scripts\angular\jquery-1.7.1-vsdoc.js" />
     <Content Include="Scripts\angular\jquery-1.7.1.js" />
     <Content Include="Scripts\angular\jquery-1.7.1.min.js" />
@@ -1152,9 +1157,10 @@
     <Content Include="Scripts\angular\src\angular-datatables.util.js" />
     <Content Include="Scripts\angular\src\dataTables.bootstrap.js" />
     <Content Include="Scripts\angular\src\jquery.dataTables.js" />
+    <Content Include="Scripts\angular\src\ng-fileDrop.min.js" />
     <Content Include="Scripts\angular\src\ngDialog.min.js" />
+    <Content Include="Scripts\angular\src\ui-bootstrap-tpls-0.3.0.min.js" />
     <Content Include="Scripts\angular\src\ui-bootstrap-tpls-2.1.4.min.js" />
-    <Content Include="Scripts\angular\version.txt" />
     <None Include="Scripts\angular\_references.js" />
     <Content Include="Scripts\bootstrap-js\bootstrap-select.js" />
     <Content Include="Scripts\bootstrap-js\bootstrap-select.min.js" />
@@ -1183,6 +1189,7 @@
     <Content Include="Scripts\js\app.min.js" />
     <Content Include="Scripts\js\login\login.js" />
     <Content Include="Scripts\js\master\master_ajax.js" />
+    <Content Include="Scripts\js\master\master_balloon.js" />
     <Content Include="Scripts\js\master\master_main.js" />
     <Content Include="Scripts\js\morris\morris.js" />
     <Content Include="Scripts\js\morris\morris.min.js" />
