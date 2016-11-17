@@ -28,6 +28,7 @@
                     rObj["rawID"] = split[split.length - 1].split('-')[0];
                     rObj["thumbnail"] = "../Images/thumbnails/xml.PNG";
                     rObj["extension"] = "../Images/files/" + ext[ext.length - 1] + ".png";
+                    rObj["retrievedate"] = obj.retdate;
 
                     return rObj;
                 });
@@ -56,15 +57,15 @@
         ];
     }
 
-    $scope.loadHover = function () {
-        $timeout(function () {
-            $('.po-files').hover(function () {
-                $($(this).context.lastElementChild).css({ top: 'auto', bottom: '0px' });
-            }, function () {
-                $($(this).context.lastElementChild).animate({ top: '85px' }, 50)
-            });
-        }, 0);
-    }
+    //$scope.loadHover = function () {
+    //    $timeout(function () {
+    //        $('.po-files').hover(function () {
+    //            $($(this).context.lastElementChild).css({ top: 'auto', bottom: '0px' });
+    //        }, function () {
+    //            $($(this).context.lastElementChild).animate({ top: '85px' }, 50)
+    //        });
+    //    }, 0);
+    //}
 
     $scope.downloadFile = function (data) {
 

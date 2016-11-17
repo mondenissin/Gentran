@@ -3,6 +3,7 @@
   <PropertyGroup>
     <ProjectView>ShowAllFiles</ProjectView>
     <UseIISExpress>false</UseIISExpress>
+    <NameOfLastUsedPublishProfile>Gentran</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>

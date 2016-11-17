@@ -28,6 +28,7 @@
                     rObj["rawID"] = split[split.length - 1].split('-')[0];
                     //rObj["thumbnail"] = "../Images/thumbnails/" + ext[0].replace(/[" "]/g, "") + ".jpg";
                     rObj["extension"] = "../Images/files/" + ext[ext.length - 1] + ".png";
+                    rObj["retrievedate"] = obj.retdate;
                     
                     return rObj;
                 });
