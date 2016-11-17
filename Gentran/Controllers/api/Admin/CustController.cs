@@ -72,7 +72,7 @@ namespace Gentran.Controllers.api
 
             if (values.operation == "get_accounts")
             {
-                sQuery = "select ATDescription,ATId from tblaccounttype order by ATDescription asc";
+                sQuery = "select ATDescription,ATId from tblaccounttype where ATStatus = '1' order by ATDescription asc";
             }
             else if (values.operation == "get_area")
             {

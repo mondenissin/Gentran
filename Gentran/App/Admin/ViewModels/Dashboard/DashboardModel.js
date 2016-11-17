@@ -16,9 +16,27 @@
         $scope.getArea();
         $scope.getAccounts();
 
+        $scope.areaType = 'Daily';
+
         $scope.Items = null;
         $scope.filterText = "Date Covered: This Year";
         $scope.refreshDash($scope.Items);
+
+        var date = new Date();
+        var year = date.getFullYear();
+        $('.txt_daterange').val(year + '/01/01-' + year + '/12/31');
+    }
+
+    $scope.toggleFilter = function (x, filt) {
+        $(x).closest('div').find('.active').attr('disabled',false);
+        $(x).closest('div').find('.active').addClass('btn-default').removeClass('btn-primary active');
+        $(x).removeClass(' btn-default');
+        $(x).addClass('btn-primary');
+        $(x).addClass('active');
+        $(x).attr('disabled', true);
+        $scope.areaType = filt;
+
+        $scope.setFilter();
     }
 
 
@@ -49,13 +67,13 @@
                     tskus += data.detail[i].ULTotalQuantity;
                     amount += data.detail[i].ULTotalAmount;
                 }
-                $('#revenue-chart').find('svg').show();
-                $('#revenue-chart').find('.morris-hover').css({'visibility':''});
+                $('#sales-chart').find('svg').show();
+                $('#sales-chart').find('.morris-hover').css({ 'visibility': '' });
                 callback(data);
             } else {
-                $('#revenue-chart').find('svg').hide();
-                $('#revenue-chart').find('.morris-hover').css({'visibility':'hidden'});
-                //$scope.area.setData([{label:'No data',order:'0',amount:'0'}]);
+                $('#sales-chart').find('svg').hide();
+                $('#sales-chart').find('.morris-hover').css({ 'visibility': 'hidden' });
+                $scope.errorMessage = 'No data available.';
             }
 
             $scope.totalOrders = orders;
@@ -69,9 +87,13 @@
         viewModelHelper.apiGet('api/dash', Items, function (result) {
             var data = result.data;
             if (data.success == true) {
+                $('#product-chart').find('svg').show();
+                $('#product-chart').find('.morris-hover').css({ 'visibility': '' });
                 callback(data);
             } else {
-                $scope.donut.setData([{label:'No data',value:0}]);
+                $('#product-chart').find('svg').hide();
+                $('#product-chart').find('.morris-hover').css({ 'visibility': 'hidden' });
+                $scope.errorMessage = 'No data available.';
             }
         });
     }
@@ -95,6 +117,7 @@
         Item.dateTo = sTo + ' 23:59:59.999';
         Item.cmArea = filterArea;
         Item.acctype = filterChain;
+        Item.prefix = $scope.areaType;
 
         $scope.filterText = sFrom == sTo ? 'Date Covered: ' + sTo : 'Date Covered: ' + sFrom + '  to ' + sTo;
 
@@ -135,6 +158,7 @@
             });
         }
 
+        $scope.errorMessage = 'Please wait.';
 
         loadAreaChart();
         loadDonutChart();
@@ -148,6 +172,9 @@
     }
 
     $scope.refreshDash = function (Items) {
+
+        $scope.errorMessage = 'Please wait.';
+
         $scope.refreshAreaData(Items, function (data) {
             $scope.AreaChartData(data.detail);
         });
@@ -190,14 +217,13 @@
             areaData[i].amount = data[i].ULTotalAmount;
         }
         $scope.area = new Morris.Bar({
-            element: 'revenue-chart',
+            element: 'sales-chart',
             resize: true,
             data: areaData,
             xkey: 'label',
             parseTime: false,
             ykeys: ['amount'],
-            yLabelFormat: function (y) { return 'P ' + y.toString(); },
-            xLabelFormat: function (x) { if (!x.label.includes("/")) return "No data"; var w = x.label.split('/'); return w[1] + '/' + w[2] + '/' + w[0]; },
+            preUnits: 'P ',
             labels: ['Amount'],
             lineColors: ['#a0d0e0'],
             // behaveLikeLine: true,
@@ -215,7 +241,7 @@
         }
 
         $scope.donut = new Morris.Donut({
-            element: 'sales-chart',
+            element: 'product-chart',
             resize: true,
             colors: ["#3c8dbc", "#f56954", "#00a65a", "#f0ad4e", "rgb(241, 130, 212)"],
             data: donutData,

@@ -797,6 +797,7 @@ div.item {
 }
 
 /* ======================================= DASHBOARD ============================================= */
+
 .span-title {
     font-family: 'Source Sans Pro',sans-serif;
     font-size: 14px;
@@ -805,6 +806,10 @@ div.item {
     margin-top: 10px;
     margin-bottom: 10px;
     line-height: 35px;
+}
+
+.chart-span {
+    font-size: 1.5em;
 }
 
 .huge {
@@ -875,13 +880,20 @@ div.item {
     padding-right: 5px;
 }
 
-.revenue-chart-span {
+.chart-span {
     line-height: 280px;
-    font-size: 40px;
+    font-size: 20px;
     text-align: center;
     display: block;
     font-weight: bold;
     color: #707070;
+}
+.chart-span i {
+    color: inherit;
+}
+
+.header-item {
+    line-height: 30px!important;
 }
 
 /* ======================================= Scrollbars ============================================= */
