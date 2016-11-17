@@ -270,9 +270,7 @@ namespace Gentran.Controllers.api
                         group by RFSubmitDate
                         ) TB
                         WHERE ULTotalQuantity > 0
-                        group by RFSubmitDate) DSQL
-                        group by DATEPART(wk, RFSubmitDate),ULTotalOrders
-                        order by RFSubmitDate";
+                        group by RFSubmitDate";
                 if (values.payload[0].prefix == "Weekly")
                 {
                     sQuery = byWeekPrefix + sQuery + byWeekSuffix;
@@ -326,9 +324,7 @@ namespace Gentran.Controllers.api
                         group by RFSubmitDate
                         ) TB
                         WHERE ULTotalQuantity > 0
-                        group by RFSubmitDate) DSQL
-                        group by DATEPART(wk, RFSubmitDate),ULTotalOrders
-                        order by RFSubmitDate";
+                        group by RFSubmitDate";
                 if (values.payload[0].prefix == "Weekly")
                 {
                     sQuery = byWeekPrefix + sQuery + byWeekSuffix;
@@ -504,9 +500,7 @@ namespace Gentran.Controllers.api
                         group by RFSubmitDate
                         ) TB
                         WHERE ULTotalQuantity > 0
-                        group by RFSubmitDate) DSQL
-                        group by DATEPART(wk, RFSubmitDate),ULTotalOrders
-                        order by RFSubmitDate";
+                        group by RFSubmitDate";
                 if (values.payload[0].prefix == "Weekly")
                 {
                     sQuery = byWeekPrefix + sQuery + byWeekSuffix;
