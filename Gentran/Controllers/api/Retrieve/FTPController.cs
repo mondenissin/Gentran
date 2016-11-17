@@ -135,7 +135,7 @@ namespace Gentran.Controllers.api
                     rows.Clear();
                     rawAcct = acct == "sm" ? "SM" : acct == "s8" ? "S8" : "NCC";
 
-                    sQuery = "select rffilename from tblrawfile where RFAccount = '" + rawAcct + "' and RFStatus = '0' ";
+                    sQuery = "select rffilename,left(RFRetrieveDate,12) + '- ' + CONVERT (varchar(15),CAST(RFRetrieveDate as time),100) as RFRetrieveDate from tblrawfile where RFAccount = '" + rawAcct + "' and RFStatus = '1' ";
                     cmd = new SqlCommand(sQuery, conn);
                     conn.Open();
                     SqlDataReader rd = cmd.ExecuteReader();
@@ -146,6 +146,7 @@ namespace Gentran.Controllers.api
                         {
                             row = new Dictionary<string, object>();
                             row.Add("files", rd[0].ToString());
+                            row.Add("retdate", rd[1].ToString());
                             rows.Add(row);
                         }
                     }

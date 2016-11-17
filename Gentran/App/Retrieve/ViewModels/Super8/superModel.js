@@ -8,8 +8,18 @@
         $scope.refreshS8();
     }
 
-    $scope.refreshS8 = function () {
+    this.tab = 1;
 
+    this.setTab = function (tabId) {
+        this.tab = tabId;
+    };
+
+    this.isSet = function (tabId) {
+        return this.tab === tabId;
+    };
+
+    $scope.refreshS8 = function () {
+       
         $scope.search = {};
         $scope.searchBy = "files";
 
@@ -28,6 +38,7 @@
                     rObj["rawID"] = split[split.length - 1].split('-')[0];
                     rObj["thumbnail"] = "../Images/thumbnails/xml.PNG";
                     rObj["extension"] = "../Images/files/" + ext[ext.length - 1] + ".png";
+                    rObj["retrievedate"] = obj.retdate;
 
                     return rObj;
                 });
