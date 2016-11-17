@@ -43,7 +43,7 @@
                     $scope.currentPage = 1;
                 });
 
-                viewModelHelper.saveTransaction(result.data.transactionDetail);
+                //viewModelHelper.saveTransaction(result.data.transactionDetail);
                 console.log($scope.files);
             } else {
                 console.log(result.data.detail[0].error);
@@ -135,17 +135,16 @@
                 //this.checked = false;
 
                 listFile[ctr] = {};
-
+                console.log($(this));
                 listElem[ctr] = {};
-                listElem[ctr].element = $(this.parentElement);
-                console.log($(this.nextElementSibling.children));
+                listElem[ctr].element = $($($(this.parentElement)[0].parentElement)[0].parentElement);
                 listFile[ctr].outlet = "SM";
-                listFile[ctr].fileName = this.nextElementSibling.children[1].children[2].textContent;
-                listFile[ctr].rawID = this.nextElementSibling.children[1].children[3].textContent;
-                listFile[ctr].fileLogo = this.nextElementSibling.children[1].children[0].outerHTML;
-                listFile[ctr].name = this.nextElementSibling.children[1].children[1].textContent;
-                listFile[ctr].fileID = this.nextElementSibling.children[1].children[1].textContent.replace(/[. ]/g, '');
-                console.log(listFile[ctr]);
+                listFile[ctr].fileName = $($($($(this.parentElement)[0].parentElement)[0].children[1])[0].children)[1].title;
+                listFile[ctr].rawID = $($($($(this.parentElement)[0].parentElement)[0].children[1])[0].children)[3].textContent;
+                listFile[ctr].fileLogo = $($($($(this.parentElement)[0].parentElement)[0].children[1])[0].children)[0].outerHTML;
+                listFile[ctr].name = $($($($(this.parentElement)[0].parentElement)[0].children[1])[0].children)[2].textContent;
+                listFile[ctr].fileID = $($($($(this.parentElement)[0].parentElement)[0].children[1])[0].children)[2].textContent.replace(/[. ]/g, '');
+
                 ctr++; 
             }
         }).promise().done(function () {
@@ -174,8 +173,6 @@
                         $('#' + fileName[0].fileID).animate({ width: '100%' }, execTime);
 
                         setTimeout(function () {
-
-                            viewModelHelper.saveTransaction(result.data.detail);
 
                             if (result.data.success == true) {
                                 $('#' + fileName[0].fileID).text("Read Successful");

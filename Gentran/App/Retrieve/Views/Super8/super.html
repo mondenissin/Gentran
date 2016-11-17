@@ -53,6 +53,10 @@
                                     <!--<span {{ f.files.length > -1  ? "style='font-size:10px;text-overflow:ellipsis;word-wrap:break-word'" : 'style="font-size:10px;text-overflow:ellipsis"'}} ">{{(f.files).length > 0 ? f.files : ''}}</span>-->
                                     <!--<span {{ f.files.length > -1  ? "style='font-size:10px;text-overflow:ellipsis;word-wrap:break-word'" : 'style="font-size:10px;text-overflow:ellipsis"'}} ">{{(f.files).length > 0 ? f.files : ''}}</span>-->
                                     <span style='font-size:10px;' title="{{ f.files }}">{{ f.files.slice(0,20) }}...</span>
+                                    <!--For directory and rawID Purposes-->
+                                    <label hidden>{{f.directory}}</label>
+                                    <label hidden>{{f.rawID}}</label>
+                                    <!--For directory and rawID Purposes-->
                                     <span style='font-size:10px; '>{{ f.retrievedate }}</span>
                                 </div>
                                 <div class="po-file-download col-sm-1 col-xs-2">
@@ -106,7 +110,7 @@
                         <div class="po-files">
                             <div class="">
                                 <div class="po-cbx-design col-sm-1 col-xs-2">
-                                    <input class="po-cbx" ng-model="check" ng-checked="all" ng-click="$event = $event" ng-change="selectFile($event)" type="checkbox" />
+                                    <input class="po-cbx" ng-model="check" ng-checked="allU" ng-click="$event = $event" ng-change="selectFile($event)" type="checkbox" />
                                 </div>
                                 <div class="po-file-content col-sm-2 col-xs-4">
                                     <img ng-src="{{f.extension}}" class="po-files-ico pull-left" />
