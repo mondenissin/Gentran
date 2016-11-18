@@ -186,6 +186,8 @@
                             $(elemName[0].element).remove();
                             //$scope.refreshSM();
                         }, execTime);
+
+                        viewModelHelper.saveTransaction(result.data.detail);
                     });
 
                     i++;

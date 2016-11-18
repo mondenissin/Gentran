@@ -186,6 +186,8 @@
                             console.log(elemName[0].element);
                             //$scope.refreshSM();
                         }, execTime);
+
+                        viewModelHelper.saveTransaction(result.data.detail);
                     });
 
                     i++;
