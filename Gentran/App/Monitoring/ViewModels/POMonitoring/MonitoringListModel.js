@@ -43,7 +43,7 @@
     $scope.refreshTransact = function () {
 
         $scope.searchTransaction = {};
-        $scope.searchByTransaction = "TLId";
+        $scope.searchByTransaction = "TLValue";
 
         $scope.data = {};
         $scope.data.operation = 'transaction';
@@ -61,7 +61,7 @@
             });
         });
 
-        $scope.dtOptionsTrans = DTOptionsBuilder.newOptions().withOption('order', [1, 'desc']);
+        $scope.dtOptionsTrans = DTOptionsBuilder.newOptions().withOption('order', [0, 'desc']);
         $scope.dtColumnDefsTrans = [
            DTColumnDefBuilder.newColumnDef('no-sort').notSortable()
         ];

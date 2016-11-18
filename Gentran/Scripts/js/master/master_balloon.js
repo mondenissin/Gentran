@@ -6,6 +6,7 @@ function notif_error(title, message) {
 }
 function notif_warning(title, message) {
     $.Notification.notify('warning', 'bottom left', title, message);
+    $('.notifyjs-metro-warning .text-wrapper').css('color', 'rgba(115, 115, 115, 0.94)');
 }
 function notif_info(title, message) {
     $.Notification.notify('info', 'bottom left', title, message);

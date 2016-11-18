@@ -1,15 +1,15 @@
 ﻿<div class="breadcrumb monitor-menu">
    <!-- <b class="page-top-header">Monitoring</b>-->
     <ul class="nav nav-tabs skin-blue">
-        <li><a data-toggle="tab" href="/#POMonitoring"><b>PO Monitoring</b></a></li>
-        <li><a data-toggle="tab" href="/#TransactionLogs"><b>Transaction Logs</b></a></li>
+        <li class="active"><a data-toggle="tab" href="#POMonitoring"><b>PO Monitoring</b></a></li>
+        <li><a data-toggle="tab" href="#TransactionLogs"><b>Transaction Logs</b></a></li>
     </ul>
 </div>
 
 
 <div class="page-table">
     <div class="tab-content">
-        <div id="POMonitoring" class="tab-pane active ">
+        <div id="POMonitoring" class="tab-pane active in">
             <div class="pull-left" style="line-height: 40px;">
                 <div class="form-inline">
                     <label >N/A = <span style="color:red;">Not Yet Processed</span></label>
@@ -67,9 +67,8 @@
             <div class="pull-right">
                 <div class="form-inline">
                     <select ng-model="searchByTransaction" class="form-control" ng-change="clearSearch()">
-                        <option value="TLId" selected>Transaction ID</option>
-                        <option value="TADescription">Description</option>
                         <option value="TLValue">PO Number</option>
+                        <option value="TADescription">Activity</option>
                         <option value="TLRemarks">Remarks</option>
                     </select>
                     <input type="text" ng-model="searchTransaction[searchByTransaction]" ng-model-options="{debounce: {'default': 100, 'blur': 0}}" class="form-control" placeholder="Search" />
@@ -79,24 +78,24 @@
             <table id="PageTable" dt-column-defs="dtColumnDefsTrans" datatable="ng" dt-options="dtOptionsTrans" class="table table-responsive table-bordered bordered table-striped table-condensed datatable table-font">
                 <thead>
                     <tr>
-                        <th style="width: 5%;">Code</th>
+                        <!--<th style="width: 5%;">Code</th>-->
                         <th>Date</th>
-                        <th style="width: 15%;">Description</th>
+                        <th style="width: 15%;">Activity</th>
                         <th>Value</th>
                         <th style="width: 65%;">Remarks</th>
-                        <th ng-hide="UserAccess != 'DEV'">Download</th>
+                        <!--<th ng-hide="UserAccess != 'DEV'">Download</th>-->
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="t in filterTransaction | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
-                        <td ng-cloak class="table-data-tlcode center">{{t.TLId}}</td>
+                        <!--<td ng-cloak class="table-data-tlcode center">{{t.TLId}}</td>-->
                         <td ng-cloak class="table-data-tldate center">{{t.TLDate}}</td>
                         <td ng-cloak class="table-data-tldesc center" >{{t.TADescription}}</td>
                         <td ng-cloak class="table-data-tlvalue center">{{t.TLValue}}</td>
                         <td ng-cloak class="table-data-tlremarks center">{{t.TLRemarks}}</td>
-                        <td ng-cloak class="table-data-tloption center" ng-hide="UserAccess != 'DEV'">
+                        <!--<td ng-cloak class="table-data-tloption center" ng-hide="UserAccess != 'DEV'">
                             <button class="btn btn-default btn-xs option-icon-size" ng-click="downloadJSON(t)" title="Download JSON"><i class="fa fa-file"></i></button>
-                        </td>
+                        </td>-->
                     </tr>
                 </tbody>
             </table>
