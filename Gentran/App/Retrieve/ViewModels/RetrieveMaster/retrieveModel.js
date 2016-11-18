@@ -68,29 +68,9 @@
     //}
 
     $scope.downloadFile = function (data) {
-
-        var split = data.directory.split('\\');
-
-        downloadURI(host + "ftp/ncc/" + split[split.length - 1], split[split.length - 1]);
-        function downloadURI(uri, name) {
-            var link = document.createElement("a");
-            link.download = name;
-            link.href = uri;
-            link.click();
-        }
-    }
-
-    $scope.showFile = function (data) {
+        window.location.href = viewModelHelper.getRootPath() + "api/download/" + data.rawID + ',order';
         console.log(data.rawID);
-        var temponame = data.directory;
-        var temp1 = temponame.split('.');
-        var temp2 = temp1[(temp1.length - 1)];
-        var fileLoc = "";
-        fileLoc = "ftp/ncc/";
-
-        viewModelHelper.fileViewer(temp2, data.files, fileLoc);
     }
-
 
     $scope.selectFile = function ($event) {
         /*console.log(this);
