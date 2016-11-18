@@ -1,4 +1,4 @@
-﻿retrieveModule.controller("rootViewModel", function ($route,$scope, retrieveService, $http, $q, $routeParams, $window, $location, viewModelHelper) {
+﻿retrieveModule.controller("rootViewModel", function ($timeout,$route,$scope, retrieveService, $http, $q, $routeParams, $window, $location, viewModelHelper) {
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.retrieveService = retrieveService;
@@ -8,18 +8,18 @@
     var initialize = function () {
         $scope.POfile = [];
         $scope.autoRetrieve();
-
+        var time = 0;
+        
         setInterval(function () {
-            $scope.$apply(function () {
-                $scope.autoRetrieve();
-            });
-        }, 60000);
-
-        setInterval(function () {
-           console.log("");
+            time++;
+            if(time % 5 == 0){
+                $scope.$apply(function () {
+                    $scope.autoRetrieve();
+                    time = 0;
+                });
+            }
         },1000);
     }
-
     $scope.autoRetrieve = function () {
         $scope.retrieveCtr('SM', 'c_sm');
         $scope.retrieveCtr('S8', 'c_s8');
