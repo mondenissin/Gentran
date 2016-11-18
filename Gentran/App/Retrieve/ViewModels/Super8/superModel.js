@@ -201,6 +201,8 @@
                     i++;
                     if (i < count) {
                         setTimeout(LaodFile, 1000);
+                    } else if (i == count) {
+                        $scope.autoRetrieve();
                     }
                 }
                 setTimeout(function () {
