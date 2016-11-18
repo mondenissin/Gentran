@@ -188,12 +188,8 @@
     <Content Include="App\Order\Views\Orders\order.html" />
     <Content Include="App\Retrieve\App.js" />
     <Content Include="App\Retrieve\RootViewModel.js" />
-    <Content Include="App\Retrieve\ViewModels\SM\smModel.js" />
-    <Content Include="App\Retrieve\ViewModels\NCC\nccModel.js" />
-    <Content Include="App\Retrieve\ViewModels\Super8\superModel.js" />
-    <Content Include="App\Retrieve\Views\SM\sm.html" />
-    <Content Include="App\Retrieve\Views\NCC\ncc.html" />
-    <Content Include="App\Retrieve\Views\Super8\super.html" />
+    <Content Include="App\Retrieve\ViewModels\RetrieveMaster\retrieveModel.js" />
+    <Content Include="App\Retrieve\Views\RetrieveMaster\retrieve.html" />
     <Content Include="Content\AdminLTE.css" />
     <Content Include="Content\AdminLTE.min.css" />
     <Content Include="Content\bootstrap\bootstrap-select.css" />

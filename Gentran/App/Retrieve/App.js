@@ -1,9 +1,9 @@
 ﻿var retrieveModule = angular.module('retrieve', ['common', 'sly', 'datatables', 'sly', 'ui.bootstrap'])
     .config(function ($routeProvider, $locationProvider) {
         var _root = getRoot();
-        $routeProvider.when(_root + 'Retrieve/SM', { templateUrl: _root + 'App/Retrieve/Views/SM/sm.html', controller: 'smViewModel' });
-        $routeProvider.when(_root + 'Retrieve/Super8', { templateUrl: _root + 'App/Retrieve/Views/Super8/super.html', controller: 'superViewModel' });
-        $routeProvider.when(_root + 'Retrieve/NCC', { templateUrl: _root + 'App/Retrieve/Views/NCC/ncc.html', controller: 'nccViewModel' });
+        $routeProvider.when(_root + 'Retrieve/SM', { templateUrl: _root + 'App/Retrieve/Views/RetrieveMaster/retrieve.html', controller: 'retrieveViewModel' });
+        $routeProvider.when(_root + 'Retrieve/Super8', { templateUrl: _root + 'App/Retrieve/Views/RetrieveMaster/retrieve.html', controller: 'retrieveViewModel' });
+        $routeProvider.when(_root + 'Retrieve/NCC', { templateUrl: _root + 'App/Retrieve/Views/RetrieveMaster/retrieve.html', controller: 'retrieveViewModel' });
         $routeProvider.otherwise({ redirectTo: _root + 'Retrieve' });
         $locationProvider.html5Mode({
             enabled: true,

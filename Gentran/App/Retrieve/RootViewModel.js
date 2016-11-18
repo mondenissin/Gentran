@@ -2,7 +2,7 @@
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.retrieveService = retrieveService;
-
+    $scope.activeOutlet = "";
     $scope.flags = { shownFromList: false };
 
     var initialize = function () {
@@ -47,6 +47,7 @@
         if ($location.path() == "/Gentran/Retrieve/SM") {
             $route.reload();
         }
+        $scope.activeOutlet = "sm";
     }
 
     $scope.superFile = function () {
@@ -54,6 +55,7 @@
         if ($location.path() == "/Gentran/Retrieve/Super8") {
             $route.reload();
         }
+        $scope.activeOutlet = "s8";
     }
 
     $scope.nccFile = function () {
@@ -61,6 +63,7 @@
         if ($location.path() == "/Gentran/Retrieve/NCC") {
             $route.reload();
         }
+        $scope.activeOutlet = "ncc";
     }
     initialize();
 });

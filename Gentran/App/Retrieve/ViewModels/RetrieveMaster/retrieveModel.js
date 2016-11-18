@@ -1,19 +1,19 @@
-﻿retrieveModule.controller("nccViewModel", function ($sce,$scope, retrieveService, $http, $q, $routeParams, $window, $location, viewModelHelper, $timeout, DTOptionsBuilder, DTColumnDefBuilder, $route, filterFilter) {
+﻿retrieveModule.controller("retrieveViewModel", function ($sce,$scope, retrieveService, $http, $q, $routeParams, $window, $location, viewModelHelper, $timeout, DTOptionsBuilder, DTColumnDefBuilder, $route, filterFilter) {
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.retrieveService = retrieveService;
     $scope.trustAsHtml = $sce.trustAsHtml;
 
     var initialize = function () {
-        $scope.refreshNCC();
+        $scope.refreshRetrieve();
     }
 
-    $scope.refreshNCC = function () {
+    $scope.refreshRetrieve = function () {
 
         $scope.search = {};
         $scope.searchBy = "files";
 
-        viewModelHelper.apiGet('api/ftp/ncc', null, function (result) {
+        viewModelHelper.apiGet('api/ftp/'+$scope.activeOutlet, null, function (result) {
             $scope.pageSize = 5;
             $scope.entryLimit = 50;
             $scope.entryLimitPO = 12;
@@ -26,7 +26,7 @@
                     rObj["files"] = split[split.length - 1];
                     rObj["directory"] = obj.files;
                     rObj["rawID"] = split[split.length - 1].split('-')[0];
-                    rObj["thumbnail"] = "../Images/thumbnails/xml.PNG";
+                    rObj["thumbnail"] = "../Images/thumbnails/" + ext[ext.length - 1] + ".PNG";
                     rObj["extension"] = "../Images/files/" + ext[ext.length - 1] + ".png";
                     rObj["retrievedate"] = obj.retdate;
 
@@ -138,7 +138,7 @@
                 console.log($(this));
                 listElem[ctr] = {};
                 listElem[ctr].element = $($($(this.parentElement)[0].parentElement)[0].parentElement);
-                listFile[ctr].outlet = "NCC";
+                listFile[ctr].outlet = $scope.activeOutlet.toUpperCase();
                 listFile[ctr].fileName = $($($($(this.parentElement)[0].parentElement)[0].children[1])[0].children)[1].title;
                 listFile[ctr].rawID = $($($($(this.parentElement)[0].parentElement)[0].children[1])[0].children)[3].textContent;
                 listFile[ctr].fileLogo = $($($($(this.parentElement)[0].parentElement)[0].children[1])[0].children)[0].outerHTML;
