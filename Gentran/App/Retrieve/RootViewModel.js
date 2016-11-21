@@ -7,6 +7,7 @@
 
     var initialize = function () {
         $scope.POfile = [];
+        $scope.POfileErr = [];
         $scope.autoRetrieve();
         var time = 0;
         
@@ -28,13 +29,18 @@
 
     $scope.retrieveCtr = function (chain, acct) {
         viewModelHelper.apiGet('api/ftp/' + acct, null, function (result) {
+            
             if (result.data.success) {
                 if (chain == "SM") {
                     $scope.POfile.SM = parseInt(result.data.notiftext);
+                    $scope.POfileErr.SM = parseInt(result.data.notiftextErr);
                 }else if(chain == "S8"){
                     $scope.POfile.S8 = parseInt(result.data.notiftext);
+                    $scope.POfileErr.S8 = parseInt(result.data.notiftextErr);
                 } else if (chain == "NCC") {
-                    $scope.POfile.NCC =parseInt(result.data.notiftext);
+                    $scope.POfile.NCC = parseInt(result.data.notiftext);
+                    console.log(result.data.notiftextErr);
+                    $scope.POfileErr.NCC = parseInt(result.data.notiftextErr);
                 }
                 console.log(result.data);
             } else {

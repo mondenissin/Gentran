@@ -25,7 +25,7 @@
                     var ext = split[split.length - 1].split('.');
                     rObj["files"] = split[split.length - 1];
                     rObj["directory"] = obj.files;
-                    rObj["rawID"] = split[split.length - 1].split('-')[0];
+                    rObj["rawID"] = obj.rawid;
                     rObj["thumbnail"] = "../Images/thumbnails/" + ext[ext.length - 1] + ".PNG";
                     rObj["extension"] = "../Images/files/" + ext[ext.length - 1] + ".png";
                     rObj["retrievedate"] = obj.retdate;
@@ -69,7 +69,6 @@
 
     $scope.downloadFile = function (data) {
         window.location.href = viewModelHelper.getRootPath() + "api/download/" + data.rawID + ',order';
-        console.log(data.rawID);
     }
 
     $scope.selectFile = function ($event) {

@@ -28,9 +28,10 @@ namespace Gentran.Controllers.api
         {
             string acct = id;
             int notifCtr = 0;
+            int notifCtrErr = 0;
             bool success = true;
             DataTable dt = new DataTable();
-            //List<string> fileList = new List<string>();
+            List<string> fileList = new List<string>();
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
 
@@ -39,15 +40,32 @@ namespace Gentran.Controllers.api
                 rows.Clear();
                 rawAcct = acct == "sm" || acct == "c_sm" ? "SM" : acct == "s8" || acct == "c_s8" ? "S8" : "NCC";
 
-                sQuery = "select rffilename,left(RFRetrieveDate,12) + '- ' + CONVERT (varchar(15),CAST(RFRetrieveDate as time),100) as RFRetrieveDate from tblrawfile where RFAccount = '" + rawAcct + "' and RFStatus = '0'";
+                sQuery = "select rffilename,left(RFRetrieveDate,12) + '- ' + CONVERT (varchar(15),CAST(RFRetrieveDate as time),100) as RFRetrieveDate,rfid from tblrawfile where RFAccount = '" + rawAcct + "' and RFStatus = '0'";
                 cmd = new SqlCommand(sQuery, conn);
                 conn.Open();
                 SqlDataReader rd = cmd.ExecuteReader();
 
                 if (acct == "c_sm" || acct == "c_s8" || acct == "c_ncc")
                 {
+                    fileList.Clear();
                     dt.Load(rd);
                     notifCtr = dt.Rows.Count;
+
+                    if (acct == "c_sm")
+                    {
+                        fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\error\sm", "*.csv"));
+                        notifCtrErr = fileList.Count;
+                    }
+                    else if (acct == "c_s8")
+                    {
+                        fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\error\s8", "*.xml"));
+                        notifCtrErr = fileList.Count;
+                    }
+                    else if (acct == "c_ncc")
+                    {
+                        fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\error\ncc", "*.xml"));
+                        notifCtrErr = fileList.Count;
+                    }
                 }
                 else {
                     if (rd.HasRows)
@@ -57,6 +75,7 @@ namespace Gentran.Controllers.api
                             row = new Dictionary<string, object>();
                             row.Add("files", rd[0].ToString());
                             row.Add("retdate", rd[1].ToString());
+                            row.Add("rawid",rd[2].ToString());
                             rows.Add(row);
                         }
                     }
@@ -132,7 +151,7 @@ namespace Gentran.Controllers.api
                 rows.Add(row);
             }
 
-            return new Response { success = success,detail = rows, notiftext = notifCtr.ToString() };
+            return new Response { success = success, detail = rows, notiftext = notifCtr.ToString(), notiftextErr = notifCtrErr.ToString() };
         }
 
         // GET api/ftp/5

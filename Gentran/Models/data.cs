@@ -270,6 +270,7 @@ public class Response
     public string payloadvalue { get; set; }
     public long execution { get; set; }
     public string notiftext { get; set; }
+    public string notiftextErr { get; set; }
     public object reports { get; set; }
     public object transactionDetail { get; set; }
 }

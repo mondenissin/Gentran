@@ -397,7 +397,7 @@ namespace Gentran.Controllers.api.Retrieve
                         //<!INSERT ORDER HEADER----------------------------------------------------------------
                         if (validPO == true)
                         {
-                            String insertULId = "INSERT INTO tblUploadLog select '" + uID + "','" + rawID + "','" + uPONum + "','" + uCust + "','" + uODate + "','" + uDDate + "','10','" + uRemarks + "'";
+                            String insertULId = "INSERT INTO tblUploadLog select '" + uID + "','" + rawID + "','" + uPONum + "','" + uCust + "','" + uODate + "','" + uDDate + "','','10','" + uRemarks + "'";
                             //String insertULId = "INSERT INTO tblUploadLog SELECT '" + uID + "','" + uPONum + "','" + uCust + "','" + uODate + "','" + uDDate + "','" + uDate + "','','" + uUser + "','10','" + uRemarks + "','" + uAcct + "'";
                             connection.Open();
                             SqlCommand insertCmdULId = new SqlCommand(insertULId, connection);
