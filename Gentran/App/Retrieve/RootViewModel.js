@@ -39,7 +39,6 @@
                     $scope.POfileErr.S8 = parseInt(result.data.notiftextErr);
                 } else if (chain == "NCC") {
                     $scope.POfile.NCC = parseInt(result.data.notiftext);
-                    console.log(result.data.notiftextErr);
                     $scope.POfileErr.NCC = parseInt(result.data.notiftextErr);
                 }
                 console.log(result.data);

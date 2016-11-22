@@ -397,7 +397,7 @@ namespace Gentran.Controllers.api.Retrieve
                         //<!INSERT ORDER HEADER----------------------------------------------------------------
                         if (validPO == true)
                         {
-                            String insertULId = "INSERT INTO tblUploadLog select '" + uID + "','" + rawID + "','" + uPONum + "','" + uCust + "','" + uODate + "','" + uDDate + "','','10','" + uRemarks + "'";
+                            String insertULId = "INSERT INTO tblUploadLog select '" + uID + "','" + rawID + "','" + uPONum + "','" + uCust + "','" + uODate + "','" + uDDate + "','','"+ uDate + "','"+ userID + "','','','10','" + uRemarks + "'";
                             //String insertULId = "INSERT INTO tblUploadLog SELECT '" + uID + "','" + uPONum + "','" + uCust + "','" + uODate + "','" + uDDate + "','" + uDate + "','','" + uUser + "','10','" + uRemarks + "','" + uAcct + "'";
                             connection.Open();
                             SqlCommand insertCmdULId = new SqlCommand(insertULId, connection);
@@ -526,7 +526,7 @@ namespace Gentran.Controllers.api.Retrieve
                     connection.Close();
 
                     if (!ifMult) {
-                        update = "update tblRawFile set RFstatus = '1', RFReadUser = '" + userID + "', RFReadDate = '" + uDate + "' where RFId = '" + rawID + "'";
+                        update = "update tblRawFile set RFstatus = '1' where RFId = '" + rawID + "'";
                         connection.Open();
                         updateCmd = new SqlCommand(update, connection);
                         updateCmd.ExecuteNonQuery();

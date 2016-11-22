@@ -35,8 +35,8 @@ namespace Gentran.Controllers.api.Order
                             cm.cmdescription, 
                             LEFT(ul.ulorderdate,12) AS ulorderdate,
                             LEFT(ul.uldeliverydate,12) AS uldeliverydate,
-                            ur.rfreaddate as sortupload,
-                            LEFT(ur.rfreaddate,12) +'- ' + CONVERT(varchar(15), CAST(ur.rfreaddate as time), 100) AS ulreaddate,
+                            ul.ulreaddate as sortupload,
+                            LEFT(ul.ulreaddate,12) +'- ' + CONVERT(varchar(15), CAST(ul.ulreaddate as time), 100) AS ulreaddate,
                             ui.sumulquantity,
                             ui.countulquantity,
                             ul.ulstatus,
@@ -72,7 +72,7 @@ namespace Gentran.Controllers.api.Order
                             AND ulstatus !=0  
                             AND ulstatus !=10 
                             AND ulstatus <=20 
-                            AND ur.RFReadDate > DATEADD(day, -15, GETDATE())
+                            AND ul.ulReadDate > DATEADD(day, -15, GETDATE())
                             ORDER BY sortupload desc"; //Nov. 8, 2016
                 
 
@@ -143,7 +143,7 @@ namespace Gentran.Controllers.api.Order
                             ULRemarks,
                             ULStatus,
                             ULPONumber,
-                            RFReadUser, 
+                            ULReadUser, 
                             left(ulorderdate,12) as ULOrderDate,
                             left(uldeliverydate,12) as ULDeliveryDate,
                             uiquantity as UIQuantity,
@@ -165,7 +165,7 @@ namespace Gentran.Controllers.api.Order
                             left join tblproductpricing
                             on ppproduct = uiproduct and pparea = cmarea
                             where
-                            ulid ='"+id+@"'
+                            ulid ='" + id+@"'
                             and uiquantity != 0";
 
             SqlCommand cmd = new SqlCommand(sQuery, connection);

@@ -83,7 +83,7 @@ namespace Gentran.Controllers.api.Admin
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
             try
             {
-                dateFilter = values.payload[0].reportDate == "odate" ? "a.ulorderdate" : "a.uldeliverydate";
+                dateFilter = values.payload[0].reportDate == "odate" ? "a.ulorderdate" : values.payload[0].reportDate == "ddate" ? "a.uldeliverydate" : "a.ulcanceldate";
 
                 if (values.reportName == "purchase") {
                     reportType = "PO Report";
@@ -92,21 +92,22 @@ namespace Gentran.Controllers.api.Admin
                     {
                         sQuery = @"select top 100 a.ulponumber,a.ulcustomer,left(a.ulorderdate,12) as ulorderdate,
                                 left(a.ULDeliveryDate,12) as uldeliverydate,left(r.RFRetrieveDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFRetrieveDate as time),100) as ulretrievedate,
-                                left(r.RFReadDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFReadDate as time),100) as ulreaddate,
-                                (case CAST(r.RFSubmitDate as time) when CAST('00:00' as time) then 'Not yet Submitted' else left(r.RFSubmitDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFSubmitDate as time),100) end) as ulsubmitdate,
-                                (case r.RFSubmitUser when '' then 'Not yet Submitted' else r.RFSubmitUser end) as ulsubmituser,
+                                left(a.ULReadDate,12) + '- ' + CONVERT (varchar(15),CAST(a.ULReadDate as time),100) as ulreaddate,
+                                (case CAST(a.ULSubmitDate as time) when CAST('00:00' as time) then 'Not yet Submitted' else left(a.ULSubmitDate,12) + '- ' + CONVERT (varchar(15),CAST(a.ULSubmitDate as time),100) end) as ulsubmitdate,
+                                (case CAST(a.ulcanceldate as date) when CAST('01/01/1900' as date) then '-' else left(a.ulcanceldate,12) end) as ulcanceldate,
+                                (case a.ULSubmitUser when '' then 'Not yet Submitted' else a.ULSubmitUser end) as ulsubmituser,
                                 (case a.ulstatus when '20' then 'New' when '0' then 'Deleted' else 'Failed' end) as ulstatus,ui.countulquantity,ui.sumulquantity,ui.uiprice from tbluploadlog a 
                                 left join tblrawfile r on a.ulfile = r.RFId 
                                 left join tblcustomermaster b on a.ulcustomer = b.cmid 
-                                left join tblusermaster c on c.umid = r.RFSubmitUser 
+                                left join tblusermaster c on c.umid = a.ULSubmitUser 
                                 left join (SELECT SUM(uiquantity * ppprice) as uiprice, SUM(uiquantity) as sumulquantity,COUNT(uiquantity) as countulquantity,uiid FROM tblUploadItems 
                                 left join tblUploadLog on ULId = UIId left join tblrawfile on RFId = ULFile left join tblCustomerMaster on cmid = ulcustomer
-                                left join tblProductPricing on ppproduct = uiproduct and pparea = cmarea WHERE uistatus NOT IN ('3','0') group by uiid ) ui on a.ULId = ui.UIId ";
+                                left join tblProductPricing on ppproduct = uiproduct and pparea = cmarea WHERE uistatus NOT IN ('3','0') group by uiid ) ui on a.ULId = ui.UIId  ";
 
                         if (values.payload[0].reportType == "latepo"){
-                            sQuery += "where CAST(r.RFReadDate as time) > CAST('12:00' as time) ";
+                            sQuery += "where CAST(a.ULReadDate as time) > CAST('12:00' as time) ";
                         }else if (values.payload[0].reportType == "latesubpo"){
-                            sQuery += "where CAST(r.RFSubmitDate as date) != CAST(r.RFReadDate as date) and a.ulstatus = 25 ";
+                            sQuery += "where CAST(a.ULSubmitDate as date) != CAST(a.ULReadDate as date) and a.ulstatus = 25 ";
                         }else if (values.payload[0].reportType == "queuedpo"){
                             sQuery += "where a.ulstatus <= 20";
                         }else if (values.payload[0].reportType == "submitpo"){
@@ -121,22 +122,23 @@ namespace Gentran.Controllers.api.Admin
                     {
                         sQuery = @"select a.ulponumber,a.ulcustomer,left(a.ulorderdate,12) as ulorderdate,
                                 left(a.ULDeliveryDate,12) as uldeliverydate,left(r.RFRetrieveDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFRetrieveDate as time),100) as ulretrievedate,
-                                left(r.RFReadDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFReadDate as time),100) as ulreaddate,
-                                (case CAST(r.RFSubmitDate as time) when CAST('00:00' as time) then 'Not yet Submitted' else left(r.RFSubmitDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFSubmitDate as time),100) end) as ulsubmitdate,
-                                (case r.RFSubmitUser when '' then 'Not yet Submitted' else r.RFSubmitUser end) as ulsubmituser,
+                                left(a.ULReadDate,12) + '- ' + CONVERT (varchar(15),CAST(a.ULReadDate as time),100) as ulreaddate,
+                                (case CAST(a.ULSubmitDate as time) when CAST('00:00' as time) then 'Not yet Submitted' else left(a.ULSubmitDate,12) + '- ' + CONVERT (varchar(15),CAST(a.ULSubmitDate as time),100) end) as ulsubmitdate,
+                                (case CAST(a.ulcanceldate as date) when CAST('01/01/1900' as date) then '-' else left(a.ulcanceldate,12) end) as ulcanceldate,
+                                (case a.ULSubmitUser when '' then 'Not yet Submitted' else a.ULSubmitUser end) as ulsubmituser,
                                 (case a.ulstatus when '20' then 'New' when '0' then 'Deleted' else 'Failed' end) as ulstatus,ui.countulquantity,ui.sumulquantity,ui.uiprice from tbluploadlog a 
                                 left join tblrawfile r on a.ulfile = r.RFId 
                                 left join tblcustomermaster b on a.ulcustomer = b.cmid 
-                                left join tblusermaster c on c.umid = r.RFSubmitUser 
+                                left join tblusermaster c on c.umid = a.ULSubmitUser 
                                 left join (SELECT SUM(uiquantity * ppprice) as uiprice, SUM(uiquantity) as sumulquantity,COUNT(uiquantity) as countulquantity,uiid FROM tblUploadItems 
                                 left join tblUploadLog on ULId = UIId left join tblrawfile on RFId = ULFile left join tblCustomerMaster on cmid = ulcustomer
-                                left join tblProductPricing on ppproduct = uiproduct and pparea = cmarea WHERE uistatus NOT IN ('3','0') group by uiid ) ui on a.ULId = ui.UIId  
+                                left join tblProductPricing on ppproduct = uiproduct and pparea = cmarea WHERE uistatus NOT IN ('3','0') group by uiid ) ui on a.ULId = ui.UIId 
                                 where r.RFReadUser = '" + values.payload[0].ULUser + "' and "+ dateFilter + " between '" + values.payload[0].dateFrom + "' and '" + values.payload[0].dateTo + "' ";
 
                         if (values.payload[0].reportType == "latepo") {
-                            sQuery += "and CAST(r.RFReadDate as time) < CAST('12:00' as time) ";
+                            sQuery += "and CAST(a.ULReadDate as time) < CAST('12:00' as time) ";
                         } else if (values.payload[0].reportType == "latesubpo") {
-                            sQuery += "and CAST(r.RFSubmitDate as date) != CAST(r.RFReadDate as date) and a.ulstatus = 25 ";
+                            sQuery += "and CAST(a.ULSubmitDate as date) != CAST(a.ULReadDate as date) and a.ulstatus = 25 ";
                         } else if (values.payload[0].reportType == "queuedpo") {
                             sQuery += "and a.ulstatus <= 20";
                         } else if (values.payload[0].reportType == "submitpo") {
@@ -151,22 +153,23 @@ namespace Gentran.Controllers.api.Admin
                     {
                         sQuery = @"select a.ulponumber,a.ulcustomer,left(a.ulorderdate,12) as ulorderdate,
                                 left(a.ULDeliveryDate,12) as uldeliverydate,left(r.RFRetrieveDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFRetrieveDate as time),100) as ulretrievedate,
-                                left(r.RFReadDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFReadDate as time),100) as ulreaddate,
-                                (case CAST(r.RFSubmitDate as time) when CAST('00:00' as time) then 'Not yet Submitted' else left(r.RFSubmitDate,12) + '- ' + CONVERT (varchar(15),CAST(r.RFSubmitDate as time),100) end) as ulsubmitdate,
-                                (case r.RFSubmitUser when '' then 'Not yet Submitted' else r.RFSubmitUser end) as ulsubmituser,
+                                left(a.ULReadDate,12) + '- ' + CONVERT (varchar(15),CAST(a.ULReadDate as time),100) as ulreaddate,
+                                (case CAST(a.ULSubmitDate as time) when CAST('00:00' as time) then 'Not yet Submitted' else left(a.ULSubmitDate,12) + '- ' + CONVERT (varchar(15),CAST(a.ULSubmitDate as time),100) end) as ulsubmitdate,
+                                (case CAST(a.ulcanceldate as date) when CAST('01/01/1900' as date) then '-' else left(a.ulcanceldate,12) end) as ulcanceldate,
+                                (case a.ULSubmitUser when '' then 'Not yet Submitted' else a.ULSubmitUser end) as ulsubmituser,
                                 (case a.ulstatus when '20' then 'New' when '0' then 'Deleted' else 'Failed' end) as ulstatus,ui.countulquantity,ui.sumulquantity,ui.uiprice from tbluploadlog a 
                                 left join tblrawfile r on a.ulfile = r.RFId 
                                 left join tblcustomermaster b on a.ulcustomer = b.cmid 
-                                left join tblusermaster c on c.umid = r.RFSubmitUser 
+                                left join tblusermaster c on c.umid = a.ULSubmitUser 
                                 left join (SELECT SUM(uiquantity * ppprice) as uiprice, SUM(uiquantity) as sumulquantity,COUNT(uiquantity) as countulquantity,uiid FROM tblUploadItems 
                                 left join tblUploadLog on ULId = UIId left join tblrawfile on RFId = ULFile left join tblCustomerMaster on cmid = ulcustomer
-                                left join tblProductPricing on ppproduct = uiproduct and pparea = cmarea WHERE uistatus NOT IN ('3','0') group by uiid ) ui on a.ULId = ui.UIId  
+                                left join tblProductPricing on ppproduct = uiproduct and pparea = cmarea WHERE uistatus NOT IN ('3','0') group by uiid ) ui on a.ULId = ui.UIId 
                                 where " + dateFilter + " between '" + values.payload[0].dateFrom + "' and '" + values.payload[0].dateTo + "' ";
 
                         if (values.payload[0].reportType == "latepo"){
-                            sQuery += "and CAST(r.RFReadDate as time) < CAST('12:00' as time) ";
+                            sQuery += "and CAST(a.ULReadDate as time) < CAST('12:00' as time) ";
                         }else if (values.payload[0].reportType == "latesubpo"){
-                            sQuery += "and CAST(r.RFSubmitDate as date) != CAST(r.RFReadDate as date) and a.ulstatus = 25 ";
+                            sQuery += "and CAST(a.ULSubmitDate as date) != CAST(a.ULReadDate as date) and a.ulstatus = 25 ";
                         }else if (values.payload[0].reportType == "queuedpo"){
                             sQuery += "and a.ulstatus <= 20";
                         }else if (values.payload[0].reportType == "submitpo"){

@@ -47,6 +47,7 @@
                                         <select ng-model="reportDateMaster" class="form-control">
                                             <option value="odate" selected>Order Date</option>
                                             <option value="ddate">Delivery Date</option>
+                                            <option value="cdate">Cancel Date</option>
                                         </select>
                                     </div>
                                 </div><br />
@@ -161,6 +162,7 @@
                                             <th>Delivery Date</th>
                                             <th>Retrieve Date</th>
                                             <th>Upload Date</th>
+                                            <th>Cancel Date</th>
                                             <th>Submitted Date</th>
                                             <th>Submitted By</th>
                                             <th>Total SKU</th>
@@ -176,6 +178,7 @@
                                             <td ng-cloak> {{tp.uldeliverydate}} </td>
                                             <td ng-cloak> {{tp.ulretrievedate}} </td>
                                             <td ng-cloak> {{tp.ulreaddate}} </td>
+                                            <td ng-cloak> {{tp.ulcanceldate}} </td>
                                             <td ng-cloak> {{tp.ulsubmitdate}} </td>
                                             <td ng-cloak> {{tp.ulsubmituser}} </td>
                                             <td ng-cloak> {{tp.countulquantity == NULL ? '0' : tp.countulquantity}} </td>
