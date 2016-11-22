@@ -147,6 +147,7 @@
     <Compile Include="Controllers\api\Order\OrderErrorsController.cs" />
     <Compile Include="Controllers\api\Retrieve\FTPController.cs" />
     <Compile Include="Controllers\api\Retrieve\MasterUploaderController.cs" />
+    <Compile Include="Controllers\api\Retrieve\UnsuccessController.cs" />
     <Compile Include="Controllers\mvc\AdminController.cs" />
     <Compile Include="Controllers\mvc\HomeController.cs" />
     <Compile Include="Controllers\mvc\MonitoringController.cs" />
