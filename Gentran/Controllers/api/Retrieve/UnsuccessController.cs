@@ -120,10 +120,12 @@ namespace Gentran.Controllers.api.Retrieve
 
                     try
                     {
+                        string fileName = values.payload[x].fileName.Length > 50 ? values.payload[x].fileName.Substring(0, 50) : values.payload[x].fileName;
                         // TBLRAWFILE
-                        sQuery = "insert into tblRawFile values('" + RFId + "','" + values.payload[x].fileName + "',@fileContent,'" + rDate + "','"+ userID + "','','" + values.payload[x].outlet + "')";
+                        sQuery = "insert into tblRawFile values('" + RFId + "',@fileName,@fileContent,'" + rDate + "','"+ userID + "','','" + values.payload[x].outlet + "')";
                         cmd = new SqlCommand(sQuery, conn);
                         cmd.Parameters.AddWithValue("fileContent", fileData);
+                        cmd.Parameters.AddWithValue("fileName", fileName);
                         conn.Open();
                         cmd.ExecuteNonQuery();
                         conn.Close();
