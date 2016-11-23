@@ -87,10 +87,10 @@
 
                     return rObj;
                 });
-                $scope.qweqwe = $scope.unsuccessList;
+                $scope.errFile = $scope.unsuccessList;
 
                 $scope.$watch('search[searchBy]', function () {
-                    $scope.unsuccessList = filterFilter($scope.qweqwe, $scope.search);
+                    $scope.unsuccessList = filterFilter($scope.errFile, $scope.search);
 
                     $scope.noOfPages = Math.ceil($scope.unsuccessList.length / $scope.entryLimit);
                     $scope.noOfPagesPO = Math.ceil($scope.unsuccessList.length / $scope.entryLimitPO);

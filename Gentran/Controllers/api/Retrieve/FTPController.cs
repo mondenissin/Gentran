@@ -27,7 +27,6 @@ namespace Gentran.Controllers.api
         public Object Get(string id)
         {
             string acct = id;
-            int notifCtr = 0;
             int notifCtrErr = 0;
             bool success = true;
             DataTable dt = new DataTable();
@@ -47,9 +46,22 @@ namespace Gentran.Controllers.api
 
                 if (acct == "c_sm" || acct == "c_s8" || acct == "c_ncc")
                 {
+                    if (rd.HasRows)
+                    {
+                        while (rd.Read())
+                        {
+                            row = new Dictionary<string, object>();
+                            row.Add("files", rd[0].ToString());
+                            row.Add("retdate", rd[1].ToString());
+                            row.Add("rawid", rd[2].ToString());
+                            rows.Add(row);
+                        }
+                    }
+
+                    rd.Close();
                     fileList.Clear();
-                    dt.Load(rd);
-                    notifCtr = dt.Rows.Count;
+                    //dt.Load(rd);
+                    //notifCtr = dt.Rows.Count;
 
                     if (acct == "c_sm")
                     {
@@ -151,7 +163,7 @@ namespace Gentran.Controllers.api
                 rows.Add(row);
             }
 
-            return new Response { success = success, detail = rows, notiftext = notifCtr.ToString(), notiftextErr = notifCtrErr.ToString() };
+            return new Response { success = success, detail = rows, notiftextErr = notifCtrErr.ToString() };
         }
 
         // GET api/ftp/5

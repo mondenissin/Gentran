@@ -2,8 +2,8 @@
 <h3 class="breadcrumb"><b>S</b>M FILES LOADED</h3>
 
 <ul class="nav nav-tabs skin-blue">
-    <li class="active"><a data-toggle="tab" href="#Retrieved"><b>Retrieved</b></a></li>
-    <li><a data-toggle="tab" href="#Unretrieve" ng-click="unsuccess()"><b>Unretrieve</b></a></li>
+    <li class="active"><a data-toggle="tab" href="#Retrieved"><b>Retrieved &nbsp;</b><span class="label label-success badge pull-right" ng-show="POfile.NCC" ng-cloak>{{POfile.NCC}}</span></a></li>
+    <li><a data-toggle="tab" href="#Unretrieve" ng-click="unsuccess()"><b>Unretrieve &nbsp;</b><span class="label label-danger badge pull-right" ng-show="POfileErr.NCC" ng-cloak>{{POfileErr.NCC}}</span></a></li>
 </ul>
 <div class="tab-content">
     <div id="Retrieved" class="tab-pane fade active in">
@@ -41,7 +41,7 @@
             </div>-->
             <div class="row">
                 <div class="col-md-12 searchable-container">
-                    <div class="po-files-h" sly-repeat="f in files" ng-init="$last ? loadHover() : angular.noop()">
+                    <div class="po-files-h" ng-repeat="f in files" ng-init="$last ? loadHover() : angular.noop()">
                         <!--<input class="po-cbx" ng-click="$event = $event" ng-change="selectFile($event)" type="checkbox" ng-model="check" ng-checked="all" />-->
                         <div class="po-files">
                             <div class="">
