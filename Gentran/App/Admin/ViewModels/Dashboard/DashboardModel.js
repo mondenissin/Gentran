@@ -132,7 +132,7 @@
                 var areaData = [];
                 for (var i = 0; i < data.detail.length; i++) {
                     areaData[i] = {};
-                    areaData[i].label = data.detail[i].RFSubmitDate;
+                    areaData[i].label = data.detail[i].ULSubmitDate;
                     areaData[i].orders = data.detail[i].ULTotalOrders;
                     areaData[i].amount = data.detail[i].ULTotalAmount;
                 }
@@ -212,7 +212,7 @@
         var areaData = [];
         for (var i = 0; i < data.length; i++) {
             areaData[i] = {};
-            areaData[i].label = data[i].RFSubmitDate;
+            areaData[i].label = data[i].ULSubmitDate;
             areaData[i].orders = data[i].ULTotalOrders;
             areaData[i].amount = data[i].ULTotalAmount;
         }
