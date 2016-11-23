@@ -3,7 +3,7 @@
 
 <ul class="nav nav-tabs skin-blue">
     <li class="active"><a data-toggle="tab" href="#Retrieved"><b>Retrieved</b></a></li>
-    <li><a data-toggle="tab" href="#Unretrieve"><b>Unretrieve</b></a></li>
+    <li><a data-toggle="tab" href="#Unretrieve" ng-click="unsuccess()"><b>Unretrieve</b></a></li>
 </ul>
 <div class="tab-content">
     <div id="Retrieved" class="tab-pane fade active in">
@@ -63,8 +63,7 @@
                                     <button  title="Download" ng-click="downloadFile(f)" class="btn btn-default btn-xs btn-download" ><span class="fa fa-download "></span></button>
                                 </div>
                             </div>
-                    </div>
-
+                        </div>
                 </div>
             </div>
         </div>
@@ -74,8 +73,8 @@
         <br />
         <div class="navbar" id="navbar">
             <ul class="nav navbar-nav">
-                <li><input class="po-cbx-all" type="checkbox" ng-model="allU" ng-change="selectFileAll()" ng-show="files" /></li>
-                <li><button class="btn btn-default btn-sm" ng-click="getSelected()" ng-show="files">Read files</button></li>
+                <li><input class="po-cbx-all" type="checkbox" ng-model="allU" ng-change="selectFileAllUnsucc()" ng-show="unsuccessList" /></li>
+                <li><button class="btn btn-default btn-sm" ng-click="unsuccessRet()" ng-show="unsuccessList">Reretrieve files</button></li>
             </ul>
 
             <div class="pull-right">
@@ -105,18 +104,22 @@
             </div>-->
             <div class="row">
                 <div class="col-md-12 searchable-container">
-                    <div class="po-files-h" sly-repeat="f in files" ng-init="$last ? loadHover() : angular.noop()">
+                    <div class="po-files-h" sly-repeat="f in unsuccessList" ng-init="$last ? loadHover() : angular.noop()">
                         <!--<input class="po-cbx" ng-click="$event = $event" ng-change="selectFile($event)" type="checkbox" ng-model="check" ng-checked="all" />-->
                         <div class="po-files">
                             <div class="">
                                 <div class="po-cbx-design col-sm-1 col-xs-2">
-                                    <input class="po-cbx" ng-model="check" ng-checked="allU" ng-click="$event = $event" ng-change="selectFile($event)" type="checkbox" />
+                                    <input class="po-cbx-unsucc" ng-model="check" ng-checked="allU" ng-click="$event = $event" ng-change="selectFile($event)" type="checkbox" />
                                 </div>
                                 <div class="po-file-content col-sm-2 col-xs-4">
                                     <img ng-src="{{f.extension}}" class="po-files-ico pull-left" />
                                     <!--<span {{ f.files.length > -1  ? "style='font-size:10px;text-overflow:ellipsis;word-wrap:break-word'" : 'style="font-size:10px;text-overflow:ellipsis"'}} ">{{(f.files).length > 0 ? f.files : ''}}</span>-->
                                     <!--<span {{ f.files.length > -1  ? "style='font-size:10px;text-overflow:ellipsis;word-wrap:break-word'" : 'style="font-size:10px;text-overflow:ellipsis"'}} ">{{(f.files).length > 0 ? f.files : ''}}</span>-->
                                     <span style='font-size:10px;' title="{{ f.files }}">{{ f.files.slice(0,20) }}...</span>
+                                    <!--For directory and rawID Purposes-->
+                                    <label hidden>{{f.directory}}</label>
+                                    <label hidden>{{f.rawID}}</label>
+                                    <!--For directory and rawID Purposes-->
                                     <span style='font-size:10px; '>{{ f.retrievedate }}</span>
                                 </div>
                                 <div class="po-file-download col-sm-1 col-xs-2">
@@ -125,7 +128,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         <!--  </div>-->

@@ -559,9 +559,6 @@ namespace Gentran.Controllers.api.Retrieve
                             File.Move(source, destination);
                         */
                     }
-                    string newpaypload = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                    trows.Add(new Transaction { response = response, activity = "UPL20", date = uDate, remarks = uPONum, user = userID, type = "ADM", value = "PO ID:" + uID, changes = "", payloadvalue = newpaypload, customernumber = uCust, ponumber = uPONum });
-                    
                 }
                 catch (Exception ex)
                 {
@@ -590,6 +587,9 @@ namespace Gentran.Controllers.api.Retrieve
                     response = ex.Message;
                 }*/
             }
+            
+            string newpaypload = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            trows.Add(new Transaction { response = response, activity = "UPL20", date = uDate, remarks = response, user = userID, type = "ADM", value = "PO ID:" + uID, changes = "", payloadvalue = newpaypload, customernumber = uCust, ponumber = uPONum });
         }
     }
 }
