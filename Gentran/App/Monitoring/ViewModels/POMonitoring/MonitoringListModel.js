@@ -25,10 +25,10 @@
             $scope.pageSize = 5;
             $scope.entryLimit = 50;
 
-            $scope.monitor = result.data.detail;
+            $scope.monitorPO = result.data.detail;
             console.log(result.data.detail);
             $scope.$watch('searchPO[searchByPO]', function () {
-                $scope.filterMonitor = filterFilter($scope.monitor, $scope.searchPO);
+                $scope.filterMonitor = filterFilter($scope.monitorPO, $scope.searchPO);
                 $scope.noOfPages = Math.ceil($scope.filterMonitor.length / $scope.entryLimit);
                 $scope.currentPage = 1;
             });
@@ -49,15 +49,15 @@
         $scope.data.operation = 'transaction';
         
         viewModelHelper.apiGet('api/monitor', $scope.data, function (result) {
-            $scope.pageSize = 5;
-            $scope.entryLimit = 50;
+            $scope.pageSizeT = 5;
+            $scope.entryLimitT = 50;
 
             $scope.transact = result.data.detail;
             console.log(result.data.detail);
             $scope.$watch('searchTransaction[searchByTransaction]', function () {
                 $scope.filterTransaction = filterFilter($scope.transact, $scope.searchTransaction);
-                $scope.noOfPages = Math.ceil($scope.filterTransaction.length / $scope.entryLimit);
-                $scope.currentPage = 1;
+                $scope.noOfPagesT = Math.ceil($scope.filterTransaction.length / $scope.entryLimitT);
+                $scope.currentPageT = 1;
             });
         });
 
@@ -74,11 +74,12 @@
         $('#txt_custname').text(monitoring.CMDescription == null || monitoring.CMDescription == '' ? 'N/A' : monitoring.CMDescription);
         $('#txt_orderdate').text(monitoring.ULOrderDate == null || monitoring.ULOrderDate == '' ? 'N/A' : monitoring.ULOrderDate);
         $('#txt_deliverydate').text(monitoring.ULDeliveryDate == null || monitoring.ULDeliveryDate == '' ? 'N/A' : monitoring.ULDeliveryDate);
-        $('#txt_retrievedate').text(monitoring.RFRetrieveDate);
-        $('#txt_readdate').text(monitoring.RFReadDate == null || monitoring.RFReadDate == '' ? 'N/A' : monitoring.RFReadDate);
-        $('#txt_submitteddate').text(monitoring.RFSubmitDate == null || monitoring.RFSubmitDate == '' ? 'N/A' : monitoring.RFSubmitDate);
-        $('#txt_reader').text(monitoring.RFReadUser == null || monitoring.RFReadUser == '' ? 'N/A' : monitoring.RFReadUser);
-        $('#txt_submittedby').text(monitoring.RFSubmitUser == null || monitoring.RFSubmitUser == '' ? 'N/A' : monitoring.RFSubmitUser);
+        $('#txt_canceldate').text(monitoring.ULCancelDate == null || monitoring.ULCancelDate == '' ? 'N/A' : monitoring.ULCancelDate);
+        $('#txt_retrievedate').text(monitoring.ULRetrieveDate);
+        $('#txt_readdate').text(monitoring.ULReadDate == null || monitoring.ULReadDate == '' ? 'N/A' : monitoring.ULReadDate);
+        $('#txt_submitteddate').text(monitoring.ULSubmitDate == null || monitoring.ULSubmitDate == '' ? 'N/A' : monitoring.ULSubmitDate);
+        $('#txt_reader').text(monitoring.ULReadUser == null || monitoring.ULReadUser == '' ? 'N/A' : monitoring.ULReadUser);
+        $('#txt_submittedby').text(monitoring.ULSubmitUser == null || monitoring.ULSubmitUser == '' ? 'N/A' : monitoring.ULSubmitUser);
         $('#txt_sku').text(monitoring.UIOrigQuantity == null || monitoring.UIOrigQuantity == '' ? 'N/A' : monitoring.UIOrigQuantity);
         $('#txt_qty').text(monitoring.UIQuantity == null || monitoring.UIQuantity == '' ? 'N/A' : monitoring.UIQuantity);
         $('#txt_amount').text(monitoring.UIPrice == null || monitoring.UIPrice == '' ? 'N/A' : monitoring.UIPrice);

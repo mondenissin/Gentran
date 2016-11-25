@@ -20,6 +20,7 @@
     <script>
         $(document).ready(function () {
             $('.visitRetrieve').addClass('active');
+            
         });
     </script>
 }
@@ -81,9 +82,9 @@
             <div class="col-md-2">
                         <ul class="sidebar-menu">
                             <li><h3 class="breadcrumb"><b>O</b>utlets</h3></li>
-                            <li class="treeview"><button class="btn btn-link-ret" ng-click="smFile()"><i class="fa fa-user"></i> SM <span class="label label-danger badge pull-right" ng-show="POfileErr.SM" ng-cloak>{{POfileErr.SM}}</span><span class="label label-success badge pull-right" ng-show="POfile.SM" ng-cloak>{{POfile.SM}}</span></button></li>
-                            <li class="treeview"><button class="btn btn-link-ret" ng-click="superFile()"><i class="fa fa-user"></i> Super 8 <span class="label label-danger badge pull-right" ng-show="POfileErr.S8" ng-cloak>{{POfileErr.S8}}</span><span class="label label-success badge pull-right" ng-show="POfile.S8" ng-cloak>{{POfile.S8}}</span></button></li>
-                            <li class="treeview"><button class="btn btn-link-ret" ng-click="nccFile()"><i class="fa fa-user"></i> NCCC <span class="label label-danger badge pull-right" ng-show="POfileErr.NCC" ng-cloak>{{POfileErr.NCC}}</span><span class="label label-success badge pull-right" ng-show="POfile.NCC" ng-cloak>{{POfile.NCC}}</span></button></li>
+                            <li class="treeview outlet-sm"><button data-toggle="pill" class="btn btn-link-ret" ng-click="smFile()"><i class="fa fa-user"></i> SM <span class="label label-danger badge pull-right" ng-show="POfileErr.SM" ng-cloak>{{POfileErr.SM}}</span><span class="label label-success badge pull-right" ng-show="POfile.SM" ng-cloak>{{POfile.SM}}</span></button></li>
+                            <li class="treeview outlet-s8"><button data-toggle="pill" class="btn btn-link-ret" ng-click="superFile()"><i class="fa fa-user"></i> Super 8 <span class="label label-danger badge pull-right" ng-show="POfileErr.S8" ng-cloak>{{POfileErr.S8}}</span><span class="label label-success badge pull-right" ng-show="POfile.S8" ng-cloak>{{POfile.S8}}</span></button></li>
+                            <li class="treeview outlet-ncc"><button data-toggle="pill"  class="btn btn-link-ret" ng-click="nccFile()"><i class="fa fa-user"></i> NCCC <span class="label label-danger badge pull-right" ng-show="POfileErr.NCC" ng-cloak>{{POfileErr.NCC}}</span><span class="label label-success badge pull-right" ng-show="POfile.NCC" ng-cloak>{{POfile.NCC}}</span></button></li>
                         </ul>
                     </div>
                     <!--<div id="API" class="tab-pane fade">

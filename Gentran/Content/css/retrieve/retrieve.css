@@ -149,3 +149,15 @@
     border:none;
     background: #eeeeee;
 }
+
+.outlet-active {
+    background: #afd6ec;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.treeview:hover {
+    background: #cee4f1;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+}

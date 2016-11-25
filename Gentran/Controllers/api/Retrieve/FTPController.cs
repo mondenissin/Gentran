@@ -57,8 +57,8 @@ namespace Gentran.Controllers.api
                             rows.Add(row);
                         }
                     }
-
                     rd.Close();
+
                     fileList.Clear();
                     //dt.Load(rd);
                     //notifCtr = dt.Rows.Count;

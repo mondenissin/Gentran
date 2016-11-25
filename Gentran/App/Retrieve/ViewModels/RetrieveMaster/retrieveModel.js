@@ -12,6 +12,7 @@
 
         $scope.search = {};
         $scope.searchBy = "files";
+        $scope.notifTab = 0;
 
         viewModelHelper.apiGet('api/ftp/'+$scope.activeOutlet, null, function (result) {
             $scope.pageSize = 5;
@@ -19,6 +20,19 @@
             $scope.entryLimitPO = 12;
 
             if (result.data.success) {
+                if ($scope.activeOutlet == "sm" || $scope.activeOutlet == "s8" || $scope.activeOutlet == "ncc") {
+                    $scope.notifTab = parseInt(result.data.detail.length);
+                    $scope.outlet = $scope.activeOutlet == "sm" ? "SM" : $scope.activeOutlet == "s8" ? "Super 8" : "NCCC";
+                    $(function () {
+                        var parent = $('.sidebar-menu');
+                        parent.addClass('menu-open').css({ 'display': 'block' });
+                        var elem = $('.outlet-'+ $scope.activeOutlet);
+                        parent.find('li').each(function () {
+                            $(this).removeClass('outlet-active');
+                        });
+                        elem.closest('li').addClass('outlet-active');
+                    });
+                }
                 $scope.files = result.data.detail.map(function (obj) {
                     var rObj = {};
                     var split = obj.files.split('\\');
@@ -123,7 +137,7 @@
                 listFile[ctr] = {};
                 console.log($(this));
                 listElem[ctr] = {};
-                listElem[ctr].element = $($($(this.parentElement)[0].parentElement)[0].parentElement);
+                listElem[ctr].element = $($($($(this.parentElement)[0].parentElement)[0].parentElement)[0].parentElement);
                 listFile[ctr].outlet = $scope.activeOutlet.toUpperCase();
                 listFile[ctr].fileName = $($($($(this.parentElement)[0].parentElement)[0].children[1])[0].children)[1].title;
                 listFile[ctr].rawID = $($($($(this.parentElement)[0].parentElement)[0].children[1])[0].children)[3].textContent;
@@ -239,7 +253,7 @@
                 listFile[ctr] = {};
                 console.log($(this));
                 listElem[ctr] = {};
-                listElem[ctr].element = $($($(this.parentElement)[0].parentElement)[0].parentElement);
+                listElem[ctr].element = $($($($(this.parentElement)[0].parentElement)[0].parentElement)[0].parentElement);
                 listFile[ctr].outlet = $scope.activeOutlet.toUpperCase();
                 listFile[ctr].fileName = $($($($(this.parentElement)[0].parentElement)[0].children[1])[0].children)[1].title;
                 listFile[ctr].rawID = $($($($(this.parentElement)[0].parentElement)[0].children[1])[0].children)[3].textContent;

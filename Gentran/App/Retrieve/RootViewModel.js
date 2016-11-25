@@ -16,7 +16,7 @@
             if(time % 5 == 0){
                 $scope.$apply(function () {
                     $scope.autoRetrieve();
-                    $scope.files;
+                    //$scope.files;
                     time = 0;
                 });
             }
@@ -55,6 +55,10 @@
 
                         return rObj;
                     });
+                    $scope.filesList = $scope.files;
+
+                    $scope.$applyAsync();
+
                     console.log($scope.files);
                 }
                 console.log(result.data);

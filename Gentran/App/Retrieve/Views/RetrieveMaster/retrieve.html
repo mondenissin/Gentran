@@ -1,9 +1,9 @@
 ﻿
-<h3 class="breadcrumb"><b>S</b>M FILES LOADED</h3>
+<h3 class="breadcrumb"><b ng-show="outlet">{{outlet}}</b> FILES LOADED</h3>
 
 <ul class="nav nav-tabs skin-blue">
-    <li class="active"><a data-toggle="tab" href="#Retrieved"><b>Retrieved &nbsp;</b><span class="label label-success badge pull-right" ng-show="POfile.NCC" ng-cloak>{{POfile.NCC}}</span></a></li>
-    <li><a data-toggle="tab" href="#Unretrieve" ng-click="unsuccess()"><b>Unretrieve &nbsp;</b><span class="label label-danger badge pull-right" ng-show="POfileErr.NCC" ng-cloak>{{POfileErr.NCC}}</span></a></li>
+    <li class="active"><a data-toggle="tab" href="#" data-target="#Retrieved"><b>Retrieved &nbsp;</b><span class="label label-success badge pull-right" ng-show="notifTab" ng-cloak>{{notifTab}}</span></a></li>
+    <li><a data-toggle="tab" href="#" data-target="#Unretrieve" ng-click="unsuccess()"><b>Unretrieve &nbsp;</b><span class="label label-danger badge pull-right" ng-show="POfileErr.NCC" ng-cloak>{{POfileErr.NCC}}</span></a></li>
 </ul>
 <div class="tab-content">
     <div id="Retrieved" class="tab-pane fade active in">
@@ -41,10 +41,9 @@
             </div>-->
             <div class="row">
                 <div class="col-md-12 searchable-container">
-                    <div class="po-files-h" ng-repeat="f in files" ng-init="$last ? loadHover() : angular.noop()">
+                    <div class="po-files-h" ng-repeat="f in filesList" ><!--ng-init="$last ? loadHover() : angular.noop()"-->
                         <!--<input class="po-cbx" ng-click="$event = $event" ng-change="selectFile($event)" type="checkbox" ng-model="check" ng-checked="all" />-->
                         <div class="po-files">
-                            <div class="">
                                 <div class="po-cbx-design col-sm-1 col-xs-2" >
                                     <input class="po-cbx" ng-model="check" ng-checked="all" ng-click="$event = $event" ng-change="selectFile($event)" type="checkbox" />
                                 </div>
@@ -62,7 +61,6 @@
                                 <div  class="po-file-download col-sm-1 col-xs-2">
                                     <button  title="Download" ng-click="downloadFile(f)" class="btn btn-default btn-xs btn-download" ><span class="fa fa-download "></span></button>
                                 </div>
-                            </div>
                         </div>
                 </div>
             </div>

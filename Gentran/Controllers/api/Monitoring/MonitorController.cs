@@ -30,11 +30,12 @@ namespace Gentran.Controllers.api
                                 CMDescription,
                                 left(ULOrderDate,12) as ULOrderDate,
                                 left(ULDeliveryDate,12) as ULDeliveryDate,
+                                left(ULCancelDate,12) as ULCancelDate,
                                 left(RFRetrieveDate,12) + '- ' + CONVERT (varchar(15),CAST(RFRetrieveDate as time),100) as RFRetrieveDate,
-                                left(RFReadDate,12) + '- ' + CONVERT (varchar(15),CAST(RFReadDate as time),100) as RFReadDate,
-                                left(RFSubmitDate,12) + '- ' + CONVERT (varchar(15),CAST(RFSubmitDate as time),100) as RFSubmitDate,
-                                RFReadUser,
-                                RFSubmitUser,
+                                left(ULReadDate,12) + '- ' + CONVERT (varchar(15),CAST(ULReadDate as time),100) as ULReadDate,
+                                left(ULSubmitDate,12) + '- ' + CONVERT (varchar(15),CAST(ULSubmitDate as time),100) as ULSubmitDate,
+                                ULReadUser,
+                                ULSubmitUser,
                                 RFAccount,
                                 RFStatus
                             from tblrawfile 
@@ -101,7 +102,7 @@ namespace Gentran.Controllers.api
                             from tblTransactionLog
                             left join tblTransactionActivity
                                 on taid = TLActivity
-                            where TLUser = '17002'
+                            where TLUser = '000000'
                             order by TLId desc"; //" + HttpContext.Current.Session["UserId"].ToString() + "
             }
 

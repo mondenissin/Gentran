@@ -198,6 +198,7 @@ button.btn.btn-link i, button.btn.btn-link span {
     width:100%;
     text-align:left;
     text-decoration:none;
+    background-color: transparent;
 }
 
 .page-top-header {

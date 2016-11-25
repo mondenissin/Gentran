@@ -1,8 +1,8 @@
 ﻿<div class="breadcrumb monitor-menu">
    <!-- <b class="page-top-header">Monitoring</b>-->
     <ul class="nav nav-tabs skin-blue">
-        <li class="active"><a data-toggle="tab" href="#POMonitoring"><b>PO Monitoring</b></a></li>
-        <li><a data-toggle="tab" href="#TransactionLogs"><b>Transaction Logs</b></a></li>
+        <li class="active"><a data-toggle="tab" href="#" data-target="#POMonitoring"><b>PO Monitoring</b></a></li>
+        <!--<li><a data-toggle="tab" href="#" data-target="#TransactionLogs"><b>Transaction Logs</b></a></li>-->
     </ul>
 </div>
 
@@ -46,10 +46,10 @@
                         <td ng-cloak class="table-data-ponum center" >{{m.RFFilename}}</td>
                         <td ng-cloak class="table-data-ponum center">{{m.ULPONumber == NULL || m.ULPONumber == "" ? 'N/A' : m.ULPONumber}}</td>
                         <td ng-cloak class="table-data-rrtdate center">{{m.RFRetrieveDate}}</td>
-                        <td ng-cloak class="table-data-rrddate center">{{m.RFReadDate}}</td>
-                        <td ng-cloak class="table-data-rsdate center">{{m.RFSubmitDate == NULL || m.RFSubmitDate == "" ? "N/A" : m.RFSubmitDate}}</td>
-                        <td ng-cloak class="table-data-rrddate center">{{m.RFReadUser == NULL || m.RFReadUser == "" ? "N/A" : m.RFReadUser }}</td>
-                        <td ng-cloak class="table-data-rsuser center">{{m.RFSubmitUser == NULL || m.RFSubmitUser == "" ? "N/A" : m.RFSubmitUser}}</td>
+                        <td ng-cloak class="table-data-rrddate center">{{m.ULReadDate}}</td>
+                        <td ng-cloak class="table-data-rsdate center">{{m.ULSubmitDate == NULL || m.ULSubmitDate == "" ? "N/A" : m.ULSubmitDate}}</td>
+                        <td ng-cloak class="table-data-rrddate center">{{m.ULReadUser == NULL || m.ULReadUser == "" ? "N/A" : m.ULReadUser }}</td>
+                        <td ng-cloak class="table-data-rsuser center">{{m.ULSubmitUser == NULL || m.ULSubmitUser == "" ? "N/A" : m.ULSubmitUser}}</td>
                         <td ng-cloak class="table-data-rsstatus center">{{m.RFStatus}}</td>
                         <td ng-cloak class="table-data-rsuser center">{{m.RFAccount}}</td>
                         <td ng-cloak>
@@ -87,7 +87,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="t in filterTransaction | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
+                    <tr ng-repeat="t in filterTransaction | start: (currentPageT - 1) * entryLimitT | limitTo: entryLimitT">
                         <!--<td ng-cloak class="table-data-tlcode center">{{t.TLId}}</td>-->
                         <td ng-cloak class="table-data-tldate center">{{t.TLDate}}</td>
                         <td ng-cloak class="table-data-tldesc center" >{{t.TADescription}}</td>
@@ -99,7 +99,7 @@
                     </tr>
                 </tbody>
             </table>
-            <pagination data-boundary-links="true" data-num-pages="noOfPages" data-current-page="currentPage" max-size="pageSize" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
+            <pagination data-boundary-links="true" data-num-pages="noOfPagesT" data-current-page="currentPageT" max-size="pageSizeT" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
         </div>
     </div>
 </div>
@@ -131,6 +131,10 @@
                     <tr>
                         <td style="width:150px; font-weight:bold;">Delivery Date: </td>
                         <td id="txt_deliverydate"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Cancel Date: </td>
+                        <td id="txt_canceldate"></td>
                     </tr>
                     <tr>
                         <td style="width:150px; font-weight:bold;">Retrieve Date: </td>
