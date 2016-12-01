@@ -59,9 +59,9 @@ namespace Gentran.Controllers.api.Retrieve
             bool ifFormatted = false;
             string tempCust = "", xmlString = "";
             string[] data = { };
-            string[] tempData = new string[9];
-            string[] colName = { "CustNo", "PONum", "oDate", "dDate", "ProdCode", "qty", "uUser", "uAcct" , "rawID" };
-            string cust = "", ponum = "", podate = "", deldate = "", qty = "", barcode = "";
+            string[] tempData = new string[10];
+            string[] colName = { "CustNo", "PONum", "oDate", "dDate","cDate", "ProdCode", "qty", "uUser", "uAcct" , "rawID" };
+            string cust = "", ponum = "", podate = "", deldate = "",caldate = "", qty = "", barcode = "";
             //cust,ponum,podate,deldate,blank,blank,blank,prod,qty,userid,outlet
 
             try
@@ -74,7 +74,7 @@ namespace Gentran.Controllers.api.Retrieve
                 //data = appSet.csv(fileByte);
                 connection.Close();
 
-                
+
                 if (values.payload[0].outlet == "SM")
                 {
                     data = appSet.csv(fileByte);
@@ -97,7 +97,7 @@ namespace Gentran.Controllers.api.Retrieve
                     );
                     datactr = obj.ToList().Where(x => x.ContainsKey("Barcode")).Count();
                     data = new string[datactr];
-                    
+
                     foreach (var listKey in objValues)
                     {
                         if (listKey.Keys.ElementAt(0).ToString() == "DestinationCode") {
@@ -120,11 +120,11 @@ namespace Gentran.Controllers.api.Retrieve
                         }
                         if (listKey.Keys.ElementAt(0).ToString() == "Quantity" && barcode != "")
                         {
-                            data[arrayCtr] = cust + "," + ponum + "," + podate.Replace(" ", "") + "," + deldate.Replace(" ", "") + "," + "," + "," + "," + barcode + "," + listKey["Quantity"].ToString();
+                            data[arrayCtr] = cust + "," + ponum + "," + podate.Replace(" ", "") + "," + deldate.Replace(" ", "") + "," + caldate + "," + "," + "," + barcode + "," + listKey["Quantity"].ToString();
                             arrayCtr++;
                         }
                     }
-                    
+
                     ifFormatted = true;
                 } else if (values.payload[0].outlet == "NCC") {
 
@@ -148,7 +148,7 @@ namespace Gentran.Controllers.api.Retrieve
                         if (listKey.Keys.ElementAt(0).ToString() == "deliver_to")
                         {
                             string[] custSplit = listKey["deliver_to"].ToString().Split('-');
-                            cust = custSplit[1] +"-"+custSplit[0];
+                            cust = custSplit[1] + "-" + custSplit[0];
                         }
                         if (listKey.Keys.ElementAt(0).ToString() == "po_number")
                         {
@@ -156,7 +156,7 @@ namespace Gentran.Controllers.api.Retrieve
                         }
                         if (listKey.Keys.ElementAt(0).ToString() == "podate")
                         {
-                            podate = listKey["podate"].ToString().Replace('/',' ');
+                            podate = listKey["podate"].ToString().Replace('/', ' ');
                         }
                         if (listKey.Keys.ElementAt(0).ToString() == "delvdate")
                         {
@@ -168,14 +168,29 @@ namespace Gentran.Controllers.api.Retrieve
                         }
                         if (listKey.Keys.ElementAt(0).ToString() == "upc" && qty != "")
                         {
-                            data[arrayCtr] = cust + "," + ponum + "," + podate.Replace(" ","") + "," + deldate.Replace(" ", "") + "," + "," + "," + "," + listKey["upc"].ToString() + "," + qty;
+                            data[arrayCtr] = cust + "," + ponum + "," + podate.Replace(" ", "") + "," + deldate.Replace(" ", "") + "," + "," + caldate + "," + "," + listKey["upc"].ToString() + "," + qty;
                             arrayCtr++;
                         }
                     }
 
                     ifFormatted = true;
                 }
-                
+                else if (values.payload[0].outlet == "PRG" || values.payload[0].outlet == "WTM" || values.payload[0].outlet == "UTM")
+                {
+                    data = appSet.csv(fileByte);
+                    data = data.Select(x=>x !="" || x!=null ? 
+                        x.Split(',')[9] + "," + 
+                        x.Split(',')[0] + "," +
+                        x.Split(',')[3].Split('-')[1] + "" + x.Split(',')[3].Split('-')[2]+ "" + x.Split(',')[3].Split('-')[0].Substring(2,2) + "," +
+                        x.Split(',')[10].Split('-')[1] + "" + x.Split(',')[10].Split('-')[2] + "" + x.Split(',')[10].Split('-')[0].Substring(2, 2) + "," + "," +
+                        x.Split(',')[14].Split('-')[1] + "" + x.Split(',')[14].Split('-')[2] + "" + x.Split(',')[14].Split('-')[0].Substring(2, 2) + "," + "," +
+                        x.Split(',')[17] + "," +
+                        x.Split(',')[19] : "").ToArray();
+
+                    datactr = data.Length;
+                    ifFormatted = true;
+                }
+
                 if (ifFormatted)
                 {
                     /*string[] temp = values.payload[0].fileName.Split('\\');
@@ -200,11 +215,12 @@ namespace Gentran.Controllers.api.Retrieve
                             tempData[1] = split[1]; // PO Number
                             tempData[2] = app.toDate((split[2])); // Order date
                             tempData[3] = app.toDate(split[3]); // Delivery date
-                            tempData[4] = split[7]; // Product Code 
-                            tempData[5] = split[8]; // Quantity
-                            tempData[6] = HttpContext.Current.Session["UserId"].ToString(); // User ID
-                            tempData[7] = values.payload[0].outlet; // Outlet
-                            tempData[8] = values.payload[0].rawID;
+                            tempData[4] = app.toDate(split[5]); // Cancel Date
+                            tempData[5] = split[7]; // Product Code 
+                            tempData[6] = split[8]; // Quantity
+                            tempData[7] = HttpContext.Current.Session["UserId"].ToString(); // User ID
+                            tempData[8] = values.payload[0].outlet; // Outlet
+                            tempData[9] = values.payload[0].rawID;
 
                             row = new Dictionary<string, object>();
                             if (tempCust != tempData[0])
@@ -232,6 +248,7 @@ namespace Gentran.Controllers.api.Retrieve
                 }
                 else {
                     data[0] = "File not formatted!";
+                    success = false;
                 }
                 #region Version2_Linq
 
@@ -306,7 +323,7 @@ namespace Gentran.Controllers.api.Retrieve
 
         private void SaveData(List<Dictionary<string, object>> data) {
             
-            string uQty = "", uPrice = "", uPONum = "", uAcct = "", uODate = "", uDDate = "", uUser = "",uRemarks = "", uCust = "",uID="",uProd="",rawID = "";
+            string uQty = "", uPrice = "", uPONum = "", uAcct = "", uODate = "", uDDate = "",uCDate = "", uUser = "",uRemarks = "", uCust = "",uID="",uProd="",rawID = "";
             string response = "Successful";
             Boolean NoCustomer = false;
             Boolean validPO = true;
@@ -325,6 +342,7 @@ namespace Gentran.Controllers.api.Retrieve
                         uAcct = data[x]["uAcct"].ToString();
                         uODate = data[x]["oDate"].ToString();
                         uDDate = data[x]["dDate"].ToString();
+                        uCDate = data[x]["cDate"].ToString();
                         uRemarks = "";
                         uUser = data[x]["uUser"].ToString();
                         uCust = data[x]["CustNo"].ToString();
@@ -397,7 +415,7 @@ namespace Gentran.Controllers.api.Retrieve
                         //<!INSERT ORDER HEADER----------------------------------------------------------------
                         if (validPO == true)
                         {
-                            String insertULId = "INSERT INTO tblUploadLog select '" + uID + "','" + rawID + "','" + uPONum + "','" + uCust + "','" + uODate + "','" + uDDate + "','','"+ uDate + "','"+ userID + "','','','10','" + uRemarks + "'";
+                            String insertULId = "INSERT INTO tblUploadLog select '" + uID + "','" + rawID + "','" + uPONum + "','" + uCust + "','" + uODate + "','" + uDDate + "','"+ uCDate + "','"+ uDate + "','"+ userID + "','','','10','" + uRemarks + "'";
                             //String insertULId = "INSERT INTO tblUploadLog SELECT '" + uID + "','" + uPONum + "','" + uCust + "','" + uODate + "','" + uDDate + "','" + uDate + "','','" + uUser + "','10','" + uRemarks + "','" + uAcct + "'";
                             connection.Open();
                             SqlCommand insertCmdULId = new SqlCommand(insertULId, connection);

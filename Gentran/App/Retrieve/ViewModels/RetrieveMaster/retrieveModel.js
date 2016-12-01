@@ -259,7 +259,7 @@
                 listFile[ctr].rawID = $($($($(this.parentElement)[0].parentElement)[0].children[1])[0].children)[3].textContent;
                 listFile[ctr].fileLogo = $($($($(this.parentElement)[0].parentElement)[0].children[1])[0].children)[0].outerHTML;
                 listFile[ctr].name = $($($($(this.parentElement)[0].parentElement)[0].children[1])[0].children)[2].textContent;
-                listFile[ctr].fileID = $($($($(this.parentElement)[0].parentElement)[0].children[1])[0].children)[2].textContent.replace(/[. ]/g, '');
+                listFile[ctr].fileID = $($($($(this.parentElement)[0].parentElement)[0].children[1])[0].children)[2].textContent.replace(/[(). ]/g, '');
                 
                 ctr++;
             }
@@ -296,7 +296,7 @@
                             if (result.data.success == true) {
                                 $('#' + fileName[0].fileID).text("Read Successful");
                             } else {
-                                $('#' + fileName[0].fileID).text("With error");
+                                $('#' + fileName[0].fileID).text("With Error");
                             }
 
                             $(elemName[0].element).remove();

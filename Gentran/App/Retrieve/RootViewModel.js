@@ -26,6 +26,9 @@
         $scope.retrieveCtr('SM', 'c_sm');
         $scope.retrieveCtr('S8', 'c_s8');
         $scope.retrieveCtr('NCC', 'c_ncc');
+        $scope.retrieveCtr('PRG', 'c_prg');
+        $scope.retrieveCtr('WTM', 'c_wtm');
+        $scope.retrieveCtr('UTM', 'c_utm');
     }
 
     $scope.retrieveCtr = function (chain, acct) {
@@ -39,6 +42,15 @@
                 }else if(chain == "S8"){
                     $scope.POfile.S8 = parseInt(result.data.detail.length);
                     $scope.POfileErr.S8 = parseInt(result.data.notiftextErr);
+                } else if (chain == "PRG") {
+                    $scope.POfile.PRG = parseInt(result.data.detail.length);
+                    $scope.POfileErr.PRG = parseInt(result.data.notiftextErr);
+                } else if (chain == "WTM") {
+                    $scope.POfile.WTM = parseInt(result.data.detail.length);
+                    $scope.POfileErr.WTM = parseInt(result.data.notiftextErr);
+                } else if (chain == "UTM") {
+                    $scope.POfile.UTM = parseInt(result.data.detail.length);
+                    $scope.POfileErr.UTM = parseInt(result.data.notiftextErr);
                 } else if (chain == "NCC") {
                     $scope.POfile.NCC = parseInt(result.data.detail.length);
                     $scope.POfileErr.NCC = parseInt(result.data.notiftextErr);
@@ -89,6 +101,30 @@
             $route.reload();
         }
         $scope.activeOutlet = "ncc";
+    }
+
+    $scope.prgFile = function () {
+        viewModelHelper.navigateTo('Retrieve/Puregold');
+        if ($location.path() == "/Gentran/Retrieve/Puregold") {
+            $route.reload();
+        }
+        $scope.activeOutlet = "prg";
+    }
+
+    $scope.wtmFile = function () {
+        viewModelHelper.navigateTo('Retrieve/Waltermart');
+        if ($location.path() == "/Gentran/Retrieve/Waltermart") {
+            $route.reload();
+        }
+        $scope.activeOutlet = "wtm";
+    }
+
+    $scope.utmFile = function () {
+        viewModelHelper.navigateTo('Retrieve/Ultramega');
+        if ($location.path() == "/Gentran/Retrieve/Ultramega") {
+            $route.reload();
+        }
+        $scope.activeOutlet = "utm";
     }
     initialize();
 });

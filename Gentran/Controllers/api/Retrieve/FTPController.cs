@@ -37,14 +37,14 @@ namespace Gentran.Controllers.api
             try
             {
                 rows.Clear();
-                rawAcct = acct == "sm" || acct == "c_sm" ? "SM" : acct == "s8" || acct == "c_s8" ? "S8" : "NCC";
+                rawAcct = acct == "sm" || acct == "c_sm" ? "SM" : acct == "s8" || acct == "c_s8" ? "S8" : acct == "ncc" || acct == "c_ncc" ? "NCC" : acct == "prg" || acct == "c_prg" ? "PRG" : acct == "wtm" || acct == "c_wtm" ? "WTM" : "UTM";
 
                 sQuery = "select rffilename,left(RFRetrieveDate,12) + '- ' + CONVERT (varchar(15),CAST(RFRetrieveDate as time),100) as RFRetrieveDate,rfid from tblrawfile where RFAccount = '" + rawAcct + "' and RFStatus = '0'";
                 cmd = new SqlCommand(sQuery, conn);
                 conn.Open();
                 SqlDataReader rd = cmd.ExecuteReader();
 
-                if (acct == "c_sm" || acct == "c_s8" || acct == "c_ncc")
+                if (acct == "c_sm" || acct == "c_s8" || acct == "c_ncc" || acct == "c_prg" || acct == "c_wtm" || acct == "c_utm")
                 {
                     if (rd.HasRows)
                     {
@@ -76,6 +76,21 @@ namespace Gentran.Controllers.api
                     else if (acct == "c_ncc")
                     {
                         fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\error\ncc", "*.xml"));
+                        notifCtrErr = fileList.Count;
+                    }
+                    else if (acct == "c_prg")
+                    {
+                        fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\error\prg", "*.csv"));
+                        notifCtrErr = fileList.Count;
+                    }
+                    else if (acct == "c_wtm")
+                    {
+                        fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\error\wtm", "*.csv"));
+                        notifCtrErr = fileList.Count;
+                    }
+                    else if (acct == "c_utm")
+                    {
+                        fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\error\utm", "*.csv"));
                         notifCtrErr = fileList.Count;
                     }
                 }

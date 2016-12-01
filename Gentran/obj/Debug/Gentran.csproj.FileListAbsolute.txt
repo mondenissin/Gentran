@@ -32,6 +32,6 @@ C:\inetpub\wwwroot\Gentran\Gentran\bin\System.Web.Razor.xml
 C:\inetpub\wwwroot\Gentran\Gentran\bin\System.Web.WebPages.xml
 C:\inetpub\wwwroot\Gentran\Gentran\bin\System.Web.WebPages.Deployment.xml
 C:\inetpub\wwwroot\Gentran\Gentran\bin\System.Web.WebPages.Razor.xml
+C:\inetpub\wwwroot\Gentran\Gentran\obj\Debug\Gentran.csprojResolveAssemblyReference.cache
 C:\inetpub\wwwroot\Gentran\Gentran\obj\Debug\Gentran.dll
 C:\inetpub\wwwroot\Gentran\Gentran\obj\Debug\Gentran.pdb
-C:\inetpub\wwwroot\Gentran\Gentran\obj\Debug\Gentran.csprojResolveAssemblyReference.cache

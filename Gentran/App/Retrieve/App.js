@@ -4,6 +4,9 @@
         $routeProvider.when(_root + 'Retrieve/SM', { templateUrl: _root + 'App/Retrieve/Views/RetrieveMaster/retrieve.html', controller: 'retrieveViewModel' });
         $routeProvider.when(_root + 'Retrieve/Super8', { templateUrl: _root + 'App/Retrieve/Views/RetrieveMaster/retrieve.html', controller: 'retrieveViewModel' });
         $routeProvider.when(_root + 'Retrieve/NCC', { templateUrl: _root + 'App/Retrieve/Views/RetrieveMaster/retrieve.html', controller: 'retrieveViewModel' });
+        $routeProvider.when(_root + 'Retrieve/Puregold', { templateUrl: _root + 'App/Retrieve/Views/RetrieveMaster/retrieve.html', controller: 'retrieveViewModel' });
+        $routeProvider.when(_root + 'Retrieve/Waltermart', { templateUrl: _root + 'App/Retrieve/Views/RetrieveMaster/retrieve.html', controller: 'retrieveViewModel' });
+        $routeProvider.when(_root + 'Retrieve/Ultramega', { templateUrl: _root + 'App/Retrieve/Views/RetrieveMaster/retrieve.html', controller: 'retrieveViewModel' });
         $routeProvider.otherwise({ redirectTo: _root + 'Retrieve' });
         $locationProvider.html5Mode({
             enabled: true,
