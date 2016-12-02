@@ -26,7 +26,55 @@ namespace Gentran.Controllers.api.Order
                 SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
 
                 String selectStr = "";
-               
+
+                //selectStr = @"SELECT DISTINCT
+                //            ur.rfid,
+                //            ul.ulid,
+                //            ul.ulponumber,
+                //            cm.cmcode as ulcustomer,
+                //            cm.cmdescription, 
+                //            LEFT(ul.ulorderdate,12) AS ulorderdate,
+                //            LEFT(ul.uldeliverydate,12) AS uldeliverydate,
+                //            ul.ulreaddate as sortupload,
+                //            LEFT(ul.ulreaddate,12) +'- ' + CONVERT(varchar(15), CAST(ul.ulreaddate as time), 100) AS ulreaddate,
+                //            ui.sumulquantity,
+                //            ui.countulquantity,
+                //            ul.ulstatus,
+                //            ul.ulremarks,
+                //            ur.rffilename,
+                //            ui.uiprice,
+                //            ur.rfaccount
+                //            FROM tblUploadLog ul
+                //            LEFT JOIN tblCustomerMaster cm
+                //            ON ul.ulcustomer = cm.cmid 
+                //            LEFT JOIN tblUserAssignment ua 
+                //            ON ul.ulcustomer = ua.uacustomer 
+                //            LEFT JOIN tblRawFile ur
+                //            ON ur.RFId = ul.ULFile
+                //            LEFT JOIN
+                //            (SELECT
+                //            uiprice = SUM(uiquantity * ppprice),
+                //            sumulquantity = SUM(uiquantity),
+                //            countulquantity = COUNT(uiquantity),
+                //            uiid
+                //            FROM tblUploadItems
+                //            left join tblUploadLog
+                //            on ulid = uiid
+                //            left join tblCustomerMaster
+                //            on cmid = ulcustomer
+                //            LEFT JOIN tblProductPricing
+                //            on ppproduct = uiproduct and pparea = cmarea
+                //            WHERE uistatus NOT IN ('3','0')
+                //            group by uiid ) ui 
+                //            ON ul.ulid = ui.uiid 
+                //            WHERE ua.uauser = '17002'
+                //            AND uatype = 'KAS' 
+                //            AND ulstatus !=0  
+                //            AND ulstatus !=10 
+                //            AND ulstatus <=20 
+                //            AND ul.ulReadDate > DATEADD(day, -15, GETDATE())
+                //            ORDER BY sortupload desc"; //Nov. 8, 2016
+
                 selectStr = @"SELECT DISTINCT
                             ur.rfid,
                             ul.ulid,
@@ -35,16 +83,21 @@ namespace Gentran.Controllers.api.Order
                             cm.cmdescription, 
                             LEFT(ul.ulorderdate,12) AS ulorderdate,
                             LEFT(ul.uldeliverydate,12) AS uldeliverydate,
+                            LEFT(ul.ulcanceldate,12) AS ulcanceldate,
                             ul.ulreaddate as sortupload,
                             LEFT(ul.ulreaddate,12) +'- ' + CONVERT(varchar(15), CAST(ul.ulreaddate as time), 100) AS ulreaddate,
+                            LEFT(ul.ulsubmitdate,12) +'- ' + CONVERT(varchar(15), CAST(ul.ulsubmitdate as time), 100) AS ulsubmitdate,
                             ui.sumulquantity,
                             ui.countulquantity,
                             ul.ulstatus,
+                            us.usdescription,
                             ul.ulremarks,
                             ur.rffilename,
                             ui.uiprice,
                             ur.rfaccount
                             FROM tblUploadLog ul
+                            LEFT JOIN tblUploadStatus us
+                            on ulstatus = usid
                             LEFT JOIN tblCustomerMaster cm
                             ON ul.ulcustomer = cm.cmid 
                             LEFT JOIN tblUserAssignment ua 
@@ -69,12 +122,11 @@ namespace Gentran.Controllers.api.Order
                             ON ul.ulid = ui.uiid 
                             WHERE ua.uauser = '17002'
                             AND uatype = 'KAS' 
-                            AND ulstatus !=0  
-                            AND ulstatus !=10 
-                            AND ulstatus <=20 
+                            AND ulstatus = 25
+                            OR ulstatus = 21  
                             AND ul.ulReadDate > DATEADD(day, -15, GETDATE())
-                            ORDER BY sortupload desc"; //Nov. 8, 2016
-                
+                            ORDER BY sortupload desc"; //Dec. 2, 2016
+
 
                 SqlDataAdapter dataadapter = new SqlDataAdapter(selectStr, connection);
                 connection.Open();
@@ -91,17 +143,27 @@ namespace Gentran.Controllers.api.Order
                     row = new Dictionary<object, object>();
                     foreach (DataColumn col in dt.Columns)
                     {
-                        if (col.ColumnName == "ulstatus" && dr[col].ToString() == "11") {
-                            sStat = "Read Failed";
+                        //if (col.ColumnName == "ulstatus" && dr[col].ToString() == "11") {
+                        //    sStat = "Read Failed";
+                        //    icon = "fa-exclamation-circle";
+                        //    oClass = "label label-danger";
+                        //} else if (col.ColumnName == "ulstatus" && dr[col].ToString() == "20") {
+                        //    sStat = "New";
+                        //    icon = "fa-check";
+                        //    oClass = "label label-success";
+                        //}
+                        //else if(col.ColumnName == "ulstatus"){
+                        //    sStat = "New";
+                        //    icon = "fa-check";
+                        //    oClass = "label label-success";
+                        //}
+
+                        if (col.ColumnName == "ulstatus" && dr[col].ToString() == "21") {
+                            sStat = dt.Rows[0]["usdescription"].ToString();
                             icon = "fa-exclamation-circle";
                             oClass = "label label-danger";
-                        } else if (col.ColumnName == "ulstatus" && dr[col].ToString() == "20") {
-                            sStat = "New";
-                            icon = "fa-check";
-                            oClass = "label label-success";
-                        }
-                        else if(col.ColumnName == "ulstatus"){
-                            sStat = "New";
+                        } else if (col.ColumnName == "ulstatus" && dr[col].ToString() == "25") {
+                            sStat = dt.Rows[0]["usdescription"].ToString();
                             icon = "fa-check";
                             oClass = "label label-success";
                         }

@@ -1,13 +1,12 @@
 ﻿
 <h3 class="breadcrumb"><b ng-show="outlet">{{outlet}}</b> FILES LOADED</h3>
 
-<ul class="nav nav-tabs skin-blue">
+<!--<ul class="nav nav-tabs skin-blue">
     <li class="active"><a data-toggle="tab" href="#" data-target="#Retrieved"><b>Retrieved &nbsp;</b><span class="label label-success badge pull-right" ng-show="notifTab" ng-cloak>{{notifTab}}</span></a></li>
     <li><a data-toggle="tab" href="#" data-target="#Unretrieve" ng-click="unsuccess()"><b>Unretrieve &nbsp;</b><span class="label label-danger badge pull-right" ng-show="POfileErr.NCC" ng-cloak>{{POfileErr.NCC}}</span></a></li>
-</ul>
+</ul>-->
 <div class="tab-content">
-    <div id="Retrieved" class="tab-pane fade active in">
-        <br />
+   <!-- <div id="Retrieved" class="tab-pane fade active in">-->
         <div class="navbar" id="navbar">
             <ul class="nav navbar-nav">
                 <li><input class="po-cbx-all" type="checkbox" ng-model="all" ng-change="selectFileAll()" ng-show="files" /></li>
@@ -19,6 +18,7 @@
                     <input type="text" ng-model="search[searchBy]" placeholder="Search" class="form-control" />
                     <select ng-model="searchBy" class="form-control">
                         <option value="files" selected>PO File</option>
+                        <option value="retdate">Retrieve Date</option>
                     </select>
                     <pagination data-boundary-links="true" data-num-pages="noOfPagesPO" data-current-page="currentPage" max-size="pageSize" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
                 </div>
@@ -67,7 +67,7 @@
         </div>
     </div>
 
-    <div id="Unretrieve" class="tab-pane fade">
+    <!--<div id="Unretrieve" class="tab-pane fade">
         <br />
         <div class="navbar" id="navbar">
             <ul class="nav navbar-nav">
@@ -84,7 +84,7 @@
                     <pagination data-boundary-links="true" data-num-pages="noOfPagesPO" data-current-page="currentPage" max-size="pageSize" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
                 </div>
             </div>
-        </div>
+        </div>-->
 
         <!--<div class="container-fluid">
             <div class="row">
@@ -100,10 +100,10 @@
                     <pagination data-boundary-links="true" data-num-pages="noOfPagesPO" data-current-page="currentPage" max-size="pageSize" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
                 </div>
             </div>-->
-            <div class="row">
+            <!--<div class="row">
                 <div class="col-md-12 searchable-container">
                     <div class="po-files-h" sly-repeat="f in unsuccessList" ng-init="$last ? loadHover() : angular.noop()">
-                        <!--<input class="po-cbx" ng-click="$event = $event" ng-change="selectFile($event)" type="checkbox" ng-model="check" ng-checked="all" />-->
+                        <!--<input class="po-cbx" ng-click="$event = $event" ng-change="selectFile($event)" type="checkbox" ng-model="check" ng-checked="all" />
                         <div class="po-files">
                             <div class="">
                                 <div class="po-cbx-design col-sm-1 col-xs-2">
@@ -111,13 +111,13 @@
                                 </div>
                                 <div class="po-file-content col-sm-2 col-xs-4">
                                     <img ng-src="{{f.extension}}" class="po-files-ico pull-left" />
-                                    <!--<span {{ f.files.length > -1  ? "style='font-size:10px;text-overflow:ellipsis;word-wrap:break-word'" : 'style="font-size:10px;text-overflow:ellipsis"'}} ">{{(f.files).length > 0 ? f.files : ''}}</span>-->
-                                    <!--<span {{ f.files.length > -1  ? "style='font-size:10px;text-overflow:ellipsis;word-wrap:break-word'" : 'style="font-size:10px;text-overflow:ellipsis"'}} ">{{(f.files).length > 0 ? f.files : ''}}</span>-->
+                                    <!--<span {{ f.files.length > -1  ? "style='font-size:10px;text-overflow:ellipsis;word-wrap:break-word'" : 'style="font-size:10px;text-overflow:ellipsis"'}} ">{{(f.files).length > 0 ? f.files : ''}}</span>
+                                    <!--<span {{ f.files.length > -1  ? "style='font-size:10px;text-overflow:ellipsis;word-wrap:break-word'" : 'style="font-size:10px;text-overflow:ellipsis"'}} ">{{(f.files).length > 0 ? f.files : ''}}</span>
                                     <span style='font-size:10px;' title="{{ f.files }}">{{ f.files.slice(0,20) }}...</span>
-                                    <!--For directory and rawID Purposes-->
+                                    <!--For directory and rawID Purposes
                                     <label hidden>{{f.directory}}</label>
                                     <label hidden>{{f.rawID}}</label>
-                                    <!--For directory and rawID Purposes-->
+                                    <!--For directory and rawID Purposes
                                     <span style='font-size:10px; '>{{ f.retrievedate }}</span>
                                 </div>
                                 <div class="po-file-download col-sm-1 col-xs-2">
@@ -127,10 +127,10 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        <!--  </div>-->
+            </div>-->
+        <!--  </div>
     </div>
-</div>
+</div>-->
 
 <div id="mapModal" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">

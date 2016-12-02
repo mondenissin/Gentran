@@ -39,7 +39,7 @@ namespace Gentran.Controllers.api
                 rows.Clear();
                 rawAcct = acct == "sm" || acct == "c_sm" ? "SM" : acct == "s8" || acct == "c_s8" ? "S8" : acct == "ncc" || acct == "c_ncc" ? "NCC" : acct == "prg" || acct == "c_prg" ? "PRG" : acct == "wtm" || acct == "c_wtm" ? "WTM" : "UTM";
 
-                sQuery = "select rffilename,left(RFRetrieveDate,12) + '- ' + CONVERT (varchar(15),CAST(RFRetrieveDate as time),100) as RFRetrieveDate,rfid from tblrawfile where RFAccount = '" + rawAcct + "' and RFStatus = '0'";
+                sQuery = "select rffilename,left(RFRetrieveDate,12) + '- ' + CONVERT (varchar(15),CAST(RFRetrieveDate as time),100) as RFRetrieveDate,rfid from tblrawfile where RFAccount = '" + rawAcct + "' and RFStatus = '0' order by RFRetrieveDate desc";
                 cmd = new SqlCommand(sQuery, conn);
                 conn.Open();
                 SqlDataReader rd = cmd.ExecuteReader();

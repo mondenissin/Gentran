@@ -54,24 +54,24 @@
                 } else if (chain == "NCC") {
                     $scope.POfile.NCC = parseInt(result.data.detail.length);
                     $scope.POfileErr.NCC = parseInt(result.data.notiftextErr);
-                    $scope.files = result.data.detail.map(function (obj) {
-                        var rObj = {};
-                        var split = obj.files.split('\\');
-                        var ext = split[split.length - 1].split('.');
-                        rObj["files"] = split[split.length - 1];
-                        rObj["directory"] = obj.files;
-                        rObj["rawID"] = obj.rawid;
-                        rObj["thumbnail"] = "../Images/thumbnails/" + ext[ext.length - 1] + ".PNG";
-                        rObj["extension"] = "../Images/files/" + ext[ext.length - 1] + ".png";
-                        rObj["retrievedate"] = obj.retdate;
+                    //$scope.files = result.data.detail.map(function (obj) {
+                    //    var rObj = {};
+                    //    var split = obj.files.split('\\');
+                    //    var ext = split[split.length - 1].split('.');
+                    //    rObj["files"] = split[split.length - 1];
+                    //    rObj["directory"] = obj.files;
+                    //    rObj["rawID"] = obj.rawid;
+                    //    rObj["thumbnail"] = "../Images/thumbnails/" + ext[ext.length - 1] + ".PNG";
+                    //    rObj["extension"] = "../Images/files/" + ext[ext.length - 1] + ".png";
+                    //    rObj["retrievedate"] = obj.retdate;
 
-                        return rObj;
-                    });
-                    $scope.filesList = $scope.files;
+                    //    return rObj;
+                    //});
+                    //$scope.filesList = $scope.files;
 
-                    $scope.$applyAsync();
+                    //$scope.$applyAsync();
 
-                    console.log($scope.files);
+                    //console.log($scope.files);
                 }
                 console.log(result.data);
             } else {

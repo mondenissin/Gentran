@@ -20,9 +20,9 @@
             $scope.entryLimitPO = 12;
 
             if (result.data.success) {
-                if ($scope.activeOutlet == "sm" || $scope.activeOutlet == "s8" || $scope.activeOutlet == "ncc") {
+                if ($scope.activeOutlet == "sm" || $scope.activeOutlet == "s8" || $scope.activeOutlet == "ncc" || $scope.activeOutlet == "prg" || $scope.activeOutlet == "wtm" || $scope.activeOutlet == "utm") {
                     $scope.notifTab = parseInt(result.data.detail.length);
-                    $scope.outlet = $scope.activeOutlet == "sm" ? "SM" : $scope.activeOutlet == "s8" ? "Super 8" : "NCCC";
+                    $scope.outlet = $scope.activeOutlet == "sm" ? "SM" : $scope.activeOutlet == "s8" ? "Super 8" : $scope.activeOutlet == "ncc" ? "NCCC" : $scope.activeOutlet == "prg" ? "Puregold" : $scope.activeOutlet == "wtm" ? "Waltermart" : "Ultramega";
                     $(function () {
                         var parent = $('.sidebar-menu');
                         parent.addClass('menu-open').css({ 'display': 'block' });
