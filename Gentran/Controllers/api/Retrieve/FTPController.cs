@@ -321,7 +321,7 @@ namespace Gentran.Controllers.api
                 rows.Add(row);
             }
 
-            return new Response { success = success, detail = rows, notiftextErr = notifCtrErr.ToString(), notifConnection = notifConnection };
+            return new Response { success = success, detail = rows, notiftextErr = notifCtrErr.ToString() };
         }
 
         // GET api/ftp/5
