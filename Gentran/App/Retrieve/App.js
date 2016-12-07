@@ -1,4 +1,4 @@
-﻿var retrieveModule = angular.module('retrieve', ['common', 'sly', 'datatables', 'sly', 'ui.bootstrap'])
+﻿var retrieveModule = angular.module('retrieve', ['common', 'sly', 'datatables', 'ui.bootstrap'])
     .config(function ($routeProvider, $locationProvider) {
         var _root = getRoot();
         $routeProvider.when(_root + 'Retrieve/SM', { templateUrl: _root + 'App/Retrieve/Views/RetrieveMaster/retrieve.html', controller: 'retrieveViewModel' });

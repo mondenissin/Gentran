@@ -42,3 +42,15 @@ table.dataTable thead th.sorting_asc:first-child {
 .center {
     text-align: center !important;
 }
+
+.label-count {
+    position:absolute;
+    top:3px;
+    /*right:5px;*/
+    text-align:center;
+    font-size:9px;
+    padding:2px 3px;
+    line-height:.9;
+    background-color:#dd4b39 !important;
+    color:white;
+}

@@ -5,7 +5,7 @@
     <li class="active"><a data-toggle="tab" href="#" data-target="#Retrieved"><b>Retrieved &nbsp;</b><span class="label label-success badge pull-right" ng-show="notifTab" ng-cloak>{{notifTab}}</span></a></li>
     <li><a data-toggle="tab" href="#" data-target="#Unretrieve" ng-click="unsuccess()"><b>Unretrieve &nbsp;</b><span class="label label-danger badge pull-right" ng-show="POfileErr.NCC" ng-cloak>{{POfileErr.NCC}}</span></a></li>
 </ul>-->
-<div class="tab-content">
+<!--<div class="tab-content">-->
    <!-- <div id="Retrieved" class="tab-pane fade active in">-->
         <div class="navbar" id="navbar">
             <ul class="nav navbar-nav">
@@ -18,7 +18,6 @@
                     <input type="text" ng-model="search[searchBy]" placeholder="Search" class="form-control" />
                     <select ng-model="searchBy" class="form-control">
                         <option value="files" selected>PO File</option>
-                        <option value="retdate">Retrieve Date</option>
                     </select>
                     <pagination data-boundary-links="true" data-num-pages="noOfPagesPO" data-current-page="currentPage" max-size="pageSize" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
                 </div>
@@ -54,7 +53,7 @@
                                     <span style='font-size:10px;' title="{{ f.files }}">{{ f.files.slice(0,20) }}...</span>
                                     <!--For directory and rawID Purposes-->
                                     <label hidden>{{f.directory}}</label>
-                                    <label hidden>{{f.rawID}}</label>
+                                    <label hidden>{{f.rawID}}</label><br />
                                     <!--For directory and rawID Purposes-->
                                     <span style='font-size:10px; '>{{ f.retrievedate }}</span>
                                 </div>
@@ -65,9 +64,9 @@
                 </div>
             </div>
         </div>
-    </div>
+   <!-- </div>
 
-    <!--<div id="Unretrieve" class="tab-pane fade">
+    <div id="Unretrieve" class="tab-pane fade">
         <br />
         <div class="navbar" id="navbar">
             <ul class="nav navbar-nav">

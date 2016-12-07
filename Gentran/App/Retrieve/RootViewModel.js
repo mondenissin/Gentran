@@ -8,6 +8,7 @@
     var initialize = function () {
         $scope.POfile = [];
         $scope.POfileErr = [];
+        $scope.outletConn = "";
         $scope.autoRetrieve();
         var time = 0;
         
@@ -72,9 +73,11 @@
                     //$scope.$applyAsync();
 
                     //console.log($scope.files);
+                    $scope.outletConn = result.data.notifConnection;
                 }
                 console.log(result.data);
             } else {
+                $scope.outletConn = result.data.notifConnection;
             }
         });
     }

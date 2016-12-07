@@ -20,14 +20,19 @@ namespace Gentran.Controllers.api
     public class FTPController : ApiController
     {
         private SqlCommand cmd;
+        private SqlCommand cmd1;
         private string sQuery = "";
+        private string cQuery = "";
         private SqlConnection conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
         string rawAcct = "";
+        private AppSettings app = new AppSettings();
         // GET api/ftp
+
         public Object Get(string id)
         {
             string acct = id;
             int notifCtrErr = 0;
+            string notifConnection = "";
             bool success = true;
             DataTable dt = new DataTable();
             List<string> fileList = new List<string>();
@@ -36,14 +41,151 @@ namespace Gentran.Controllers.api
 
             try
             {
+
+                //sQuery = "select * from tblConnectionStatus";
+                //cmd = new SqlCommand(sQuery, conn);
+                //conn.Open();
+                //SqlDataReader rd = cmd.ExecuteReader();
+                //if (rd.HasRows)
+                //{
+                //    while (rd.Read())
+                //    {
+                //        FtpWebRequest ftp = (FtpWebRequest)FtpWebRequest.Create(rd[2].ToString());
+                //        FtpWebResponse res;
+                //        StreamReader reader;
+
+                //        ftp.Credentials = new NetworkCredential(rd[4].ToString().Normalize(),app.Decrypt(rd[5].ToString().Normalize()));
+                //        ftp.KeepAlive = false;
+                //        ftp.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
+                //        ftp.UsePassive = true;
+
+                //        using (res = (FtpWebResponse)ftp.GetResponse())
+                //        {
+                //            reader = new StreamReader(res.GetResponseStream());
+                //            notifConnection = "fa-plus";
+
+                //        }
+
+                //    }
+                //}
+                //rd.Close();
+
+                //conn.Close();
+
+                //SqlCommand cmd1 = new SqlCommand();
+                //rows.Clear();
+                //rawAcct = acct == "sm" || acct == "c_sm" ? "SM" : acct == "s8" || acct == "c_s8" ? "S8" : acct == "ncc" || acct == "c_ncc" ? "NCC" : acct == "prg" || acct == "c_prg" ? "PRG" : acct == "wtm" || acct == "c_wtm" ? "WTM" : "UTM";
+
+                //sQuery = "select rffilename,left(RFRetrieveDate,12) + '- ' + CONVERT (varchar(15),CAST(RFRetrieveDate as time),100) as RFRetrieveDate,rfid from tblrawfile where RFAccount = '" + rawAcct + "' and RFStatus = '0' order by RFRetrieveDate desc";
+                //cmd = new SqlCommand(sQuery, conn);
+                //conn.Open();
+                //SqlConnection.ClearPool(conn);
+                //SqlDataReader rd1 = cmd.ExecuteReader();
+
+                //if (acct == "c_sm" || acct == "c_s8" || acct == "c_ncc" || acct == "c_prg" || acct == "c_wtm" || acct == "c_utm")
+                //{
+                //    if (rd1.HasRows)
+                //    {
+                //        while (rd1.Read())
+                //        {
+                //            row = new Dictionary<string, object>();
+                //            row.Add("files", rd1[0].ToString());
+                //            row.Add("retdate", rd1[1].ToString());
+                //            row.Add("rawid", rd1[2].ToString());
+                //            rows.Add(row);
+                //        }
+                //    }
+                //    rd1.Close();
+
+                //    fileList.Clear();
+                //    //dt.Load(rd);
+                //    //notifCtr = dt.Rows.Count;
+
+                //    if (acct == "c_sm")
+                //    {
+                //        fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\error\sm", "*.csv"));
+                //        notifCtrErr = fileList.Count;
+                //    }
+                //    else if (acct == "c_s8")
+                //    {
+                //        fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\error\s8", "*.xml"));
+                //        notifCtrErr = fileList.Count;
+                //    }
+                //    else if (acct == "c_ncc")
+                //    {
+                //        fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\error\ncc", "*.xml"));
+                //        notifCtrErr = fileList.Count;
+                //    }
+                //    else if (acct == "c_prg")
+                //    {
+                //        fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\error\prg", "*.csv"));
+                //        notifCtrErr = fileList.Count;
+                //    }
+                //    else if (acct == "c_wtm")
+                //    {
+                //        fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\error\wtm", "*.csv"));
+                //        notifCtrErr = fileList.Count;
+                //    }
+                //    else if (acct == "c_utm")
+                //    {
+                //        fileList.AddRange(Directory.GetFiles(@"C:\inetpub\wwwroot\files\ftp\error\utm", "*.csv"));
+                //        notifCtrErr = fileList.Count;
+                //    }
+                //}
+                //else
+                //{
+                //    if (rd1.HasRows)
+                //    {
+                //        while (rd1.Read())
+                //        {
+                //            row = new Dictionary<string, object>();
+                //            row.Add("files", rd1[0].ToString());
+                //            row.Add("retdate", rd1[1].ToString());
+                //            row.Add("rawid", rd1[2].ToString());
+                //            rows.Add(row);
+                //        }
+                //    }
+                //    rd1.Close();
+                //}
+
+                //conn.Close();
                 rows.Clear();
                 rawAcct = acct == "sm" || acct == "c_sm" ? "SM" : acct == "s8" || acct == "c_s8" ? "S8" : acct == "ncc" || acct == "c_ncc" ? "NCC" : acct == "prg" || acct == "c_prg" ? "PRG" : acct == "wtm" || acct == "c_wtm" ? "WTM" : "UTM";
 
                 sQuery = "select rffilename,left(RFRetrieveDate,12) + '- ' + CONVERT (varchar(15),CAST(RFRetrieveDate as time),100) as RFRetrieveDate,rfid from tblrawfile where RFAccount = '" + rawAcct + "' and RFStatus = '0' order by RFRetrieveDate desc";
+                //cQuery = "select * from tblConnectionStatus";
                 cmd = new SqlCommand(sQuery, conn);
+               // cmd1 = new SqlCommand(cQuery, conn);
                 conn.Open();
-                SqlDataReader rd = cmd.ExecuteReader();
 
+                SqlConnection.ClearPool(conn);
+                //SqlDataReader rd1 = cmd1.ExecuteReader();
+
+                //if (rd1.HasRows)
+                //{
+                //    while (rd1.Read())
+                //    {
+                //        FtpWebRequest ftp = (FtpWebRequest)FtpWebRequest.Create(rd1[2].ToString());
+                //        FtpWebResponse res;
+                //        StreamReader reader;
+
+                //        ftp.Credentials = new NetworkCredential(rd1[4].ToString().Normalize(), app.Decrypt(rd1[5].ToString().Normalize()));
+                //        ftp.KeepAlive = false;
+                //        ftp.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
+                //        ftp.UsePassive = true;
+
+                //        using (res = (FtpWebResponse)ftp.GetResponse())
+                //        {
+                //            reader = new StreamReader(res.GetResponseStream());
+                //            notifConnection = "fa-plus";
+
+                //        }
+
+                //    }
+                //}
+                //rd1.Close();
+                //SqlConnection.ClearPool(conn);
+                SqlDataReader rd = cmd.ExecuteReader();
                 if (acct == "c_sm" || acct == "c_s8" || acct == "c_ncc" || acct == "c_prg" || acct == "c_wtm" || acct == "c_utm")
                 {
                     if (rd.HasRows)
@@ -94,7 +236,8 @@ namespace Gentran.Controllers.api
                         notifCtrErr = fileList.Count;
                     }
                 }
-                else {
+                else
+                {
                     if (rd.HasRows)
                     {
                         while (rd.Read())
@@ -102,13 +245,12 @@ namespace Gentran.Controllers.api
                             row = new Dictionary<string, object>();
                             row.Add("files", rd[0].ToString());
                             row.Add("retdate", rd[1].ToString());
-                            row.Add("rawid",rd[2].ToString());
+                            row.Add("rawid", rd[2].ToString());
                             rows.Add(row);
                         }
                     }
                     rd.Close();
                 }
-
                 conn.Close();
                 #region For thumbnail
 
@@ -173,12 +315,13 @@ namespace Gentran.Controllers.api
             }
             catch (Exception ex){
                 success = false;
+                notifConnection = "fa-plug";
                 row = new Dictionary<string, object>();
                 row.Add("error", ex.Message);
                 rows.Add(row);
             }
 
-            return new Response { success = success, detail = rows, notiftextErr = notifCtrErr.ToString() };
+            return new Response { success = success, detail = rows, notiftextErr = notifCtrErr.ToString(), notifConnection = notifConnection };
         }
 
         // GET api/ftp/5
