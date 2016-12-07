@@ -9,7 +9,7 @@
     $routeProvider.when(_root + 'Admin/Connections', { templateUrl: _root + 'App/Admin/Views/Connections/ConnectionList.html', controller: 'connectionViewModel' });
     $routeProvider.when(_root + 'Admin/Dashboard', { templateUrl: _root + 'App/Admin/Views/Dashboard/Dashboard.html', controller: 'dashViewModel' });
     $routeProvider.when(_root + 'Admin/reports', { templateUrl: _root + 'App/Admin/Views/Reports/MasterReport.html', controller: 'reportViewModel' });
-    $routeProvider.otherwise({ redirectTo: _root + 'Admin' });
+    $routeProvider.otherwise({ redirectTo: _root + 'Admin/Dashboard' });
     $locationProvider.html5Mode({
         enabled: true,
         requireBase: false

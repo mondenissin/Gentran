@@ -105,10 +105,13 @@ textarea {
 }
 .profile-img
 {
-    width: 96px;
-    height: 96px;
+    width: 120px;
+    height: 120px;
     margin: 0 auto 10px;
     display: block;
+    padding: 5px;
+    border: 1px solid #f0f0f0;
+    background-color: #fff;
     -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
     border-radius: 50%;
@@ -202,8 +205,39 @@ button.btn.btn-link i, button.btn.btn-link span {
 }
 
 .page-top-header {
-    font-size: 30px; 
-    color:#24546f;
+    font-size: 30px;
+    color: #24546f;
+}
+
+.login-outer {
+    display: table;
+    position: absolute;
+    height: 90%;
+    width: 100%;
+}
+
+.login-middle {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+header {
+    position:fixed!important;
+    width: 100%;
+}
+
+.content-wrapper {
+    margin-top: 0px !important;
+}
+
+.fixed .content-wrapper, .fixed .right-side {
+    padding-top: 35px;
+}
+
+footer:not(.footer-admin) {  
+    bottom: 10px;
+    position: fixed; 
+    width: 100%;
 }
 
 /* ======================================== EDIT USER MODAL ========================================== */
@@ -919,3 +953,11 @@ div.item {
     background-color: #aaaaaa;
     border-radius: 20px;
 }
+
+ /*@media ( max-width: 991px ) {
+    .page-top-header {
+        font-size: 30px; 
+        color:#24546f;
+        position: initial!important;
+    }
+}*/  
