@@ -480,7 +480,7 @@ namespace Gentran.Controllers.api.Retrieve
                                     
                                     if (uQty != "0")
                                     {
-                                        String insertUIId = "insert into tblUploadItems select '" + uID + "','" + uProd + "','" + uQty + "','" + uQty + "','" + uPrice + "','1'";
+                                        String insertUIId = "insert into tblUploadItems select '" + uID + "','" + uProd + "','','" + uQty + "','" + uQty + "','" + uPrice + "','1'";
                                         connection.Open();
                                         SqlCommand cmdUIIdInsert = new SqlCommand(insertUIId, connection);
                                         cmdUIIdInsert.ExecuteNonQuery();
@@ -498,6 +498,12 @@ namespace Gentran.Controllers.api.Retrieve
                                 String insertELId = "insert into tblErrorLog select '" + uID + "','102','" + data[x]["ProdCode"].ToString() + "'";
                                 connection.Open();
                                 SqlCommand cmdELIdInsert = new SqlCommand(insertELId, connection);
+                                cmdELIdInsert.ExecuteNonQuery();
+                                connection.Close();
+
+                                insertELId = "insert into tblUploadItems select '" + uID + "','0','" + uProd + "','" + uQty + "','" + uQty + "','" + uPrice + "','1'";
+                                connection.Open();
+                                cmdELIdInsert = new SqlCommand(insertELId, connection);
                                 cmdELIdInsert.ExecuteNonQuery();
                                 connection.Close();
                             }

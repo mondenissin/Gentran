@@ -142,6 +142,7 @@
     <Compile Include="Controllers\api\Master\MasterController.cs" />
     <Compile Include="Controllers\api\Master\TransactionsController.cs" />
     <Compile Include="Controllers\api\Monitoring\MonitorController.cs" />
+    <Compile Include="Controllers\api\Monitoring\MonitorErrorsController.cs" />
     <Compile Include="Controllers\api\Order\DeleteOrderController.cs" />
     <Compile Include="Controllers\api\Order\OrderController.cs" />
     <Compile Include="Controllers\api\Order\OrderErrorsController.cs" />
