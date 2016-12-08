@@ -5,7 +5,7 @@
 
     var initialize = function () {
         $scope.refreshMonitor();
-        $scope.refreshTransact();
+        //$scope.refreshTransact();
         $scope.getAccess();
     }
 
@@ -50,32 +50,32 @@
         ];
     }
 
-    $scope.refreshTransact = function () {
+    //$scope.refreshTransact = function () {
 
-        $scope.searchTransaction = {};
-        $scope.searchByTransaction = "TLValue";
+    //    $scope.searchTransaction = {};
+    //    $scope.searchByTransaction = "TLValue";
 
-        $scope.data = {};
-        $scope.data.operation = 'transaction';
+    //    $scope.data = {};
+    //    $scope.data.operation = 'transaction';
         
-        viewModelHelper.apiGet('api/monitor', $scope.data, function (result) {
-            $scope.pageSizeT = 5;
-            $scope.entryLimitT = 50;
+    //    viewModelHelper.apiGet('api/monitor', $scope.data, function (result) {
+    //        $scope.pageSizeT = 5;
+    //        $scope.entryLimitT = 50;
 
-            $scope.transact = result.data.detail;
-            console.log(result.data.detail);
-            $scope.$watch('searchTransaction[searchByTransaction]', function () {
-                $scope.filterTransaction = filterFilter($scope.transact, $scope.searchTransaction);
-                $scope.noOfPagesT = Math.ceil($scope.filterTransaction.length / $scope.entryLimitT);
-                $scope.currentPageT = 1;
-            });
-        });
+    //        $scope.transact = result.data.detail;
+    //        console.log(result.data.detail);
+    //        $scope.$watch('searchTransaction[searchByTransaction]', function () {
+    //            $scope.filterTransaction = filterFilter($scope.transact, $scope.searchTransaction);
+    //            $scope.noOfPagesT = Math.ceil($scope.filterTransaction.length / $scope.entryLimitT);
+    //            $scope.currentPageT = 1;
+    //        });
+    //    });
 
-        $scope.dtOptionsTrans = DTOptionsBuilder.newOptions().withOption('order', [0, 'desc']);
-        $scope.dtColumnDefsTrans = [
-           DTColumnDefBuilder.newColumnDef('no-sort').notSortable()
-        ];
-    }
+    //    $scope.dtOptionsTrans = DTOptionsBuilder.newOptions().withOption('order', [0, 'desc']);
+    //    $scope.dtColumnDefsTrans = [
+    //       DTColumnDefBuilder.newColumnDef('no-sort').notSortable()
+    //    ];
+    //}
 
     //$scope.showDetails = function (monitoring) {
     //   // $scope.ResetEditFields();
@@ -97,6 +97,38 @@
 
     //    $('#ViewPODetailsModal').modal('show');
     //}
+
+    $scope.advsearch = function () {
+        $scope.Items = {};
+        $scope.Items.dateTo = $scope.datet;
+        $scope.Items.dateFrom = $scope.datef;
+
+        $scope.data = {};
+        //$scope.data.operation = "advsearch";
+        $scope.data.payload = _payloadParser($scope.Items);
+
+       
+
+        viewModelHelper.apiGet('api/monitor', $scope.data, function (result) {
+
+            var orders = result.data.detail.filter(x=>x.uiprice = parseInt(x.uiprice).toLocaleString());
+            orders.filter(x=> {
+                var data = x.ulid + ',' + x.ulstatus;
+                if (x.ulstatus < 20) {
+                    viewModelHelper.apiGet('api/monitorerrors/' + data, null, function (result) {
+                        x.eCtr = result.data.detail.length;
+                    });
+                }
+            });
+
+            $scope.filterMonitor = result.data.detail;
+        });
+
+        $scope.dtOptions = DTOptionsBuilder.newOptions().withOption('order', [7, 'desc']);
+        $scope.dtColumnDefs = [
+           DTColumnDefBuilder.newColumnDef('no-sort').notSortable()
+        ];
+    }
 
     $scope.showDetails = function (order) {
         $scope.flags.shownFromList = true;
@@ -140,6 +172,10 @@
         console.log(data.RFId);
         window.location.href = viewModelHelper.getRootPath() + "api/download/" + data.RFId+',order';
     };
+
+    $scope.advancedsearch = function () {
+        $('#advancedModal').modal('show');
+    }
 
     $scope.getStatus = function (id, $event) {
         var datas = id.ulid + ',' + id.ulstatus;

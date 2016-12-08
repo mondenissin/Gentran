@@ -23,7 +23,7 @@ namespace Gentran.Controllers.api
         {
             bool success = true;
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
-            String sQuery = "select PMId, PMCode, PMDescription, PMBarcode, PSDescription, PCDescription as PMCategory from tblproductmaster left join tblProductStatus on PMStatus = PSId left join tblProductCategory on PMCategory = PCId";
+            String sQuery = "select PMId, PMCode, PMDescription, PMBarcode, PSDescription, PCDescription as PMCategory from tblproductmaster left join tblProductStatus on PMStatus = PSId left join tblProductCategory on PMCategory = PCId where PMId != 0";
             SqlCommand cmd = new SqlCommand(sQuery, connection);
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
@@ -77,6 +77,10 @@ namespace Gentran.Controllers.api
             else if (values.operation == "get_mapping")
             {
                 sQuery = "select ATDescription,PAAccount,PACode,PAProduct from tblproductassignment left join tblaccounttype on PAAccount = ATId where PAProduct = '" + values.payload[0].pmid + "' order by ATDescription asc";
+            }
+            else if (values.operation == "suggestions")
+            {
+                sQuery = "select PMCode,PMDescription from tblproductmaster WHERE PMId != '0' AND (PMCode LIKE '%" + values.payload[0].prefix + "%' or PMDescription LIKE '%" + values.payload[0].prefix + "%') order by PMCode asc";
             }
             else
             {

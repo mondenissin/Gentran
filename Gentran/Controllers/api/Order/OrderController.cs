@@ -92,8 +92,9 @@ namespace Gentran.Controllers.api.Order
                             ul.ulstatus,
                             us.usdescription,
                             ul.ulremarks,
-                            ur.rffilename,
+                            ur.rffilename,  
                             ui.uiprice,
+                            ui.uicode,
                             ur.rfaccount
                             FROM tblUploadLog ul
                             LEFT JOIN tblUploadStatus us
@@ -210,7 +211,8 @@ namespace Gentran.Controllers.api.Order
                             left(uldeliverydate,12) as ULDeliveryDate,
                             uiquantity as UIQuantity,
                             cmcode as ULCustomer,
-                            pmcode as UIProduct,
+                            pmcode as UIProduct,   
+                            UICode,
                             pmdescription as PMDescription,
                             ppprice  as UIPrice,
                             (ppprice * uiquantity) as UITPrice
@@ -227,8 +229,8 @@ namespace Gentran.Controllers.api.Order
                             left join tblproductpricing
                             on ppproduct = uiproduct and pparea = cmarea
                             where
-                            ulid ='" + id+@"'
-                            and uiquantity != 0";
+                            ulid ='" + id +@"'
+                            and uiquantity != 0 order by UIStatus desc";
 
             SqlCommand cmd = new SqlCommand(sQuery, connection);
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
