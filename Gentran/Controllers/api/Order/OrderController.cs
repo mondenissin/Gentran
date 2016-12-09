@@ -64,7 +64,7 @@ namespace Gentran.Controllers.api.Order
                 //            on cmid = ulcustomer
                 //            LEFT JOIN tblProductPricing
                 //            on ppproduct = uiproduct and pparea = cmarea
-                //            WHERE uistatus NOT IN ('3','0')
+                //            WHERE uistatus NOT IN ('4','3','0')
                 //            group by uiid ) ui 
                 //            ON ul.ulid = ui.uiid 
                 //            WHERE ua.uauser = '17002'
@@ -94,7 +94,6 @@ namespace Gentran.Controllers.api.Order
                             ul.ulremarks,
                             ur.rffilename,  
                             ui.uiprice,
-                            ui.uicode,
                             ur.rfaccount
                             FROM tblUploadLog ul
                             LEFT JOIN tblUploadStatus us
@@ -118,7 +117,7 @@ namespace Gentran.Controllers.api.Order
                             on cmid = ulcustomer
                             LEFT JOIN tblProductPricing
                             on ppproduct = uiproduct and pparea = cmarea
-                            WHERE uistatus NOT IN ('3','0')
+                            WHERE uistatus NOT IN ('4','3','0')
                             group by uiid ) ui 
                             ON ul.ulid = ui.uiid 
                             WHERE ua.uauser = '17002'

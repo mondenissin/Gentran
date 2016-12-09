@@ -52,7 +52,7 @@ namespace Gentran.Controllers.api
                             on cmid = ulcustomer
                             LEFT JOIN tblProductPricing
                             on ppproduct = uiproduct and pparea = cmarea
-                            WHERE uistatus NOT IN ('3','0')
+                            WHERE uistatus NOT IN ('4','3','0')
                             group by uiid ) ui 
                             ON ul.ulid = ui.uiid  
                             ) UL on ul.ULFile = RFId
@@ -155,7 +155,7 @@ namespace Gentran.Controllers.api
                         on cmid = ulcustomer
                         LEFT JOIN tblProductPricing
                         on ppproduct = uiproduct and pparea = cmarea
-                        WHERE uistatus NOT IN ('3','0')
+                        WHERE uistatus NOT IN ('4','3','0')
                         group by uiid ) ui 
                         ON ul.ulid = ui.uiid  
                         ) UL on ul.ULFile = RFId
@@ -206,7 +206,7 @@ namespace Gentran.Controllers.api
                         on cmid = ulcustomer
                         LEFT JOIN tblProductPricing
                         on ppproduct = uiproduct and pparea = cmarea
-                        WHERE uistatus NOT IN ('3','0')
+                        WHERE uistatus NOT IN ('4','3','0')
                         and ULCustomer in (SELECT Distinct(CACustomer) from tblCustomerAssignment where CAAccount = '" + values.payload[0].acctype + @"')
                         group by uiid ) ui 
                         ON ul.ulid = ui.uiid  
@@ -260,7 +260,7 @@ namespace Gentran.Controllers.api
                         on cmid = ulcustomer
                         LEFT JOIN tblProductPricing
                         on ppproduct = uiproduct and pparea = cmarea
-                        WHERE uistatus NOT IN ('3','0')
+                        WHERE uistatus NOT IN ('4','3','0')
                         and CMArea = '" + values.payload[0].cmArea + @"'
                         group by uiid ) ui 
                         ON ul.ulid = ui.uiid  
@@ -314,7 +314,7 @@ namespace Gentran.Controllers.api
                         on cmid = ulcustomer
                         LEFT JOIN tblProductPricing
                         on ppproduct = uiproduct and pparea = cmarea
-                        WHERE uistatus NOT IN ('3','0')
+                        WHERE uistatus NOT IN ('4','3','0')
                         and ULCustomer in (SELECT Distinct(CACustomer) from tblCustomerAssignment where CAAccount = '" + values.payload[0].acctype + @"')
                         and CMArea = '" + values.payload[0].cmArea + @"'
                         group by uiid ) ui 
@@ -348,7 +348,7 @@ namespace Gentran.Controllers.api
                         select UIId, PMCategory, sum(UIQuantity) as TotalQuantity
                         from tblUploadItems
                         left join tblProductMaster on pmid = UIProduct
-                        where UIStatus not in ('0', '3')
+                        where UIStatus not in ('0', '3', '4')
                         group by UIId,PMCategory ) UI on UIId = ULId
                         where ULStatus in (21,22,25)
                         AND RFStatus = '1'
@@ -372,7 +372,7 @@ namespace Gentran.Controllers.api
                         select UIId, PMCategory, sum(UIQuantity) as TotalQuantity
                         from tblUploadItems
                         left join tblProductMaster on pmid = UIProduct
-                        where UIStatus not in ('0', '3')
+                        where UIStatus not in ('0', '3', '4')
                         group by UIId,PMCategory ) UI on UIId = ULId
                         where ULStatus in (21,22,25)
                         AND RFStatus = '1'
@@ -396,7 +396,7 @@ namespace Gentran.Controllers.api
                         select UIId, PMCategory, sum(UIQuantity) as TotalQuantity
                         from tblUploadItems
                         left join tblProductMaster on pmid = UIProduct
-                        where UIStatus not in ('0', '3')
+                        where UIStatus not in ('0', '3', '4')
                         group by UIId,PMCategory ) UI on UIId = ULId
                         where ULStatus in (21,22,25)
                         AND ULCustomer in (SELECT CMId from tblCustomerMaster WHERE CMArea = '" + values.payload[0].cmArea + @"')
@@ -421,7 +421,7 @@ namespace Gentran.Controllers.api
                         select UIId, PMCategory, sum(UIQuantity) as TotalQuantity
                         from tblUploadItems
                         left join tblProductMaster on pmid = UIProduct
-                        where UIStatus not in ('0', '3')
+                        where UIStatus not in ('0', '3', '4')
                         group by UIId,PMCategory ) UI on UIId = ULId
                         where ULStatus in (21,22,25)
                         AND ULCustomer in (SELECT Distinct(CACustomer) from tblCustomerAssignment where CAAccount = '" + values.payload[0].acctype + @"')
@@ -446,7 +446,7 @@ namespace Gentran.Controllers.api
                         select UIId, PMCategory, sum(UIQuantity) as TotalQuantity
                         from tblUploadItems
                         left join tblProductMaster on pmid = UIProduct
-                        where UIStatus not in ('0', '3')
+                        where UIStatus not in ('0', '3', '4')
                         group by UIId,PMCategory ) UI on UIId = ULId
                         where ULStatus in (21,22,25)
                         AND ULCustomer in (SELECT  Distinct(CMId) from tblCustomerMaster WHERE CMArea = '" + values.payload[0].cmArea + @"')
@@ -493,7 +493,7 @@ namespace Gentran.Controllers.api
                         on cmid = ulcustomer
                         LEFT JOIN tblProductPricing
                         on ppproduct = uiproduct and pparea = cmarea
-                        WHERE uistatus NOT IN ('3','0')
+                        WHERE uistatus NOT IN ('4','3','0')
                         group by uiid ) ui 
                         ON ul.ulid = ui.uiid  
                         ) UL on ul.ULFile = RFId

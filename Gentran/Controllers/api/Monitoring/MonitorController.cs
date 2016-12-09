@@ -72,7 +72,7 @@ namespace Gentran.Controllers.api.Monitor
                             on cmid = ulcustomer
                             LEFT JOIN tblProductPricing
                             on ppproduct = uiproduct and pparea = cmarea
-                            WHERE uistatus NOT IN ('3','0')
+                            WHERE uistatus NOT IN ('4','3','0')
                             group by uiid ) ui 
                             ON ul.ulid = ui.uiid 
                             WHERE ua.uauser = '17002'
@@ -171,6 +171,7 @@ namespace Gentran.Controllers.api.Monitor
                             ur.rfaccount
                             FROM tblUploadLog ul
                             LEFT JOIN tblUploadStatus us
+
                             on ulstatus = usid
                             LEFT JOIN tblCustomerMaster cm
                             ON ul.ulcustomer = cm.cmid 
@@ -191,7 +192,7 @@ namespace Gentran.Controllers.api.Monitor
                             on cmid = ulcustomer
                             LEFT JOIN tblProductPricing
                             on ppproduct = uiproduct and pparea = cmarea
-                            WHERE uistatus NOT IN ('3','0')
+                            WHERE uistatus NOT IN ('4','3','0')
                             group by uiid ) ui 
                             ON ul.ulid = ui.uiid 
                             WHERE ua.uauser = '17002'
@@ -255,8 +256,187 @@ namespace Gentran.Controllers.api.Monitor
         }
 
         // POST api/order
-        public void Post([FromBody]string value)
+        public object Post([FromBody]Data values)
         {
+            SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
+            String sQuery = "";
+            SqlCommand cmd; 
+            SqlDataReader dr;  
+
+            List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+            Dictionary<string, object> row;
+
+            bool success = false;
+            string response = ""; 
+
+            string ulid = "";
+            string pmid = "";
+            string pmcode = "";
+            string pacode = "";
+            string acctype = "";
+
+
+            try {
+                for (int i = 0; i < values.payload.Count; i++) {
+                    ulid = values.payload[i].ULId;
+                    acctype = values.payload[i].acctype;
+                    pmcode = values.payload[i].pmcode;
+                    pacode = values.payload[i].pacode;
+
+                    sQuery = "select top 1 * from tblProductMaster where pmcode = '"+ pmcode +"'";
+                    connection.Open();
+                    cmd = new SqlCommand(sQuery, connection);
+                    dr = cmd.ExecuteReader();
+                    if (dr.HasRows)
+                    {
+                        dr.Read();
+                        pmid = dr["PMId"].ToString();
+                        dr.Close();
+                        connection.Close();
+
+                        sQuery = "select top 1 * from tblProductAssignment left join tblAccountType on PAAccount = ATId where paproduct = '" + pmid + "' and paaccount = '" + acctype + "'";
+                        connection.Open();
+                        cmd = new SqlCommand(sQuery, connection);
+                        dr = cmd.ExecuteReader();
+                        if (dr.HasRows)
+                        {
+                            dr.Read();       
+                            string account = dr["ATDescription"].ToString();
+                            dr.Close();
+                            connection.Close();
+                             
+                            response = "SKU " + pmcode + " already has assignment for "+ account;
+                            row = new Dictionary<string, object>();
+                            row.Add("status", false);
+                            row.Add("response", response);
+                            rows.Add(row);
+                        }
+                        else
+                        {
+                            connection.Close();
+
+                            sQuery = "select top 1 * from tblProductAssignment left join tblAccountType on PAAccount = ATId where pacode = '" + pacode  + "' and paaccount = '" + acctype + "'";
+                            connection.Open();
+                            cmd = new SqlCommand(sQuery, connection);
+                            dr = cmd.ExecuteReader();
+                            if (dr.HasRows)
+                            {
+                                dr.Read();
+                                string account = dr["ATDescription"].ToString();
+                                dr.Close();
+                                connection.Close();
+
+                                response = "Product Code " + pacode + " already has assignment for " + account;
+                                row = new Dictionary<string, object>();
+                                row.Add("status", false);
+                                row.Add("response", response);
+                                rows.Add(row);
+                            }
+                            else
+                            {
+                                connection.Close();
+
+                                sQuery = "INSERT INTO tblProductAssignment select '" + pacode + "','" + pmid + "','" + acctype + "'";
+                                connection.Open();
+                                cmd = new SqlCommand(sQuery, connection);
+                                cmd.ExecuteNonQuery();
+                                connection.Close();
+
+                                sQuery = "UPDATE tblUploadItems set uiproduct = '" + pmid + "', uistatus='1' where uiid in (select ULId from tblUploadLog left join tblRawFile on ULFile = RFId where RFAccount = '" + acctype + "') AND uicode='" + pacode + "'";
+                                connection.Open();
+                                cmd = new SqlCommand(sQuery, connection);
+                                cmd.ExecuteNonQuery();
+                                connection.Close();
+
+                                sQuery = "delete from tblErrorLog where elid in (select ULId from tblUploadLog left join tblRawFile on ULFile = RFId where RFAccount = '" + acctype + "') AND eldetail='" + pacode + "'";
+                                connection.Open();
+                                cmd = new SqlCommand(sQuery, connection);
+                                cmd.ExecuteNonQuery();
+                                connection.Close();
+
+                                response = "SKU " + pmcode + " assignment saved!";
+                                row = new Dictionary<string, object>();
+                                row.Add("status", true);
+                                row.Add("response", response);
+                                rows.Add(row);
+
+                                // <!--- MNS20161209
+                                // Checking of affected POs, starts here
+                                sQuery = @"SELECT distinct ULId FROM tblUploadLog left join tblUploadItems on ULId = UIId
+                                           where ULStatus = '11'";
+                                connection.Open(); 
+                                cmd = new SqlCommand(sQuery, connection);
+                                dr = cmd.ExecuteReader();
+                                if (dr.HasRows)
+                                {
+                                    List<string> ulids = new List<string>();
+
+                                    while (dr.Read())
+                                    {
+                                        ulids.Add(dr["ULId"].ToString());
+                                      
+                                    }
+                                    dr.Close();
+                                    connection.Close();
+
+                                    foreach (string id in ulids) {
+                                        sQuery = "select * from tblUploadItems where uiid ='" + id + "' AND uistatus in ('0','3','4')";
+
+                                        cmd = new SqlCommand(sQuery, connection);
+                                        connection.Open();
+                                        dr = cmd.ExecuteReader();
+                                        if (!dr.HasRows)
+                                        {
+                                            connection.Close();
+                                            sQuery = "UPDATE tblUploadLog set ulstatus='20' where ulid ='" + id + "'";
+                                            connection.Open();
+                                            cmd = new SqlCommand(sQuery, connection);
+                                            cmd.ExecuteNonQuery();
+                                            connection.Close();
+                                        }
+                                        else {
+                                            connection.Close();
+                                        }
+                                    }
+
+                                }
+                                else
+                                {
+                                    connection.Close();
+                                }
+
+
+
+
+                                // Checking of affected POs, ends here
+                                // --- MNS20161209 ----->
+
+                            }
+                            
+
+                        }
+
+                    }
+                    else {
+
+                        connection.Close();
+                        response = "SKU "+ pmcode + " not found.";  
+                        row = new Dictionary<string, object>();
+                        row.Add("status", false);
+                        row.Add("response", response);
+                        rows.Add(row);
+                    }  
+                }
+                success = true;
+            }
+            catch (Exception ex) {
+                connection.Close();
+                success = false;
+                row = new Dictionary<string, object>();
+                row.Add("response", ex.Message);
+                rows.Add(row);
+            }
+            return new Response { success = success, detail = rows };
         }
 
         // PUT api/order/5

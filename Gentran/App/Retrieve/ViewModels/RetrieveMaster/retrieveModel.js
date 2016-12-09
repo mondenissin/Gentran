@@ -297,7 +297,10 @@
                                 $('#' + fileName[0].fileID).text("Read Successful");
                             } else {
                                 $('#' + fileName[0].fileID).text("With Error");
+                                $('#' + fileName[0].fileID).removeClass('progress-bar-success');
+                                $('#' + fileName[0].fileID).addClass('progress-bar-danger');
                             }
+                            $('#' + fileName[0].fileID).closest('.active').removeClass('active');
 
                             $(elemName[0].element).remove();
                             //$scope.refreshSM();

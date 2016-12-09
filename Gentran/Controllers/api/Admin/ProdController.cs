@@ -63,61 +63,147 @@ namespace Gentran.Controllers.api
         public object Get([FromUri]string value)
         {
             Data values = JsonConvert.DeserializeObject<Data>(value);
-
-            bool success = true;
-
+            bool success = false;  
+            string response = "";
+                                  
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
-
-            String sQuery = "";
-
-            if (values.operation == "get_accounts")
-            {
-                sQuery = "select ATDescription,ATId from tblaccounttype order by ATDescription asc";
-            }
-            else if (values.operation == "get_mapping")
-            {
-                sQuery = "select ATDescription,PAAccount,PACode,PAProduct from tblproductassignment left join tblaccounttype on PAAccount = ATId where PAProduct = '" + values.payload[0].pmid + "' order by ATDescription asc";
-            }
-            else if (values.operation == "suggestions")
-            {
-                sQuery = "select PMCode,PMDescription from tblproductmaster WHERE PMId != '0' AND (PMCode LIKE '%" + values.payload[0].prefix + "%' or PMDescription LIKE '%" + values.payload[0].prefix + "%') order by PMCode asc";
-            }
-            else
-            {
-                sQuery = "select PMId, PMCode, PMDescription, PMBarcode, PMStatus, PMCategory from tblproductmaster left join tblProductStatus on PMStatus = PSId";
-            }
-
-            SqlCommand cmd = new SqlCommand(sQuery, connection);
+            SqlCommand cmd;
+            SqlDataReader dr;
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
-
+            String sQuery = "";
             try
             {
-                connection.Open();
-                SqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+
+                if (values.operation == "check_map_availability")
                 {
-                    while (dr.Read())
+
+                    sQuery = "select * from tblProductMaster where PMCode = '"+ values.payload[0].pmcode +"'";
+                    cmd = new SqlCommand(sQuery, connection);
+                    connection.Open();
+                    dr = cmd.ExecuteReader();
+                    if (dr.HasRows)
                     {
-                        row = new Dictionary<string, object>();
-                        for (int i = 0; i < dr.FieldCount; i++)
+                        dr.Read();
+                        string pmid = dr["PMId"].ToString();
+                        dr.Close();  
+                        connection.Close();
+
+                        sQuery = "select top 1 PMCode,PACode from tblProductAssignment left join tblProductMaster on PMid = PAProduct where PAProduct = '" + pmid + "' AND PAAccount = '" + values.payload[0].acctype + "'";
+                        cmd = new SqlCommand(sQuery, connection);
+                        connection.Open();
+                        dr = cmd.ExecuteReader();
+                        if (dr.HasRows)
                         {
-                            var cName = dr.GetName(i);
-                            row.Add(cName, dr[cName]);
+                            dr.Read();
+                            string pmcode = dr["PMCode"].ToString();
+                            string pacode = dr["PACode"].ToString();
+                            dr.Close();
+
+                            connection.Close();
+                            success = false;
+                            response = "SKU ["+ pmcode + "] is already mapped with Mapping Code ["+ pacode + "]";
+                            row = new Dictionary<string, object>();
+                            row.Add("response", response);
+                            rows.Add(row);
                         }
-                        rows.Add(row);
+                        else
+                        {       
+                            connection.Close();
+                            sQuery = "select top 1 PMCode from tblProductAssignment left join tblProductMaster on PMid = PAProduct where PACode = '" + values.payload[0].pacode + "' AND PAAccount = '" + values.payload[0].acctype + "'";
+                            cmd = new SqlCommand(sQuery, connection);
+                            connection.Open();
+                            dr = cmd.ExecuteReader();
+                            if (dr.HasRows)
+                            {
+                                dr.Read();
+                                string pmcode = dr["PMCode"].ToString();
+                                dr.Close();
+                                connection.Close();
+
+                                success = false;
+                                response = "Mapping Code [" + values.payload[0].pacode + "] is already assigned to SKU [" + pmcode + "]" ;
+                                row = new Dictionary<string, object>();
+                                row.Add("response", response);
+                                rows.Add(row);
+                            }
+                            else
+                            {
+                                connection.Close();
+                                success = true;
+                                response = "Product mapping available";
+                                row = new Dictionary<string, object>();
+                                row.Add("response", response);
+                                rows.Add(row);
+                            }
+                        }   
+
                     }
+                    else
+                    {
+                        connection.Close();
+
+                        success = false;
+                        response = "Product not found";
+                        row = new Dictionary<string, object>();
+                        row.Add("response", response);
+                        rows.Add(row);
+                    }     
                 }
                 else
-                    success = false;
+                {
+                    if (values.operation == "get_accounts")
+                    {
+                        sQuery = "select ATDescription,ATId from tblaccounttype order by ATDescription asc";
+                    }
+                    else if (values.operation == "get_mapping")
+                    {
+                        sQuery = "select ATDescription,PAAccount,PACode,PAProduct from tblproductassignment left join tblaccounttype on PAAccount = ATId where PAProduct = '" + values.payload[0].pmid + "' order by ATDescription asc";
+                    }
+                    else if (values.operation == "suggestions")
+                    {
+                        sQuery = "select TOP 20 PMCode,PMDescription from tblproductmaster WHERE PMId != '0' AND (PMCode LIKE '%" + values.payload[0].prefix + "%' or PMDescription LIKE '%" + values.payload[0].prefix + "%') AND PMId not IN (SELECT PAProduct FROM tblProductAssignment where PAAccount = '" + values.payload[0].acctype + "') order by PMCode asc";
+                    }
+                    else
+                    {
+                        sQuery = "select PMId, PMCode, PMDescription, PMBarcode, PMStatus, PMCategory from tblproductmaster left join tblProductStatus on PMStatus = PSId";
+                    }
+
+
+                    cmd = new SqlCommand(sQuery, connection);
+                    connection.Open();
+                    dr = cmd.ExecuteReader();
+                    if (dr.HasRows)
+                    {
+                        while (dr.Read())
+                        {
+                            row = new Dictionary<string, object>();
+                            for (int i = 0; i < dr.FieldCount; i++)
+                            {
+                                var cName = dr.GetName(i);
+                                row.Add(cName, dr[cName]);
+                            }
+                            rows.Add(row);
+                        }
+                        success = true;
+                    }
+                    else
+                        success = false;  
+
+                }
             }
             catch (Exception ex)
             {
+                if (connection.State == ConnectionState.Open) { 
+                    connection.Close();
+                }
+                       
                 success = false;
                 row = new Dictionary<string, object>();
                 row.Add("Error", ex.Message);
                 rows.Add(row);
             }
+
 
             return new Response { success = success, detail = rows };
         }
@@ -145,7 +231,7 @@ namespace Gentran.Controllers.api
             SqlDataReader dr;
 
             try
-            {    
+            {
                 if (values.operation == "add_product")
                 {
                     activity = "ADD30";
@@ -199,7 +285,7 @@ namespace Gentran.Controllers.api
                             value = pmcode;
                         }
                     }
-                }  
+                }
                 else if (values.operation == "batch_mapping")
                 {
                     string id = "";
@@ -277,12 +363,12 @@ namespace Gentran.Controllers.api
                         rows.Add(row);
                     }
                     return new Response { success = success, detail = rows };
-                } 
+                }
                 else if (values.operation == "update_mapping")
                 {
 
                     activity = "EDI40";
-                                      
+
                     string pmcode = "";
                     string pmid = "";
                     string pacode = "";
@@ -345,7 +431,7 @@ namespace Gentran.Controllers.api
                                 connection.Close();
                                 success = true;
                             }
-                        }       
+                        }
                     }
                     string Accounts = "";
                     for (int ctr = 0; ctr < values.payload.Count; ctr++)
@@ -361,7 +447,7 @@ namespace Gentran.Controllers.api
                                 Accounts += ",'" + values.payload[ctr].acctype + "'";
                             }
                         }
-                    }              
+                    }
 
                     string atdescription = "";
 
