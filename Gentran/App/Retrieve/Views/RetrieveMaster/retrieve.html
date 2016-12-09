@@ -10,15 +10,15 @@
         <div class="navbar" id="navbar">
             <ul class="nav navbar-nav">
                 <li><input class="po-cbx-all" type="checkbox" ng-model="all" ng-change="selectFileAll()" ng-show="files" /></li>
-                <li><button class="btn btn-default btn-sm" ng-click="getSelected()" ng-show="files">Read files</button></li>
+                <li><button class="btn btn-default btn-sm" ng-click="getSelected()" ng-show="files"><i class="fa fa-paper-plane" aria-hidden="true"></i> Read files</button></li>
             </ul>
 
             <div class="pull-right">
                 <div class="form-inline">
-                    <input type="text" ng-model="search[searchBy]" placeholder="Search" class="form-control" />
                     <select ng-model="searchBy" class="form-control">
                         <option value="files" selected>PO File</option>
                     </select>
+                    <input type="text" ng-model="search[searchBy]" placeholder="Search" class="form-control" />
                     <pagination data-boundary-links="true" data-num-pages="noOfPagesPO" data-current-page="currentPage" max-size="pageSize" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                         <!--<input class="po-cbx" ng-click="$event = $event" ng-change="selectFile($event)" type="checkbox" ng-model="check" ng-checked="all" />-->
                         <div class="po-files">
                                 <div class="po-cbx-design col-sm-1 col-xs-2" >
-                                    <input class="po-cbx" ng-model="check" ng-checked="all" ng-click="$event = $event" ng-change="selectFile($event)" type="checkbox" />
+                                    <input class="po-cbx {{f.rawID}}" ng-model="check" ng-checked="all" ng-change="selectFile(f.rawID)" type="checkbox" />
                                 </div>
                                 <div  class="po-file-content col-sm-2 col-xs-4">
                                     <img ng-src="{{f.extension}}" class="po-files-ico pull-left" />

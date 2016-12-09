@@ -100,9 +100,9 @@
 
     $scope.advsearch = function () {
         $scope.Items = {};
-        $scope.Items.dateTo = $scope.datet;
-        $scope.Items.dateFrom = $scope.datef;
-
+        $scope.Items.dateFrom = $("#datefrom").val();
+        $scope.Items.dateTo = $("#dateto").val();
+       
         $scope.data = {};
         //$scope.data.operation = "advsearch";
         $scope.data.payload = _payloadParser($scope.Items);
@@ -122,6 +122,8 @@
             });
 
             $scope.filterMonitor = result.data.detail;
+            $scope.noOfPages = Math.ceil($scope.filterMonitor.length / $scope.entryLimit);
+            $scope.currentPage = 1;
         });
 
         $scope.dtOptions = DTOptionsBuilder.newOptions().withOption('order', [7, 'desc']);
@@ -234,6 +236,23 @@
             notif_success("New order", "Successful");
         }
     }
+
+    $("#datefrom").datepicker({
+        dateFormat: 'yy-mm-dd' ,
+        defaultDate: new Date(),
+        onSelect: function (dateStr) {
+            $("#dateto").val(dateStr);
+            $("#dateto").datepicker("option", { minDate: new Date(dateStr) })
+        }
+    });
+
+    $('#dateto').datepicker({
+        dateFormat: 'yy-mm-dd',
+        defaultDate: new Date(),
+        onSelect: function (dateStr) {
+            toDate = new Date(dateStr);
+        }
+    });
 
     initialize();
 }).filter('start', function () {

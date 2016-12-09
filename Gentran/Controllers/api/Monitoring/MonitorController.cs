@@ -198,7 +198,7 @@ namespace Gentran.Controllers.api.Monitor
                             AND uatype = 'KAS' 
                             AND (ulstatus != 25
                             OR ulstatus != 21)  
-                            AND (ul.ulReadDate >= '" + values.payload[0].dateTo + "' and  ul.ulReadDate <= dateadd(day,1,'" + values.payload[0].dateFrom + "')) ORDER BY sortupload desc"; //Dec. 6, 2016
+                            AND (ul.ulReadDate >= '" + values.payload[0].dateFrom + "' and  ul.ulReadDate <= dateadd(day,1,'" + values.payload[0].dateTo + "')) ORDER BY sortupload desc"; //Dec. 6, 2016
                 
                 SqlDataAdapter dataadapter = new SqlDataAdapter(selectStr, connection);
                 connection.Open();

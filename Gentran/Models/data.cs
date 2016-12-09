@@ -271,6 +271,8 @@ public class Response
     public long execution { get; set; }
     public string notiftext { get; set; }
     public string notiftextErr { get; set; }
+    public string notifConnection { get; set; }
+    public string connColor { get; set; }
     public object reports { get; set; }
     public object transactionDetail { get; set; }
 }

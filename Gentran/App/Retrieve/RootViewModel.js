@@ -8,7 +8,8 @@
     var initialize = function () {
         $scope.POfile = [];
         $scope.POfileErr = [];
-        $scope.outletConn = "";
+        $scope.outletConn = [];
+        $scope.color = [];
         $scope.autoRetrieve();
         var time = 0;
         
@@ -36,48 +37,47 @@
         viewModelHelper.apiGet('api/ftp/' + acct, null, function (result) {
             
             if (result.data.success) {
-
                 if (chain == "SM") {
                     $scope.POfile.SM = parseInt(result.data.detail.length);
-                    $scope.POfileErr.SM = parseInt(result.data.notiftextErr);
+                    $scope.outletConn.SM = result.data.notifConnection;
+                    $scope.color.SM = result.data.connColor;
                 }else if(chain == "S8"){
                     $scope.POfile.S8 = parseInt(result.data.detail.length);
-                    $scope.POfileErr.S8 = parseInt(result.data.notiftextErr);
+                    $scope.outletConn.S8 = result.data.notifConnection;
+                    $scope.color.S8 = result.data.connColor;
                 } else if (chain == "PRG") {
                     $scope.POfile.PRG = parseInt(result.data.detail.length);
-                    $scope.POfileErr.PRG = parseInt(result.data.notiftextErr);
+                    $scope.outletConn.PRG = result.data.notifConnection;
+                    $scope.color.PRG = result.data.connColor;
                 } else if (chain == "WTM") {
                     $scope.POfile.WTM = parseInt(result.data.detail.length);
-                    $scope.POfileErr.WTM = parseInt(result.data.notiftextErr);
+                    $scope.outletConn.WTM = result.data.notifConnection;
+                    $scope.color.WTM = result.data.connColor;
                 } else if (chain == "UTM") {
                     $scope.POfile.UTM = parseInt(result.data.detail.length);
-                    $scope.POfileErr.UTM = parseInt(result.data.notiftextErr);
+                    $scope.outletConn.UTM = result.data.notifConnection;
+                    $scope.color.UTM = result.data.connColor;
                 } else if (chain == "NCC") {
                     $scope.POfile.NCC = parseInt(result.data.detail.length);
-                    $scope.POfileErr.NCC = parseInt(result.data.notiftextErr);
-                    //$scope.files = result.data.detail.map(function (obj) {
-                    //    var rObj = {};
-                    //    var split = obj.files.split('\\');
-                    //    var ext = split[split.length - 1].split('.');
-                    //    rObj["files"] = split[split.length - 1];
-                    //    rObj["directory"] = obj.files;
-                    //    rObj["rawID"] = obj.rawid;
-                    //    rObj["thumbnail"] = "../Images/thumbnails/" + ext[ext.length - 1] + ".PNG";
-                    //    rObj["extension"] = "../Images/files/" + ext[ext.length - 1] + ".png";
-                    //    rObj["retrievedate"] = obj.retdate;
-
-                    //    return rObj;
-                    //});
-                    //$scope.filesList = $scope.files;
-
-                    //$scope.$applyAsync();
-
-                    //console.log($scope.files);
-                    $scope.outletConn = result.data.notifConnection;
+                    $scope.outletConn.NCC = result.data.notifConnection;
+                    $scope.color.NCC = result.data.connColor;
                 }
                 console.log(result.data);
             } else {
-                $scope.outletConn = result.data.notifConnection;
+                $scope.color = "red";
+                if (chain == "SM") {
+                    $scope.outletConn.SM = result.data.notifConnection;
+                } else if (chain == "S8") {
+                    $scope.outletConn.S8 = result.data.notifConnection;
+                } else if (chain == "PRG") {
+                    $scope.outletConn.PRG = result.data.notifConnection;
+                } else if (chain == "WTM") {
+                    $scope.outletConn.WTM = result.data.notifConnection;
+                } else if (chain == "UTM") {
+                    $scope.outletConn.UTM = result.data.notifConnection;
+                } else if (chain == "NCC") {
+                    $scope.outletConn.NCC = result.data.notifConnection;
+                }
             }
         });
     }

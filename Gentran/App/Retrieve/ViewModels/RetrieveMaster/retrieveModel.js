@@ -198,16 +198,20 @@
         window.location.href = viewModelHelper.getRootPath() + "api/download/" + data.rawID + ',order';
     }
 
-    $scope.selectFile = function ($event) {
-        /*console.log(this);
-        if (this.check == true) {
-            $($($event.target)[0].nextElementSibling).css('border', '2px solid green');
-            $($($event.target)[0].nextElementSibling).css('background', 'hsla(120,100%,50%,0.3)');
+    $scope.selectFile = function (x) {
+        console.log();
+        var element = $('.' + x);
+        var parent = element.closest('.po-files');
+        console.log(element.prop('checked'));
+        //console.log(x);
+        if (element.prop('checked') == true) {
+            parent.css('border', '2px solid green');
+            parent.css('background', 'hsla(120,100%,50%,0.3)');
         }
-        else if(this.check == false){
-            $($($event.target)[0].nextElementSibling).css('border', '2px solid #e1e1e1');
-            $($($event.target)[0].nextElementSibling).css('background', 'transparent');
-        }*/
+        else {
+            parent.css('border', '2px solid #e1e1e1');
+            parent.css('background', 'transparent');
+        }
     }
         
     $scope.selectFileAll = function () {
