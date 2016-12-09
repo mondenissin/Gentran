@@ -480,7 +480,7 @@ namespace Gentran.Controllers.api.Retrieve
                                     
                                     if (uQty != "0")
                                     {
-                                        String insertUIId = "insert into tblUploadItems select '" + uID + "','" + uProd + "','','" + uQty + "','" + uQty + "','" + uPrice + "','1'";
+                                        String insertUIId = "insert into tblUploadItems select '" + uID + "','" + uProd + "','" + data[x]["ProdCode"].ToString() + "','" + uQty + "','" + uQty + "','" + uPrice + "','1'";
                                         connection.Open();
                                         SqlCommand cmdUIIdInsert = new SqlCommand(insertUIId, connection);
                                         cmdUIIdInsert.ExecuteNonQuery();
@@ -501,11 +501,39 @@ namespace Gentran.Controllers.api.Retrieve
                                 cmdELIdInsert.ExecuteNonQuery();
                                 connection.Close();
 
-                                insertELId = "insert into tblUploadItems select '" + uID + "','0','" + uProd + "','" + uQty + "','" + uQty + "','" + uPrice + "','1'";
+
+                                String selectUIId = "select * from tblUploadItems where uiid = '" + uID + "' and uicode = '" + data[x]["ProdCode"].ToString() + "'";
                                 connection.Open();
-                                cmdELIdInsert = new SqlCommand(insertELId, connection);
-                                cmdELIdInsert.ExecuteNonQuery();
-                                connection.Close();
+                                SqlCommand cmdUIId = new SqlCommand(selectUIId, connection);
+                                SqlDataReader drUIId = cmdUIId.ExecuteReader();
+
+                                if (drUIId.HasRows)
+                                {
+                                    connection.Close();
+                                    success = false;
+                                    response = "Duplicate Store Product " + data[x]["ProdCode"].ToString() + " with " + uQty + " quantity ordered!";
+
+                                    insertELId = "insert into tblErrorLog select '" + uID + "','103','" + response + "'";
+                                    connection.Open();
+                                    cmdELIdInsert = new SqlCommand(insertELId, connection);
+                                    cmdELIdInsert.ExecuteNonQuery();
+                                    connection.Close();
+                                }
+                                else
+                                {
+                                    connection.Close();
+
+                                    if (uQty != "0")
+                                    {                  
+                                        insertELId = "insert into tblUploadItems select '" + uID + "','0','" + data[x]["ProdCode"].ToString() + "','" + uQty + "','" + uQty + "','" + uPrice + "','4'";
+                                        connection.Open();
+                                        cmdELIdInsert = new SqlCommand(insertELId, connection);
+                                        cmdELIdInsert.ExecuteNonQuery();
+                                        connection.Close();
+                                    }
+
+                                }
+
                             }
                         }
                     }

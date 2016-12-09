@@ -50,6 +50,148 @@
         ];
     }
 
+    //<!---- MNS20161208
+
+    $scope.AutoComplete = function (x, ctr) {
+        $('#txt_' + ctr).autocomplete({
+            source: function (request, response) {
+                var Search = {};
+                Search.prefix = request.term;
+                Search.acctype = $('#txt_account_det').val();
+
+                $scope.data = {};
+                $scope.data.operation = 'suggestions';
+                $scope.data.payload = _payloadParser(Search);
+
+                viewModelHelper.apiGet('api/prod', $scope.data, function (result) {
+                    var data = result.data;
+                    response($.map(data.detail, function (item) {
+                        return {
+                            label: '<b>' + item.PMCode + '</b> <span>' + item.PMDescription + '</span>',
+                            value: item.PMCode
+                        }
+                    }))
+                });
+
+            },
+            select: function (e, i) {
+                $('#txt_' + ctr).val(i.item.value);
+            },
+            minLength: 1
+        });
+    }
+
+    $scope.textboxFocus = function (x, ctr) {
+        $('#txt_' + ctr).removeClass('prod-valid');
+        $('#txt_' + ctr).removeClass('prod-invalid');
+    }
+    $scope.textboxBlur = function (x, ctr) {
+
+        if ($('#txt_' + ctr).val().trim() != '') {
+
+            var Item = {};
+            Item.pmcode = $('#txt_' + ctr).val();
+            Item.pacode = $('#txt_' + ctr).closest('tr').find('.table-data-spcode').text();
+            Item.acctype = $('#txt_account_det').val();
+
+            $scope.data = {};
+            $scope.data.operation = 'check_map_availability';
+            $scope.data.payload = _payloadParser(Item);
+
+            viewModelHelper.apiGet('api/prod', $scope.data, function (result) {
+                var data = result.data;
+                if (data.success) {
+                    $('#txt_' + ctr).addClass('prod-valid');
+                    $('#txt_' + ctr).removeClass('prod-invalid');
+                    $('#txt_' + ctr).attr('title', '');
+                } else {
+                    $('#txt_' + ctr).addClass('prod-invalid');
+                    $('#txt_' + ctr).removeClass('prod-valid');
+                    $('#txt_' + ctr).attr('title', data.detail[0].response);
+                }
+            });
+        } else {
+            $('#txt_' + ctr).addClass('prod-invalid');
+            $('#txt_' + ctr).removeClass('prod-valid');
+            $('#txt_' + ctr).attr('title', '');
+        }
+
+    }
+    // --- MNS20161208 --->
+
+    //<!---- MNS20161209
+
+    $scope.validateMapping = function () {
+        var Items = [];
+        var ctr = 0;         
+        var iDuplicates = 0;
+        var iBlank = 0;
+        $('.table-data-pmcode').each(function () {
+            element = this.closest('tr');
+            Items[ctr] = {};
+            Items[ctr].pacode = $(element).find('.table-data-spcode').text().trim();
+            Items[ctr].pmcode = $(element).find('.table-data-pmcode').val().trim();
+            Items[ctr].acctype = $('#txt_account_det').val().trim();
+            Items[ctr].ULId = $('#txt_id').val().trim();
+            ctr++;
+        });
+
+        for (var x = 0; x < Items.length; x++) {
+            if (Items[x].pmcode == '') {
+                iBlank++;
+            } else {
+                for (var y = x + 1; y < Items.length; y++) {
+                    if (Items[x].pmcode == Items[y].pmcode) {
+                        iDuplicates++;
+                    }
+                }
+            }
+        }
+
+        if (iBlank > 0) {
+            notif_warning('Order Details', 'Please fill all required fields.');
+        }
+        else if (iDuplicates > 0) {
+            notif_warning('Order Details', 'Duplicate SKU input.');
+        }
+        else {
+            $scope.updateMapping(Items);
+        }
+        
+    }
+
+    $scope.updateMapping = function (Item) {
+        $scope.Items = Item;
+
+        $scope.data = {};
+        $scope.data.operation = "update_order_map";
+        $scope.data.payload = _payloadParser($scope.Items);
+
+
+        viewModelHelper.apiPost('api/monitor', $scope.data, function (result) {
+            var data = result.data;
+            if (data.success) {
+                for (var x = 0; x < data.detail.length; x++) {
+                    if ( data.detail[x].status){
+                        notif_success('Order Details', data.detail[x].response);
+                    }
+                    else{
+                        notif_warning('Order Details', data.detail[x].response);
+                    }
+                    $('#orderDetailsModal').modal('hide');
+                    $scope.refreshMonitor();
+                }
+            } else {
+                notif_warning('Order Details', data.detail[0].response);
+            }
+        });
+    }
+
+
+    // --- MNS20161209 --->
+
+
+
     //$scope.refreshTransact = function () {
 
     //    $scope.searchTransaction = {};
@@ -133,16 +275,20 @@
     }
 
     $scope.showDetails = function (order) {
+        $scope.ifConfirm = false;
+
+        $('.table-data-pmcode').attr('title', '');
+        $('.table-data-pmcode').val();
+
         $scope.flags.shownFromList = true;
-        console.log(order);
-        if (order.uiprice == "NaN" || order.uiprice == 0) {
+        if (order.uiprice < 0) {
             notif_warning('Order Details', 'Lack of Product Mapping');
         } else {
 
             if (order.ulstatus == "20") {
-                $scope.ifEditable = true;
-            } else {
                 $scope.ifEditable = false;
+            } else {
+                $scope.ifEditable = true;
             }
             var orderDetails = [];
             orderDetails[0] = {};
@@ -153,13 +299,18 @@
             orderDetails.txt_remarks = order.ulremarks;
             orderDetails.txt_status = order.ulstatus;
             orderDetails.txt_orderid = order.ulid;
+
             $scope.ordersInfo = orderDetails;
-            console.log(order);
+
             viewModelHelper.apiGet('api/order/' + order.ulid, null, function (result) {
-                console.log(result.data.detail);
                 $scope.orderItems = result.data.detail.filter(x=>x.UITPrice = parseInt(x.UITPrice).toLocaleString());
                 $scope.orderItems = result.data.detail.filter(x=>x.UIPrice = parseInt(x.UIPrice).toLocaleString());
             });
+
+
+            $('#txt_account_det').val(order.rfaccount);
+            $('#txt_id').val(order.ulid);
+            $('#txt_status').val(order.ulstatus);
 
             $('#orderDetailsModal').modal('show');
         }

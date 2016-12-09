@@ -102,7 +102,7 @@ namespace Gentran.Controllers.api.Admin
                                 left join tblusermaster c on c.umid = a.ULSubmitUser 
                                 left join (SELECT SUM(uiquantity * ppprice) as uiprice, SUM(uiquantity) as sumulquantity,COUNT(uiquantity) as countulquantity,uiid FROM tblUploadItems 
                                 left join tblUploadLog on ULId = UIId left join tblrawfile on RFId = ULFile left join tblCustomerMaster on cmid = ulcustomer
-                                left join tblProductPricing on ppproduct = uiproduct and pparea = cmarea WHERE uistatus NOT IN ('3','0') group by uiid ) ui on a.ULId = ui.UIId  ";
+                                left join tblProductPricing on ppproduct = uiproduct and pparea = cmarea WHERE uistatus NOT IN ('4','3','0') group by uiid ) ui on a.ULId = ui.UIId  ";
 
                         if (values.payload[0].reportType == "latepo"){
                             sQuery += "where CAST(a.ULReadDate as time) > CAST('12:00' as time) ";
@@ -132,7 +132,7 @@ namespace Gentran.Controllers.api.Admin
                                 left join tblusermaster c on c.umid = a.ULSubmitUser 
                                 left join (SELECT SUM(uiquantity * ppprice) as uiprice, SUM(uiquantity) as sumulquantity,COUNT(uiquantity) as countulquantity,uiid FROM tblUploadItems 
                                 left join tblUploadLog on ULId = UIId left join tblrawfile on RFId = ULFile left join tblCustomerMaster on cmid = ulcustomer
-                                left join tblProductPricing on ppproduct = uiproduct and pparea = cmarea WHERE uistatus NOT IN ('3','0') group by uiid ) ui on a.ULId = ui.UIId 
+                                left join tblProductPricing on ppproduct = uiproduct and pparea = cmarea WHERE uistatus NOT IN ('4','3','0') group by uiid ) ui on a.ULId = ui.UIId 
                                 where r.RFReadUser = '" + values.payload[0].ULUser + "' and "+ dateFilter + " between '" + values.payload[0].dateFrom + "' and '" + values.payload[0].dateTo + "' ";
 
                         if (values.payload[0].reportType == "latepo") {
@@ -163,7 +163,7 @@ namespace Gentran.Controllers.api.Admin
                                 left join tblusermaster c on c.umid = a.ULSubmitUser 
                                 left join (SELECT SUM(uiquantity * ppprice) as uiprice, SUM(uiquantity) as sumulquantity,COUNT(uiquantity) as countulquantity,uiid FROM tblUploadItems 
                                 left join tblUploadLog on ULId = UIId left join tblrawfile on RFId = ULFile left join tblCustomerMaster on cmid = ulcustomer
-                                left join tblProductPricing on ppproduct = uiproduct and pparea = cmarea WHERE uistatus NOT IN ('3','0') group by uiid ) ui on a.ULId = ui.UIId 
+                                left join tblProductPricing on ppproduct = uiproduct and pparea = cmarea WHERE uistatus NOT IN ('4','3','0') group by uiid ) ui on a.ULId = ui.UIId 
                                 where " + dateFilter + " between '" + values.payload[0].dateFrom + "' and '" + values.payload[0].dateTo + "' ";
 
                         if (values.payload[0].reportType == "latepo"){

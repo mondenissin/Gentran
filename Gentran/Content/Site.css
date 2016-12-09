@@ -240,6 +240,17 @@ footer:not(.footer-admin) {
     width: 100%;
 }
 
+.table-data-pmcode {
+    text-transform: uppercase;
+}
+
+.table-data-opmcode {
+    padding-left: 12px!important;
+}
+
+.prod-valid {
+    background-color: rgba(3, 251, 45, 0.49)!important;
+}
 .prod-invalid {
     background-color: rgba(255, 0, 0, 0.21)!important;
 }

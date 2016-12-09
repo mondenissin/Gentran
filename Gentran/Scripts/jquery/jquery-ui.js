@@ -3277,7 +3277,7 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_renderItem: function( ul, item ) {
-		return $( "<li>" ).text( item.label ).appendTo( ul );
+		return $( "<li>" ).html( item.label ).appendTo( ul );   //MNS20161208
 	},
 
 	_move: function( direction, event ) {
