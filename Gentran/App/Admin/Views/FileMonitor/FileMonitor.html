@@ -1,0 +1,152 @@
+﻿<style>
+    .text-center {
+        text-align:center !important;
+    }
+</style>
+<div class="page-table">
+    
+    <div class="breadcrumb">
+        <div class="pull-left" style="line-height: 40px;">
+            <div class="form-inline">
+                <label>N/A = <span style="color:red;">Not Yet Processed</span></label>
+            </div>
+        </div>
+        <div class="pull-right">
+            <div class="form-inline">
+                <select ng-model="searchByPO" class="form-control" ng-change="clearSearch()">
+                    <option value="ULPONumber" selected>PO Number</option>
+                    <option value="RFFilename">Filename</option>
+                    <option value="RSDescription">Status</option>
+                </select>
+                <input type="text" ng-model="searchPO[searchByPO]" ng-model-options="{debounce: {'default': 100, 'blur': 0}}" class="form-control" placeholder="Search" />
+            </div>
+        </div><br /><br />
+    </div>
+
+            <table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-responsive table-bordered bordered table-striped table-condensed datatable table-font text-center" >
+                <thead>
+                    <tr>
+                        <th style="width:5%;">Account</th>
+                        <th style="width:25%;">Filename</th>
+                        <!--<th>PO #</th>-->
+                        <th>Retrieve Date</th>
+                        <th style="width:25%;">Read Date</th>
+                        <th style="width:10%;">Submitted Date</th>
+                        <th>Reader</th>
+                        <th>Submitted By</th>
+                        <th style="">Status</th>
+                        <th class="no-sort">Options</th>
+                    </tr>
+                </thead>
+                <tbody style="text-align:center !important;font-size:12px;">
+                    <tr ng-repeat="m in filterMonitor | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
+                        <td ng-cloak class="table-data-rsuser text-center">{{m.RFAccount}}</td>
+                        <td ng-cloak class="table-data-ponum text-center">{{m.RFFilename}}</td>
+                        <!--<td ng-cloak class="table-data-ponum text-center">{{m.ULPONumber == NULL || m.ULPONumber == "" ? 'N/A' : m.ULPONumber}}</td>-->
+                        <td ng-cloak class="table-data-rrtdate text-center">{{m.RFRetrieveDate}}</td>
+                        <td ng-cloak class="table-data-rrddate text-center" style="width:85px; text-align:center;">{{m.ULReadDate == NULL || m.ULReadDate == "" ? 'N/A' : m.ULReadDate}}</td>
+                        <td ng-cloak class="table-data-rsdate text-center">{{m.ULSubmitDate == NULL || m.ULSubmitDate == "" ? "N/A" : m.ULSubmitDate}}</td>
+                        <td ng-cloak class="table-data-rrddate text-center">{{m.ULReadUser == NULL || m.ULReadUser == "" ? "N/A" : m.ULReadUser }}</td>
+                        <td ng-cloak class="table-data-rsuser text-center">{{m.ULSubmitUser == NULL || m.ULSubmitUser == "" ? "N/A" : m.ULSubmitUser}}</td>
+                        <td ng-cloak class="table-data-rsstatus text-center" style="width:55px;"><span class="label label-{{m.RSDescription == 'Unread' ? 'warning' : m.RSDescription == 'Read File' ? 'success' : 'danger'}} ">{{m.RSDescription}}</span></td>
+                        <td ng-cloak style="width:55px;  text-align:center;">
+                            <button class="btn btn-default btn-xs option-icon-size" ng-click="showDetails(m)" title="PO Details"><i class="fa fa-info"></i></button>
+                            <button class="btn btn-default btn-xs option-icon-size" ng-click="downloadFile(m)" title="Download File"><i class="fa fa-download"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <pagination data-boundary-links="true" data-num-pages="noOfPages" data-current-page="currentPage" max-size="pageSize" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
+
+</div>
+
+
+<!------- VIEW COMPLETE DETAILS MODAL ------->
+<div id="ViewPODetailsModal" class="modal fade" role="dialog">
+    <div class="modal-dialog ">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-user"></i> Details for PO Number # <b><span id="txt_ponum"></span></b></h4>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Account: </td>
+                        <td id="txt_account"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Customer #: </td>
+                        <td id="txt_custnum"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Customer Name: </td>
+                        <td id="txt_custname"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Order Date: </td>
+                        <td id="txt_orderdate"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Delivery Date: </td>
+                        <td id="txt_deliverydate"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Cancel Date: </td>
+                        <td id="txt_canceldate"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Retrieve Date: </td>
+                        <td id="txt_retrievedate"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Read Date: </td>
+                        <td id="txt_readdate"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Submitted Date: </td>
+                        <td id="txt_submitteddate"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Reader: </td>
+                        <td id="txt_reader"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Submitted By: </td>
+                        <td id="txt_submittedby"></td>
+                    </tr>
+                    <!--<tr>
+                        <td style="width:150px; font-weight:bold;">Total SKU: </td>
+                        <td id="txt_sku"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Total Quantity: </td>
+                        <td id="txt_qty"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:150px; font-weight:bold;">Total Amount: </td>
+                        <td id="txt_amount"></td>
+                    </tr>-->
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!------- END OF VIEW COMPLETE DETAILS MODAL ------->
+
+<script>
+    $(function () {
+        var parent = $('.data-management');
+        parent.addClass('menu-open').css({ 'display': 'block' });
+        var elem = $('.btnmonitor');
+        parent.find('li').each(function () {
+            $(this).removeClass('active');
+        });
+        elem.closest('li').addClass(' active');
+    });
+</script>

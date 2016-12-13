@@ -39,6 +39,10 @@
     $scope.logList = function () {
         viewModelHelper.navigateTo('Admin/TransactionLogs');
     }
+
+    $scope.filemonitorList = function () {
+        viewModelHelper.navigateTo('Admin/FileMonitor');
+    }
     
     $scope.connections = function () {
         viewModelHelper.navigateTo('Admin/Connections');

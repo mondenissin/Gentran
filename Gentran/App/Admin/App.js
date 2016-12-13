@@ -7,6 +7,7 @@
     $routeProvider.when(_root + 'Admin/Customers', { templateUrl: _root + 'App/Admin/Views/Cust/CustList.html', controller: 'custViewModel' });
     $routeProvider.when(_root + 'Admin/TransactionLogs', { templateUrl: _root + 'App/Admin/Views/TransLog/TransLogList.html', controller: 'translogViewModel' });
     $routeProvider.when(_root + 'Admin/Connections', { templateUrl: _root + 'App/Admin/Views/Connections/ConnectionList.html', controller: 'connectionViewModel' });
+    $routeProvider.when(_root + 'Admin/FileMonitor', { templateUrl: _root + 'App/Admin/Views/FileMonitor/FileMonitor.html', controller: 'filemonitorViewModel' });
     $routeProvider.when(_root + 'Admin/Dashboard', { templateUrl: _root + 'App/Admin/Views/Dashboard/Dashboard.html', controller: 'dashViewModel' });
     $routeProvider.when(_root + 'Admin/reports', { templateUrl: _root + 'App/Admin/Views/Reports/MasterReport.html', controller: 'reportViewModel' });
     $routeProvider.otherwise({ redirectTo: _root + 'Admin/Dashboard' });
