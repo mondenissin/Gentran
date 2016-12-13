@@ -16,6 +16,7 @@ namespace Gentran.Controllers.mvc
         {
             FormsAuthentication.SignOut();
             Session.Abandon();
+            System.Web.HttpRuntime.UnloadAppDomain();
             return RedirectToAction("Login", "Home");
             //return View();
         }
