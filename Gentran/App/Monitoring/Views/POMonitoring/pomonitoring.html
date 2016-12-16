@@ -290,8 +290,8 @@
                                             <td ng-if="oi.UIStatus != 4" class="table-data-opmcode">{{oi.UIProduct}}</td>
                                             <td class="table-data-spcode">{{oi.UICode}}</td>
                                             <td style="text-align:right;"> {{oi.UIQuantity }}</td>
-                                            <td style="text-align:right;">₱ {{oi.UIPrice }}</td>
-                                            <td style="text-align:right;">₱ {{oi.UITPrice }}</td>
+                                            <td style="text-align:right;">₱ {{oi.UIPrice == 'NaN' ? '0' : oi.UIPrice }}</td>
+                                            <td style="text-align:right;">₱ {{oi.UITPrice == 'NaN' ? '0' : oi.UITPrice }}</td>
                                             <!--<td><button class="btn btn-default btn-sm " ng-click="delItem(oi,$event)" title="Delete Item" ng-hide="ifEdit"><i class="fa fa-trash" aria-hidden="true"></i></button></td>-->
                                         </tr>
                                     </tbody>

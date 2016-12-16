@@ -58,8 +58,10 @@
                     $scope.currentPage = 1;
                 });
 
-                //viewModelHelper.saveTransaction(result.data.transactionDetail);
-                console.log($scope.files);
+                //FOR PAUSING RETRIEVING PO COUNTS
+                retrieveService.setPause(false);
+
+                console.log("continued: " + retrieveService.getPause());
             } else {
                 console.log(result.data.detail[0].error);
             }
