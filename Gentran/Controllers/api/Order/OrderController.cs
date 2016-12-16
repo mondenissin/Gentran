@@ -120,12 +120,11 @@ namespace Gentran.Controllers.api.Order
                             WHERE uistatus NOT IN ('4','3','0')
                             group by uiid ) ui 
                             ON ul.ulid = ui.uiid 
-                            WHERE ua.uauser = '17002'
-                            AND uatype = 'KAS' 
+                            WHERE uatype = 'KAS' 
                             AND ulstatus = 25
                             OR ulstatus = 21  
                             AND ul.ulReadDate > DATEADD(day, -15, GETDATE())
-                            ORDER BY sortupload desc"; //Dec. 2, 2016
+                            ORDER BY sortupload desc"; //Dec. 2, 2016 //Dec. 16 - WHERE ua.uauser = '17002' 
 
 
                 SqlDataAdapter dataadapter = new SqlDataAdapter(selectStr, connection);
