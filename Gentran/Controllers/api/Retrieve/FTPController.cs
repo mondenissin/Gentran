@@ -31,7 +31,7 @@ namespace Gentran.Controllers.api
         public Object Get(string id)
         {
             string acct = id;
-            int notifCtrErr = 0;
+            int notifCtrErr = 0,notifCtr = 0;
             string notifConnection = "";
             string connColor = "";
             bool success = true;
@@ -98,14 +98,17 @@ namespace Gentran.Controllers.api
                 {
                     if (rd1.HasRows)
                     {
-                        while (rd1.Read())
-                        {
-                            row = new Dictionary<string, object>();
-                            row.Add("files", rd1[0].ToString());
-                            row.Add("retdate", rd1[1].ToString());
-                            row.Add("rawid", rd1[2].ToString());
-                            rows.Add(row);
-                        }
+                        //while (rd1.Read())
+                        //{
+                        //    row = new Dictionary<string, object>();
+                        //    row.Add("files", rd1[0].ToString());
+                        //    row.Add("retdate", rd1[1].ToString());
+                        //    row.Add("rawid", rd1[2].ToString());
+                        //    rows.Add(row);
+                        //}
+
+                        dt.Load(rd1);
+                        notifCtr = dt.Rows.Count;
                     }
                     rd1.Close();
 
@@ -299,7 +302,7 @@ namespace Gentran.Controllers.api
                 rows.Add(row);
             }
 
-            return new Response { success = success, detail = rows, notiftextErr = notifCtrErr.ToString(), notifConnection = notifConnection, connColor = connColor };
+            return new Response { success = success, detail = rows, notiftextErr = notifCtrErr.ToString(), notifConnection = notifConnection, connColor = connColor,notiftext = notifCtr.ToString() };
         }
 
         // GET api/ftp/5
