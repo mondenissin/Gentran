@@ -33,6 +33,19 @@ public class Value
 
     public string cmArea { get; set; }
 
+    //------Connection-------//
+    public string CSAccount { get; set; }
+
+    public string CSId { get; set; }
+
+    public string CSHost { get; set; }
+
+    public string CSPort { get; set; }
+
+    public string CSUserName { get; set; }
+
+    public string CSPassword { get; set; }
+
     //------Customer Assignment-------//
 
     public string caCode { get; set; }

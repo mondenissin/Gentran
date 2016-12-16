@@ -1,0 +1,146 @@
+﻿<div class="breadcrumb">
+    <button class="btn btn-default btn-xs icon-size" title="Add Connection" ng-click="addconnModal()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+    <div class="pull-right">
+        <div class="form-inline">
+            <select ng-model="searchBy" class="form-control" ng-change="clearSearch()">
+                <option value="CSAccount" selected>Account</option>
+            </select>
+            <input type="text" ng-model="search[searchBy]" ng-model-options="{debounce: {'default': 100, 'blur': 0}}" placeholder="Search" class="form-control" />
+        </div>
+    </div>
+</div>
+<pagination data-boundary-links="true" data-num-pages="noOfPages" data-current-page="currentPage" max-size="pageSize" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
+<table id="PageTable" dt-column-defs="dtColumnDefs" datatable="ng" dt-options="dtOptions" class="table table-bordered bordered table-striped table-condensed datatable">
+    <thead>
+        <tr>
+            <th  style="width:10%;">Account</th>
+            <th  style="width:50%;">Hostname</th>
+            <th>Port</th>
+            <th>Username</th>
+            <th class="no-sort" style="width:5%;">Option</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="c in filterList | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
+            <td ng-cloak class="text-center"> {{c.CSAccount}} </td>
+            <td ng-cloak class="text-center"> {{c.CSHost}} </td>
+            <td ng-cloak class="text-center"> {{c.CSPort}} </td>
+            <td ng-cloak class="text-center"> {{c.CSUserName}} </td>
+            <td class="table-data-poptions" ng-cloak>
+                <button class="btn btn-default btn-xs option-icon-size" ng-click="editconnModal(c)" title="Edit Connection"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<pagination data-boundary-links="true" data-num-pages="noOfPages" data-current-page="currentPage" max-size="pageSize" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
+
+
+<!------- ADD CONNECTION MODAL ------->
+<div id="addConnModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-user"></i> Add Connection</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form"> 
+                    <div class="form-group">
+                        <label>Account:</label>
+                        <input id="txt_addacct" class="form-control  input-sm" type="text" />
+
+                    </div>
+                    <div class="form-group">
+                        <label>Hostname:</label>
+                        <input id="txt_addhost" class="form-control  input-sm" type="text" />
+
+                    </div>
+                    <div class="form-group">
+
+                        <label>Port:</label>
+                        <input id="txt_addport" class="form-control input-sm" type="text" />
+
+                    </div>
+                    <div class="form-group">
+
+                        <label>User Name:</label>
+                        <input id="txt_adduname" class="form-control input-sm" type="text" />
+
+                    </div>
+                    <div class="form-group">
+
+                        <label>Password:</label>
+                        <input id="txt_addpass" class="form-control input-sm" type="password" />
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-sm" ng-click="saveAddConn()">Add Connection</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!------- END OF ADD CONNECTION MODAL ------->
+
+<!------- EDIT CONNECTION MODAL ------->
+<div id="editConnModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-user"></i>  Connection for <b><span id="txt_outlet"></span></b></h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <input id="txt_hiddenid" class="form-control  input-sm" type="hidden" />
+                    <div class="form-group">
+                        <label>Hostname:</label>
+                        <input id="txt_edithost" class="form-control  input-sm" type="text"  />
+
+                    </div>
+                    <div class="form-group">
+
+                        <label>Port:</label>
+                        <input id="txt_editport" class="form-control input-sm" type="text" />
+
+                    </div>
+                    <div class="form-group">
+
+                        <label>User Name:</label> 
+                        <input id="txt_edituname" class="form-control input-sm" type="text" />
+
+                    </div>
+                    <div class="form-group">
+
+                        <label>Password:</label>
+                        <input id="txt_editpass" class="form-control input-sm" type="password" />
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-sm" ng-click="saveEditConn()">Save Connection</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!------- END OF EDIT CONNECTION MODAL ------->
+
+
+
+<script>
+    $(function () {
+        var parent = $('.data-management');
+        parent.addClass('menu-open').css({ 'display': 'block' });
+        var elem = $('.btnconn');
+        parent.find('li').each(function () {
+            $(this).removeClass('active');
+        });
+        elem.closest('li').addClass(' active');
+    });
+</script>
