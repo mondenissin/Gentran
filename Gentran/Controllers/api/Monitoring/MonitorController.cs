@@ -75,12 +75,11 @@ namespace Gentran.Controllers.api.Monitor
                             WHERE uistatus NOT IN ('4','3','0')
                             group by uiid ) ui 
                             ON ul.ulid = ui.uiid 
-                            WHERE ua.uauser = '17002'
-                            AND uatype = 'KAS' 
+                            WHERE uatype = 'KAS' 
                             AND ulstatus != 25
                             OR ulstatus != 21  
                             AND ul.ulReadDate = GETDATE()
-                            ORDER BY sortupload desc"; //Dec. 6, 2016
+                            ORDER BY sortupload desc"; //Dec. 6, 2016 // Dec 16 - ua.uauser = '17002'
 
                 SqlDataAdapter dataadapter = new SqlDataAdapter(selectStr, connection);
                 connection.Open();
@@ -98,7 +97,7 @@ namespace Gentran.Controllers.api.Monitor
                     foreach (DataColumn col in dt.Columns)
                     {
 
-                        if (col.ColumnName == "ulstatus" && dr[col].ToString() == "11")
+                        if (col.ColumnName == "ulstatus" && (dr[col].ToString() == "11" || dr[col].ToString() == "12"))
                         {
                             sStat = dr["usdescription"].ToString();
                             icon = "fa-exclamation-circle";

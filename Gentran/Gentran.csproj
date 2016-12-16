@@ -130,8 +130,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\api\Admin\ConnController.cs" />
     <Compile Include="Controllers\api\Admin\CustController.cs" />
     <Compile Include="Controllers\api\Admin\DashController.cs" />
+    <Compile Include="Controllers\api\Admin\FileMonitorController.cs" />
     <Compile Include="Controllers\api\Admin\LogsController.cs" />
     <Compile Include="Controllers\api\Admin\ProdController.cs" />
     <Compile Include="Controllers\api\Admin\ReportsController.cs" />
@@ -166,14 +168,18 @@
   <ItemGroup>
     <Content Include="App\Admin\App.js" />
     <Content Include="App\Admin\RootViewModel.js" />
+    <Content Include="App\Admin\ViewModels\Connections\ConnectionModel.js" />
     <Content Include="App\Admin\ViewModels\Cust\CustListModel.js" />
     <Content Include="App\Admin\ViewModels\Dashboard\DashboardModel.js" />
+    <Content Include="App\Admin\ViewModels\FileMonitor\FileMonitorModel.js" />
     <Content Include="App\Admin\ViewModels\Prod\ProdListModel.js" />
     <Content Include="App\Admin\ViewModels\Reports\MasterReportModel.js" />
     <Content Include="App\Admin\ViewModels\TransLog\TransLogListModel.js" />
     <Content Include="App\Admin\ViewModels\Users\UserListModel.js" />
+    <Content Include="App\Admin\Views\Connections\ConnectionList.html" />
     <Content Include="App\Admin\Views\Cust\CustList.html" />
     <Content Include="App\Admin\Views\Dashboard\Dashboard.html" />
+    <Content Include="App\Admin\Views\FileMonitor\FileMonitor.html" />
     <Content Include="App\Admin\Views\Prod\ProdList.html" />
     <Content Include="App\Admin\Views\Reports\MasterReport.html" />
     <Content Include="App\Admin\Views\TransLog\TransLogList.html" />
@@ -296,6 +302,20 @@
     <Content Include="Images\files\xlsx.png" />
     <Content Include="Images\files\xml.png" />
     <Content Include="Images\FTP.png" />
+    <Content Include="Images\jquery\ui-bg_flat_0_888888_40x100.png" />
+    <Content Include="Images\jquery\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Images\jquery\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Images\jquery\ui-bg_glass_25_e1f0f5_1x400.png" />
+    <Content Include="Images\jquery\ui-bg_glass_55_444444_1x400.png" />
+    <Content Include="Images\jquery\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Images\jquery\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Images\jquery\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Images\jquery\ui-bg_inset-soft_95_fef1ec_1x100.png" />
+    <Content Include="Images\jquery\ui-icons_222222_256x240.png" />
+    <Content Include="Images\jquery\ui-icons_309bbf_256x240.png" />
+    <Content Include="Images\jquery\ui-icons_454545_256x240.png" />
+    <Content Include="Images\jquery\ui-icons_bf3030_256x240.png" />
+    <Content Include="Images\jquery\ui-icons_ffffff_256x240.png" />
     <Content Include="Images\logoTrans.png" />
     <Content Include="Images\master\add.png" />
     <Content Include="Images\master\assign.png" />
@@ -343,6 +363,9 @@
     <Content Include="Images\sort_desc_disabled.png" />
     <Content Include="Images\thumbnails\excel.PNG" />
     <Content Include="Images\thumbnails\xml.PNG" />
+    <Content Include="Images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Images\ui-icons_222222_256x240.png" />
+    <Content Include="Images\ui-icons_454545_256x240.png" />
     <Content Include="Images\user3-128x128.jpg" />
     <Content Include="Images\view.png" />
     <Content Include="Scripts\angular\angular-animate.js" />
@@ -1226,8 +1249,6 @@
     <Content Include="Views\Shared\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App\Admin\ViewModels\Connections\" />
-    <Folder Include="App\Admin\Views\Connections\" />
     <Folder Include="App\Home\" />
     <Folder Include="App_Data\" />
     <Folder Include="Scripts\angular\i18n\ngLocale\" />

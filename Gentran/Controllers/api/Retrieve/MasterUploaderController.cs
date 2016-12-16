@@ -148,7 +148,8 @@ namespace Gentran.Controllers.api.Retrieve
                         if (listKey.Keys.ElementAt(0).ToString() == "deliver_to")
                         {
                             string[] custSplit = listKey["deliver_to"].ToString().Split('-');
-                            cust = custSplit[1] + "-" + custSplit[0];
+                            //cust = custSplit[1] + "-" + custSplit[0];
+                            cust = custSplit[0];
                         }
                         if (listKey.Keys.ElementAt(0).ToString() == "po_number")
                         {
@@ -323,7 +324,7 @@ namespace Gentran.Controllers.api.Retrieve
 
         private void SaveData(List<Dictionary<string, object>> data) {
             
-            string uQty = "", uPrice = "", uPONum = "", uAcct = "", uODate = "", uDDate = "",uCDate = "", uUser = "",uRemarks = "", uCust = "",uID="",uProd="",rawID = "";
+            string uQty = "", uPrice = "", uPONum = "", uAcct = "", uODate = "", uDDate = "",uCDate = "", uUser = "",uRemarks = "", uCust = "",uID="",uProd="",rawID = "",streCode = "";
             string response = "Successful";
             Boolean NoCustomer = false;
             Boolean validPO = true;
@@ -361,6 +362,7 @@ namespace Gentran.Controllers.api.Retrieve
                         else
                         {
                             connection.Close();
+                            streCode = uCust;
                             uCust = "0";
                             //if (ULAccount == "ALT" || ULAccount == "GGM" || ULAccount == "UNT" || ULAccount == "PRN" || ULAccount == "IST")
                                 //NoCustomer = false;
@@ -435,7 +437,7 @@ namespace Gentran.Controllers.api.Retrieve
                                 connection.Close();
 
                                 success = false;
-                                response = "Invalid Store Code: " + uCust;
+                                response = "Invalid Store Code: " + streCode;
                             }
                         }
                         //CHECK CUSTOMER------------------------------------------------------------------------>
