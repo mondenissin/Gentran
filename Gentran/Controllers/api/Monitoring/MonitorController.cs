@@ -97,7 +97,7 @@ namespace Gentran.Controllers.api.Monitor
                     foreach (DataColumn col in dt.Columns)
                     {
 
-                        if (col.ColumnName == "ulstatus" && dr[col].ToString() == "11")
+                        if (col.ColumnName == "ulstatus" && (dr[col].ToString() == "11" || dr[col].ToString() == "12"))
                         {
                             sStat = dr["usdescription"].ToString();
                             icon = "fa-exclamation-circle";

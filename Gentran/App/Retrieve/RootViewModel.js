@@ -90,7 +90,16 @@
         });
     }
 
-    $scope.smFile = function () {
+    $scope.smFile = function ($event) {
+
+        var buttonParent = $($event.target.parentNode.parentNode);
+        
+        buttonParent.find('li').each(function () {
+            $(this).removeClass('outlet-active');
+        });
+        
+        $($event.target.parentNode).addClass('outlet-active');
+
         retrieveService.setPause(true);
         viewModelHelper.navigateTo('Retrieve/SM');
         if ($location.path() == "/Gentran/Retrieve/SM") {
@@ -99,7 +108,16 @@
         $scope.activeOutlet = "sm";
     }
 
-    $scope.superFile = function () {
+    $scope.superFile = function ($event) {
+
+        var buttonParent = $($event.target.parentNode.parentNode);
+
+        buttonParent.find('li').each(function () {
+            $(this).removeClass('outlet-active');
+        });
+
+        $($event.target.parentNode).addClass('outlet-active');
+
         retrieveService.setPause(true);
         viewModelHelper.navigateTo('Retrieve/Super8');
         if ($location.path() == "/Gentran/Retrieve/Super8") {
@@ -108,7 +126,15 @@
         $scope.activeOutlet = "s8";
     }
 
-    $scope.nccFile = function () {
+    $scope.nccFile = function ($event) {
+
+        var buttonParent = $($event.target.parentNode.parentNode);
+
+        buttonParent.find('li').each(function () {
+            $(this).removeClass('outlet-active');
+        });
+
+        $($event.target.parentNode).addClass('outlet-active');
         retrieveService.setPause(true);
         viewModelHelper.navigateTo('Retrieve/NCC');
         if ($location.path() == "/Gentran/Retrieve/NCC") {
@@ -117,7 +143,15 @@
         $scope.activeOutlet = "ncc";
     }
 
-    $scope.prgFile = function () {
+    $scope.prgFile = function ($event) {
+
+        var buttonParent = $($event.target.parentNode.parentNode);
+
+        buttonParent.find('li').each(function () {
+            $(this).removeClass('outlet-active');
+        });
+
+        $($event.target.parentNode).addClass('outlet-active');
         retrieveService.setPause(true);
         viewModelHelper.navigateTo('Retrieve/Puregold');
         if ($location.path() == "/Gentran/Retrieve/Puregold") {
@@ -126,7 +160,15 @@
         $scope.activeOutlet = "prg";
     }
 
-    $scope.wtmFile = function () {
+    $scope.wtmFile = function ($event) {
+
+        var buttonParent = $($event.target.parentNode.parentNode);
+
+        buttonParent.find('li').each(function () {
+            $(this).removeClass('outlet-active');
+        });
+
+        $($event.target.parentNode).addClass('outlet-active');
         retrieveService.setPause(true);
         viewModelHelper.navigateTo('Retrieve/Waltermart');
         if ($location.path() == "/Gentran/Retrieve/Waltermart") {
@@ -135,7 +177,15 @@
         $scope.activeOutlet = "wtm";
     }
 
-    $scope.utmFile = function () {
+    $scope.utmFile = function ($event) {
+
+        var buttonParent = $($event.target.parentNode.parentNode);
+
+        buttonParent.find('li').each(function () {
+            $(this).removeClass('outlet-active');
+        });
+
+        $($event.target.parentNode).addClass('outlet-active');
         retrieveService.setPause(true);
         viewModelHelper.navigateTo('Retrieve/Ultramega');
         if ($location.path() == "/Gentran/Retrieve/Ultramega") {
