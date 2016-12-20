@@ -33,7 +33,7 @@ namespace Gentran.Controllers.api
                                 left(RFRetrieveDate,12) + '- ' + CONVERT (varchar(15),CAST(RFRetrieveDate as time),100) as RFRetrieveDate,
                                 left(ULReadDate,12) + '- ' + CONVERT (varchar(15),CAST(ULReadDate as time),100) as ULReadDate,
                                 left(ULSubmitDate,12) as ULSubmitDate,
-                                ULReadUser,
+                                UMUserName,
                                 ULSubmitUser,
                                 RFAccount,
                                 RSDescription
@@ -42,6 +42,8 @@ namespace Gentran.Controllers.api
                                 on rsid = rfstatus
                             left join tbluploadlog 
                                 on ulfile = rfid
+                            left join tblusermaster 
+                                on ulreaduser = umid
                             left join tblcustomermaster
                                 on cmid = ulcustomer
                             order by RFRetrieveDate desc";

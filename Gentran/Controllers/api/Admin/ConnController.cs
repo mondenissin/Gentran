@@ -16,6 +16,8 @@ namespace Gentran.Controllers.api
     public class ConnController : ApiController
     {
         private AppSettings app = new AppSettings();
+        string userID = HttpContext.Current.Session["UserId"].ToString();
+        List<Transaction> rows = new List<Transaction>();
         // GET api/default1
         public Object Get()
         {
@@ -154,15 +156,24 @@ namespace Gentran.Controllers.api
 
             bool success = false;
             string response = "";
+            string activity = "";
+
+            DateTime now = new DateTime();
+            now = DateTime.Now;
+
+            string type = "ADM";
+            string changes = "";
+            string sValue = "";
 
             SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DB_GEN"].ConnectionString);
 
             SqlCommand cmd;
             String sQuery = "";
 
+            string csacct = values.payload[0].CSAccount;
             if (values.operation == "edit_connection")
             {
-
+                activity = "EDI60";
                 string csid = values.payload[0].CSId;
                 string cshost = values.payload[0].CSHost;
                 string csport = values.payload[0].CSPort;
@@ -179,10 +190,44 @@ namespace Gentran.Controllers.api
                 cmd.ExecuteNonQuery();
                 connection.Close();
                 success = true;
-                response = "Successful";
+                sValue = csacct;
+                response = csacct + " Connection Edited Successful";
+
+                rows.Add(new Transaction { activity = activity, date = now, remarks = response, user = userID, value = sValue + " Edited Successfully", type = type, changes = changes, payloadvalue = newpayload, customernumber = "", ponumber = "" });
+            }
+            else if (values.operation == "disable_connection")
+            {
+                activity = "DIS10";
+                string csid = values.payload[0].CSId;
+                sQuery = "Update tblConnectionStatus set CSStatus = 0 where CSId = '" + csid + "'";
+                connection.Open();
+                cmd = new SqlCommand(sQuery, connection);
+                cmd.ExecuteNonQuery();
+                connection.Close();
+                success = true;
+                sValue = csacct;
+                response = csacct + " Disable Connection Successful";
+
+                rows.Add(new Transaction { activity = activity, date = now, remarks = response, user = userID, value = sValue + " Disabled Successfully", type = type, changes = changes, payloadvalue = newpayload, customernumber = "", ponumber = "" });
             }
 
-            return new Response { success = success, detail = response };
+            else if (values.operation == "enable_connection")
+            {
+                activity = "ENB10";
+                string csid = values.payload[0].CSId;
+                sQuery = "Update tblConnectionStatus set CSStatus = 1 where CSId = '" + csid + "'";
+                connection.Open();
+                cmd = new SqlCommand(sQuery, connection);
+                cmd.ExecuteNonQuery();
+                connection.Close();
+                success = true;
+                sValue = csacct;
+                response = csacct + " Enable Connection Successful";
+
+                rows.Add(new Transaction { activity = activity, date = now, remarks = response, user = userID, value = sValue + " Enabled Successfully", type = type, changes = changes, payloadvalue = newpayload, customernumber = "", ponumber = "" });
+            }
+
+            return new Response { success = success, detail = response, transactionDetail = rows };
         }
 
         // DELETE api/default1/5

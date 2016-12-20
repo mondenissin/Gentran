@@ -27,13 +27,14 @@
                 <thead>
                     <tr>
                         <th style="width:5%;">Account</th>
+                        <th style="width:5%;">PO #</th>
+                        <th style="width:5%;">Customer #</th>
                         <th style="width:25%;">Filename</th>
-                        <!--<th>PO #</th>-->
-                        <th>Retrieve Date</th>
-                        <th style="width:25%;">Read Date</th>
-                        <th style="width:10%;">Submitted Date</th>
-                        <th>Reader</th>
-                        <th>Submitted By</th>
+                        <th style="width:23%;">Retrieve Date</th>
+                        <th style="width:23%;">Read Date</th>
+                        <!--<th style="width:7%;">Submitted Date</th>-->
+                        <th  style="width:23%;">Reader</th>
+                        <!--<th>Submitted By</th>-->
                         <th style="">Status</th>
                         <th class="no-sort">Options</th>
                     </tr>
@@ -41,13 +42,14 @@
                 <tbody style="text-align:center !important;font-size:12px;">
                     <tr ng-repeat="m in filterMonitor | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
                         <td ng-cloak class="table-data-rsuser text-center">{{m.RFAccount}}</td>
+                        <td ng-cloak class="table-data-ponum text-center">{{m.ULPONumber == NULL || m.ULPONumber == "" ? 'N/A' : m.ULPONumber}}</td>
+                        <td ng-cloak class="table-data-ponum text-center">{{m.ULCustomer == NULL || m.ULCustomer == "" ? 'N/A' : m.ULCustomer}}</td>
                         <td ng-cloak class="table-data-ponum text-center">{{m.RFFilename}}</td>
-                        <!--<td ng-cloak class="table-data-ponum text-center">{{m.ULPONumber == NULL || m.ULPONumber == "" ? 'N/A' : m.ULPONumber}}</td>-->
                         <td ng-cloak class="table-data-rrtdate text-center">{{m.RFRetrieveDate}}</td>
                         <td ng-cloak class="table-data-rrddate text-center" style="width:85px; text-align:center;">{{m.ULReadDate == NULL || m.ULReadDate == "" ? 'N/A' : m.ULReadDate}}</td>
-                        <td ng-cloak class="table-data-rsdate text-center">{{m.ULSubmitDate == NULL || m.ULSubmitDate == "" ? "N/A" : m.ULSubmitDate}}</td>
-                        <td ng-cloak class="table-data-rrddate text-center">{{m.ULReadUser == NULL || m.ULReadUser == "" ? "N/A" : m.ULReadUser }}</td>
-                        <td ng-cloak class="table-data-rsuser text-center">{{m.ULSubmitUser == NULL || m.ULSubmitUser == "" ? "N/A" : m.ULSubmitUser}}</td>
+                        <!--<td ng-cloak class="table-data-rsdate text-center">{{m.ULSubmitDate == NULL || m.ULSubmitDate == "" ? "N/A" : m.ULSubmitDate}}</td>-->
+                        <td ng-cloak class="table-data-rrddate text-center">{{m.UMUserName == NULL || m.UMUserName == "" ? "N/A" : m.UMUserName }}</td>
+                        <!--<td ng-cloak class="table-data-rsuser text-center">{{m.ULSubmitUser == NULL || m.ULSubmitUser == "" ? "N/A" : m.ULSubmitUser}}</td>-->
                         <td ng-cloak class="table-data-rsstatus text-center" style="width:55px;"><span class="label label-{{m.RSDescription == 'Unread' ? 'warning' : m.RSDescription == 'Read File' ? 'success' : 'danger'}} ">{{m.RSDescription}}</span></td>
                         <td ng-cloak style="width:55px;  text-align:center;">
                             <button class="btn btn-default btn-xs option-icon-size" ng-click="showDetails(m)" title="PO Details"><i class="fa fa-info"></i></button>
@@ -113,11 +115,11 @@
                         <td style="width:150px; font-weight:bold;">Reader: </td>
                         <td id="txt_reader"></td>
                     </tr>
-                    <tr>
+                    <!--<tr>
                         <td style="width:150px; font-weight:bold;">Submitted By: </td>
                         <td id="txt_submittedby"></td>
                     </tr>
-                    <!--<tr>
+                    <tr>
                         <td style="width:150px; font-weight:bold;">Total SKU: </td>
                         <td id="txt_sku"></td>
                     </tr>
