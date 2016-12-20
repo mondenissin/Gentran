@@ -187,6 +187,40 @@
         });
     }
 
+    //----------GMC 20161219 FOR REUPLOADING -------------> 
+
+    $scope.reUpload = function (order) {
+        console.log(order);
+
+        var items = {};
+        var obj = [];
+        var custNum = order.txt_custnum;
+        console.log(order.txt_custnum);
+        if (custNum == $('#txt_custnum').text()) {
+            notif_warning('Order Details', 'Nothings Change');
+            return;
+        }
+
+
+        obj[0] = {};
+        obj[0].outlet = order.txt_account;
+        obj[0].ULId = order.txt_orderid;
+        obj[0].rawID = order.txt_rawID;
+        items.payload = obj;
+
+        console.log(items);
+        /*
+        viewModelHelper.apiPost('api/masteruploader', JSON.stringify(items), function (result) {
+            var mapData = result.data.filecontent;
+            execTime = result.data.execution;
+            //console.log(mapData);
+            console.log(execTime);
+            console.log(result);
+           
+        });
+        */
+    }
+
 
     // --- MNS20161209 --->
 
@@ -275,6 +309,10 @@
     }
 
     $scope.showDetails = function (order) {
+        console.log(order);
+        var orderDetails = [];
+        orderDetails[0] = {};
+
         $scope.ifConfirm = false;
 
         $('.table-data-pmcode').attr('title', '');
@@ -283,15 +321,16 @@
         $scope.flags.shownFromList = true;
         if (order.uiprice < 0) {
             notif_warning('Order Details', 'Lack of Product Mapping');
-        } else {
+        } else if (order.uiprice == "NaN" || order.uiprice == NaN || order.ulcustomer == "0") {
+            notif_info('Order Details', 'Enter Assigned Customer Code');
+        }
+        else {
 
             if (order.ulstatus == "20") {
                 $scope.ifEditable = false;
             } else {
                 $scope.ifEditable = true;
             }
-            var orderDetails = [];
-            orderDetails[0] = {};
             orderDetails.txt_ponum = order.ulponumber;
             orderDetails.txt_custnum = order.ulcustomer;
             orderDetails.txt_orderdate = new Date(order.ulorderdate);

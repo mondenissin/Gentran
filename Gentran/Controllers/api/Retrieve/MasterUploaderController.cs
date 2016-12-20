@@ -328,6 +328,7 @@ namespace Gentran.Controllers.api.Retrieve
             string response = "Successful";
             Boolean NoCustomer = false;
             Boolean validPO = true;
+            Boolean storeErr = false;
 
             for (int x=0;x<data.Count;x++) {
                 try
@@ -437,6 +438,7 @@ namespace Gentran.Controllers.api.Retrieve
                                 connection.Close();
 
                                 success = false;
+                                storeErr = true;
                                 response = "Invalid Store Code: " + streCode;
                             }
                         }
@@ -555,7 +557,6 @@ namespace Gentran.Controllers.api.Retrieve
                 {
                     String fileExtension = "";
                     String ULStatus = "";
-                    String destinationFolder = "";
                     
                     string[] splitEx = filePath.Split('.');
                     fileExtension = splitEx[splitEx.Length - 1];
@@ -563,13 +564,13 @@ namespace Gentran.Controllers.api.Retrieve
                     if (success == true)
                     {
                         ULStatus = "20";
-                        
-                        destinationFolder = "successful";
                     }
                     else
                     {
-                        ULStatus = "11";
-                        destinationFolder = "failed";
+                        if (storeErr)
+                            ULStatus = "12";
+                        else
+                            ULStatus = "11";
                     }
 
                     //String update = "update tblUploadLog set ulstatus = '" + ULStatus + "',ulfilename = '" + rawID + "." + fileExtension + "' where ULFIle = '" + rawID + "';";
@@ -585,33 +586,6 @@ namespace Gentran.Controllers.api.Retrieve
                         updateCmd = new SqlCommand(update, connection);
                         updateCmd.ExecuteNonQuery();
                         connection.Close();
-                        /*
-                        String source = @"C:\inetpub\wwwroot\files\Gentran\queued\" + absoluteName;
-
-                        String destination = @"C:\inetpub\wwwroot\files\Gentran\" + destinationFolder + @"\" + uID + "." + fileExtension;
-
-                        String failed = @"C:\inetpub\wwwroot\files\Gentran\failed\" + uID + "." + fileExtension;
-
-                        if (destinationFolder == "successful")
-                        {
-                            if (File.Exists(failed))
-                            {
-                                File.Delete(failed);
-                            }
-                        }
-
-                        if (File.Exists(destination))
-                        {
-                            File.Delete(destination);
-                        }
-
-                        File.Move(source, destination);
-                        /*
-                        if (ifMult)
-                            File.Copy(source, destination);
-                        else
-                            File.Move(source, destination);
-                        */
                     }
                 }
                 catch (Exception ex)

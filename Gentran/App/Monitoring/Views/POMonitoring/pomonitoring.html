@@ -271,7 +271,7 @@
                                 <input id="txt_remarks" class="form-control input-sm" type="text" disabled ng-model="ordersInfo.txt_remarks">
                             </div>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-9" ng-show="ordersInfo.txt_custnum != '0' ? true : false">
                             <div class="table-responsive table-order-height" id="order_table">
                                 <table id="tbl_orders" class="table table-responsive table-striped table-condensed table-order">
                                     <thead>
@@ -314,7 +314,6 @@
     </div>
 </div>
 <!-- END MODAL FOR ORDERS DETAIL-->
-
 
 <!-- START MODAL FOR ADVANCED SEARCH-->
 <div id="advancedModal" class="modal fade">

@@ -170,7 +170,6 @@ namespace Gentran.Controllers.api.Monitor
                             ur.rfaccount
                             FROM tblUploadLog ul
                             LEFT JOIN tblUploadStatus us
-
                             on ulstatus = usid
                             LEFT JOIN tblCustomerMaster cm
                             ON ul.ulcustomer = cm.cmid 
@@ -194,8 +193,7 @@ namespace Gentran.Controllers.api.Monitor
                             WHERE uistatus NOT IN ('4','3','0')
                             group by uiid ) ui 
                             ON ul.ulid = ui.uiid 
-                            WHERE ua.uauser = '17002'
-                            AND uatype = 'KAS' 
+                            WHERE uatype = 'KAS' 
                             AND (ulstatus != 25
                             OR ulstatus != 21)  
                             AND (ul.ulReadDate >= '" + values.payload[0].dateFrom + "' and  ul.ulReadDate <= dateadd(day,1,'" + values.payload[0].dateTo + "')) ORDER BY sortupload desc"; //Dec. 6, 2016
@@ -216,7 +214,7 @@ namespace Gentran.Controllers.api.Monitor
                     foreach (DataColumn col in dt.Columns)
                     {
 
-                        if (col.ColumnName == "ulstatus" && dr[col].ToString() == "11")
+                        if (col.ColumnName == "ulstatus" && dr[col].ToString() == "11" || dr[col].ToString() == "12")
                         {
                             sStat = dr["usdescription"].ToString();
                             icon = "fa-exclamation-circle";
@@ -403,10 +401,6 @@ namespace Gentran.Controllers.api.Monitor
                                 {
                                     connection.Close();
                                 }
-
-
-
-
                                 // Checking of affected POs, ends here
                                 // --- MNS20161209 ----->
 
