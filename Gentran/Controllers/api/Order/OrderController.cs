@@ -158,11 +158,11 @@ namespace Gentran.Controllers.api.Order
                         //}
 
                         if (col.ColumnName == "ulstatus" && dr[col].ToString() == "21") {
-                            sStat = dt.Rows[0]["usdescription"].ToString();
+                            sStat = dr["usdescription"].ToString();
                             icon = "fa-exclamation-circle";
                             oClass = "label label-danger";
                         } else if (col.ColumnName == "ulstatus" && dr[col].ToString() == "25") {
-                            sStat = dt.Rows[0]["usdescription"].ToString();
+                            sStat = dr["usdescription"].ToString();
                             icon = "fa-check";
                             oClass = "label label-success";
                         }

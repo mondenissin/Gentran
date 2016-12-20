@@ -1,5 +1,5 @@
-﻿<div class="breadcrumb">
-    <button class="btn btn-default btn-xs icon-size" title="Add Connection" ng-click="addconnModal()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+﻿<div class="breadcrumb" style="height:50px;">
+    <!--<button class="btn btn-default btn-xs icon-size" title="Add Connection" ng-click="addconnModal()"><i class="fa fa-plus" aria-hidden="true"></i></button>-->
     <div class="pull-right">
         <div class="form-inline">
             <select ng-model="searchBy" class="form-control" ng-change="clearSearch()">
@@ -17,17 +17,21 @@
             <th  style="width:50%;">Hostname</th>
             <th>Port</th>
             <th>Username</th>
-            <th class="no-sort" style="width:5%;">Option</th>
+            <th class="no-sort" style="width:15%;">Option</th>
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="c in filterList | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
+        <tr style="background-color:{{c.CSStatus == 0 ? 'rgba(255, 0, 0, 0.21)':'#f4f4f4'}}" ng-repeat="c in filterList | start: (currentPage - 1) * entryLimit | limitTo: entryLimit">
             <td ng-cloak class="text-center"> {{c.CSAccount}} </td>
             <td ng-cloak class="text-center"> {{c.CSHost}} </td>
             <td ng-cloak class="text-center"> {{c.CSPort}} </td>
             <td ng-cloak class="text-center"> {{c.CSUserName}} </td>
             <td class="table-data-poptions" ng-cloak>
+                <input id="txt_hiddenconnid" class="form-control input-sm" type="hidden" value="{{c.CSId}}"/>
+                <input id="txt_hiddenstatus" class="form-control input-sm" type="hidden" value="{{c.CSStatus}}" />
                 <button class="btn btn-default btn-xs option-icon-size" ng-click="editconnModal(c)" title="Edit Connection"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                <button class="btn btn-default btn-xs option-icon-size" ng-click="disableConn(c)" title="Click to Disable Connection" style="display:{{c.CSStatus == 0 ? 'none':''}};" id="btndisable"><i class="fa fa-power-off" aria-hidden="true"></i></button>
+                <button class="btn btn-default btn-xs option-icon-size" ng-click="enableConn(c)" title="Click to Enable Connection"  style="display:{{c.CSStatus == 1 ? 'none':''}};"  id="btnenable"><i class="fa fa-power-off" aria-hidden="true" style="color:green;"></i></button>
             </td>
         </tr>
     </tbody>
@@ -36,7 +40,7 @@
 
 
 <!------- ADD CONNECTION MODAL ------->
-<div id="addConnModal" class="modal fade" role="dialog">
+<!--<div id="addConnModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-sm">
 
         <div class="modal-content">
@@ -82,7 +86,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->
 <!------- END OF ADD CONNECTION MODAL ------->
 
 <!------- EDIT CONNECTION MODAL ------->
@@ -96,6 +100,7 @@
             </div>
             <div class="modal-body">
                 <form role="form">
+                    <input id="txt_hiddenacct" class="form-control  input-sm" type="hidden" />
                     <input id="txt_hiddenid" class="form-control  input-sm" type="hidden" />
                     <div class="form-group">
                         <label>Hostname:</label>

@@ -16,10 +16,10 @@
             $scope.pageSize = 5;
             $scope.entryLimit = 50;
 
-            $scope.transactions = result.data.detail;
+            $scope.connections = result.data.detail;
 
             $scope.$watch('search[searchBy]', function () {
-                $scope.filterList = filterFilter($scope.transactions, $scope.search);
+                $scope.filterList = filterFilter($scope.connections, $scope.search);
                 $scope.noOfPages = Math.ceil($scope.filterList.length / $scope.entryLimit);
                 $scope.currentPage = 1;
             });
@@ -31,39 +31,87 @@
        DTColumnDefBuilder.newColumnDef('no-sort').notSortable()
     ];
 
-    $scope.addconnModal = function () {
-        $('#addConnModal').modal('show');
-    }
+    //$scope.addconnModal = function () {
+    //    $('#addConnModal').modal('show');
+    //}
 
-    $scope.saveAddConn = function () {
+    //$scope.saveAddConn = function () {
+    //    var Items = {};
+    //    Items.CSAccount = $('#txt_addacct').val();
+    //    Items.CSHost = $('#txt_addhost').val();
+    //    Items.CSPort = $('#txt_addport').val();
+    //    Items.CSUserName = $('#txt_adduname').val();
+    //    Items.CSPassword = $('#txt_addpass').val();
+
+    //    $scope.data = {};
+    //    $scope.data.operation = 'add_connection';
+    //    $scope.data.payload = _payloadParser(Items);
+
+    //    viewModelHelper.apiPost('api/conn', $scope.data, function (result) {
+    //        var data = result.data;
+    //        if (data.success == true) {
+    //            $('#addConnModal').modal('hide');
+
+    //            $scope.refreshConn();
+
+    //            notif_success('Add Connection', 'Connection successfully added!');
+
+    //            viewModelHelper.saveTransaction(data.detail);
+    //        } else {
+    //            notif_error('Add Connection', data.detail)
+    //        }
+    //    });
+    //}
+
+    $scope.enableConn = function (con) {
         var Items = {};
-        Items.CSAccount = $('#txt_addacct').val();
-        Items.CSHost = $('#txt_addhost').val();
-        Items.CSPort = $('#txt_addport').val();
-        Items.CSUserName = $('#txt_adduname').val();
-        Items.CSPassword = $('#txt_addpass').val();
+        Items.CSId = con.CSId;
+        Items.CSAccount = con.CSAccount;
 
         $scope.data = {};
-        $scope.data.operation = 'add_connection';
+        $scope.data.operation = 'enable_connection';
         $scope.data.payload = _payloadParser(Items);
 
-        viewModelHelper.apiPost('api/conn', $scope.data, function (result) {
+        viewModelHelper.apiPut('api/conn', $scope.data, function (result) {
             var data = result.data;
             if (data.success == true) {
-                $('#addConnModal').modal('hide');
-
                 $scope.refreshConn();
 
-                notif_success('Add Connection', 'Connection successfully added!');
+                notif_success('Connection Enabled', 'Connection successfully enabled!');
 
+                viewModelHelper.saveTransaction(data.transactionDetail);
             } else {
-                notif_error('Add Connection', data.detail)
+                notif_error('Connection Enabled', data.detail);
+            }
+        });
+    }
+
+    $scope.disableConn = function (con) {
+        var Items = {};
+        Items.CSId = con.CSId;
+        Items.CSAccount = con.CSAccount;
+        
+        $scope.data = {};
+        $scope.data.operation = 'disable_connection';
+        $scope.data.payload = _payloadParser(Items);
+
+        viewModelHelper.apiPut('api/conn', $scope.data, function (result) {
+            var data = result.data;
+            if (data.success == true) {
+
+                $scope.refreshConn();
+                notif_success('Connection Disabled', 'Connection successfully disabled!');
+               
+                viewModelHelper.saveTransaction(data.transactionDetail);
+            } else {
+                notif_error('Connection Disabled', data.detail);
             }
         });
     }
 
     $scope.editconnModal = function (con) {
         $('#txt_outlet').text(con.CSAccount);
+        $('#txt_hiddenacct').val(con.CSAccount);
         $('#txt_hiddenid').val(con.CSId);
         $('#txt_edithost').val(con.CSHost);
         $('#txt_editport').val(con.CSPort);
@@ -75,6 +123,7 @@
 
     $scope.saveEditConn = function (connection) {
         var Items = {};
+        Items.CSAccount = $('#txt_hiddenacct').val();
         Items.CSId = $('#txt_hiddenid').val();
         Items.CSHost = $('#txt_edithost').val();
         Items.CSPort = $('#txt_editport').val();
@@ -94,8 +143,9 @@
 
                 notif_success('Edit Connection', 'Connection successfully saved!');
 
+                viewModelHelper.saveTransaction(data.transactionDetail);
             } else {
-                notif_error('Edit Connection', data.detail)
+                notif_error('Edit Connection', data.detail);
             }
         });
     }

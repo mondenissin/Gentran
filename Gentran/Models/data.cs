@@ -46,6 +46,8 @@ public class Value
 
     public string CSPassword { get; set; }
 
+    public string CSStatus { get; set; }
+
     //------Customer Assignment-------//
 
     public string caCode { get; set; }

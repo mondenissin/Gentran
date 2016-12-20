@@ -977,6 +977,14 @@ div.item {
     border-radius: 20px;
 }
 
+.disable {
+    background-color: rgba(255, 0, 0, 0.21);
+}
+
+.enable {
+    background: #f4f4f4;
+}
+
  /*@media ( max-width: 991px ) {
     .page-top-header {
         font-size: 30px; 
