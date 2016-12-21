@@ -20,17 +20,62 @@
     <script src="~/Scripts/jquery/jquery-2.2.3.min.js"></script>
     <script src="~/Scripts/plugins/raphael-min.js"></script>
     <script src="~/Scripts/js/morris/morris.js"></script>
+    <style>
+        .menu-margin {
+            text-align:left !important;
+            margin-left:25px;
+        }
+        .dropdown-menu {
+            padding: 0px 0;
+            min-width:0px;
+        }
+        .nav navbar-nav,.dropdown open,.dropdown-toggle {
+            background-color:#367fa9 !important;
+        }
+    </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="fixed">
         <header class="main-header">
             <!-- Logo -->
-            <a href='@Url.Content("~/Home")' class="logo">
-            <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><i class="fa fa-home"></i></span>
-            <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><i class="fa fa-home">&nbsp;&nbsp;</i> <b>Home</b></span>
-            </a>
+            <ul class="nav navbar-nav" >
+                <li class="dropdown"><a href="#" class="dropdown-toggle logo" data-toggle="dropdown"><span class="glyphicon glyphicon-list "></span>&nbsp;&nbsp;<b>Menu</b> <b class="caret"></b></a>
+                    <ul class="dropdown-menu " >
+                        <li>
+                            <a href='@Url.Content("~/Home")' class="logo">
+                                <!-- mini logo for sidebar mini 50x50 pixels -->
+                                <span class="logo-mini"><i class="fa fa-home"></i></span>
+                                <!-- logo for regular state and mobile devices -->
+                                <span class="logo-lg menu-margin"><i class="fa fa-home">&nbsp;&nbsp;</i> <b>Home</b></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href='@Url.Content("~/Retrieve")' class="logo">
+                                <!-- mini logo for sidebar mini 50x50 pixels -->
+                                <span class="logo-mini"><i class="fa fa-barcode"></i></span>
+                                <!-- logo for regular state and mobile devices -->
+                                <span class="logo-lg menu-margin"><i class="fa fa-barcode">&nbsp;&nbsp;</i> <b>PO Retrieve</b></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href='@Url.Content("~/Order")' class="logo">
+                                <!-- mini logo for sidebar mini 50x50 pixels -->
+                                <span class="logo-mini"><i class="fa fa-file"></i></span>
+                                <!-- logo for regular state and mobile devices -->
+                                <span class="logo-lg menu-margin"><i class="fa fa-file">&nbsp;&nbsp;</i> <b>Orders</b></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href='@Url.Content("~/Monitoring")' class="logo">
+                                <!-- mini logo for sidebar mini 50x50 pixels -->
+                                <span class="logo-mini"><i class="fa fa-television"></i></span>
+                                <!-- logo for regular state and mobile devices -->
+                                <span class="logo-lg menu-margin"><i class="fa fa-television">&nbsp;&nbsp;</i> <b>Monitoring</b></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top">
                 <!-- Sidebar toggle button-->
@@ -42,7 +87,7 @@
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="user user-menu">
                             <a href="#">
-                                <img src="~/Images/master/default.png"class="user-image img_userProfPic" alt="User Image">
+                                <img src="~/Images/master/default.png" class="user-image img_userProfPic" alt="User Image">
                                 <span class="hidden-xs lbl_userfullname">Loading user...</span>
                             </a>
 
@@ -87,7 +132,7 @@
                     @RenderBody()
                     <hr />
                     <footer class="footer-admin">
-                        <p>&copy; 2016 - Gentran</p>
+                        <p>&copy; 2016 - BES</p>
                     </footer>
                 </section>
             </div>

@@ -136,35 +136,6 @@ ul.data-management li.active .btn {
      color:#fff;
 }
 
-ul.dropdown-options li.active {
-    background-color: #8dc3e2;  
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
-
-ul.dropdown-options li.active .btn {
-     color:#fff;
-}
-
-button.btn.btn-link {
-    color: #8aa4af;
-    padding: 5px 5px 5px 15px;
-    display: block;
-    font-size: 14px;
-    width:100%;
-    text-align:left;
-    text-decoration:none;
-}
-ul.dropdown-options li:not(.active):hover {
-    color:#fff;
-    background-color: #8dc3e2;  
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
-ul.dropdown-options li:hover .btn {
-     color:#fff;
-}
-
 ul.data-management li:not(.active):hover {
     color:#fff;
     background-color: #FABD44;  
@@ -177,6 +148,90 @@ ul.data-management li:hover .btn {
 
 ul.data-management li:active {
     background-color: transparent;
+}
+
+/*dash*/
+ul.data-managementdash li.active{
+    background-color: #f7790e;  
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+ul.data-managementdash li.active .btn {
+     color:#fff;
+}
+
+ul.data-managementdash li:not(.active):hover {
+    color:#fff;
+    background-color: #FABD44;  
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+}
+ul.data-managementdash li:hover .btn {
+     color:#fff;
+}
+
+ul.data-managementdash li:active {
+    background-color: transparent;
+}
+/*dash*/
+
+/*report*/
+ul.data-managementreport li.active{
+    background-color: #f7790e;  
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+ul.data-managementreport li.active .btn {
+     color:#fff;
+}
+
+ul.data-managementreport li:not(.active):hover {
+    color:#fff;
+    background-color: #FABD44;  
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+}
+ul.data-managementreport li:hover .btn {
+     color:#fff;
+}
+
+ul.data-managementreport li:active {
+    background-color: transparent;
+}
+/*report*/
+
+ul.dropdown-options li.active {
+    background-color: #8dc3e2;  
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+ul.dropdown-options li.active .btn {
+     color:#fff;
+}
+
+ul.dropdown-options li:not(.active):hover {
+    color:#fff;
+    background-color: #8dc3e2;  
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+ul.dropdown-options li:hover .btn {
+     color:#fff;
+}
+
+
+
+button.btn.btn-link {
+    color: #8aa4af;
+    padding: 5px 5px 5px 15px;
+    display: block;
+    font-size: 14px;
+    width:100%;
+    text-align:left;
+    text-decoration:none;
 }
 
 button.btn.btn-link:focus {
@@ -236,8 +291,8 @@ header {
 
 footer:not(.footer-admin) {  
     bottom: 10px;
-    position: fixed; 
-    width: 100%;
+    position: absolute; 
+    width: 50%;
 }
 
 .table-data-pmcode {

@@ -258,7 +258,17 @@
 </div>
 
 <!-- END MODAL FOR GENERATED REPORTS PRODUCT-->
-
+<script>
+    $(function () {
+        var parent = $('.data-managementreport');
+        parent.addClass('menu-open').css({ 'display': 'block' });
+        var elem = $('.btnreport');
+        parent.find('li').each(function () {
+            $(this).removeClass('active');
+        });
+        elem.closest('li').addClass(' active');
+    });
+</script>
 <script type="text/javascript">
     $('#nav-tab a').click(function (e) {
         e.preventDefault()
