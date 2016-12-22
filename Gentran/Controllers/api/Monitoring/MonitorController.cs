@@ -385,7 +385,7 @@ namespace Gentran.Controllers.api.Monitor
                                         if (!dr.HasRows)
                                         {
                                             connection.Close();
-                                            sQuery = "UPDATE tblUploadLog set ulstatus='20' where ulid ='" + id + "'";
+                                            sQuery = "UPDATE tblUploadLog set ulstatus='20' where ulid ='" + id + "' and ulstatus = '11' ";
                                             connection.Open();
                                             cmd = new SqlCommand(sQuery, connection);
                                             cmd.ExecuteNonQuery();

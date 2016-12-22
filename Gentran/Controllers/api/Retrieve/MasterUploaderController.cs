@@ -431,7 +431,7 @@ namespace Gentran.Controllers.api.Retrieve
 
                             if (NoCustomer == true)
                             {
-                                String insertELId = "insert into tblErrorLog select '" + uID + "','101','" + uCust + "'";
+                                String insertELId = "insert into tblErrorLog select '" + uID + "','101','" + streCode + "'";
                                 connection.Open();
                                 SqlCommand cmdELIdInsert = new SqlCommand(insertELId, connection);
                                 cmdELIdInsert.ExecuteNonQuery();
