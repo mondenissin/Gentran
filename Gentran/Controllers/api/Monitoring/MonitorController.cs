@@ -76,9 +76,8 @@ namespace Gentran.Controllers.api.Monitor
                             group by uiid ) ui 
                             ON ul.ulid = ui.uiid 
                             WHERE uatype = 'KAS' 
-                            AND ulstatus != 25
-                            OR ulstatus != 21  
-                            AND ul.ulReadDate = GETDATE()
+                            AND ulstatus not in ('21','25')
+                            AND convert(varchar(10), ULReadDate,120) = convert(varchar(10), getdate(),120)
                             ORDER BY sortupload desc"; //Dec. 6, 2016 // Dec 16 - ua.uauser = '17002'
 
                 SqlDataAdapter dataadapter = new SqlDataAdapter(selectStr, connection);
@@ -194,9 +193,8 @@ namespace Gentran.Controllers.api.Monitor
                             group by uiid ) ui 
                             ON ul.ulid = ui.uiid 
                             WHERE uatype = 'KAS' 
-                            AND (ulstatus != 25
-                            OR ulstatus != 21)  
-                            AND (ul.ulReadDate >= '" + values.payload[0].dateFrom + "' and  ul.ulReadDate <= dateadd(day,1,'" + values.payload[0].dateTo + "')) ORDER BY sortupload desc"; //Dec. 6, 2016
+                            AND ulstatus not in ('21','25')
+                            AND (convert(varchar(10), ULReadDate,120) >= '" + values.payload[0].dateFrom + "' and convert(varchar(10), ULReadDate,120) <= dateadd(day,1,'" + values.payload[0].dateTo + "')) ORDER BY sortupload desc"; //Dec. 6, 2016
                 
                 SqlDataAdapter dataadapter = new SqlDataAdapter(selectStr, connection);
                 connection.Open();
@@ -385,7 +383,7 @@ namespace Gentran.Controllers.api.Monitor
                                         if (!dr.HasRows)
                                         {
                                             connection.Close();
-                                            sQuery = "UPDATE tblUploadLog set ulstatus='20' where ulid ='" + id + "' and ulstatus = '11' ";
+                                            sQuery = "UPDATE tblUploadLog set ulstatus='20' where ulid ='" + id + "' and ulstatus = 11";
                                             connection.Open();
                                             cmd = new SqlCommand(sQuery, connection);
                                             cmd.ExecuteNonQuery();
