@@ -2,6 +2,7 @@
 
     $scope.viewModelHelper = viewModelHelper;
     $scope.monitoringService = monitoringService;
+    $scope.custIfCorrect = false;
 
     var initialize = function () {
         $scope.refreshMonitor();
@@ -51,6 +52,43 @@
     }
 
     //<!---- MNS20161208
+    $scope.AutoCompleteCust = function (x, ctr) {
+        $('#txt_' + ctr).autocomplete({
+            source: function (request, response) {
+                var Search = {};
+                Search.prefix = request.term;
+                Search.acctype = $('#txt_account_det').val();
+
+                $scope.data = {};
+                $scope.data.operation = 'suggestions';
+                $scope.data.payload = _payloadParser(Search);
+
+                viewModelHelper.apiGet('api/cust', $scope.data, function (result) {
+                    var data = result.data;
+                    if (data.detail[0].Data == "No Data Found") {
+                        response($.map(data.detail, function (item) {
+                            return {
+                                label: '<b>No Data Found</b>',
+                                value: request.term
+                            }
+                        }))
+                    } else {
+                        response($.map(data.detail, function (item) {
+                            return {
+                                label: '<b>' + item.CMId + '</b> <span>' + item.CMDescription + '</span>',
+                                value: item.CMId
+                            }
+                        }))
+                    }
+                });
+
+            },
+            select: function (e, i) {
+                $('#txt_' + ctr).val(i.item.value);
+            },
+            minLength: 1
+        });
+    }
 
     $scope.AutoComplete = function (x, ctr) {
         $('#txt_' + ctr).autocomplete({
@@ -84,6 +122,49 @@
     $scope.textboxFocus = function (x, ctr) {
         $('#txt_' + ctr).removeClass('prod-valid');
         $('#txt_' + ctr).removeClass('prod-invalid');
+        $('#txt_' + ctr).removeClass('cust-valid');
+        $('#txt_' + ctr).removeClass('cust-invalid');
+    }
+    $scope.textboxBlurCust = function (x, ctr) {
+        var custText = $('#txt_' + ctr);
+        if (custText.val().trim() != '0' || custText.val().trim() != '') {
+
+            var Item = {};
+            Item.customernumber = $('#txt_' + ctr).val();
+            Item.acctype = $('#txt_account_det').val();
+
+            $scope.data = {};
+            $scope.data.operation = 'check_map_availability';
+            $scope.data.payload = _payloadParser(Item);
+
+            viewModelHelper.apiGet('api/cust', $scope.data, function (result) {
+                var data = result.data;
+                console.log(data);
+                if (data.success) {
+                    if (data.detail[0].CMId == '0') {
+                        $scope.custIfCorrect = false;
+                        $('#txt_' + ctr).addClass('cust-invalid');
+                        $('#txt_' + ctr).removeClass('cust-valid');
+                        $('#txt_' + ctr).attr('title', 'NO CUSTOMER');
+                    } else {
+                        $scope.custIfCorrect = true;
+                        $('#txt_' + ctr).addClass('cust-valid');
+                        $('#txt_' + ctr).removeClass('cust-invalid');
+                        $('#txt_' + ctr).attr('title', data.detail[0].CMDescription);
+                    }
+                } else {
+                    $scope.custIfCorrect = false;
+                    $('#txt_' + ctr).addClass('cust-invalid');
+                    $('#txt_' + ctr).removeClass('cust-valid');
+                    $('#txt_' + ctr).attr('title', data.detail[0].Data);
+                }
+            });
+        } else {
+            $scope.custIfCorrect = false;
+            $('#txt_' + ctr).addClass('cust-invalid');
+            $('#txt_' + ctr).removeClass('cust-valid');
+            $('#txt_' + ctr).attr('title', '');
+        }
     }
     $scope.textboxBlur = function (x, ctr) {
 
@@ -115,9 +196,50 @@
             $('#txt_' + ctr).removeClass('prod-valid');
             $('#txt_' + ctr).attr('title', '');
         }
-
     }
     // --- MNS20161208 --->
+
+    $scope.customerMapping = function (cust, assign) {
+        var customer = $('#' + cust).val();
+        var assigned = $('#' + assign).val();
+
+        if (customer == '' || assigned == '') {
+            notif_warning('Customer Mapping', 'Please fill all the fields.');
+        }
+        else if ($scope.custIfCorrect == false) {
+            notif_warning('Customer Mapping', 'Customer Number Not Found');
+        }
+        else {
+            var Item = {};
+            Item.customernumber = customer;
+            Item.assignedcode = assigned;
+            Item.ponumber = $('#txt_ponum').val();
+            Item.ULId = $('#txt_id').val();
+            Item.acctype = $('#txt_account_det').val();
+            $scope.data = {};
+            $scope.data.operation = 'customer_mapping';
+            $scope.data.payload = _payloadParser(Item);
+            
+            viewModelHelper.apiPut('api/cust', $scope.data, function (result) {
+                var data = result.data;
+
+                if (data.success) {
+                    console.log(data);
+                    $scope.refreshMonitor();
+                    viewModelHelper.saveTransaction(data.detail);
+                    notif_info('Success', 'Successfully Assigned');
+                    $('#orderCustDetailsModal').modal('hide');
+
+                } else {
+                    console.log(data);
+                    $scope.refreshMonitor();
+                    viewModelHelper.saveTransaction(data.detail);
+                    notif_warning('Unsuccess', data.detail[0].remarks);
+                    $('#orderCustDetailsModal').modal('hide');
+                }
+            });
+        }
+    }
 
     //<!---- MNS20161209
 
@@ -178,8 +300,8 @@
                     else{
                         notif_warning('Order Details', data.detail[x].response);
                     }
-                    $('#orderDetailsModal').modal('hide');
                     $scope.refreshMonitor();
+                    $('#orderDetailsModal').modal('hide');
                 }
             } else {
                 notif_warning('Order Details', data.detail[0].response);
@@ -321,8 +443,39 @@
         $scope.flags.shownFromList = true;
         if (order.uiprice < 0) {
             notif_warning('Order Details', 'Lack of Product Mapping');
-        } else if (order.uiprice == "NaN" || order.uiprice == NaN || order.ulcustomer == "0") {
-            notif_info('Order Details', 'Enter Assigned Customer Code');
+        } else if (order.ulcustomer == '0') {
+            notif_info('Customer Mapping', 'Please Assign Customer Number');
+
+            orderDetails.txt_cmdescription = order.cmdescription;
+            orderDetails.txt_ponum = order.ulponumber;
+            orderDetails.txt_custnum = order.ulcustomer;
+            orderDetails.txt_status = order.ulstatus;
+            orderDetails.txt_orderid = order.ulid;
+
+            var Item = {};
+            Item.ULId = order.ulid;
+
+            $scope.data = {};
+            $scope.data.operation = 'get_custError';
+            $scope.data.payload = _payloadParser(Item);
+
+            viewModelHelper.apiGet('api/cust', $scope.data, function (result) {
+                var data = result.data;
+
+                if (data.success) {
+                    orderDetails.txt_elid = data.detail[0].ELDetail;
+                } else {
+                    orderDetails.txt_elid = '';
+                }
+
+                $scope.ordersInfo = orderDetails;
+
+                $('#txt_ponum').val(order.ulponumber);
+                $('#txt_id').val(order.ulid);
+                $('#txt_account_det').val(order.rfaccount);
+
+                $('#orderCustDetailsModal').modal('show');
+            })
         }
         else {
 
@@ -335,17 +488,18 @@
             orderDetails.txt_custnum = order.ulcustomer;
             orderDetails.txt_orderdate = new Date(order.ulorderdate);
             orderDetails.txt_deliverydate = new Date(order.uldeliverydate);
-            orderDetails.txt_remarks = order.ulremarks;
+            orderDetails.txt_remarks = order.ulremarks; 
             orderDetails.txt_status = order.ulstatus;
             orderDetails.txt_orderid = order.ulid;
 
             $scope.ordersInfo = orderDetails;
 
             viewModelHelper.apiGet('api/order/' + order.ulid, null, function (result) {
+                console.log(order.ulid);
+                console.log(result.data.detail);
                 $scope.orderItems = result.data.detail.filter(x=>x.UITPrice = parseInt(x.UITPrice).toLocaleString());
                 $scope.orderItems = result.data.detail.filter(x=>x.UIPrice = parseInt(x.UIPrice).toLocaleString());
             });
-
 
             $('#txt_account_det').val(order.rfaccount);
             $('#txt_id').val(order.ulid);

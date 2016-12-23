@@ -98,6 +98,16 @@ namespace Gentran.Controllers.api
             {
                 sQuery = "select UMId, UMFirstname, UMLastname from tblusermaster where umid in (" + values.payload[0].keyword + ") order by UMLastname,UMFirstname";
             }
+            else if (values.operation == "check_map_availability") // user-
+            {
+                sQuery = "select CMId,CMCode,CMDescription from tblcustomermaster where CMId='" + values.payload[0].customernumber + "'";
+            }
+            else if (values.operation == "suggestions")
+            {
+                sQuery = "select TOP 20 CMId,CMDescription from tblCustomerMaster WHERE CMId != '0' AND (CMId LIKE '%" + values.payload[0].prefix + "%' or CMDescription LIKE '%" + values.payload[0].prefix + "%') order by CMId asc";
+            } else if (values.operation == "get_custError") {
+                sQuery = "select ELId,(select ETDescription from tblerrortype where ETId = ELType) as ELType,ELDetail from tblErrorLog where eltype = '101' and  elid = '" + values.payload[0].ULId + "' group by elid,eltype,eldetail";
+            }
             else
             {
                 sQuery = "select CMId, CMCode, CMDescription, CMStatus, CMArea, COUNT(distinct UAUser) as UCount from tblCustomerMaster left join tblUserAssignment on UACustomer = CMId group by CMId,CMCode, CMDescription, CMStatus,CMArea order by cmid desc";
@@ -124,8 +134,12 @@ namespace Gentran.Controllers.api
                         rows.Add(row);
                     }
                 }
-                else
+                else { 
                     success = false;
+                    row = new Dictionary<string, object>();
+                    row.Add("Data", "No Data Found");
+                    rows.Add(row);
+                }
             }
             catch (Exception ex)
             {
@@ -182,7 +196,7 @@ namespace Gentran.Controllers.api
                         {
                             connection.Close();
                             response = "Customer: " + cmCode + " already exist!";
-                            success = false; 
+                            success = false;
 
                             return new Response { success = success, detail = response };
                         }
@@ -411,7 +425,7 @@ namespace Gentran.Controllers.api
                     string cmID = "";
                     string umID = "";
                     string cmCode = "";
-                    
+
                     for (int i = 0; i < values.payload.Count; i++)
                     {
                         cmID = values.payload[i].cmID;
@@ -485,7 +499,7 @@ namespace Gentran.Controllers.api
                         connection.Close();
 
                         success = true;
-                    }   
+                    }
                     value = cmCode;
                 }
             }
@@ -528,53 +542,139 @@ namespace Gentran.Controllers.api
 
             try
             {
-
-                for (int i = 0; i < values.payload.Count; i++)
+                if (values.operation == "customer_mapping")
                 {
+                    string uploadID = values.payload[0].customernumber + "" + values.payload[0].ponumber;
+                    success = true;
+                    activity = "EDI30";
 
-                    string cmID = values.payload[i].cmID;
-                    string cmCode = values.payload[i].cmCode;
-                    string cmName = values.payload[i].cmName;
-                    string cmArea = values.payload[i].cmArea;
-                    string cmStat = values.payload[i].cmStat; 
-                 
-                    if (values.operation == "save_edit_customer")
+                    sQuery = "delete from tblerrorlog where elid = '"+values.payload[0].ULId+"' and eldetail = '"+values.payload[0].assignedcode+"'";
+                    connection.Open();
+                    SqlCommand selectcmd = new SqlCommand(sQuery, connection);
+                    selectcmd.ExecuteNonQuery();
+                    connection.Close();
+
+                    sQuery = "select * from tblcustomerassignment where cacode='"+ values.payload[0].assignedcode + "' and cacustomer='"+ values.payload[0].customernumber + "' and caaccount='"+ values.payload[0].acctype + "'";
+                    connection.Open();
+                    selectcmd = new SqlCommand(sQuery, connection);
+                    dr = selectcmd.ExecuteReader();
+
+                    if (dr.HasRows)
                     {
-                        activity = "EDI30";
-
-                        sQuery = "select * from tblcustomermaster where CMId = '" + cmID + "'";
-
+                        dr.Close();
+                        connection.Close();
+                        
+                        sQuery = "update tblcustomerassignment set cacode='" + values.payload[0].assignedcode + "',cacustomer='" + values.payload[0].customernumber + "',caaccount='" + values.payload[0].acctype + "' where cacode='" + values.payload[0].assignedcode + "' and cacustomer='" + values.payload[0].customernumber + "' and caaccount='" + values.payload[0].acctype + "'";
                         connection.Open();
+                        selectcmd = new SqlCommand(sQuery, connection);
+                        selectcmd.ExecuteNonQuery();
+                        connection.Close();
 
-                        cmd = new SqlCommand(sQuery, connection);
+                    } else {
+                        connection.Close();
 
-                        dr = cmd.ExecuteReader();
+                        sQuery = "Insert into tblcustomerassignment values ('" + values.payload[0].assignedcode + "','" + values.payload[0].customernumber + "','" + values.payload[0].acctype + "')";
+                        connection.Open();
+                        selectcmd = new SqlCommand(sQuery, connection);
+                        selectcmd.ExecuteNonQuery();
+                        connection.Close();
+                    }
 
-                        if (dr.HasRows)
-                        { 
-                            connection.Close();
+                    sQuery = "select * from tblerrorlog where elid='"+values.payload[0].ULId+"' and eltype = '102'";
+                    connection.Open();
+                    selectcmd = new SqlCommand(sQuery, connection);
+                    dr = selectcmd.ExecuteReader();
 
-                            sQuery = "update tblcustomermaster set CMCode='"+ cmCode +"',CMDescription='"+ cmName +"',CMArea = '"+ cmArea +"',CMStatus='"+ cmStat +"' where CMId = '"+ cmID +"'";
+                    if (dr.HasRows)
+                    {
+                        dr.Close();
+                        connection.Close();
+                        
+                        sQuery = "update tblerrorlog set elid='" + uploadID + "' where eltype = '102'";
+                        connection.Open();
+                        selectcmd = new SqlCommand(sQuery, connection);
+                        selectcmd.ExecuteNonQuery();
+                        connection.Close();
+
+                        sQuery = "update tbluploadlog set ulstatus = '11',ulid='"+uploadID+"',ulcustomer = '" +values.payload[0].customernumber+"' where ulid = '" + values.payload[0].ULId + "'";
+                        connection.Open();
+                        selectcmd = new SqlCommand(sQuery, connection);
+                        selectcmd.ExecuteNonQuery();
+                        connection.Close();
+
+                        response = "Code: "+values.payload[0].assignedcode+" assigned to customer - "+values.payload[0].customernumber;
+                    }
+                    else
+                    {
+                        connection.Close();
+
+                        sQuery = "update tbluploadlog set ulstatus = '20',ulid='" + values.payload[0].customernumber + "" + values.payload[0].ponumber + "',ulcustomer = '" + values.payload[0].customernumber + "' where ulid = '" + values.payload[0].ULId + "'";
+                        connection.Open();
+                        selectcmd = new SqlCommand(sQuery, connection);
+                        selectcmd.ExecuteNonQuery();
+                        connection.Close();
+
+                        response = "Store Code error to New PO";
+                    }
+
+                    sQuery = "update tbluploaditems set uiid = '"+ uploadID + "' where uiid='"+ values.payload[0].ULId + "'";
+                    connection.Open();
+                    selectcmd = new SqlCommand(sQuery, connection);
+                    selectcmd.ExecuteNonQuery();
+                    connection.Close();
+
+                    sValue = "PO ID: "+ values.payload[0].customernumber + "" + values.payload[0].ponumber;
+                    changes = "Customer Mapping";
+                }
+                else{
+
+                    for (int i = 0; i < values.payload.Count; i++)
+                    {
+
+                        string cmID = values.payload[i].cmID;
+                        string cmCode = values.payload[i].cmCode;
+                        string cmName = values.payload[i].cmName;
+                        string cmArea = values.payload[i].cmArea;
+                        string cmStat = values.payload[i].cmStat;
+
+                        if (values.operation == "save_edit_customer")
+                        {
+                            activity = "EDI30";
+
+                            sQuery = "select * from tblcustomermaster where CMId = '" + cmID + "'";
 
                             connection.Open();
+
                             cmd = new SqlCommand(sQuery, connection);
-                            cmd.ExecuteNonQuery();
-                            connection.Close();
 
-                            success = true;
-                            sValue = cmCode;
-                            response = "Successful";  
-                            changes = "Customer Update,";
+                            dr = cmd.ExecuteReader();
+
+                            if (dr.HasRows)
+                            {
+                                connection.Close();
+
+                                sQuery = "update tblcustomermaster set CMCode='" + cmCode + "',CMDescription='" + cmName + "',CMArea = '" + cmArea + "',CMStatus='" + cmStat + "' where CMId = '" + cmID + "'";
+
+                                connection.Open();
+                                cmd = new SqlCommand(sQuery, connection);
+                                cmd.ExecuteNonQuery();
+                                connection.Close();
+
+                                success = true;
+                                sValue = cmCode;
+                                response = "Successful";
+                                changes = "Customer Update,";
+
+                            }
+                            else
+                            {
+                                response = "Customer: " + cmCode + " not found!";
+                                success = false;
+                                return new Response { success = success, detail = response };
+                            }
 
                         }
-                        else
-                        {
-                            response = "Customer: " + cmCode + " not found!";
-                            success = false;
-                            return new Response { success = success, detail = response };
-                        }
-
-                    }                                      
+                    }
                 }
             }
             catch (Exception ex)

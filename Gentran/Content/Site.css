@@ -310,6 +310,13 @@ footer:not(.footer-admin) {
     background-color: rgba(255, 0, 0, 0.21)!important;
 }
 
+.cust-valid {
+    background-color: rgba(3, 251, 45, 0.49)!important;
+}
+.cust-invalid {
+    background-color: rgba(255, 0, 0, 0.21)!important;
+}
+
 .ui-autocomplete.ui-front.ui-menu.ui-widget.ui-widget-content {
 z-index: 99999!important;
 }

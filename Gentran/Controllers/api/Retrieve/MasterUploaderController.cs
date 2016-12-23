@@ -448,7 +448,7 @@ namespace Gentran.Controllers.api.Retrieve
                     //<!INSERT ORDER ------------------------------------------------------------------------
                     if (validPO == true)
                     {
-                        if (NoCustomer == false)
+                        //if (NoCustomer == false)
                         {
                             String selectUIProduct = "SELECT PAProduct FROM tblProductAssignment WHERE PACode = '" + data[x]["ProdCode"].ToString() + "' and PAAccount = '" + uAcct + "'";
                             SqlCommand cmdUIProduct = new SqlCommand(selectUIProduct, connection);
@@ -594,26 +594,6 @@ namespace Gentran.Controllers.api.Retrieve
                     success = false;
                     response = ex.Message;
                 }
-            }
-            else
-            {
-                /*
-                try
-                {
-                    String source = @"C:\inetpub\wwwroot\files\Gentran\scheduled\" + "";
-
-                    if (File.Exists(source))
-                    {
-                        File.Delete(source);
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    connection.Close();
-                    success = false;
-                    response = ex.Message;
-                }*/
             }
             
             string newpaypload = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });

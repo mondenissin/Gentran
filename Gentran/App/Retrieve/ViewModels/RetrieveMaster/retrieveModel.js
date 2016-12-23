@@ -248,9 +248,9 @@
                 //this.checked = false;
 
                 listFile[ctr] = {};
-                console.log($(this));
                 listElem[ctr] = {};
-                listElem[ctr].element = $($($($(this.parentElement)[0].parentElement)[0].parentElement)[0].parentElement);
+
+                listElem[ctr].element = $($($(this.parentElement)[0].parentElement)[0].parentElement);
                 listFile[ctr].outlet = $scope.activeOutlet.toUpperCase();
                 listFile[ctr].fileName = $($($($(this.parentElement)[0].parentElement)[0].children[1])[0].children)[1].title;
                 listFile[ctr].rawID = $($($($(this.parentElement)[0].parentElement)[0].children[1])[0].children)[3].textContent;
@@ -300,7 +300,7 @@
                             $('#' + fileName[0].fileID).closest('.active').removeClass('active');
 
                             $(elemName[0].element).remove();
-                            //$scope.refreshSM();
+                            //$scope.refreshRetrieve();
                         }, execTime);
 
                         viewModelHelper.saveTransaction(result.data.detail);

@@ -15,8 +15,6 @@
         
         setInterval(function () {
 
-            console.log(retrieveService.getPause());
-
             if(retrieveService.getPause() == false){
                 time++;
 
