@@ -614,7 +614,7 @@ namespace Gentran.Controllers.api
                         selectcmd.ExecuteNonQuery();
                         connection.Close();
 
-                        response = "Store Code error to New PO";
+                        response = "Code: " + values.payload[0].assignedcode + " assigned to customer - " + values.payload[0].customernumber;
                     }
 
                     sQuery = "update tbluploaditems set uiid = '"+ uploadID + "' where uiid='"+ values.payload[0].ULId + "'";
